@@ -39,13 +39,6 @@ const menu = css`
       box-shadow: inset 0 0 0 1px ${themeVars.github.control.transparent.borderColor.active};
     }
   }
-  /* 一些水平小型菜单的颜色更改 */
-  .small-menu-items .item {
-    background-color: ${themeVars.color.body} !important;
-    &:hover {
-      background: ${themeVars.github.control.transparent.bgColor.hover} !important;
-    }
-  }
   /* 一些菜单的悬浮色更改 */
   .ui.segment .ui.tabular.menu,
   .header-wrapper .ui.tabular.menu,

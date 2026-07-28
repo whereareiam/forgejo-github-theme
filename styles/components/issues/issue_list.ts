@@ -107,46 +107,6 @@ const issueList = css`
       img.ui.avatar {
         border-radius: 9999px;
       }
-      > .item {
-        align-items: center;
-        padding: 0;
-        min-height: 64px;
-        &:last-child {
-          border-bottom-left-radius: ${otherThemeVars.border.radius};
-          border-bottom-right-radius: ${otherThemeVars.border.radius};
-        }
-        &:hover {
-          background-color: ${themeVars.color.hover.opaque};
-        }
-        &:has(:checked) {
-          background-color: ${themeVars.github.bgColor.accent.muted};
-        }
-        > .item-leading {
-          align-self: flex-start;
-          margin-top: 14px;
-          margin-left: 16px;
-          > .flex-text-inline {
-            margin-top: 0px !important;
-            /* 复选框 */
-            input {
-              margin-right: 8px !important;
-            }
-          }
-        }
-        > .item-main {
-          gap: 4px;
-          .item-header {
-            padding-top: 8px;
-          }
-          .item-body {
-            font-size: 12px;
-            padding-bottom: 8px;
-          }
-        }
-        > .item-trailing {
-          margin-right: 32px;
-        }
-      }
     }
   }
 
@@ -154,24 +114,24 @@ const issueList = css`
   /* [TODO] 暂时排除项目的列表 */
   .page-content.repository.milestones:not(.projects) .milestone-list,
   /* 仪表板的里程碑列表 */
-  .page-content.repository.milestones.dashboard .flex-divided-list {
+  .page-content.repository.milestones.dashboard .milestone-list {
     border: 1px solid ${themeVars.color.light.border};
     border-bottom-left-radius: ${otherThemeVars.border.radius};
     border-bottom-right-radius: ${otherThemeVars.border.radius};
-    .item {
-      padding: 8px 16px 10px 16px;
-      .list-item-large-title {
+    .milestone-card {
+      padding: 8px 16px 10px;
+      .milestone-header h3 > a {
         font-size: 16px;
         font-weight: 500;
       }
-      div span {
+      .milestone-header > .tw-flex > span {
         font-size: 14px;
         font-weight: 600;
       }
     }
-    .list-item-secondary-bar {
+    .milestone-toolbar {
       font-size: 12px;
-      .a {
+      .group > a {
         font-size: 13px;
       }
     }
@@ -223,4 +183,133 @@ const issuePins = css`
   }
 `;
 
-export default cssCombine(issueList, issueListMobile, issuePins);
+const issueRows = css`
+  :is(
+      .page-content.repository.milestone-issue-list,
+      .page-content.dashboard.issues,
+      .page-content.user.notification,
+      .page-content.repository.issue-list
+    )
+    #issue-list
+    > .flex-item {
+    align-items: center;
+    min-height: 64px;
+    padding: 0;
+  }
+
+  :is(
+      .page-content.repository.milestone-issue-list,
+      .page-content.dashboard.issues,
+      .page-content.user.notification,
+      .page-content.repository.issue-list
+    )
+    #issue-list
+    > .flex-item:last-child {
+    border-bottom-left-radius: ${otherThemeVars.border.radius};
+    border-bottom-right-radius: ${otherThemeVars.border.radius};
+  }
+
+  :is(
+      .page-content.repository.milestone-issue-list,
+      .page-content.dashboard.issues,
+      .page-content.user.notification,
+      .page-content.repository.issue-list
+    )
+    #issue-list
+    > .flex-item:hover {
+    background-color: ${themeVars.color.hover.opaque};
+  }
+
+  :is(
+      .page-content.repository.milestone-issue-list,
+      .page-content.dashboard.issues,
+      .page-content.user.notification,
+      .page-content.repository.issue-list
+    )
+    #issue-list
+    > .flex-item:has(:checked) {
+    background-color: ${themeVars.github.bgColor.accent.muted};
+  }
+
+  :is(
+      .page-content.repository.milestone-issue-list,
+      .page-content.dashboard.issues,
+      .page-content.user.notification,
+      .page-content.repository.issue-list
+    )
+    #issue-list
+    > .flex-item
+    > .flex-item-icon {
+    align-self: flex-start;
+    margin-top: 14px;
+    margin-left: 16px;
+  }
+
+  :is(
+      .page-content.repository.milestone-issue-list,
+      .page-content.dashboard.issues,
+      .page-content.user.notification,
+      .page-content.repository.issue-list
+    )
+    #issue-list
+    > .flex-item
+    > .flex-item-icon
+    > input.issue-checkbox {
+    margin-right: 8px !important;
+  }
+
+  :is(
+      .page-content.repository.milestone-issue-list,
+      .page-content.dashboard.issues,
+      .page-content.user.notification,
+      .page-content.repository.issue-list
+    )
+    #issue-list
+    > .flex-item
+    > .flex-item-main {
+    gap: 4px;
+  }
+
+  :is(
+      .page-content.repository.milestone-issue-list,
+      .page-content.dashboard.issues,
+      .page-content.user.notification,
+      .page-content.repository.issue-list
+    )
+    #issue-list
+    > .flex-item
+    > .flex-item-main
+    > .flex-item-header {
+    padding-top: 8px;
+  }
+
+  :is(
+      .page-content.repository.milestone-issue-list,
+      .page-content.dashboard.issues,
+      .page-content.user.notification,
+      .page-content.repository.issue-list
+    )
+    #issue-list
+    > .flex-item
+    > .flex-item-main
+    > .flex-item-header
+    > .flex-item-trailing {
+    margin-right: 32px;
+  }
+
+  :is(
+      .page-content.repository.milestone-issue-list,
+      .page-content.dashboard.issues,
+      .page-content.user.notification,
+      .page-content.repository.issue-list
+    )
+    #issue-list
+    > .flex-item
+    > .flex-item-main
+    > .flex-item-body {
+    font-size: 12px;
+    padding-bottom: 8px;
+  }
+`;
+
+export default cssCombine(issueList, issueListMobile, issuePins, issueRows);

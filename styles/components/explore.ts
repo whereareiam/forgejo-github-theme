@@ -20,194 +20,145 @@
 import { css, cssCombine, customThemeVars, otherThemeVars, themeVars } from "@lutinglt/gitea-github-theme/core";
 import { fallbackVar } from "@vanilla-extract/css";
 
-const userRepoVar = fallbackVar(customThemeVars.userRepolistColumns, "2");
-const exploreRepoVar = fallbackVar(customThemeVars.explore.repolistColumns, "2");
-const orgRepoVar = fallbackVar(customThemeVars.org.repolistColumns, "1");
+const userRepoColumns = fallbackVar(customThemeVars.userRepolistColumns, "2");
+const exploreRepoColumns = fallbackVar(customThemeVars.explore.repolistColumns, "2");
+const orgRepoColumns = fallbackVar(customThemeVars.org.repolistColumns, "1");
+const exploreUserColumns = fallbackVar(customThemeVars.explore.userlistColumns, "3");
+const orgUserColumns = fallbackVar(customThemeVars.org.userlistColumns, "2");
 
-// 仓库列表
-const repoList = css`
-  /* 组织 */
-  .page-content.organization.profile > .ui.container > .ui.stackable > .ui.eleven,
-  /* 用户 */
-  .page-content.user.profile > .ui.container > .ui.stackable > .ui.twelve,
-  /* 探索 */
-  .page-content.explore.repositories > .ui.container {
-    /* 排除用户的公开活动页 */
-    > .items-with-main:not(#activity-feed) {
-      display: grid;
-      > .item {
-        border: 1px solid ${themeVars.color.light.border};
-        border-radius: ${otherThemeVars.border.radius};
-        padding: 16px;
-        /* 仓库头像 */
-        > .item-leading {
-          img,
-          svg {
-            color: ${themeVars.color.text.light.num1};
-          }
-        }
-        /* 仓库信息 */
-        > .item-main {
-          /* 仓库标题 */
-          > .item-header {
-            /* 仓库名称 */
-            > .item-title {
-              gap: 8px;
-              /* 仓库中间的间隔线 */
-              &:not(a) {
-                color: ${themeVars.color.text.light.num1};
-              }
-            }
-            /* 仓库语言, 星标 */
-            > .item-trailing {
-              color: ${themeVars.color.text.light.num1};
-              gap: 16px;
-              font-size: 12px;
-              > .flex-text-inline .color-icon {
-                width: 12px;
-                height: 12px;
-                margin-right: 0 !important;
-              }
-            }
-          }
-          /* 描述和更新时间 */
-          > .item-body {
-            margin-top: 8px;
-            /* 更新时间 */
-            &:last-child {
-              font-size: 12px;
-            }
-          }
-          /* 主题标签 */
-          > .label-list {
-            margin-top: 8px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 4px;
-          }
-        }
+const repositoryList = css`
+  :is(
+      .page-content.organization.profile > .ui.container > .ui.stackable > .ui.eleven,
+      .page-content.user.profile > .ui.container > .ui.stackable > .ui.twelve,
+      .page-content.explore.repositories > .ui.container
+    )
+    > .flex-list:not(#activity-feed) {
+    display: grid;
+    > .flex-item {
+      border: 1px solid ${themeVars.color.light.border};
+      border-radius: ${otherThemeVars.border.radius};
+      padding: 16px;
+      > .flex-item-leading :is(img, svg) {
+        color: ${themeVars.color.text.light.num1};
       }
-    }
-  }
-  /* 仓库列表列数 */
-  /* 组织 */
-  .page-content.organization.profile > .ui.container > .ui.stackable > .ui.eleven > .items-with-main {
-    grid-template-columns: repeat(${orgRepoVar}, 1fr);
-    gap: min(${orgRepoVar} * 8px, 16px);
-  }
-  /* 用户 */
-  /* 排除用户的公开活动页 */
-  .page-content.user.profile > .ui.container > .ui.stackable > .ui.twelve > .items-with-main:not(#activity-feed) {
-    grid-template-columns: repeat(${userRepoVar}, 1fr);
-    gap: min(${userRepoVar} * 8px, 16px);
-  }
-  /* 探索 */
-  .page-content.explore.repositories > .ui.container > .items-with-main {
-    grid-template-columns: repeat(${exploreRepoVar}, 1fr);
-    gap: min(${exploreRepoVar} * 8px, 16px);
-  }
-`;
-
-const exploreUserVar = fallbackVar(customThemeVars.explore.userlistColumns, "3");
-const orgUserVar = fallbackVar(customThemeVars.org.userlistColumns, "2");
-
-// 用户列表
-const userList = css`
-  /* 组织 */
-  .page-content.organization.members > .ui.container,
-  /* 探索的用户和组织 */
-  .page-content.explore.users > .ui.container {
-    > .items-with-main {
-      display: grid;
-      > .item {
-        border: 1px solid ${themeVars.color.light.border};
-        border-radius: ${otherThemeVars.border.radius};
-        padding: 16px;
-        > .item-main {
-          /* 用户名称 */
-          > .item-title {
+      > .flex-item-main {
+        > .flex-item-header {
+          > .flex-item-title {
             gap: 8px;
-            margin-bottom: 8px;
-            /* 用户标签 */
-            > .label {
-              font-size: 12px;
+          }
+          > .flex-item-trailing {
+            color: ${themeVars.color.text.light.num1};
+            font-size: 12px;
+            gap: 16px;
+            .color-icon {
+              width: 12px;
+              height: 12px;
+              margin-right: 0 !important;
             }
           }
-          /* 用户描述 */
-          > .item-body {
+        }
+        > .flex-item-body {
+          margin-top: 8px;
+          &:last-child {
             font-size: 12px;
-            svg {
-              width: 12px;
-              min-width: 12px;
-            }
+          }
+        }
+        > .repo-topics {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 4px;
+          margin-top: 8px;
+        }
+      }
+    }
+  }
+
+  .page-content.organization.profile > .ui.container > .ui.stackable > .ui.eleven > .flex-list {
+    grid-template-columns: repeat(${orgRepoColumns}, minmax(0, 1fr));
+    gap: min(calc(${orgRepoColumns} * 8px), 16px);
+  }
+  .page-content.user.profile > .ui.container > .ui.stackable > .ui.twelve > .flex-list:not(#activity-feed) {
+    grid-template-columns: repeat(${userRepoColumns}, minmax(0, 1fr));
+    gap: min(calc(${userRepoColumns} * 8px), 16px);
+  }
+  .page-content.explore.repositories > .ui.container > .flex-list {
+    grid-template-columns: repeat(${exploreRepoColumns}, minmax(0, 1fr));
+    gap: min(calc(${exploreRepoColumns} * 8px), 16px);
+  }
+`;
+
+const userList = css`
+  :is(.page-content.organization.members > .ui.container, .page-content.explore.users > .ui.container) > .flex-list {
+    display: grid;
+    > .flex-item {
+      border: 1px solid ${themeVars.color.light.border};
+      border-radius: ${otherThemeVars.border.radius};
+      padding: 16px;
+      > .flex-item-main {
+        > .flex-item-title {
+          gap: 8px;
+          margin-bottom: 8px;
+          > .label {
+            font-size: 12px;
+          }
+        }
+        > .flex-item-body {
+          font-size: 12px;
+          svg {
+            width: 12px;
+            min-width: 12px;
           }
         }
       }
     }
   }
-  /* 用户列表列数 */
-  /* 组织 */
-  .page-content.organization.members > .ui.container > .items-with-main {
-    grid-template-columns: repeat(${orgUserVar}, 1fr);
-    gap: min(${orgUserVar} * 8px, 16px);
+
+  .page-content.organization.members > .ui.container > .flex-list {
+    grid-template-columns: repeat(${orgUserColumns}, minmax(0, 1fr));
+    gap: min(calc(${orgUserColumns} * 8px), 16px);
   }
-  /* 探索的用户和组织 */
-  .page-content.explore.users > .ui.container > .items-with-main {
-    grid-template-columns: repeat(${exploreUserVar}, 1fr);
-    gap: min(${exploreUserVar} * 8px, 16px);
+  .page-content.explore.users > .ui.container > .flex-list {
+    grid-template-columns: repeat(${exploreUserColumns}, minmax(0, 1fr));
+    gap: min(calc(${exploreUserColumns} * 8px), 16px);
   }
 `;
 
-// 手机下的仓库和用户列表
+const emptyList = css`
+  :is(
+      .page-content.organization.profile > .ui.container > .ui.stackable > .ui.eleven,
+      .page-content.user.profile > .ui.container > .ui.stackable > .ui.twelve,
+      .page-content.explore.repositories > .ui.container,
+      .page-content.organization.members > .ui.container,
+      .page-content.explore.users > .ui.container
+    )
+    > .flex-list:has(> div:only-child):not(:has(.flex-item-main)) {
+    grid-template-columns: 1fr;
+    > div {
+      border: 1px solid ${themeVars.color.light.border};
+      border-radius: ${otherThemeVars.border.radius};
+      display: flex;
+      font-size: 16px;
+      font-weight: 500;
+      justify-content: center;
+      padding: 32px;
+    }
+  }
+`;
+
 const mobileList = css`
   @media (max-width: 767.98px) {
-    /* 组织的仓库列表 */
-    .page-content.organization.profile > .ui.container > .ui.stackable > .ui.eleven,
-    /* 用户的仓库列表 */
-    .page-content.user.profile > .ui.container > .ui.stackable > .ui.twelve,
-    /* 探索的仓库列表 */
-    .page-content.explore.repositories > .ui.container,
-    /* 组织的成员列表 */
-    .page-content.organization.members >.ui.container,
-    /* 探索的用户和组织列表 */
-    .page-content.explore.users >.ui.container {
-      /* 排除用户的公开活动页 */
-      > .items-with-main:not(#activity-feed) {
-        grid-template-columns: 1fr;
-        gap: 8px;
-      }
+    :is(
+        .page-content.organization.profile > .ui.container > .ui.stackable > .ui.eleven,
+        .page-content.user.profile > .ui.container > .ui.stackable > .ui.twelve,
+        .page-content.explore.repositories > .ui.container,
+        .page-content.organization.members > .ui.container,
+        .page-content.explore.users > .ui.container
+      )
+      > .flex-list:not(#activity-feed) {
+      grid-template-columns: 1fr;
+      gap: 8px;
     }
   }
 `;
 
-// 统一无搜索结果时的样式
-const notMatch = css`
-  /* 组织的仓库列表 */
-  .page-content.organization.profile > .ui.container > .ui.stackable > .ui.eleven,
-  /* 用户的仓库列表 */
-  .page-content.user.profile > .ui.container > .ui.stackable > .ui.twelve,
-  /* 探索的仓库列表 */
-  .page-content.explore.repositories > .ui.container,
-  /* 组织的成员列表 */
-  .page-content.organization.members >.ui.container,
-  /* 探索的用户和组织列表 */
-  .page-content.explore.users >.ui.container {
-    /* 排除用户的公开活动页 */
-    > .items-with-main:not(#activity-feed) {
-      &:has(> div:only-child):not(:has(.item-main)) {
-        grid-template-columns: 1fr;
-        > div {
-          border: 1px solid ${themeVars.color.light.border};
-          border-radius: ${otherThemeVars.border.radius};
-          font-size: 16px;
-          font-weight: 500;
-          padding: 32px;
-          display: flex;
-          justify-content: center;
-        }
-      }
-    }
-  }
-`;
-
-export default cssCombine(repoList, userList, mobileList, notMatch);
+export default cssCombine(repositoryList, userList, emptyList, mobileList);

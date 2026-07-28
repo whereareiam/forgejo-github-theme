@@ -27,38 +27,25 @@ const org = css`
     }
     > .ui.container {
       /* 组织头像 */
-      > div:not([class]):first-child {
-        .ui.avatar {
-          margin: 8px 16px 16px 0px;
-        }
+      > img.org-avatar {
+        margin: 8px 16px 16px 0;
       }
       /* 组织信息 */
-      > .flex-relaxed-list:last-child {
+      > #org-info {
         gap: 8px;
         /* 组织名称 */
-        > .ui.header {
+        .org-title > h1 {
           font-size: 24px;
-          > .org-visibility {
-            margin-left: 8px;
-          }
-          /* 组织页面的 RSS 订阅按钮 */
-          .ui.label.button {
-            padding: 4px 16px;
-            .svg {
-              width: 20px;
-              min-width: 20px;
-            }
-            &:hover {
-              border-color: ${themeVars.color.light.border};
-            }
-          }
+        }
+        .org-visibility {
+          margin-left: 8px;
         }
         /* 组织描述 */
         > .markup {
           color: ${themeVars.color.text.light.num1};
         }
         /* 组织信息 */
-        > div:not([class]) {
+        > .meta {
           display: flex;
           flex-direction: column;
           gap: 4px;

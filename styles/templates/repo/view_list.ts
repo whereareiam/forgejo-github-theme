@@ -52,4 +52,106 @@ const repoFileLastCommit = css`
   }
 `;
 
-export default cssCombine(repoFileLastCommit);
+const repoFileList = css`
+  #repo-files-table {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 2fr 3fr auto;
+    border: 1px solid ${themeVars.color.secondary.self};
+    background: ${themeVars.color.box.body.self};
+    border-radius: ${otherThemeVars.border.radius};
+    margin: 10px 0;
+  }
+
+  @media (max-width: 767.98px) {
+    #repo-files-table {
+      grid-template-columns: auto 1fr auto;
+    }
+  }
+
+  #repo-files-table .repo-file-item {
+    display: contents;
+  }
+
+  #repo-files-table .repo-file-item:hover > .repo-file-cell,
+  #repo-files-table .parent-link:hover {
+    background: ${themeVars.color.hover.opaque};
+  }
+
+  #repo-files-table .repo-file-line,
+  #repo-files-table .repo-file-cell {
+    border-top: 1px solid ${themeVars.color.secondary.self};
+    padding: 8px 10px;
+  }
+
+  #repo-files-table .repo-file-line:first-child {
+    border-top: none;
+    border-radius: ${otherThemeVars.border.radius} ${otherThemeVars.border.radius} 0 0;
+  }
+
+  #repo-files-table .repo-file-item:last-child .repo-file-cell:first-child {
+    border-bottom-left-radius: calc(${otherThemeVars.border.radius} - 1px);
+  }
+
+  #repo-files-table .repo-file-item:last-child .repo-file-cell:last-child {
+    border-bottom-right-radius: calc(${otherThemeVars.border.radius} - 1px);
+  }
+
+  #repo-files-table .repo-file-line {
+    grid-column: 1 / span 3;
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+  }
+
+  #repo-files-table .repo-file-last-commit {
+    min-width: 0;
+    background: ${themeVars.color.box.header};
+  }
+
+  #repo-files-table .repo-file-cell.name {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    overflow: hidden;
+  }
+
+  #repo-files-table .repo-file-cell.name > a,
+  #repo-files-table .repo-file-cell.name > span {
+    flex-shrink: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  #repo-files-table .repo-file-cell.name .entry-name {
+    flex-shrink: 1;
+    min-width: 1ch;
+  }
+
+  @media (max-width: 767.98px) {
+    #repo-files-table .repo-file-cell.name {
+      max-width: 35vw;
+    }
+  }
+
+  #repo-files-table .repo-file-cell.message {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: ${themeVars.color.text.light.num1};
+  }
+
+  #repo-files-table .repo-file-cell.age {
+    text-align: right;
+    white-space: nowrap;
+    color: ${themeVars.color.text.light.num1};
+  }
+
+  #repo-files-table .repo-file-cell.notready.message .loader {
+    width: 16px;
+    height: 16px;
+  }
+`;
+
+export default cssCombine(repoFileLastCommit, repoFileList);

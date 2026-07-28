@@ -115,32 +115,6 @@ const comment = css`
       height: 28px;
       width: 28px;
     }
-    /* 底部表情栏 */
-    .bottom-reactions {
-      .ui.ui.ui.label {
-        background-color: unset !important;
-        border-radius: 9999px;
-        border-color: ${themeVars.color.light.border};
-        &:hover {
-          background-color: ${themeVars.color.reaction.hoverBg} !important;
-          border-color: ${themeVars.color.light.border};
-        }
-        .reaction {
-          font-size: 12px;
-        }
-        .reaction-count {
-          color: ${themeVars.color.text.light.self};
-          font-weight: 500;
-          margin-left: 0;
-        }
-      }
-      /* 显示表情菜单按钮 */
-      .select-reaction {
-        padding: 0;
-        /* 两个表情按钮看着怪怪的, 很难受 */
-        /* visibility: visible; */
-      }
-    }
   }
 `;
 
@@ -156,9 +130,9 @@ const commentForm = css`
 
 // PR 界面的 PR 操作评论
 const prMerge = css`
-  .repository.view.issue .comment-list .timeline-item.pull-merge-box {
+  .repository.view.issue .comment-list .timeline-item.comment.merge.box {
     /* 头像 */
-    .timeline-avatar {
+    .timeline-avatar.text {
       border-radius: 9999px;
       width: 40px;
       height: 40px;
@@ -175,43 +149,43 @@ const prMerge = css`
         width: 24px;
         height: 24px;
       }
-      &.tw-text-text-light {
+      &.grey {
         background-color: ${themeVars.color.text.light.num1};
       }
-      &.tw-text-green {
+      &.green {
         background-color: ${themeVars.github.bgColor.success.emphasis};
         + .content > .ui.segment {
           border-color: ${themeVars.github.bgColor.success.emphasis};
         }
       }
-      &.tw-text-purple {
+      &.purple {
         background-color: ${themeVars.github.bgColor.done.emphasis};
         + .content > .ui.segment {
           border-color: ${themeVars.github.bgColor.done.emphasis};
         }
       }
-      &.tw-text-yellow {
+      &.yellow {
         background-color: ${themeVars.github.bgColor.attention.emphasis};
         + .content > .ui.segment {
           border-color: ${themeVars.github.bgColor.attention.emphasis};
         }
       }
-      &.tw-text-red {
+      &.red {
         background-color: ${themeVars.github.bgColor.danger.emphasis};
         + .content > .ui.segment {
           border-color: ${themeVars.github.bgColor.danger.emphasis};
         }
       }
     }
-    .avatar-content-left-arrow {
-      &::before,
-      &::after {
+    > .content {
+      > .ui.segment::before,
+      > .ui.segment::after {
         display: none;
       }
       /* 合并信息和操作 */
       .merge-section {
         /* 检查状态 */
-        .item.commit-status-toggle {
+        .commit-status-header {
           padding: 16px;
           font-size: 16px;
           font-weight: 600;

@@ -43,9 +43,6 @@ const label = css`
           border-top-right-radius: 0;
           border-bottom-right-radius: 0;
         }
-        .scope-middle {
-          border-radius: 0;
-        }
         .scope-right {
           border-top-left-radius: 0;
           border-bottom-left-radius: 0;

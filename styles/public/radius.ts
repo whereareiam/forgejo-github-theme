@@ -312,6 +312,76 @@ const fixWhyRadius = css`
   }
 `;
 
+const buttonRadius = css`
+  .ui.ui.button {
+    border-radius: ${otherThemeVars.border.radius};
+  }
+
+  .ui.buttons:not(.vertical) > .button:first-child:not(:only-child) {
+    border-bottom-left-radius: ${otherThemeVars.border.radius};
+    border-bottom-right-radius: 0;
+    border-top-left-radius: ${otherThemeVars.border.radius};
+    border-top-right-radius: 0;
+  }
+
+  .ui.buttons:not(.vertical) > .button:last-child:not(:only-child) {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: ${otherThemeVars.border.radius};
+    border-top-left-radius: 0;
+    border-top-right-radius: ${otherThemeVars.border.radius};
+  }
+
+  .ui.buttons:not(.vertical) > .button:not(:first-child):not(:last-child) {
+    border-radius: 0;
+  }
+
+  .ui.vertical.buttons > .button:first-child:not(:only-child) {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    border-top-left-radius: ${otherThemeVars.border.radius};
+    border-top-right-radius: ${otherThemeVars.border.radius};
+  }
+
+  .ui.vertical.buttons > .button:last-child:not(:only-child) {
+    border-bottom-left-radius: ${otherThemeVars.border.radius};
+    border-bottom-right-radius: ${otherThemeVars.border.radius};
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+  }
+
+  .ui.vertical.buttons > .button:not(:first-child):not(:last-child) {
+    border-radius: 0;
+  }
+
+  .ui.labeled.button > .button {
+    border-bottom-left-radius: ${otherThemeVars.border.radius};
+    border-bottom-right-radius: 0;
+    border-top-left-radius: ${otherThemeVars.border.radius};
+    border-top-right-radius: 0;
+  }
+
+  .ui.labeled.button > .label {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: ${otherThemeVars.border.radius};
+    border-top-left-radius: 0;
+    border-top-right-radius: ${otherThemeVars.border.radius};
+  }
+
+  .ui.left.labeled.button > .button {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: ${otherThemeVars.border.radius};
+    border-top-left-radius: 0;
+    border-top-right-radius: ${otherThemeVars.border.radius};
+  }
+
+  .ui.left.labeled.button > .label {
+    border-bottom-left-radius: ${otherThemeVars.border.radius};
+    border-bottom-right-radius: 0;
+    border-top-left-radius: ${otherThemeVars.border.radius};
+    border-top-right-radius: 0;
+  }
+`;
+
 export default cssCombine(
   radius,
   radiusImportant,
@@ -327,5 +397,6 @@ export default cssCombine(
   radiusBottomRight,
   onlyChild,
   fixRadius,
-  fixWhyRadius
+  fixWhyRadius,
+  buttonRadius
 );

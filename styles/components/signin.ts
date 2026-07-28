@@ -73,9 +73,6 @@ const signIn = css`
       font-size: 14px;
       font-weight: 400;
       gap: 16px;
-      .signin-passkey {
-        font-weight: 500;
-      }
     }
   }
 `;

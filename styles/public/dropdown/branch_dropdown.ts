@@ -23,10 +23,10 @@ import { fallbackVar } from "@vanilla-extract/css";
 
 // 分支菜单
 const branchDropdown = css`
-  .ui.dropdown.branch-selector-dropdown > .menu {
+  .js-branch-tag-selector > .ui.dropdown.custom > .menu {
     width: ${fallbackVar(customThemeVars.branchMenuWidth, "320px")};
     max-width: 640px;
-    > .menu > .item {
+    > .scrolling.menu > .item {
       ${animationDown};
       height: 32px;
     }
@@ -62,7 +62,7 @@ const branchDropdown = css`
 const branchDropdownMobile = css`
   @media (max-width: 767.98px) {
     /* 修复手机下分支菜单宽度过宽 */
-    .ui.dropdown.branch-selector-dropdown > .menu {
+    .js-branch-tag-selector > .ui.dropdown.custom > .menu {
       width: auto;
     }
   }

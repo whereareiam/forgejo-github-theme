@@ -17,9 +17,13 @@
  * limitations under the License.
  */
 
-import { css, cssCombine } from "@lutinglt/gitea-github-theme/core";
+import { css, cssCombine, themeVars } from "@lutinglt/gitea-github-theme/core";
 
 const body = css`
+  :root {
+    --color-selection-bg: ${themeVars.color.primary.light.num1};
+    --color-selection-fg: ${themeVars.color.white};
+  }
   body {
     line-height: 1.5;
   }

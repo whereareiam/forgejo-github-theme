@@ -29,13 +29,11 @@ const diff = css`
     background-color: unset;
     height: 28px;
     /* 展开按钮高度与折叠行一致 */
-    .code-expander-buttons {
-      .code-expander-button {
-        height: 28px;
-      }
+    .lines-num > .tw-flex > .code-expander-button {
+      height: 28px;
     }
     /* 双向展开的按钮 */
-    &:has(.code-expander-buttons[data-expand-direction="3"]) {
+    &:has(.lines-num > .tw-flex > .code-expander-button + .code-expander-button) {
       height: 40px;
       .code-expander-button {
         height: 20px;
@@ -107,11 +105,6 @@ const diffFileBoxHeader = css`
         color: ${themeVars.color.text.light.num1};
         font-size: 12px;
         font-weight: 400;
-        /* 增加/删除行, 基于 tailwindcss 的属性, 将来可能会失效 */
-        .tw-text-diff-added-fg,
-        .tw-text-diff-removed-fg {
-          font-weight: 600;
-        }
         /* 增加/删除的状态条 */
         .diff-stats-bar {
           border: 1px solid ${themeVars.color.secondary.self};
@@ -119,15 +112,6 @@ const diffFileBoxHeader = css`
           overflow: hidden;
           .diff-stats-add-bar {
             border-right: 1px solid ${themeVars.github.borderColor.success.emphasis};
-          }
-        }
-        /* 三点操作展开按钮 */
-        .diff-header-popup-btn {
-          border-radius: ${otherThemeVars.border.radius};
-          padding: 5px !important;
-          &:hover {
-            background-color: ${themeVars.github.control.transparent.bgColor.hover};
-            box-shadow: inset 0 0 0 1px ${themeVars.github.control.transparent.borderColor.active};
           }
         }
       }

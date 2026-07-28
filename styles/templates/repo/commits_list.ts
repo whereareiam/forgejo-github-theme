@@ -127,11 +127,6 @@ const commitsList = css`
       li.gitea-github-theme-commit {
         grid-template-areas: "${primary} ${primary}" "${metadata} ${actions}" "${secondary} ${actions}";
         grid-template-rows: repeat(3, auto);
-        .metadata {
-          .avatar-stack-names {
-            max-width: 45vw;
-          }
-        }
       }
     }
   }

@@ -18,12 +18,11 @@
  */
 
 import { css, cssCombine, otherThemeVars, themeVars } from "@lutinglt/gitea-github-theme/core";
-import { animationDown } from "@lutinglt/gitea-github-theme/styles/common";
 
 // 文件列表页面下的分支按钮
 const branchButton = css`
   .page-content.repository.file.list {
-    .ui.dropdown.branch-selector-dropdown > .menu > .menu {
+    .js-branch-tag-selector > .ui.dropdown.custom > .menu > .scrolling.menu {
       /* 显示默认分支的标签 */
       .ui.label {
         background-color: ${themeVars.color.menu};
@@ -48,53 +47,12 @@ const syncFork = css`
     }
   }
 `;
-// 转到文件搜索结果弹窗
-const fileSearch = css`
-  .file-search-popup.file-search-popup.file-search-popup {
-    ${animationDown};
-    /* 统一所有下拉菜单的样式 */
-    background-color: ${themeVars.color.menu};
-    border: unset;
-    border-radius: 12px;
-    box-shadow: ${themeVars.github.shadow.floating.small};
-    z-index: 2; /* 避免文件内容浏览界面中的固定导航栏遮挡 */
-    .file-search-results {
-      padding: 12px;
-      .item {
-        border-bottom: none;
-        border-radius: ${otherThemeVars.border.radius};
-        padding: 6px 8px;
-        margin: 0 4px;
-        color: ${themeVars.color.text.light.num1};
-        &.selected {
-          background-color: unset;
-          box-shadow: 0 0 0 2px ${themeVars.github.borderColor.accent.emphasis} !important;
-        }
-        &:hover {
-          background: ${themeVars.github.control.transparent.bgColor.hover} !important;
-          box-shadow: inset 0 0 0 1px ${themeVars.github.control.transparent.borderColor.active};
-        }
-        .full-path :nth-child(2n) {
-          color: ${themeVars.color.text.self};
-        }
-      }
-    }
-  }
-`;
 // 仓库文件列表
 const repoFiles = css`
   /* 文件列表和提交列表的按钮组 */
   .repo-button-row {
     margin: 16px 0;
     .repo-button-row-right {
-      /* 转到文件搜索框 */
-      .repo-file-search-container .ui.input {
-        min-height: 32px;
-        height: 32px;
-        > input {
-          background: unset;
-        }
-      }
       /* 添加文件按钮 */
       .repo-add-file {
         padding: 0px 26px 0px 12px;
@@ -105,10 +63,6 @@ const repoFiles = css`
             margin-right: 4px !important;
           }
         }
-      }
-      /* 克隆按钮 */
-      .ui.primary.button.js-btn-clone-panel {
-        padding: 0px 12px;
       }
     }
   }
@@ -247,4 +201,4 @@ const repoFilesMobile = css`
   }
 `;
 
-export default cssCombine(branchButton, syncFork, fileSearch, repoFiles, repoFilesMobile);
+export default cssCombine(branchButton, syncFork, repoFiles, repoFilesMobile);

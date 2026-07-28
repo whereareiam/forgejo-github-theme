@@ -19,184 +19,174 @@
 
 import { css, cssCombine, otherThemeVars, themeVars } from "@lutinglt/gitea-github-theme/core";
 
-// 用户订阅/关注页面
-const notification = css`
+const notificationToolbar = css`
   .page-content.user.notification {
     > .ui.container {
+      > .tw-flex.tw-justify-between:first-child,
+      > .ui.attached.segment > .tw-flex.tw-justify-between:first-child {
+        align-content: center;
+        align-items: center;
+        background-color: ${themeVars.color.box.header};
+        border: 1px solid ${themeVars.color.light.border};
+        border-bottom: 0;
+        border-top-left-radius: ${otherThemeVars.border.radius};
+        border-top-right-radius: ${otherThemeVars.border.radius};
+        min-height: 52px;
+        padding: 8px;
+        margin-bottom: 0 !important;
+        > .switch {
+          --switch-item-min-height: 32px;
+          --switch-padding-inline: 12px;
+          align-items: center;
+          background: light-dark(${themeVars.github.controlTrack.bgColor.rest}, ${themeVars.color.menu}) !important;
+          border: 0;
+          border-radius: ${otherThemeVars.border.radius};
+          display: flex;
+          gap: 0;
+          height: 32px;
+          min-height: 32px;
+          > .item {
+            align-items: center;
+            background: transparent !important;
+            border: 1px solid #0000;
+            border-radius: ${otherThemeVars.border.radius};
+            box-sizing: border-box;
+            color: ${themeVars.color.text.self};
+            display: flex;
+            font-weight: 400;
+            height: 32px;
+            justify-content: center;
+            line-height: 21px;
+            margin: 0;
+            min-height: 32px;
+            outline: 0;
+            padding: 4px 12px;
+            &::before {
+              display: none;
+            }
+            &:not(.active):hover {
+              background: ${themeVars.github.control.transparent.bgColor.hover} !important;
+            }
+            &.active {
+              background: light-dark(
+                ${themeVars.github.controlKnob.bgColor.rest},
+                ${themeVars.color.hover.self}
+              ) !important;
+              border-color: ${themeVars.color.secondary.self};
+              color: ${themeVars.color.text.self};
+              font-weight: 600;
+            }
+            .notifications-unread-count {
+              margin-left: 4px;
+            }
+          }
+          > .item:has(+ .active.item),
+          > .active.item + .item {
+            margin: 0;
+            padding: 4px 12px;
+          }
+        }
+        > .button-row {
+          align-items: center;
+          gap: 8px;
+          > .button,
+          > form .button {
+            height: 32px;
+            line-height: 20px;
+            min-height: 32px;
+            padding: 5px 12px;
+          }
+        }
+      }
       > .ui.attached.segment {
         border: 0;
         padding: 0;
         > .divider {
           display: none;
         }
-        /* 订阅列表 */
-        &:has(#issue-list) {
-          > .flex-left-right {
-            align-items: center;
-            align-content: center;
-            background-color: ${themeVars.color.box.header};
-            border: 1px solid ${themeVars.color.light.border};
-            border-bottom: 0;
-            border-top-left-radius: ${otherThemeVars.border.radius};
-            border-top-right-radius: ${otherThemeVars.border.radius};
-            height: 52px;
-            padding: 8px;
-            /* 左侧菜单 */
-            > .tw-flex:first-child > .ui.compact.menu {
-              align-items: center;
-              border: 0;
-              > .item {
-                background: unset !important;
-                border-radius: ${otherThemeVars.border.radius};
-                color: ${themeVars.color.text.light.num1};
-                padding: 0px 8px;
-                height: 30px;
-                &:before {
-                  display: none;
-                }
-                &:hover {
-                  background: ${themeVars.github.control.transparent.bgColor.hover} !important;
-                }
-                &.active {
-                  color: ${themeVars.color.text.self};
-                  font-weight: 700;
-                }
-              }
-            }
-            /* 右侧菜单 */
-            > .ui.secondary.menu:last-child {
-              align-items: center;
-              > .item {
-                color: ${themeVars.color.text.light.num1};
-              }
-              > .ui.button {
-                padding: 0 12px;
-                height: 32px;
-              }
+      }
+    }
+  }
+`;
+
+const watchingList = css`
+  .page-content.user.notification > .ui.container > .ui.attached.segment > .flex-list:not([id]) {
+    border: 1px solid ${themeVars.color.light.border};
+    border-radius: ${otherThemeVars.border.radius};
+    > .flex-item {
+      padding: 16px;
+      > .flex-item-main {
+        gap: 4px;
+        > .flex-item-header {
+          > .flex-item-title {
+            gap: 12px;
+          }
+          > .flex-item-trailing {
+            color: ${themeVars.color.text.light.num1};
+            font-size: 12px;
+            font-weight: 400;
+            gap: 16px;
+            .color-icon {
+              width: 12px;
+              height: 12px;
+              margin-right: 0 !important;
             }
           }
         }
-        /* 关注列表 */
-        > .items-with-main:not([id]) {
-          border: 1px solid ${themeVars.color.light.border};
-          border-radius: ${otherThemeVars.border.radius};
-          > .item {
-            padding: 16px;
-            > .item-main {
-              gap: 4px;
-              > .item-header {
-                > .item-title {
-                  gap: 12px;
-                }
-                > .item-trailing {
-                  color: ${themeVars.color.text.light.num1};
-                  font-size: 12px;
-                  font-weight: 400;
-                  gap: 16px;
-                  .color-icon {
-                    width: 12px;
-                    height: 12px;
-                    margin-right: 0 !important;
-                  }
-                }
-              }
-              > .item-body:last-child {
-                font-size: 12px;
-              }
-            }
-          }
+        > .flex-item-body:last-child {
+          font-size: 12px;
         }
       }
-      /* 通知列表 */
-      &:has(#notification_table) {
-        > .flex-left-right:first-child {
-          background-color: ${themeVars.color.box.header};
-          border: 1px solid ${themeVars.color.light.border};
-          border-bottom: 0;
-          border-top-left-radius: ${otherThemeVars.border.radius};
-          border-top-right-radius: ${otherThemeVars.border.radius};
-          height: 52px;
-          padding: 8px;
-          margin-bottom: 0 !important;
-          /* 左侧菜单 */
-          > .ui.compact.menu {
-            align-items: center;
-            border: 0;
-            > .item {
-              background: unset !important;
-              border-radius: ${otherThemeVars.border.radius};
-              color: ${themeVars.color.text.light.num1};
-              padding: 0px 8px;
-              height: 30px;
-              &:before {
-                display: none;
-              }
-              &:hover {
-                background: ${themeVars.github.control.transparent.bgColor.hover} !important;
-              }
-              &.active {
-                color: ${themeVars.color.text.self};
-                font-weight: 700;
-              }
-              .notifications-unread-count {
-                margin-left: 4px;
-              }
-            }
+    }
+  }
+`;
+
+const notificationList = css`
+  .page-content.user.notification > .ui.container {
+    #notification_table {
+      border: 1px solid ${themeVars.color.light.border};
+      border-radius: 0 0 ${otherThemeVars.border.radius} ${otherThemeVars.border.radius};
+      color: ${themeVars.color.text.light.num1};
+      > .notifications-item {
+        border-top: 1px solid ${themeVars.color.light.border};
+        padding: 12px !important;
+        &:first-child {
+          border-top: 0;
+        }
+        &:last-child {
+          border-bottom-left-radius: ${otherThemeVars.border.radius};
+          border-bottom-right-radius: ${otherThemeVars.border.radius};
+          &:hover {
+            border-bottom-left-radius: 0;
           }
         }
-        /* 通知全部确认按钮 */
-        .ui.ui.ui.ui.mini.button {
-          height: 32px;
+        &:hover {
+          background: ${themeVars.github.bgColor.accent.muted};
+          box-shadow: inset 2px 0 0 ${themeVars.github.borderColor.accent.emphasis};
+          color: ${themeVars.color.text.self};
         }
-      }
-      /* 通知列表 */
-      #notification_table {
-        border-top-left-radius: 0;
-        border-top-right-radius: 0;
-        color: ${themeVars.color.text.light.num1};
-        > .notifications-item {
-          border-top: 1px solid ${themeVars.color.light.border};
-          padding: 12px !important;
+        > .tw-self-start:has(svg) {
+          margin-top: 1px !important;
+          line-height: 1;
+        }
+        > .notifications-link > div {
           &:first-child {
-            border-top: 0;
+            font-size: 12px !important;
           }
           &:last-child {
-            border-bottom-left-radius: ${otherThemeVars.border.radius};
-            border-bottom-right-radius: ${otherThemeVars.border.radius};
-            &:hover {
-              border-bottom-left-radius: 0;
-            }
+            font-size: 14px !important;
           }
+        }
+        > .notifications-updated {
+          font-size: 12px;
+        }
+        > .notifications-buttons .interact-bg {
+          background: ${themeVars.github.bgColor.accent.muted} !important;
+          color: ${themeVars.color.text.light.num1};
+          padding: 8px !important;
           &:hover {
-            background: ${themeVars.github.bgColor.accent.muted};
-            box-shadow: 2px 0 0 ${themeVars.github.borderColor.accent.emphasis} inset;
+            background: ${themeVars.github.control.transparent.bgColor.hover} !important;
             color: ${themeVars.color.text.self};
-          }
-          > .tw-self-start:has(svg) {
-            margin-top: 1px !important;
-            line-height: 1;
-          }
-          > .notifications-link > div {
-            &:first-child {
-              font-size: 12px !important;
-            }
-            &:last-child {
-              font-size: 14px !important;
-            }
-          }
-          > .notifications-updated {
-            font-size: 12px;
-          }
-          > .notifications-buttons {
-            .interact-bg {
-              background: ${themeVars.github.bgColor.accent.muted} !important;
-              color: ${themeVars.color.text.light.num1};
-              padding: 8px !important;
-              &:hover {
-                background: ${themeVars.github.control.transparent.bgColor.hover} !important;
-                color: ${themeVars.color.text.self};
-              }
-            }
           }
         }
       }
@@ -204,4 +194,4 @@ const notification = css`
   }
 `;
 
-export default cssCombine(notification);
+export default cssCombine(notificationToolbar, watchingList, notificationList);

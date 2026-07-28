@@ -21,104 +21,48 @@ import { css, cssCombine, otherThemeVars, themeVars } from "@lutinglt/gitea-gith
 
 // 仓库 Actions 页面
 const actions = css`
-  /* 避免锚中设置界面里的 Actions */
-  .page-content.repository.actions:not(.settings) .flex-container {
-    /* Actions 列表 */
-    .flex-container-nav:before {
+  .page-content.repository.actions:not(.settings) {
+    .actions-menu::before {
       content: "Actions";
       display: block;
       font-size: 20px;
       font-weight: 600;
-      margin-top: 6px;
-      margin-bottom: 8px;
+      margin: 6px 8px 8px;
     }
-    /* 工作流列表 */
-    .flex-container-main {
-      /* 工作流列表标题栏菜单 */
-      .ui.top.attached.header {
+    .run-list {
+      border: 1px solid ${themeVars.color.light.border};
+      border-radius: ${otherThemeVars.border.radius};
+      font-size: 12px;
+      margin-top: 8px;
+      > .flex-item {
+        line-height: 18px;
         padding: 16px;
-        &:has(+ .ui.info.attached.message) {
-          border-bottom: 0;
+        > .flex-item-leading {
+          align-self: flex-start;
         }
-        .ui.secondary.menu > .ui.dropdown {
-          color: ${themeVars.color.text.light.num1};
-        }
-      }
-      /* 事件触发器 */
-      .ui.info.attached.message {
-        padding: 18px 16px;
-        /* 事件触发器按钮 */
-        .ui.mini.button {
-          padding: 3px 12px;
-          min-height: 27px;
-          font-size: 12px;
+        > .flex-item-main {
+          gap: 0.5rem;
         }
       }
-      /* 工作流列表 */
-      .ui.attached.segment {
-        padding: 0;
-        border: 0;
-        .run-list {
-          border: 1px solid ${themeVars.color.light.border};
-          border-bottom-left-radius: ${otherThemeVars.border.radius};
-          border-bottom-right-radius: ${otherThemeVars.border.radius};
-          border-top: 0;
-          font-size: 12px;
-
-          /* 分支标签按钮 */
-          .run-list-ref {
-            background-color: ${themeVars.github.bgColor.accent.muted};
-            border-color: #0000;
-            color: ${themeVars.github.fgColor.accent};
-            font-family: var(--fonts-monospace);
-            font-weight: 400;
-            padding: 0px 6px;
-            &:hover {
-              background-color: ${themeVars.github.bgColor.accent.muted};
-              color: ${themeVars.github.fgColor.accent};
-              text-decoration-line: underline !important;
-            }
-          }
-          /* 标签右侧任务信息 */
-          .run-list-item-right {
-            color: ${themeVars.color.text.light.num1};
-          }
-
-          .item {
-            padding: 16px;
-            line-height: 18px;
-            .item-leading {
-              align-self: flex-start;
-            }
-            .item-main {
-              gap: 0.5rem;
-            }
-            .item-trailing {
-              > .ui.label {
-                border-radius: ${otherThemeVars.border.radius};
-              }
-              > .ui.dropdown.jump {
-                border-radius: ${otherThemeVars.border.radius};
-                color: ${themeVars.color.text.light.num1};
-                &:hover {
-                  background-color: ${themeVars.github.control.transparent.bgColor.hover};
-                }
-                .menu > .item {
-                  font-size: 12px;
-                  gap: 4px;
-                  &:hover {
-                    color: ${themeVars.color.text.self} !important;
-                  }
-                }
-              }
-            }
-          }
-        }
-        /* 分页按钮, GitHub Gitea 修正, 不影响其他配色 */
-        .center.page.buttons {
-          background: ${themeVars.color.body};
+      .run-list-ref {
+        background-color: ${themeVars.github.bgColor.accent.muted};
+        border-color: transparent;
+        color: ${themeVars.github.fgColor.accent};
+        font-family: var(--fonts-monospace);
+        font-weight: 400;
+        padding: 0 6px;
+        &:hover {
+          background-color: ${themeVars.github.bgColor.accent.muted};
+          color: ${themeVars.github.fgColor.accent};
+          text-decoration-line: underline !important;
         }
       }
+      .run-list-item-right {
+        color: ${themeVars.color.text.light.num1};
+      }
+    }
+    .center.page.buttons {
+      background: ${themeVars.color.body};
     }
   }
 `;
@@ -134,41 +78,24 @@ const label = css`
 
 // 手动工作流
 const runWorkflow = css`
-  /* 手动工作流下拉列表 */
-  #runWorkflowDispatchForm {
+  #workflow_dispatch_dropdown > .menu > .message.ui.form {
     font-size: 12px;
-    /* 描述类标签 */
-    .ui.field label {
+    .field > label {
       font-weight: 600;
+      margin-bottom: 6px;
     }
-    /* use workflow from 描述 */
-    .ui.inline.field {
-      > :first-child {
-        margin-right: 8px;
-      }
-      > :only-child {
-        margin-right: 0;
-      }
-    }
-    /* 分支选择按钮 */
-    .ui.dropdown.button.branch-selector-dropdown {
-      padding: 3px 21px 3px 12px;
-      min-height: 27px;
-      gap: 4px;
+    .branch-dropdown-button {
       font-size: 12px;
+      gap: 4px;
+      min-height: 27px;
+      padding: 3px 21px 3px 12px;
       .text {
         line-height: 20px;
       }
     }
-    #runWorkflowDispatchModalInputs {
-      .ui.field > label {
-        margin-bottom: 6px;
-      }
-      /* 运行工作流按钮 */
-      .ui.tiny.button {
-        padding: 0px 8px;
-        min-height: 27px;
-      }
+    #workflow-dispatch-submit {
+      min-height: 27px;
+      padding: 0 8px;
     }
   }
 `;

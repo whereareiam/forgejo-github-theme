@@ -30,56 +30,49 @@ const heatmap = css`
       padding-left: 20px;
       padding-right: 8px;
     }
-    > div {
+    > div:not(.total-contributions) {
       padding: 12px 20px;
       box-shadow:
         0px 0px 0px 1px ${themeVars.color.light.border},
         ${themeVars.github.shadow.resting.small};
       border-radius: 12px;
-      /* 覆盖热力图和图例的背景色 */
-      .heatmap-legend-svg,
-      .heatmap-grid {
-        rect {
-          /* 圆角 */
-          rx: 2.5px;
-          ry: 2.5px;
-          /* 边框圆角 */
-          border-radius: 1.5px;
-          /* 宽度和高度可以用来控制间隔 */
-          width: 9.5px;
-          height: 9.5px;
-          /* 边框 */
-          outline: 0.5px solid ${themeVars.github.contribution.default.borderColor.num0};
-          /* 边框向内偏移 */
-          outline-offset: -0.5px;
-
-          &:hover {
-            outline: 0.5px solid ${themeVars.color.text.self} !important;
-          }
-          &[style="fill: var(--color-secondary-alpha-60);"] {
-            fill: ${themeVars.github.contribution.default.bgColor.num0} !important;
-          }
-          &[style="fill: var(--color-primary-light-4);"] {
-            fill: ${themeVars.github.contribution.default.bgColor.num1} !important;
-            outline-color: ${themeVars.github.contribution.default.borderColor.num1};
-          }
-          &[style="fill: var(--color-primary-light-2);"] {
-            fill: ${themeVars.github.contribution.default.bgColor.num2} !important;
-            outline-color: ${themeVars.github.contribution.default.borderColor.num2};
-          }
-          &[style="fill: var(--color-primary);"] {
-            fill: ${themeVars.github.contribution.default.bgColor.num3} !important;
-            outline-color: ${themeVars.github.contribution.default.borderColor.num3};
-          }
-          &[style="fill: var(--color-primary-dark-2);"] {
-            fill: ${themeVars.github.contribution.default.bgColor.num4} !important;
-            outline-color: ${themeVars.github.contribution.default.borderColor.num4};
-          }
-          &[style="fill: var(--color-primary-dark-4);"] {
-            fill: ${themeVars.github.themeExtra.contribution.default.bgColor.num5} !important;
-            outline-color: ${themeVars.github.themeExtra.contribution.default.borderColor.num5};
-          }
-        }
+    }
+    .vch__legend {
+      color: ${themeVars.color.text.light.num1};
+    }
+    :is(.vch__day__square, .vch__legend__wrapper rect) {
+      rx: 2.5px;
+      ry: 2.5px;
+      border-radius: 1.5px;
+      width: 9.5px;
+      height: 9.5px;
+      outline: 0.5px solid ${themeVars.github.contribution.default.borderColor.num0};
+      outline-offset: -0.5px;
+      &:hover {
+        outline: 0.5px solid ${themeVars.color.text.self} !important;
+      }
+      &[style="fill: var(--color-secondary-alpha-60);"] {
+        fill: ${themeVars.github.contribution.default.bgColor.num0} !important;
+      }
+      &[style="fill: var(--color-primary-light-4);"] {
+        fill: ${themeVars.github.contribution.default.bgColor.num1} !important;
+        outline-color: ${themeVars.github.contribution.default.borderColor.num1};
+      }
+      &[style="fill: var(--color-primary-light-2);"] {
+        fill: ${themeVars.github.contribution.default.bgColor.num2} !important;
+        outline-color: ${themeVars.github.contribution.default.borderColor.num2};
+      }
+      &[style="fill: var(--color-primary);"] {
+        fill: ${themeVars.github.contribution.default.bgColor.num3} !important;
+        outline-color: ${themeVars.github.contribution.default.borderColor.num3};
+      }
+      &[style="fill: var(--color-primary-dark-2);"] {
+        fill: ${themeVars.github.contribution.default.bgColor.num4} !important;
+        outline-color: ${themeVars.github.contribution.default.borderColor.num4};
+      }
+      &[style="fill: var(--color-primary-dark-4);"] {
+        fill: ${themeVars.github.themeExtra.contribution.default.bgColor.num5} !important;
+        outline-color: ${themeVars.github.themeExtra.contribution.default.borderColor.num5};
       }
     }
   }
@@ -87,18 +80,15 @@ const heatmap = css`
 
 // 动态
 const activity = css`
-  .activity-heatmap-container + .divider:not(.divider-text) {
-    border-color: #0000;
-  }
   #activity-feed {
     border-radius: 12px;
     box-shadow:
       0px 0px 0px 1px ${themeVars.color.light.border},
       ${themeVars.github.shadow.resting.small};
-    > .item {
+    > .flex-item {
       gap: 12px;
       padding: 16px;
-      > .item-leading {
+      > .flex-item-leading {
         img {
           width: 24px;
           height: 24px;
@@ -106,7 +96,7 @@ const activity = css`
         }
       }
       /* 动态的主要内容 */
-      > .item-main {
+      > .flex-item-main {
         gap: 8px !important;
         /* 动态的标题 */
         > div:not([class]) {
@@ -150,7 +140,7 @@ const activity = css`
             }
           }
         }
-        > .item-body {
+        > .flex-item-body {
           gap: 4px;
           font-size: 12px;
           color: ${themeVars.color.text.light.num1};
@@ -160,7 +150,7 @@ const activity = css`
         }
       }
       /* 动态的右侧 svg 图标 */
-      .item-trailing {
+      .flex-item-trailing {
         align-self: center;
         svg {
           height: 18px;

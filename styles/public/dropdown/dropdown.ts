@@ -49,7 +49,7 @@ const dropdown = css`
         &:not(.emoji):first-of-type {
           margin-top: 8px;
           /* 工单详细页面的标签菜单中的清除选中标签按钮 */
-          &.clear-selection {
+          &.no-select {
             margin-top: 0px;
           }
         }
@@ -142,7 +142,7 @@ const dropdown = css`
       border-radius: 0 0 12px 12px !important;
     }
     /* 修复仪表板切换用户按钮菜单下无创建组织按钮时的菜单圆角 */
-    &.context-user-switch {
+    &.context.user.overflow {
       .scrolling.menu:last-child {
         border-radius: 0 0 12px 12px !important;
       }

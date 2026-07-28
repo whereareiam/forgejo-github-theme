@@ -14,6 +14,16 @@ A Gitea theme that pursues GitHub style not only in colors but also in styling d
 
 ![Dashboard](https://raw.githubusercontent.com/lutinglt/gitea-github-theme/assets/screenshots/dashboard.png)
 
+## Forgejo 15 Target
+
+This fork targets Forgejo `15.0.5+gitea-1.22.0` while retaining the upstream theme engine and design system. Styles
+address Forgejo's native markup directly in the existing `styles` pipeline; they do not layer a newer-Gitea selector set
+over compatibility aliases. Adapted Go templates live in the top-level `templates` tree. The standard `bun bundle`
+command generates all themes in `dist`; generated CSS remains excluded from Git.
+
+The included templates are version-bound and should not be installed on another Forgejo release without reviewing its
+routes and template data.
+
 ## Version Number Explanation
 
 The theme version number is kept consistent with the Gitea version number

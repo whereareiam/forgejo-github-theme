@@ -63,6 +63,21 @@ const baseButton = css`
       }
     }
   }
+  .button.primary:not(.ui) {
+    ${primaryButtonStyle}
+    border: 1px solid ${themeVars.github.button.primary.borderColor.rest};
+    &:is(:hover, :focus-visible) {
+      ${primaryButtonHoverStyle}
+    }
+    &:active {
+      color: ${themeVars.github.button.primary.fgColor.rest};
+      background-color: ${themeVars.github.button.primary.bgColor.active};
+      border-color: ${themeVars.github.button.primary.borderColor.hover};
+    }
+    svg {
+      color: inherit;
+    }
+  }
   /* 主色调基本按钮和普通按钮一样 */
   /* 作者的关注按钮 */
   .ui.basic.primary.button {
@@ -101,7 +116,8 @@ const greenButton = css`
 const redButton = css`
   .ui.red.button,
   .ui.basic.red.buttons .button,
-  .ui.basic.red.button {
+  .ui.basic.red.button,
+  .button.danger:not(.ui) {
     color: ${themeVars.github.button.danger.fgColor.rest};
     background-color: ${themeVars.github.button.danger.bgColor.rest};
     /* 一些按钮边框色为红色, 比如危险操作区, 统一为暗色边框和 github 一致 */
