@@ -20,11 +20,24 @@
 import { css, cssCombine, themeVars } from "@lutinglt/gitea-github-theme/core";
 
 const body = css`
+  @font-face {
+    font-display: swap;
+    font-family: "Mona Sans VF";
+    font-style: normal;
+    font-weight: 200 900;
+    src: url("../fonts/MonaSansVF-v2.0.27.woff2") format("woff2");
+  }
+
   :root {
     --color-selection-bg: ${themeVars.color.primary.light.num1};
     --color-selection-fg: ${themeVars.color.white};
+    --fonts-proportional:
+      "Mona Sans VF", -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif;
+    --fonts-emoji: "Apple Color Emoji", "Segoe UI Emoji";
   }
+
   body {
+    font-family: var(--fonts-proportional), var(--fonts-emoji);
     line-height: 1.5;
   }
   a {

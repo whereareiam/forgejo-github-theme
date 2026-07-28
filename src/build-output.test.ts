@@ -224,6 +224,41 @@ describe("Forgejo 15 native integration", () => {
     }
   });
 
+  it("ships GitHub's proportional font and applies its Primer stack", () => {
+    const css = fs.readFileSync(path.join(DIST_DIR, `${PREFIX}light.css`), "utf-8");
+    const sourceFont = path.join(ROOT_DIR, "public", "assets", "fonts", "MonaSansVF-v2.0.27.woff2");
+    const builtFont = path.join(DIST_DIR, "assets", "fonts", "MonaSansVF-v2.0.27.woff2");
+    const fontLicense = path.join(DIST_DIR, "assets", "fonts", "MonaSans-OFL.txt");
+
+    expect(css).toContain("font-family:Mona Sans VF");
+    expect(css).toContain("url(../fonts/MonaSansVF-v2.0.27.woff2)");
+    expect(css).toContain('--fonts-proportional:"Mona Sans VF", -apple-system, BlinkMacSystemFont');
+    expect(fs.existsSync(sourceFont)).toBe(true);
+    expect(fs.existsSync(builtFont)).toBe(true);
+    expect(fs.existsSync(fontLicense)).toBe(true);
+    expect(fs.statSync(builtFont).size).toBeGreaterThan(100_000);
+  });
+
+  it("matches GitHub's measured repository navigation geometry", () => {
+    const header = fs.readFileSync(path.join(ROOT_DIR, "styles", "templates", "repo", "header.ts"), "utf-8");
+    const navbarTemplate = fs.readFileSync(path.join(ROOT_DIR, "templates", "base", "head_navbar.tmpl"), "utf-8");
+
+    expect(header).toContain("height: 52px;");
+    expect(header).toContain("padding-top: 16px;");
+    expect(header).toContain("border-bottom: 0;");
+    expect(header).toContain(".navbar-left > #navbar-logo.item");
+    expect(header).toContain("height: 48px;");
+    expect(header).toContain("gap: 8px;");
+    expect(header).toContain("margin: 0 7px;");
+    expect(header).toContain(".repository-navbar-breadcrumb > a.repository-navbar-name");
+    expect(header).toContain("margin: 0 0 8px !important;");
+    expect(header).toContain("padding: 6px 8px !important;");
+    expect(header).toContain("line-height: 21px;");
+    expect(header).toContain("bottom: -8px;");
+    expect(navbarTemplate).toContain("{{ctx.AvatarUtils.Avatar .Owner 16}}");
+    expect(navbarTemplate).not.toContain('class="repository-navbar-owner-avatar"');
+  });
+
   it("does not emit selector families from the newer Gitea markup", () => {
     const css = fs.readFileSync(path.join(DIST_DIR, `${PREFIX}light.css`), "utf-8");
 

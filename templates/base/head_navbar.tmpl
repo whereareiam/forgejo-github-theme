@@ -16,10 +16,10 @@
 		{{if .Repository}}
 			{{with .Repository}}
 			<div class="repository-navbar-breadcrumb not-mobile">
-				<a class="repository-navbar-owner-avatar" href="{{.Owner.HomeLink}}" aria-label="{{.Owner.Name}}">
-					{{ctx.AvatarUtils.Avatar .Owner 24}}
+				<a class="repository-navbar-owner" href="{{.Owner.HomeLink}}">
+					{{ctx.AvatarUtils.Avatar .Owner 16}}
+					<span>{{.Owner.Name}}</span>
 				</a>
-				<a class="repository-navbar-owner" href="{{.Owner.HomeLink}}">{{.Owner.Name}}</a>
 				<span class="repository-navbar-separator">/</span>
 				<a class="repository-navbar-name" href="{{$.RepoLink}}">{{.Name}}</a>
 			</div>
