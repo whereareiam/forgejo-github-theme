@@ -50,20 +50,6 @@ const repoSidebarTop = css`
       a.muted:hover {
         text-decoration: none;
       }
-      /* 仓库描述本身 */
-      .repo-home-sidebar-header {
-        margin-top: 10px;
-      }
-      /* 仓库描述内容 */
-      .repo-description {
-        margin-top: 10px;
-        color: ${themeVars.color.text.self};
-      }
-      /* 仓库标签 */
-      #repo-topics {
-        margin: 8px 0px !important;
-        gap: 4px !important;
-      }
       #manage_topic {
         color: ${themeVars.color.text.light.num1} !important;
       }

@@ -310,6 +310,29 @@ describe("Forgejo 15 native integration", () => {
     expect(repoContentStyle).toContain(".repo-code-actions > li > a:hover");
   });
 
+  it("matches GitHub's repository About, visibility, and code-search details", () => {
+    const headerStyle = fs.readFileSync(path.join(ROOT_DIR, "styles", "templates", "repo", "header.ts"), "utf-8");
+    const headerTemplate = fs.readFileSync(path.join(ROOT_DIR, "templates", "repo", "header.tmpl"), "utf-8");
+    const repoContentStyle = fs.readFileSync(
+      path.join(ROOT_DIR, "styles", "templates", "repo", "view_content.ts"),
+      "utf-8"
+    );
+    const sidebarTemplate = fs.readFileSync(path.join(ROOT_DIR, "templates", "repo", "home_sidebar_top.tmpl"), "utf-8");
+
+    expect(sidebarTemplate).toContain("No description, website, or topics provided.");
+    expect(sidebarTemplate).not.toContain('ctx.Locale.Tr "repo.no_desc"');
+    expect(headerTemplate).toContain("repository-visibility-label");
+    expect(headerStyle).toContain("> .ui.label.repository-visibility-label");
+    expect(repoContentStyle).toContain(".repo-home-sidebar-top > .repo-about-block");
+    expect(repoContentStyle).toContain(".repo-about-block > .repo-about-heading");
+    expect(repoContentStyle).toContain("> .repo-description.no-description");
+    expect(repoContentStyle).toContain("font-style: italic;");
+    expect(repoContentStyle).toContain("min-height: 34px;");
+    expect(repoContentStyle).toContain("flex: 1 1 120px;");
+    expect(repoContentStyle).toContain("> .ui.dropdown.selection");
+    expect(repoContentStyle).toContain("border-radius: 0 !important;");
+  });
+
   it("keeps adapted templates in the standard template tree", () => {
     for (const template of requiredTemplates) {
       expect(fs.existsSync(path.join(ROOT_DIR, "templates", template)), `missing template: ${template}`).toBe(true);

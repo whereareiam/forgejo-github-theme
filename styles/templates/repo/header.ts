@@ -265,6 +265,15 @@ const repositoryHeader = css`
     background: transparent;
   }
 
+  .page-content.repository
+    > .repository-content-header
+    .repo-header
+    > .flex-item
+    > .flex-item-trailing
+    > .ui.label.repository-visibility-label {
+    color: ${themeVars.color.text.light.num1};
+  }
+
   .page-content.repository > .secondary-nav > .ui.tabs.divider {
     border-top-color: ${themeVars.color.light.border};
     margin-bottom: 12px;

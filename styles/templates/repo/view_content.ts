@@ -313,13 +313,27 @@ const repoToolbarDetails = css`
  * topics endpoints, so present its native controls in one modal while keeping
  * the topic dropdown markup required by repo-home.js.
  */
-  .page-content.repository.file.list .repo-about-block {
+  .page-content.repository.file.list .repo-home-sidebar-top > .repo-about-block {
+    gap: 0;
+    margin: 0 !important;
     position: relative;
   }
 
-  .page-content.repository.file.list .repo-about-heading {
+  .page-content.repository.file.list .repo-about-block > .repo-about-heading {
     height: 24px;
-    margin-top: 0;
+    margin: 0;
+  }
+
+  .page-content.repository.file.list .repo-about-block > .repo-description {
+    color: ${themeVars.color.text.self};
+    margin: 12px 0;
+  }
+
+  .page-content.repository.file.list .repo-about-block > .repo-description.no-description {
+    color: ${themeVars.color.text.light.num1};
+    font-size: 16px;
+    font-style: italic;
+    line-height: 24px;
   }
 
   .page-content.repository.file.list .repo-about-settings,
@@ -394,25 +408,38 @@ const repoToolbarDetails = css`
   }
 
   .page-content.repository.file.list .repo-about-modal-body label {
+    font-size: 14px;
     font-weight: var(--font-weight-semibold);
+    line-height: 21px;
   }
 
   .page-content.repository.file.list .repo-about-modal-body input:is([name="description"], [name="website"]) {
+    box-sizing: border-box;
     font-size: 14px;
     height: 32px;
+    line-height: 20px;
+    padding: 5px 12px;
   }
 
   .page-content.repository.file.list .repo-about-topics-input {
     align-content: flex-start;
-    align-items: flex-start;
-    min-height: 58px;
-    padding: 6px;
+    align-items: center;
+    box-sizing: border-box;
+    font-size: 12px;
+    line-height: 20px;
+    min-height: 34px;
+    padding: 6px 0 6px 12px;
   }
 
   .page-content.repository.file.list .repo-about-topics-input > input.search {
-    font-size: 14px;
+    flex: 1 1 120px;
+    font-size: 12px;
+    height: 20px;
     line-height: 20px;
-    margin: 0;
+    margin: 0 12px 0 0;
+    min-width: 120px;
+    padding: 0;
+    width: auto !important;
   }
 
   .page-content.repository.file.list .repo-about-error {
@@ -441,6 +468,26 @@ const repoToolbarDetails = css`
  */
   .page-content.repository.file.list .code-search + #repo-files-table {
     margin-top: 0;
+  }
+
+  .page-content.repository.file.list .code-search [data-test-tag="codesearch"] .ui.action.input > input {
+    border-radius: ${otherThemeVars.border.radius} 0 0 ${otherThemeVars.border.radius};
+  }
+
+  .page-content.repository.file.list
+    .code-search
+    [data-test-tag="codesearch"]
+    .ui.action.input
+    > .ui.dropdown.selection {
+    border-radius: 0 !important;
+  }
+
+  .page-content.repository.file.list
+    .code-search
+    [data-test-tag="codesearch"]
+    .ui.action.input
+    > .ui.button:last-child {
+    border-radius: 0 ${otherThemeVars.border.radius} ${otherThemeVars.border.radius} 0 !important;
   }
 
   .page-content.repository.file.list .code-search + #repo-files-table > .repo-file-line:first-child {

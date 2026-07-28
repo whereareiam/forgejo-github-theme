@@ -10,10 +10,12 @@
 			{{end}}
 		</div>
 
-		<div class="repo-description tw-break-anywhere">
-			{{$description := .Repository.DescriptionHTML $.Context}}
-			{{if $description}}<span class="description">{{$description | RenderCodeBlock}}</span>{{else}}<span class="no-description text-italic">{{ctx.Locale.Tr "repo.no_desc"}}</span>{{end}}
-		</div>
+		{{$description := .Repository.DescriptionHTML $.Context}}
+		{{if $description}}
+			<div class="repo-description tw-break-anywhere"><span class="description">{{$description | RenderCodeBlock}}</span></div>
+		{{else}}
+			<div class="repo-description no-description tw-break-anywhere">No description, website, or topics provided.</div>
+		{{end}}
 
 		{{if .Repository.Website}}
 			<a class="flex-text-block repo-home-sidebar-website" href="{{.Repository.Website}}">
