@@ -80,38 +80,6 @@ const repoFiles = css`
             margin-right: 2px;
           }
         }
-        /* 最后一次提交 */
-        &.repo-file-last-commit {
-          min-height: 3.725rem;
-          .latest-commit {
-            gap: 8px;
-            line-height: 24px;
-            .commit-summary {
-              color: ${themeVars.color.text.light.num1};
-            }
-            img.ui.avatar {
-              border-radius: 9999px;
-              margin-left: 2px;
-              width: 20px;
-              height: 20px;
-            }
-            /* 作者 */
-            .author-wrapper {
-              display: flex;
-              align-items: center;
-              &:hover {
-                color: ${themeVars.color.text.self};
-              }
-            }
-            /* 提交哈希值 */
-            .ui.label {
-              display: none;
-            }
-          }
-          relative-time {
-            color: ${themeVars.color.text.light.num1};
-          }
-        }
       }
       /* 文件列表 */
       .repo-file-item {

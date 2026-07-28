@@ -333,6 +333,32 @@ describe("Forgejo 15 native integration", () => {
     expect(repoContentStyle).toContain("border-radius: 0 !important;");
   });
 
+  it("matches GitHub's latest-commit row while preserving Forgejo commit data", () => {
+    const repoFilesStyle = fs.readFileSync(
+      path.join(ROOT_DIR, "styles", "components", "repo", "repo_files.ts"),
+      "utf-8"
+    );
+    const viewListStyle = fs.readFileSync(path.join(ROOT_DIR, "styles", "templates", "repo", "view_list.ts"), "utf-8");
+    const viewListTemplate = fs.readFileSync(path.join(ROOT_DIR, "templates", "repo", "view_list.tmpl"), "utf-8");
+
+    expect(viewListTemplate).toContain('class="repo-latest-commit-row"');
+    expect(viewListTemplate).toContain('<h2 class="sr-only">Latest commit</h2>');
+    expect(viewListTemplate).toContain('class="repo-latest-commit-primary"');
+    expect(viewListTemplate).toContain('class="repo-latest-commit-actions"');
+    expect(viewListTemplate).toContain('{{printf "%.7s" .LatestCommit.ID.String}}');
+    expect(viewListTemplate).toContain('template "repo/shabox_badge"');
+    expect(viewListTemplate).toContain('template "repo/commit_statuses"');
+    expect(viewListTemplate).not.toContain('{{template "repo/latest_commit" .}}');
+    expect(viewListStyle).toContain("min-height: 52px;");
+    expect(viewListStyle).toContain(".repo-latest-commit-row");
+    expect(viewListStyle).toContain(".repo-latest-commit-row > .sr-only");
+    expect(viewListStyle).toContain("clip: rect(0, 0, 0, 0);");
+    expect(viewListStyle).toContain("min-height: 44px;");
+    expect(viewListStyle).toContain("flex: 0 0 28px;");
+    expect(viewListStyle).toContain("text-transform: capitalize;");
+    expect(repoFilesStyle).not.toContain("&.repo-file-last-commit");
+  });
+
   it("keeps adapted templates in the standard template tree", () => {
     for (const template of requiredTemplates) {
       expect(fs.existsSync(path.join(ROOT_DIR, "templates", template)), `missing template: ${template}`).toBe(true);
