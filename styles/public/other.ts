@@ -39,12 +39,12 @@ const svg = css`
   .octicon-star-fill {
     color: ${themeVars.github.button.star.iconColor} !important;
   }
-  /* VSCode 图标 */
-  .gitea-vscode {
+  /* VS Code 图标 */
+  .gitea-open-with-vscode {
     color: #007acc !important;
   }
   /* VSCodium 图标 */
-  .gitea-vscodium {
+  .gitea-open-with-vscodium {
     color: #429cf0 !important;
   }
   /* 重新打开工单按钮设置为绿色 */

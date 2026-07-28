@@ -77,9 +77,9 @@ const verticalMenu = css`
     }
     /* 部分菜单项的子菜单 */
     > details.item {
-      /* Actions 其他工作流菜单 */
+      /* Forgejo 15 设置菜单的折叠分组 */
       > summary,
-      > .menu.items-full-width > .item {
+      > .menu > .item {
         padding: 6px 8px;
         &:hover {
           background: ${themeVars.github.control.transparent.bgColor.hover};

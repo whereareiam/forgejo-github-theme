@@ -22,9 +22,9 @@ import { activeItemAfterStyle } from "@lutinglt/gitea-github-theme/styles/common
 
 // 选择框的下拉菜单看起来像普通按钮
 const selectionDropdown = css`
-  /* 排除可以选择的输入搜索框和创建仓库的拥有者 */
-  .ui.selection.dropdown:not(.search):not(.ellipsis-text-items),
-  .ui.selection.dropdown.active:not(.search):not(.ellipsis-text-items) {
+  /* 排除可搜索输入框和 Forgejo 15 的仓库拥有者选择框 */
+  .ui.selection.dropdown:not(.search):not(:has(> #uid)),
+  .ui.selection.dropdown.active:not(.search):not(:has(> #uid)) {
     background-color: ${themeVars.color.button};
     border-color: ${themeVars.color.light.border};
     border-radius: ${otherThemeVars.border.radius};
@@ -43,13 +43,11 @@ const selectionDropdown = css`
       ${activeItemAfterStyle};
     }
   }
-  /* 修复 Gitea 1.26 增加的阴影样式 */
+  /* 保持 Forgejo 选择框和菜单阴影各自独立 */
   .ui.selection.dropdown,
   .ui.selection.dropdown.active {
-    /* 修复 Gitea 1.26 多余的阴影 */
     &:hover {
       box-shadow: none;
-      /* 修复 Gitea 1.26 覆盖的阴影 */
       .menu {
         box-shadow: ${themeVars.github.shadow.floating.small};
       }
@@ -64,10 +62,10 @@ const selectionDropdown = css`
     padding-top: 8px;
     padding-bottom: 8px;
   }
-  /* 这个按钮项目前只在创建仓库的拥有者 */
+  /* Forgejo 15 的仓库拥有者选择框 */
   /* 不实现伪元素, 因为 .item 设置溢出的元素会被截断 */
-  .ui.selection.dropdown.ellipsis-text-items,
-  .ui.selection.dropdown.activeellipsis-text-items {
+  .ui.selection.dropdown:has(> #uid),
+  .ui.selection.dropdown.active:has(> #uid) {
     &:focus {
       background: ${themeVars.color.button};
       border-color: ${themeVars.color.light.border};
@@ -97,7 +95,7 @@ const selectionDropdown = css`
     border-bottom-left-radius: ${otherThemeVars.border.radius} !important;
     border-bottom-right-radius: ${otherThemeVars.border.radius} !important;
   }
-  /* 修复 Gitea 1.26 (:not(:focus)) 导致的小按钮右边框出现问题, 例如软件包类型, 通常相邻有元素 */
+  /* 与 Forgejo 的 action input 保持单一连接边框 */
   .ui.action.input:not([class*="left action"]) > .ui.small.dropdown.selection {
     border-right: none;
   }

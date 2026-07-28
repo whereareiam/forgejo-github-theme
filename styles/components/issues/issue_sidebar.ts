@@ -45,10 +45,9 @@ const issueSidebar = css`
           font-size: 12px;
         }
         .ui.form,
-        a.fixed-text.muted,
         span.text,
         /* 列表项为空时的文字 */
-        span.item.empty-list,
+        .no-select,
         p {
           color: ${themeVars.color.text.light.num1};
           font-size: 12px;
@@ -57,7 +56,6 @@ const issueSidebar = css`
         > a,
         .ui.dropdown.select-branch,
         .ui.form,
-        a.fixed-text.muted,
         span.text,
         .ui.watching > div,
         .ui.depending > div,
@@ -74,80 +72,53 @@ const issueSidebar = css`
             font-weight: 400;
           }
         }
-        .issue-sidebar-combo {
-          .ui.dropdown > a.fixed-text.muted {
-            align-items: center;
-            border-radius: ${otherThemeVars.border.radius};
-            text-decoration-line: none;
-            height: 28px;
-            &:hover {
-              background: ${themeVars.github.control.transparent.bgColor.hover};
-              box-shadow: inset 0 0 0 1px ${themeVars.github.control.transparent.borderColor.active};
-            }
+        > .ui.dropdown > :is(a, span).text.muted,
+        > #milestone-section > .ui.dropdown > a.text.muted {
+          align-items: center;
+          border-radius: ${otherThemeVars.border.radius};
+          display: flex;
+          height: 28px;
+          text-decoration-line: none;
+          &:hover {
+            background: ${themeVars.github.control.transparent.bgColor.hover};
+            box-shadow: inset 0 0 0 1px ${themeVars.github.control.transparent.borderColor.active};
           }
-          .ui.list {
-            margin-top: 0 !important;
-            margin-bottom: 0 !important;
-          }
-          /* 评审人 */
-          .ui.relaxed.list {
-            .item {
-              /* 操作图标按钮 */
-              a.muted.icon {
-                color: ${themeVars.color.text.light.num1};
-                &:hover {
-                  color: ${themeVars.color.primary.self};
-                }
-              }
-            }
-          }
-          /* 标签菜单项 */
-          .ui.dropdown > .menu > .scrolling.menu > .item:has(.item-secondary-info) {
-            /* 修复标签菜单中描述文本过长没有换行挤掉标签的问题 */
-            display: grid !important;
-            grid-template-columns: auto auto 1fr;
-            row-gap: 0px; /* 去除行间距, 仅当有描述信息时才有间距(.tw-pl-\\\[20px\\\]) */
-            /* 如果是归档标签则隐藏 */
-            &.tw-hidden {
-              display: none !important;
-            }
-            /* 默认隐藏多余信息避免标签对齐问题 */
-            .item-secondary-info {
-              display: none;
-              grid-column: 2 / -1; /* 从第2列对齐 */
+        }
+        > .ui.list,
+        > #milestone-section > .ui.list {
+          margin-top: 0 !important;
+          margin-bottom: 0 !important;
+        }
+        /* 评审人 */
+        .ui.assignees.list {
+          .item {
+            /* 操作图标按钮 */
+            a.muted.icon {
               color: ${themeVars.color.text.light.num1};
-              > .tw-pl-\\\[20px\\\] {
-                /* 已经与第二列对齐, 不需要额外的 padding */
-                padding-left: 0px !important;
-                padding-top: 4px;
-                /* 显示全部描述信息与 Github 保持一致 */
-                white-space: normal;
-                small {
-                  font-size: 12px;
-                }
-              }
-              > .archived-label-hint {
-                /* 与父元素 item 的 padding 对齐 (dropdown.ts .ui.dropdown .menu > .item) */
-                top: 6px;
-                right: 8px;
-              }
-              /* 如果有描述信息则显示 */
-              &:has(.tw-pl-\\\[20px\\\]) {
-                display: block;
-                > .archived-label-hint {
-                  top: 4px; /* 有描述信息的归档标签与标签对齐需要更高点 */
-                }
-              }
-              /* 如果有归档标签则显示 */
-              &:has(.archived-label-hint > .ui.label) {
-                display: block;
+              &:hover {
+                color: ${themeVars.color.primary.self};
               }
             }
           }
-          /* 修复菜单下拉打开时, 无法聚焦输入框 */
-          .menu input {
-            transition: none;
+        }
+        /* Forgejo 15 的标签描述和归档提示是菜单项的直接子元素 */
+        .ui.dropdown.select-label > .menu > .item {
+          .desc {
+            color: ${themeVars.color.text.light.num1};
+            font-size: 12px;
+            overflow-wrap: anywhere;
+            white-space: normal;
           }
+          .archived-label-hint {
+            color: ${themeVars.color.text.light.num1};
+            font-size: 12px;
+            margin: 4px 0 0 23px;
+          }
+        }
+        /* 修复菜单下拉打开时, 无法聚焦输入框 */
+        > .ui.dropdown .menu input,
+        > #milestone-section > .ui.dropdown .menu input {
+          transition: none;
         }
         /* 时间追踪 */
         > div:not([class]):not([id]) {

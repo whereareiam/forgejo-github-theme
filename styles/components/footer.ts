@@ -60,14 +60,6 @@ const footer = css`
           color: ${themeVars.color.primary.self};
         }
       }
-      /* 主题按钮&菜单项 */
-      .ui.dropdown .theme-menu-item {
-        gap: 4px;
-      }
-      /* 主题菜单 */
-      .menu.theme-menu > .item > .theme-menu-item {
-        padding: 0;
-      }
     }
   }
 `;

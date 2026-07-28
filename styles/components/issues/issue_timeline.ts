@@ -32,7 +32,7 @@ const timeline = css`
       .timeline-item,
       .timeline-item-group {
         padding: 12px 0;
-        .comment-text-line {
+        > .text.grey.muted-links {
           color: ${themeVars.color.text.light.num1};
         }
         /* 事件 */
@@ -40,7 +40,7 @@ const timeline = css`
           /* 修复覆盖后的位置问题 */
           padding-left: 15px;
           /* 避免锚中批准的头像 */
-          .avatar-with-link .avatar {
+          > a.avatar > img.ui.avatar {
             width: 20px;
             height: 20px;
           }
@@ -50,7 +50,7 @@ const timeline = css`
             top: -4px;
           }
           /* bot 标签 */
-          .comment-text-line .ui.basic.label {
+          > .text.grey.muted-links .ui.basic.label {
             ${botLabelStyle}
           }
           .badge {

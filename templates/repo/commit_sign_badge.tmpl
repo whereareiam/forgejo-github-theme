@@ -1,3 +1,4 @@
+{{/* Forgejo 15 commit-signature data adapted to the themed badge. */}}
 {{/* Template attributes:
 * Commit
 * CommitBaseLink
@@ -12,7 +13,7 @@ so this template should be kept as small as possible, DO NOT put large component
 
 {{- $extraClass := "" -}}
 {{- $verified := false -}}
-{{- $signingUser := NIL -}}
+{{- $signingUser := "" -}}
 {{- $signingEmail := "" -}}
 {{- $msgReasonPrefix := "" -}}
 {{- $msgReason := "" -}}
@@ -55,37 +56,21 @@ so this template should be kept as small as possible, DO NOT put large component
 	{{- end -}}
 {{- end -}}
 
-{{- $github_verifed := "gitea-github-theme.verifed" -}}
-{{- $ctx_github_verifed := ctx.Locale.Tr $github_verifed -}}
-{{- $github_partially_verifed := "gitea-github-theme.partially_verifed" -}}
-{{- $ctx_github_partially_verifed := ctx.Locale.Tr $github_partially_verifed -}}
-{{- $github_unverifed := "gitea-github-theme.unverifed" -}}
-{{- $ctx_github_unverifed := ctx.Locale.Tr $github_unverifed -}}
-
 {{- if $commit -}}
-<a {{if $commitBaseLink}}href="{{$commitBaseLink}}/{{$commit.ID}}"{{end}} class="ui label commit-id-short {{$extraClass}} gitea-github-theme-commit-sha" rel="nofollow">
+<a {{if $commitBaseLink}}href="{{$commitBaseLink}}/{{PathEscape $commit.ID.String}}"{{end}} class="ui label commit-id-short {{$extraClass}} gitea-github-theme-commit-sha" rel="nofollow">
 {{- end -}}
 {{- if or (not $commit) $extraClass}}{{/* only show the lock icon if there is no commit info (icon only) or the commit is really signed */}}
 	<span class="ui label commit-sign-badge gitea-github-theme-commit-sign-badge {{$extraClass}}">
 		{{- if $verified -}}
 			{{- if and $signingUser $signingUser.ID -}}
-				<span data-tooltip-content="{{$msgReason}}">
-					{{if eq $ctx_github_verifed $github_verifed }}Verified
-					{{else}}{{$ctx_github_verifed}}{{end}}
-				</span>
+				<span data-tooltip-content="{{$msgReason}}">Verified</span>
 				<span data-tooltip-content="{{$msgSigningKey}}">{{ctx.AvatarUtils.Avatar $signingUser 20}}</span>
 			{{- else -}}
-				<span data-tooltip-content="{{$msgReason}}">
-					{{if eq $ctx_github_partially_verifed $github_partially_verifed }}Partially verified
-					{{else}}{{$ctx_github_partially_verifed}}{{end}}
-				</span>
+				<span data-tooltip-content="{{$msgReason}}">Partially verified</span>
 				<span data-tooltip-content="{{$msgSigningKey}}">{{ctx.AvatarUtils.AvatarByEmail $signingEmail "" 20}}</span>
 			{{- end -}}
 		{{- else -}}
-			<span data-tooltip-content="{{$msgReason}}">
-				{{if eq $ctx_github_unverifed $github_unverifed }}Unverified
-				{{else}}{{$ctx_github_unverifed}}{{end}}
-			</span>
+			<span data-tooltip-content="{{$msgReason}}">Unverified</span>
 		{{- end -}}
 	</span>
 {{- end -}}

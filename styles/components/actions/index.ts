@@ -22,6 +22,5 @@ import actionSvg from "./action_svg";
 import actions from "./actions";
 import workflowRuns from "./workflow_runs";
 import workflowSteps from "./workflow_steps";
-import workflowSummary from "./workflow_summary";
 
-export default cssCombine(actionSvg, actions, workflowRuns, workflowSteps, workflowSummary);
+export default cssCombine(actionSvg, actions, workflowRuns, workflowSteps);

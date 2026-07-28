@@ -1,138 +1,138 @@
+{{/*
+	The theme's repository content layout adapted to Forgejo 15.
+	Newer file-tree/search partials are replaced with Forgejo 15's branch
+	selector and find-file route. The native clone controls are retained inside
+	a compact details dropdown so the two toolbar groups fit on one line.
+*/}}
 {{$isTreePathRoot := not .TreeNames}}
+{{$treeNameIdxLast := Eval (len .TreeNames) "-" 1}}
 
-<div class="repo-view-content-data tw-hidden" data-document-title="{{ctx.RootData.Title}}" data-document-title-common="{{ctx.RootData.PageTitleCommon}}"></div>
-{{/* {{template "repo/sub_menu" .}} */}}
 <div class="gitea-github-theme-templates repo-button-row">
 	<div class="repo-button-row-left">
-	{{if not $isTreePathRoot}}
-		{{template "repo/view_file_tree_toggle_button" .}}
-	{{end}}
+		{{template "repo/branch_dropdown" dict "root" .}}
 
-	{{template "repo/branch_dropdown" dict
-		"Repository" .Repository
-		"ShowTabBranches" true
-		"ShowTabTags" true
-		"CurrentRefType" .RefFullName.RefType
-		"CurrentRefShortName" .RefFullName.ShortName
-		"CurrentTreePath" .TreePath
-		"RefLinkTemplate" "{RepoLink}/src/{RefType}/{RefShortName}/{TreePath}"
-		"AllowCreateNewRef" .CanCreateBranch
-		"ShowViewAllRefsEntry" true
-	}}
-	{{/* 移除 PR 按钮 */}}
-	{{/* 替换 分支/标签 按钮栏 */}}
-	{{if and $isTreePathRoot (.Permission.CanRead ctx.Consts.RepoUnitTypeCode) (not .IsEmptyRepo)}}
-	<div class="repository-summary">
-		<a class="item muted" href="{{.RepoLink}}/branches">
-			{{svg "octicon-git-branch"}} <b>{{ctx.Locale.PrettyNumber .BranchesCount}}</b> {{ctx.Locale.TrN .BranchesCount "repo.branch" "repo.branches"}}
-		</a>
-		{{if $.Permission.CanRead ctx.Consts.RepoUnitTypeCode}}
-			<a class="item muted" href="{{.RepoLink}}/tags">
-				{{svg "octicon-tag"}} <b>{{ctx.Locale.PrettyNumber .NumTags}}</b> {{ctx.Locale.TrN .NumTags "repo.tag" "repo.tags"}}
+		{{if and $isTreePathRoot (.Permission.CanRead $.UnitTypeCode) (not .IsEmptyRepo)}}
+		<div class="repository-summary">
+			<a class="item muted" href="{{.RepoLink}}/branches">
+				{{svg "octicon-git-branch"}}
+				{{ctx.Locale.TrN .BranchesCount "repo.n_branch_one" "repo.n_branch_few" (printf "<b>%s</b>" (ctx.Locale.PrettyNumber .BranchesCount) | TrustHTML)}}
 			</a>
+			<a class="item muted" href="{{.RepoLink}}/tags">
+				{{svg "octicon-tag"}}
+				{{ctx.Locale.TrN .NumTags "repo.n_tag_one" "repo.n_tag_few" (printf "<b>%s</b>" (ctx.Locale.PrettyNumber .NumTags) | TrustHTML)}}
+			</a>
+		</div>
 		{{end}}
-	</div>
-	{{end}}
 
-	{{if not $isTreePathRoot}}
-		{{$treeNameIdxLast := Eval (len .TreeNames) "-" 1}}
-		<span class="breadcrumb">
-			<a class="section" href="{{.RepoLink}}/src/{{.RefTypeNameSubURL}}" title="{{.Repository.Name}}">{{StringUtils.EllipsisString .Repository.Name 30}}</a>
-			{{- range $i, $v := .TreeNames -}}
-				<span class="breadcrumb-divider">/</span>
-				{{- if eq $i $treeNameIdxLast -}}
-					<span class="active section" title="{{$v}}">{{$v}}</span>
-					<button class="btn interact-fg tw-mx-1" data-clipboard-text="{{$.TreePath}}" data-tooltip-content="{{ctx.Locale.Tr "copy_path"}}">{{svg "octicon-copy" 14}}</button>
-				{{- else -}}
-					{{$p := index $.Paths $i}}<span class="section"><a href="{{$.BranchLink}}/{{PathEscapeSegments $p}}" title="{{$v}}">{{$v}}</a></span>
+		{{if not $isTreePathRoot}}
+			<span class="breadcrumb repo-path">
+				<a class="section" href="{{.RepoLink}}/src/{{.BranchNameSubURL}}" title="{{.Repository.Name}}">{{StringUtils.EllipsisString .Repository.Name 30}}</a>
+				{{- range $i, $v := .TreeNames -}}
+					<span class="breadcrumb-divider">/</span>
+					{{- if eq $i $treeNameIdxLast -}}
+						<span class="active section" title="{{$v}}">{{$v}}</span>
+						<button class="btn interact-fg tw-p-2" data-clipboard-text="{{$.TreePath}}" data-tooltip-content="{{ctx.Locale.Tr "copy_path"}}">{{svg "octicon-copy" 14}}</button>
+					{{- else -}}
+						{{$p := index $.Paths $i}}<span class="section"><a href="{{$.BranchLink}}/{{PathEscapeSegments $p}}" title="{{$v}}">{{$v}}</a></span>
+					{{- end -}}
 				{{- end -}}
-			{{- end -}}
-		</span>
-	{{end}}
+			</span>
+		{{end}}
 	</div>
 
 	<div class="repo-button-row-right">
-		<div class="repo-file-search-container"
-				data-global-init="initRepoFileSearch"
-				data-repo-link="{{.RepoLink}}"
-				data-current-ref-name-sub-url="{{.RefTypeNameSubURL}}"
-				data-tree-list-url="{{.RepoLink}}/tree-list/{{.RefTypeNameSubURL}}"
-				data-no-results-text="{{ctx.Locale.Tr "repo.find_file.no_matching"}}"
-				data-placeholder="{{ctx.Locale.Tr "repo.find_file.go_to_file"}}"
-		><div class="ui small input global-shortcut-wrapper"><input placeholder="{{ctx.Locale.Tr "repo.find_file.go_to_file"}}"><kbd>T</kbd></div></div>
+		{{if $isTreePathRoot}}
+			<a href="{{.Repository.Link}}/find/{{.BranchNameSubURL}}" class="ui compact basic button repo-find-file">
+				{{svg "octicon-search" 16}}
+				<span>{{ctx.Locale.Tr "repo.find_file.go_to_file"}}</span>
+			</a>
+		{{end}}
 
-		{{if .RefFullName.IsBranch}}
-			{{$addFilePath := .TreePath}}
-			{{if .IsViewFile}}
-				{{if gt (len .TreeNames) 1}}
-					{{$addFilePath = StringUtils.Join (slice .TreeNames 0 (Eval (len .TreeNames) "-" 1)) "/"}}
-				{{else}}
-					{{$addFilePath = ""}}
-				{{end}}
-			{{end}}
-			<button class="ui dropdown basic compact jump button repo-add-file" {{if not .Repository.CanEnableEditor}}disabled{{end}}>
+		{{if and .CanWriteCode .IsViewBranch (not .Repository.IsMirror) (not .Repository.IsArchived) (not .IsViewFile)}}
+			<button class="ui dropdown basic compact jump button repo-add-file"{{if not .Repository.CanEnableEditor}} disabled{{end}}>
 				{{ctx.Locale.Tr "repo.editor.add_file"}}
 				{{svg "octicon-triangle-down" 14 "dropdown icon"}}
 				<div class="menu">
-					<a class="item" href="{{.RepoLink}}/_new/{{.BranchName | PathEscapeSegments}}/{{$addFilePath | PathEscapeSegments}}">
+					<a class="item" href="{{.RepoLink}}/_new/{{.BranchName | PathEscapeSegments}}/{{.TreePath | PathEscapeSegments}}">
 						{{svg "octicon-plus" 16}}{{ctx.Locale.Tr "repo.editor.new_file"}}
 					</a>
 					{{if .RepositoryUploadEnabled}}
-					<a class="item" href="{{.RepoLink}}/_upload/{{.BranchName | PathEscapeSegments}}/{{$addFilePath | PathEscapeSegments}}">
+					<a class="item" href="{{.RepoLink}}/_upload/{{.BranchName | PathEscapeSegments}}/{{.TreePath | PathEscapeSegments}}">
 						{{svg "octicon-upload" 16}}{{ctx.Locale.Tr "repo.editor.upload_file"}}
 					</a>
 					{{end}}
-					<a class="item" href="{{.RepoLink}}/_diffpatch/{{.BranchName | PathEscapeSegments}}/{{$addFilePath | PathEscapeSegments}}">
+					<a class="item" href="{{.RepoLink}}/_diffpatch/{{.BranchName | PathEscapeSegments}}/{{.TreePath | PathEscapeSegments}}">
 						{{svg "octicon-diff" 16}}{{ctx.Locale.Tr "repo.editor.patch"}}
 					</a>
 				</div>
 			</button>
-
-			{{if and (not .IsViewFile) (not $isTreePathRoot)}}
-			<button class="ui dropdown basic compact jump button tw-px-3" data-tooltip-content="{{ctx.Locale.Tr "repo.more_operations"}}">
-				{{svg "octicon-kebab-horizontal"}}
-				<div class="menu">
-					<a class="item" data-clipboard-text="{{ctx.AppFullLink}}{{.Repository.Link}}/src/commit/{{.CommitID}}/{{PathEscapeSegments .TreePath}}">
-						{{svg "octicon-link" 16}}{{ctx.Locale.Tr "repo.file_copy_permalink"}}
-					</a>
-					{{if and (not $.DisableDownloadSourceArchives) $.RefFullName}}
-						<div class="divider"></div>
-						<a class="item muted archive-link" href="{{$.RepoLink}}/archive/{{PathEscapeSegments $.RefFullName.ShortName}}.zip?path={{PathEscapeSegments .TreePath}}" rel="nofollow">{{svg "octicon-file-zip"}}{{ctx.Locale.Tr "repo.download_directory_as" "ZIP"}}</a>
-						<a class="item muted archive-link" href="{{$.RepoLink}}/archive/{{PathEscapeSegments $.RefFullName.ShortName}}.tar.gz?path={{PathEscapeSegments .TreePath}}" rel="nofollow">{{svg "octicon-file-zip"}}{{ctx.Locale.Tr "repo.download_directory_as" "TAR.GZ"}}</a>
-					{{end}}
-					{{if and .Repository.CanContentChange (not $isTreePathRoot)}}
-						<div class="divider"></div>
-						<a class="item tw-text-danger" href="{{.RepoLink}}/_delete/{{.BranchName | PathEscapeSegments}}/{{.TreePath | PathEscapeSegments}}">
-							{{svg "octicon-trash" 16}}{{ctx.Locale.Tr "repo.editor.delete_this_directory"}}
-						</a>
-					{{end}}
-				</div>
-			</button>
-			{{end}}
 		{{end}}
-		{{/* 忘了什么按钮, 当初放到这块了 */}}
+
 		{{if and $isTreePathRoot .Repository.IsTemplate}}
 			<a role="button" class="ui primary compact button" href="{{AppSubUrl}}/repo/create?template_id={{.Repository.ID}}">
 				{{ctx.Locale.Tr "repo.use_template"}}
 			</a>
 		{{end}}
-		<!-- Only show clone panel in repository home page -->
+
 		{{if $isTreePathRoot}}
-			{{template "repo/clone_panel" .}}
+			<details class="dropdown repo-code-dropdown">
+				<summary class="ui primary compact button">
+					{{svg "octicon-code" 16}}
+					<span>{{ctx.Locale.Tr "repo.code"}}</span>
+					{{svg "octicon-triangle-down" 14 "dropdown icon"}}
+				</summary>
+				<div class="content">
+					<div class="repo-code-clone">
+						<div class="repo-code-title">{{ctx.Locale.Tr "repo.clone_this_repo"}}</div>
+						<div class="clone-panel ui action tiny input">
+							{{template "repo/clone_buttons" .}}
+						</div>
+					</div>
+					{{if or (not $.DisableDownloadSourceArchives) .CitationFile .OpenWithEditorApps}}
+					<hr>
+					<ul class="repo-code-actions">
+						{{if not $.DisableDownloadSourceArchives}}
+							<li><a class="archive-link" href="{{$.RepoLink}}/archive/{{PathEscapeSegments $.RefName}}.zip" rel="nofollow">{{svg "octicon-file-zip" 16}}{{ctx.Locale.Tr "repo.download_zip"}}</a></li>
+							<li><a class="archive-link" href="{{$.RepoLink}}/archive/{{PathEscapeSegments $.RefName}}.tar.gz" rel="nofollow">{{svg "octicon-file-zip" 16}}{{ctx.Locale.Tr "repo.download_tar"}}</a></li>
+							<li><a class="archive-link" href="{{$.RepoLink}}/archive/{{PathEscapeSegments $.RefName}}.bundle" rel="nofollow">{{svg "octicon-package" 16}}{{ctx.Locale.Tr "repo.download_bundle"}}</a></li>
+						{{end}}
+						{{if .CitationFile}}
+							<li><a class="citation-link" href="{{$.RepoLink}}/src/branch/{{$.BranchName}}/{{$.CitationFile}}">{{svg "octicon-cross-reference" 16}}{{ctx.Locale.Tr "repo.cite_this_repo"}}</a></li>
+						{{end}}
+						{{range .OpenWithEditorApps}}
+							<li><a class="js-clone-url-editor" data-href-template="{{.OpenURL}}">{{.IconHTML}}{{ctx.Locale.Tr "repo.open_with_editor" .DisplayName}}</a></li>
+						{{end}}
+					</ul>
+					{{end}}
+				</div>
+				{{template "repo/clone_script" .}}{{/* Updates .js-clone-url and related elements. */}}
+			</details>
 		{{end}}
-		{{/* 文件历史按钮已移走, 这里删除 */}}
 	</div>
 </div>
+
 {{if .IsViewFile}}
 	{{template "repo/view_file" .}}
 {{else if .IsBlame}}
 	{{template "repo/blame" .}}
 {{else}}{{/* IsViewDirectory */}}
-	{{if $isTreePathRoot}}
-		{{template "repo/code/upstream_diverging_info" .}}
+	{{$isCommit := StringUtils.HasPrefix .BranchNameSubURL "commit"}}
+	{{if and (not $isCommit) (or .CodeIndexerDisabled (and (not .TagName) (eq .Repository.DefaultBranch .BranchName)))}}
+		<div class="code-search tw-w-full tw-py-2 tw-px-2 tw-bg-box-header tw-rounded-t tw-border tw-border-secondary tw-border-b-0">
+			<form class="ui form ignore-dirty" action="{{.RepoLink}}/search/{{if .CodeIndexerDisabled}}{{.BranchNameSubURL}}{{end}}" method="get" data-test-tag="codesearch">
+				<input type="hidden" name="path" value="{{.TreePath | PathEscapeSegments}}">
+				{{template "shared/search/combo_multi"
+						dict
+							"Value"       .Keyword
+							"Disabled"    .CodeIndexerUnavailable
+							"Placeholder" (ctx.Locale.Tr "search.code_kind")
+							"Selected"    (index .CodeSearchOptions 0)
+							"Options"     .CodeSearchOptions}}
+			</form>
+		</div>
 	{{end}}
 	{{template "repo/view_list" .}}
-	{{if and .ReadmeExist (or .RenderAsMarkup .IsPlainText)}}
+	{{if and .ReadmeExist (or .IsMarkup .IsPlainText)}}
 		{{template "repo/view_file" .}}
 	{{end}}
 {{end}}

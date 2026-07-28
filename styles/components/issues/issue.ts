@@ -22,7 +22,7 @@ import { activeItemAfterStyle } from "@lutinglt/gitea-github-theme/styles/common
 
 const button = css`
   /* 工单&PR标题右侧按钮 */
-  .repository.view.issue .issue-title-buttons > .ui.button {
+  .repository.view.issue .button-row > .ui.button {
     padding: 0 12px;
     height: 32px;
   }
@@ -124,4 +124,27 @@ const issueTitle = css`
   }
 `;
 
-export default cssCombine(button, babel, prBranch, dropdown, issueTitle);
+const reactions = css`
+  .comment .comment-container > .ui.attached.segment.reactions .ui.ui.ui.label {
+    background-color: transparent !important;
+    border-color: ${themeVars.color.light.border};
+    border-radius: 9999px;
+  }
+
+  .comment .comment-container > .ui.attached.segment.reactions .ui.ui.ui.label:hover {
+    background-color: ${themeVars.color.reaction.hoverBg} !important;
+    border-color: ${themeVars.color.light.border};
+  }
+
+  .comment .comment-container > .ui.attached.segment.reactions .reaction {
+    font-size: 12px;
+  }
+
+  .comment .comment-container > .ui.attached.segment.reactions .reaction-count {
+    color: ${themeVars.color.text.light.self};
+    font-weight: 500;
+    margin-left: 0;
+  }
+`;
+
+export default cssCombine(button, babel, prBranch, dropdown, issueTitle, reactions);

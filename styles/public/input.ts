@@ -20,6 +20,9 @@
 import { css, cssCombine, otherThemeVars, themeVars } from "@lutinglt/gitea-github-theme/core";
 
 const input = css`
+  :root {
+    --color-input-border-hover: ${themeVars.color.input.border};
+  }
   textarea,
   /* 排除复选框和单选框 */
   input:not([type=checkbox],[type=radio]),
@@ -53,6 +56,19 @@ const input = css`
   }
   .ui.input {
     height: 32px;
+  }
+  .ui.action.input:not([class*="left action"]) > .ui.input > input {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-right-color: transparent;
+  }
+  .ui.form .ui.action.input:not([class*="left action"]) input:focus {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+  .ui.form .ui[class*="left action"].input input {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
   }
   /* 由于输入框高度, 需要输入框在表单中垂直居中 */
   /* 管理员页面仓库搜索表单 */

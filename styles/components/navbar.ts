@@ -28,6 +28,13 @@ const navbarRight = css`
     .navbar-right {
       min-height: 48px;
     }
+    .navbar-left > .item,
+    .navbar-right > .item,
+    .navbar-mobile-right > .item {
+      color: ${themeVars.color.nav.text};
+      position: relative;
+      text-decoration: none;
+    }
     .navbar-left {
       gap: 8px;
       > .item {
@@ -117,16 +124,6 @@ const navbarRight = css`
                 width: 32px;
                 max-width: 32px;
                 margin: 0 !important;
-              }
-              /* 管理员标识 */
-              .navbar-admin-badge {
-                height: 18px;
-                min-width: 18px;
-                bottom: calc(100% - 32px);
-                left: calc(100% - 11px);
-                padding: 2px;
-                background: ${themeVars.github.fgColor.accent};
-                border-color: ${themeVars.color.nav.bg}; /* 锁定边框色, 避免鼠标悬浮时改变颜色 */
               }
             }
           }
@@ -229,6 +226,9 @@ const secondaryNav = css`
         gap: 4px;
       }
     }
+  }
+  .ui.secondary.pointing.menu .active.item:hover {
+    border-bottom-color: transparent !important;
   }
 `;
 

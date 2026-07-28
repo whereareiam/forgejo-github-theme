@@ -1,0 +1,120 @@
+{{/* Repository tabs adapted to Forgejo 15 routes and permissions. */}}
+<div class="secondary-nav">
+	<overflow-menu class="ui container secondary pointing tabular top attached borderless menu tw-pt-0 tw-my-0">
+		{{if not (or .Repository.IsBeingCreated .Repository.IsBroken)}}
+			<div class="overflow-menu-items">
+				{{if .Permission.CanRead $.UnitTypeCode}}
+					<a class="{{if .PageIsViewCode}}active {{end}}item" href="{{.RepoLink}}{{if and (ne .BranchName .Repository.DefaultBranch) (not $.PageIsWiki)}}/src/{{.BranchNameSubURL}}{{end}}">
+						{{svg "octicon-code"}} {{ctx.Locale.Tr "repo.code"}}
+					</a>
+				{{end}}
+
+				{{if .Permission.CanRead $.UnitTypeIssues}}
+					<a class="{{if .PageIsIssueList}}active {{end}}item" href="{{.RepoLink}}/issues">
+						{{svg "octicon-issue-opened"}} {{ctx.Locale.Tr "repo.issues"}}
+						{{if (.Repository.NumOpenIssues ctx)}}
+							<span class="ui small label">{{CountFmt (.Repository.NumOpenIssues ctx)}}</span>
+						{{end}}
+					</a>
+				{{end}}
+
+				{{if .Permission.CanRead $.UnitTypeExternalTracker}}
+					<a class="{{if .PageIsIssueList}}active {{end}}item" href="{{.RepoExternalIssuesLink}}" target="_blank" rel="noopener noreferrer">
+						{{svg "octicon-link-external"}} {{ctx.Locale.Tr "repo.issues"}}
+					</a>
+				{{end}}
+
+				{{if and .Repository.CanEnablePulls (.Permission.CanRead $.UnitTypePullRequests)}}
+					<a class="{{if .PageIsPullList}}active {{end}}item" href="{{.RepoLink}}/pulls">
+						{{svg "octicon-git-pull-request"}} {{ctx.Locale.Tr "repo.pulls"}}
+						{{if (.Repository.NumOpenPulls ctx)}}
+							<span class="ui small label">{{CountFmt (.Repository.NumOpenPulls ctx)}}</span>
+						{{end}}
+					</a>
+				{{end}}
+
+				{{if and (not .UnitProjectsGlobalDisabled) (.Permission.CanRead $.UnitTypeProjects)}}
+					<a href="{{.RepoLink}}/projects" class="{{if .IsProjectsPage}}active {{end}}item">
+						{{svg "octicon-project"}} {{ctx.Locale.Tr "repo.project"}}
+						{{if .Repository.NumOpenProjects}}
+							<span class="ui small label">{{CountFmt .Repository.NumOpenProjects}}</span>
+						{{end}}
+					</a>
+				{{end}}
+
+				{{if and (.Permission.CanRead $.UnitTypeReleases) (not .IsEmptyRepo)}}
+					<a class="{{if or .PageIsReleaseList .PageIsTagList}}active {{end}}item" href="{{.RepoLink}}/releases">
+						{{svg "octicon-tag"}} {{ctx.Locale.Tr "repo.releases"}}
+						{{if .NumReleases}}
+							<span class="ui small label">{{CountFmt .NumReleases}}</span>
+						{{end}}
+					</a>
+				{{end}}
+
+				{{if .Permission.CanRead $.UnitTypePackages}}
+					<a href="{{.RepoLink}}/packages" class="{{if .IsPackagesPage}}active {{end}}item">
+						{{svg "octicon-package"}} {{ctx.Locale.Tr "packages.title"}}
+						{{if .NumPackages}}
+							<span class="ui small label">{{CountFmt .NumPackages}}</span>
+						{{end}}
+					</a>
+				{{end}}
+
+				{{if .Permission.CanRead $.UnitTypeWiki}}
+					<a class="{{if .PageIsWiki}}active {{end}}item" href="{{.RepoLink}}/wiki">
+						{{svg "octicon-book"}} {{ctx.Locale.Tr "repo.wiki"}}
+					</a>
+				{{end}}
+
+				{{if .Permission.CanRead $.UnitTypeExternalWiki}}
+					<a class="item" href="{{(.Repository.MustGetUnit $.Context $.UnitTypeExternalWiki).ExternalWikiConfig.ExternalWikiURL}}" target="_blank" rel="noopener noreferrer">
+						{{svg "octicon-link-external"}} {{ctx.Locale.Tr "repo.wiki"}}
+					</a>
+				{{end}}
+
+				{{if and (.Permission.CanReadAny $.UnitTypeCode $.UnitTypePullRequests $.UnitTypeIssues $.UnitTypeReleases)}}
+					<a class="{{if .PageIsActivity}}active {{end}}item" href="{{.RepoLink}}/activity">
+						{{svg "octicon-pulse"}} {{ctx.Locale.Tr "repo.activity"}}
+					</a>
+				{{end}}
+
+				{{if and .EnableActions (not .UnitActionsGlobalDisabled) (.Permission.CanRead $.UnitTypeActions)}}
+					<a class="{{if .PageIsActions}}active {{end}}item" href="{{.RepoLink}}/actions">
+						{{svg "octicon-play"}} {{ctx.Locale.Tr "actions.actions"}}
+						{{if .NumOpenActionRuns}}
+							<span class="ui small label">{{CountFmt .NumOpenActionRuns}}</span>
+						{{end}}
+					</a>
+				{{end}}
+
+				{{template "custom/extra_tabs" .}}
+
+				{{if and RepoFlagsEnabled .SignedUser.IsAdmin}}
+					<a class="{{if .IsRepoFlagsPage}}active {{end}}item" href="{{.RepoLink}}/flags">
+						{{svg "octicon-milestone"}} {{ctx.Locale.Tr "repo.admin.manage_flags"}}
+					</a>
+				{{end}}
+
+				{{if .Permission.IsAdmin}}
+					{{$highlightSettings := true}}
+					{{if and .SignedUser.EnableRepoUnitHints (not (.Repository.AllUnitsEnabled ctx))}}
+						{{$highlightSettings = false}}
+						<a class="{{if .PageIsRepoSettingsUnits}}active {{end}}item" href="{{.RepoLink}}/settings/units">
+							{{svg "octicon-plus"}} {{ctx.Locale.Tr "repo.settings.units.add_more"}}
+						</a>
+					{{end}}
+					<a id="settings-btn" class="{{if and .PageIsRepoSettings (or $highlightSettings (not .PageIsRepoSettingsUnits))}}active {{end}}item" href="{{.RepoLink}}/settings">
+						{{svg "octicon-tools"}} {{ctx.Locale.Tr "repo.settings"}}
+					</a>
+				{{end}}
+			</div>
+		{{else if .Permission.IsAdmin}}
+			<div class="overflow-menu-items">
+				<a id="settings-btn" class="{{if .PageIsRepoSettings}}active {{end}}item" href="{{.RepoLink}}/settings">
+					{{svg "octicon-tools"}} {{ctx.Locale.Tr "repo.settings"}}
+				</a>
+			</div>
+		{{end}}
+	</overflow-menu>
+	<div class="ui tabs divider"></div>
+</div>

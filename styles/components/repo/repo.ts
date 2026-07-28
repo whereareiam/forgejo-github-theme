@@ -83,7 +83,7 @@ const repoMenu = css`
 const repoTopic = css`
   /* 理应只能覆盖探索/组织/用户下仓库的 topic 标签 */
   /* 避免渲染到仓库的类型标签 */
-  .items-with-main > .item > .item-main > .label-list > .ui.label,
+  .flex-list > .flex-item > .flex-item-main > .repo-topics > .ui.label,
   /* 仓库文件列表下的 topic 标签 */
   #repo-topics .ui.label.repo-topic {
     border-radius: 9999px;

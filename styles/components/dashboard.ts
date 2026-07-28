@@ -23,7 +23,7 @@ import { labelStyle } from "@lutinglt/gitea-github-theme/styles/common";
 const dashboard = css`
   .page-content.dashboard {
     /* 仪表板切换控制用户按钮 */
-    .ui.dropdown .menu.context-user-switch .scrolling.menu {
+    .ui.dropdown > .menu.context.user.overflow > .scrolling.menu {
       animation: none; /* 去掉嵌套菜单导致的多余动画 */
       box-shadow: 0px 0px 0px 1px ${themeVars.color.secondary.self} !important;
     }
@@ -184,7 +184,7 @@ const dashboardIssues = css`
           }
         }
       }
-      .list-header-filters {
+      > .ui.secondary.menu {
         > .item {
           border-radius: ${otherThemeVars.border.radius};
           color: ${themeVars.color.text.light.num1};

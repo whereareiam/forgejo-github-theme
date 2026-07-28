@@ -158,6 +158,106 @@ describe("非 auto 主题 CSS 内容验证", () => {
   }
 });
 
+describe("Forgejo 15 native integration", () => {
+  const requiredSelectors = [
+    "--color-selection-bg",
+    ".repository-tab-nav.page-content.repository",
+    ".repo-about-modal-overlay",
+    ".button.primary:not(.ui)",
+    ".vch__legend",
+    ".codemirror-container",
+  ];
+
+  const requiredTemplates = [
+    "base/head_navbar.tmpl",
+    "base/head_navbar_icons.tmpl",
+    "repo/global_header.tmpl",
+    "repo/header.tmpl",
+    "repo/home.tmpl",
+    "repo/home_sidebar_bottom.tmpl",
+    "repo/home_sidebar_top.tmpl",
+    "repo/view_content.tmpl",
+    "repo/view_list.tmpl",
+  ];
+
+  const unsupportedSelectorFamilies = [
+    ".items-with-main",
+    ".heatmap-grid",
+    ".heatmap-legend-svg",
+    ".branch-selector-dropdown",
+    ".small-menu-items",
+    ".context-user-switch",
+    ".action-view-right-panel",
+    ".repo-view-container",
+    ".clone-panel-popup",
+    ".workflow-graph",
+    ".clone-panel-tab",
+    ".ellipsis-text-items",
+    ".comment-text-line",
+    ".avatar-with-link",
+    ".issue-sidebar-combo",
+    ".item-secondary-info",
+    ".fixed-text",
+    ".empty-list",
+    ".flex-divided-list",
+    ".list-item-large-title",
+    ".list-item-secondary-bar",
+    ".list-item-title-progress",
+    ".scope-middle",
+    ".clear-selection",
+    ".items-full-width",
+    ".code-editor-container",
+    ".navbar-admin-badge",
+    ".theme-menu-item",
+    ".signin-passkey",
+    ".avatar-stack-names",
+    ".gitea-vscode",
+    ".gitea-vscodium",
+  ];
+
+  it("includes Forgejo-native rules in the standard theme output", () => {
+    const css = fs.readFileSync(path.join(DIST_DIR, `${PREFIX}light.css`), "utf-8");
+
+    for (const selector of requiredSelectors) {
+      expect(css, `Forgejo theme output should contain ${selector}`).toContain(selector);
+    }
+  });
+
+  it("does not emit selector families from the newer Gitea markup", () => {
+    const css = fs.readFileSync(path.join(DIST_DIR, `${PREFIX}light.css`), "utf-8");
+
+    for (const selector of unsupportedSelectorFamilies) {
+      expect(css, `Forgejo theme output should not contain ${selector}`).not.toContain(selector);
+    }
+  });
+
+  it("matches GitHub notification segment sizing without applying the subscriptions switch", () => {
+    const compactMenu = fs.readFileSync(path.join(ROOT_DIR, "styles", "public", "menu", "compact_menu.ts"), "utf-8");
+    const notification = fs.readFileSync(path.join(ROOT_DIR, "styles", "components", "notification.ts"), "utf-8");
+
+    expect(compactMenu).toContain(
+      ".page-content.user.notification > .ui.container:has(> .ui.bottom.active.tab.segment)"
+    );
+    expect(compactMenu).not.toContain(".page-content.user.notification > .ui.container,");
+    expect(notification).toContain("--switch-item-min-height: 32px;");
+    expect(notification).toContain("background: light-dark(");
+    expect(notification).toContain("${themeVars.github.controlTrack.bgColor.rest},");
+    expect(notification).toContain("${themeVars.color.menu}");
+    expect(notification).toContain("gap: 0;");
+    expect(notification).toContain("height: 32px;");
+    expect(notification).toContain("padding: 4px 12px;");
+    expect(notification).toContain("${themeVars.github.controlKnob.bgColor.rest},");
+    expect(notification).toContain("${themeVars.color.hover.self}");
+    expect(notification).toContain("font-weight: 600;");
+  });
+
+  it("keeps adapted templates in the standard template tree", () => {
+    for (const template of requiredTemplates) {
+      expect(fs.existsSync(path.join(ROOT_DIR, "templates", template)), `missing template: ${template}`).toBe(true);
+    }
+  });
+});
+
 describe("auto 主题 CSS 内容验证", () => {
   for (const fileName of AUTO_THEME_FILES) {
     describe(fileName, () => {

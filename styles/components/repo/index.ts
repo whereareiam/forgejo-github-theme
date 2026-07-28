@@ -18,7 +18,6 @@
  */
 
 import { cssCombine } from "@lutinglt/gitea-github-theme/core";
-import clone from "./clone";
 import commit from "./commit";
 import diff from "./diff";
 import milestones from "./milestones";
@@ -29,15 +28,4 @@ import repoFileView from "./repo_file_view";
 import repoFiles from "./repo_files";
 import repoSidebar from "./repo_sidebar";
 
-export default cssCombine(
-  clone,
-  commit,
-  diff,
-  milestones,
-  packages,
-  release,
-  repo,
-  repoFileView,
-  repoFiles,
-  repoSidebar
-);
+export default cssCombine(commit, diff, milestones, packages, release, repo, repoFileView, repoFiles, repoSidebar);

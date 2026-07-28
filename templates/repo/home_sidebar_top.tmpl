@@ -1,0 +1,209 @@
+{{/* GitHub-style repository overview sidebar adapted to Forgejo 15 data and endpoints. */}}
+<aside class="repo-home-sidebar-top" aria-label="About">
+	<div id="repo-topics" class="repo-about-block flex-relaxed-list">
+		<div class="repo-home-sidebar-header repo-about-heading">
+			<span>About</span>
+			{{if and .Permission.IsAdmin (not .Repository.IsArchived)}}
+				<button id="manage_topic" type="button" class="btn interact-fg repo-about-settings" aria-label="Edit repository metadata" data-tooltip-content="Edit repository metadata">
+					{{svg "octicon-gear" 16}}
+				</button>
+			{{end}}
+		</div>
+
+		<div class="repo-description tw-break-anywhere">
+			{{$description := .Repository.DescriptionHTML $.Context}}
+			{{if $description}}<span class="description">{{$description | RenderCodeBlock}}</span>{{else}}<span class="no-description text-italic">{{ctx.Locale.Tr "repo.no_desc"}}</span>{{end}}
+		</div>
+
+		{{if .Repository.Website}}
+			<a class="flex-text-block repo-home-sidebar-website" href="{{.Repository.Website}}">
+				{{svg "octicon-link" 16}} <span>{{.Repository.Website}}</span>
+			</a>
+		{{end}}
+
+		<div class="repo-about-topic-list flex-text-block tw-flex-wrap tw-gap-1">
+			{{range .Topics}}
+				<a class="repo-topic ui large label" title="{{.Name}}" href="{{AppSubUrl}}/explore/repos?q={{.Name}}&topic=1">{{.Name}}</a>
+			{{end}}
+		</div>
+
+		{{if and (.Permission.CanRead $.UnitTypeCode) (not .IsEmptyRepo)}}
+			<div class="repo-home-sidebar-metadata flex-relaxed-list">
+				{{if .ReadmeExist}}
+					<a class="flex-text-block muted" href="{{.TreeLink}}/{{PathEscapeSegments .FileName}}">
+						{{svg "octicon-book"}} {{ctx.Locale.Tr "repo.readme"}}
+					</a>
+				{{end}}
+				{{if .CitationFile}}
+					<a class="flex-text-block muted" href="{{.RepoLink}}/src/branch/{{.BranchName}}/{{.CitationFile}}">
+						{{svg "octicon-cross-reference"}} {{ctx.Locale.Tr "repo.cite_this_repo"}}
+					</a>
+				{{end}}
+				<a class="flex-text-block muted" href="{{.RepoLink}}/activity">
+					{{svg "octicon-pulse"}} {{ctx.Locale.Tr "repo.activity"}}
+				</a>
+				{{if not .DisableStars}}
+					<a class="flex-text-block muted" href="{{.RepoLink}}/stars">
+						{{svg "octicon-star"}} <b>{{CountFmt .Repository.NumStars}}</b> {{ctx.Locale.Tr "repo.stars"}}
+					</a>
+				{{end}}
+				<a class="flex-text-block muted" href="{{.RepoLink}}/watchers">
+					{{svg "octicon-eye"}} <b>{{CountFmt .Repository.NumWatches}}</b> {{ctx.Locale.Tr "repo.watchers"}}
+				</a>
+				{{if not .DisableForks}}
+					<a class="flex-text-block muted" href="{{.RepoLink}}/forks">
+						{{svg "octicon-repo-forked"}} <b>{{CountFmt .Repository.NumForks}}</b> {{ctx.Locale.Tr "repo.forks"}}
+					</a>
+				{{end}}
+				<div class="flex-text-block muted" {{if not (eq .Repository.Size 0)}}data-tooltip-content="{{.Repository.SizeDetailsString ctx.Locale}}"{{end}}>
+					{{$fileSizeFields := ctx.Locale.TrSize .Repository.Size}}
+					{{svg "octicon-database"}} <b>{{$fileSizeFields.PrettyNumber}}</b> {{$fileSizeFields.TranslatedUnit}}
+				</div>
+			</div>
+		{{end}}
+	</div>
+
+	{{if and .Permission.IsAdmin (not .Repository.IsArchived)}}
+		<div class="repo-about-modal-overlay ui form tw-hidden" id="topic_edit" role="dialog" aria-modal="true" aria-labelledby="repo-about-modal-title">
+			<form id="repo-about-form" class="repo-about-modal-card" action="{{.RepoLink}}/settings" method="post">
+				<input type="hidden" name="action" value="update">
+				<input type="hidden" name="repo_name" value="{{.Repository.Name}}">
+				{{if .Repository.IsPrivate}}<input type="hidden" name="private" value="true">{{end}}
+				{{if .Repository.IsTemplate}}<input type="hidden" name="template" value="true">{{end}}
+
+				<div class="repo-about-modal-header">
+					<strong id="repo-about-modal-title">Edit repository details</strong>
+					<button type="button" class="btn interact-fg repo-about-modal-close" aria-label="Close">
+						{{svg "octicon-x" 16}}
+					</button>
+				</div>
+
+				<div class="repo-about-modal-body">
+					<div class="field">
+						<label for="repo-about-description">{{ctx.Locale.Tr "repo.repo_desc"}}</label>
+						<input id="repo-about-description" name="description" maxlength="2048" value="{{.Repository.Description}}" placeholder="{{ctx.Locale.Tr "repo.repo_desc"}}">
+					</div>
+
+					<div class="field">
+						<label for="repo-about-website">{{ctx.Locale.Tr "repo.settings.site"}}</label>
+						<input id="repo-about-website" name="website" type="url" maxlength="1024" value="{{.Repository.Website}}" placeholder="https://">
+					</div>
+
+					<div class="field">
+						<label>Topics</label>
+						<div class="ui fluid multiple search selection dropdown tw-flex-wrap repo-about-topics-input">
+							<input type="hidden" name="topics" value="{{range $i, $v := .Topics}}{{.Name}}{{if Eval $i "+" 1 "<" (len $.Topics)}},{{end}}{{end}}">
+							{{range .Topics}}
+								{{/* Keep the layout expected by Forgejo 15's repo-home.js. */}}
+								<a class="ui label transition visible tw-cursor-default tw-inline-block repo-topic" data-value="{{.Name}}">{{.Name}}{{svg "octicon-x" 16 "delete icon"}}</a>
+							{{end}}
+							<div class="text"></div>
+						</div>
+					</div>
+
+					<div class="repo-about-error tw-hidden" role="alert"></div>
+				</div>
+
+				<div class="repo-about-modal-footer">
+					<button type="button" class="ui basic button" id="cancel_topic_edit">{{ctx.Locale.Tr "cancel"}}</button>
+					<button type="button" class="ui primary button" id="save_topic" data-link="{{.RepoLink}}/topics">Save changes</button>
+				</div>
+			</form>
+		</div>
+
+		<script>
+			(() => {
+				const initRepoAboutModal = () => {
+					const view = document.getElementById('repo-topics');
+					const modal = document.getElementById('topic_edit');
+					const form = document.getElementById('repo-about-form');
+					const manage = document.getElementById('manage_topic');
+					const cancel = document.getElementById('cancel_topic_edit');
+					const close = modal?.querySelector('.repo-about-modal-close');
+					const save = document.getElementById('save_topic');
+					const error = modal?.querySelector('.repo-about-error');
+					const description = document.getElementById('repo-about-description');
+					if (!view || !modal || !form || !manage || !cancel || !close || !save || !error || !description) return;
+
+					const hideError = () => {
+						error.textContent = '';
+						error.classList.add('tw-hidden');
+					};
+					const showError = message => {
+						error.textContent = message;
+						error.classList.remove('tw-hidden');
+					};
+
+					manage.addEventListener('click', () => {
+						hideError();
+						document.documentElement.classList.add('repo-about-modal-open');
+						requestAnimationFrame(() => description.focus());
+					});
+					cancel.addEventListener('click', () => {
+						document.documentElement.classList.remove('repo-about-modal-open');
+						hideError();
+					});
+					close.addEventListener('click', () => cancel.click());
+					modal.addEventListener('click', event => {
+						if (event.target === modal) cancel.click();
+					});
+					document.addEventListener('keydown', event => {
+						if (event.key === 'Escape' && !modal.classList.contains('tw-hidden')) {
+							event.preventDefault();
+							cancel.click();
+						}
+					});
+
+					save.addEventListener('click', async event => {
+						event.preventDefault();
+						event.stopImmediatePropagation();
+						hideError();
+						if (!form.reportValidity()) return;
+
+						const originalText = save.textContent;
+						save.disabled = true;
+						save.textContent = 'Saving…';
+						try {
+							const topics = form.querySelector('input[name="topics"]').value;
+							const topicData = new FormData();
+							topicData.append('topics', topics);
+							const topicResponse = await fetch(save.dataset.link, {
+								method: 'POST',
+								body: topicData,
+								credentials: 'same-origin',
+							});
+							const topicResult = await topicResponse.json().catch(() => ({}));
+							if (!topicResponse.ok || topicResult.status !== 'ok') {
+								throw new Error(topicResult.message || 'Could not update repository topics.');
+							}
+
+							const settingsData = new FormData(form);
+							settingsData.delete('topics');
+							const settingsURL = new URL(form.getAttribute('action'), window.location.href);
+							const settingsResponse = await fetch(settingsURL, {
+								method: 'POST',
+								body: settingsData,
+								credentials: 'same-origin',
+							});
+							const expectedPath = settingsURL.pathname;
+							if (!settingsResponse.ok || !settingsResponse.redirected || new URL(settingsResponse.url).pathname !== expectedPath) {
+								throw new Error('Could not update repository details. Check the fields and try again.');
+							}
+							window.location.reload();
+						} catch (saveError) {
+							showError(saveError instanceof Error ? saveError.message : 'Could not update repository details.');
+							save.disabled = false;
+							save.textContent = originalText;
+						}
+					}, true);
+				};
+
+				if (document.readyState === 'loading') {
+					document.addEventListener('DOMContentLoaded', initRepoAboutModal, {once: true});
+				} else {
+					initRepoAboutModal();
+				}
+			})();
+		</script>
+	{{end}}
+</aside>

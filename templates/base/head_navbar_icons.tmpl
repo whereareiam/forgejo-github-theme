@@ -1,34 +1,35 @@
+{{/* Forgejo 15 navbar actions using the native route and data contracts. */}}
 {{- $itemExtraClass := .ItemExtraClass -}}
-{{- $data := .PageGlobalData -}}
-{{if and $data $data.IsSigned}}{{/* data may not exist, for example: rendering 503 page before the PageGlobalData middleware */}}
-	{{- $activeStopwatch := call $data.GetActiveStopwatch -}}
-	{{- $notificationUnreadCount := call $data.GetNotificationUnreadCount -}}
-	{{if $activeStopwatch}}
-	<a class="item active-stopwatch {{$itemExtraClass}}" href="{{$activeStopwatch.IssueLink}}" title="{{ctx.Locale.Tr "active_stopwatch"}}" data-seconds="{{$activeStopwatch.Seconds}}">
+{{- $data := .Data -}}
+{{if and $data $data.IsSigned}}
+	{{- $notificationUnreadCount := 0 -}}
+	{{- if $data.NotificationUnreadCount -}}
+		{{- $notificationUnreadCount = call $data.NotificationUnreadCount -}}
+	{{- end -}}
+	{{if and EnableTimetracking $data.ActiveStopwatch}}
+	<a class="item active-stopwatch {{$itemExtraClass}}" href="{{$data.ActiveStopwatch.IssueLink}}" title="{{ctx.Locale.Tr "active_stopwatch"}}" data-seconds="{{$data.ActiveStopwatch.Seconds}}" aria-label="{{ctx.Locale.Tr "active_stopwatch"}}">
 		<div class="tw-relative flex-text-block">
 			{{svg "octicon-stopwatch"}}
 			<span class="header-stopwatch-dot"></span>
 		</div>
 	</a>
 	{{end}}
-	{{if not ctx.Consts.RepoUnitTypeIssues.UnitGlobalDisabled}}
-	<a class="item {{$itemExtraClass}}" href="{{AppSubUrl}}/issues" data-tooltip-content="{{ctx.Locale.Tr "issues"}}">
+	{{if not $data.UnitIssuesGlobalDisabled}}
+	<a class="item {{$itemExtraClass}}" href="{{AppSubUrl}}/issues" data-tooltip-content="{{ctx.Locale.Tr "issues"}}" aria-label="{{ctx.Locale.Tr "issues"}}">
 		{{svg "octicon-issue-opened"}}
 	</a>
 	{{end}}
-	{{if not ctx.Consts.RepoUnitTypePullRequests.UnitGlobalDisabled}}
-	<a class="item {{$itemExtraClass}}" href="{{AppSubUrl}}/pulls" data-tooltip-content="{{ctx.Locale.Tr "pull_requests"}}">
+	{{if not $data.UnitPullsGlobalDisabled}}
+	<a class="item {{$itemExtraClass}}" href="{{AppSubUrl}}/pulls" data-tooltip-content="{{ctx.Locale.Tr "pull_requests"}}" aria-label="{{ctx.Locale.Tr "pull_requests"}}">
 		{{svg "octicon-git-pull-request"}}
 	</a>
 	{{end}}
-	{{if not (and ctx.Consts.RepoUnitTypeIssues.UnitGlobalDisabled ctx.Consts.RepoUnitTypePullRequests.UnitGlobalDisabled)}}
-		{{if .ShowMilestonesDashboardPage}}
-			<a class="item {{$itemExtraClass}}" href="{{AppSubUrl}}/milestones" data-tooltip-content="{{ctx.Locale.Tr "milestones"}}">
-				{{svg "octicon-milestone"}}
-			</a>
-		{{end}}
+	{{if and (not (and $data.UnitIssuesGlobalDisabled $data.UnitPullsGlobalDisabled)) $data.ShowMilestonesDashboardPage}}
+	<a class="item {{$itemExtraClass}}" href="{{AppSubUrl}}/milestones" data-tooltip-content="{{ctx.Locale.Tr "milestones"}}" aria-label="{{ctx.Locale.Tr "milestones"}}">
+		{{svg "octicon-milestone"}}
+	</a>
 	{{end}}
-	<a class="item {{$itemExtraClass}}" href="{{AppSubUrl}}/notifications" data-tooltip-content="{{ctx.Locale.Tr "notifications"}}">
+	<a class="item {{$itemExtraClass}}" href="{{AppSubUrl}}/notifications" data-tooltip-content="{{ctx.Locale.Tr "notifications"}}" aria-label="{{ctx.Locale.Tr "notifications"}}">
 		<div class="tw-relative flex-text-block">
 			{{svg "octicon-inbox"}}
 			<span class="notification_count{{if not $notificationUnreadCount}} tw-hidden{{end}}">{{$notificationUnreadCount}}</span>

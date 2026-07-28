@@ -103,6 +103,30 @@ const button = css`
       padding: 5px 16px;
       line-height: 22px;
     }
+    .button:is(.primary, .danger):not(.ui) {
+      gap: 8px;
+      line-height: 22px;
+      min-height: 30px;
+      padding: 5px 16px;
+    }
+    .button.primary:not(.ui) {
+      background-color: ${themeVars.color.button};
+      border-color: ${themeVars.color.light.border};
+      box-shadow: none;
+      color: ${themeVars.github.themeExtra.button.primary.fgColor.accent};
+      &:is(:hover, :focus-visible) {
+        background-color: ${themeVars.github.button.primary.bgColor.hover};
+        border-color: ${themeVars.github.button.primary.borderColor.hover};
+        box-shadow: ${themeVars.github.shadow.resting.small};
+        color: ${themeVars.github.button.primary.fgColor.rest};
+      }
+      &:active {
+        background-color: ${themeVars.github.button.primary.bgColor.active};
+        border-color: ${themeVars.github.button.primary.borderColor.hover};
+        box-shadow: ${themeVars.github.shadow.resting.small};
+        color: ${themeVars.github.button.primary.fgColor.rest};
+      }
+    }
   }
 `;
 
