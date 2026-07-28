@@ -163,6 +163,7 @@ describe("Forgejo 15 native integration", () => {
     "--color-selection-bg",
     ".repository-tab-nav.page-content.repository",
     ".repo-about-modal-overlay",
+    ".repo-code-navigation",
     ".button.primary:not(.ui)",
     ".vch__legend",
     ".codemirror-container",
@@ -249,6 +250,29 @@ describe("Forgejo 15 native integration", () => {
     expect(notification).toContain("${themeVars.github.controlKnob.bgColor.rest},");
     expect(notification).toContain("${themeVars.color.hover.self}");
     expect(notification).toContain("font-weight: 600;");
+  });
+
+  it("keeps header and clone interactions aligned with GitHub controls", () => {
+    const navbar = fs.readFileSync(path.join(ROOT_DIR, "styles", "components", "navbar.ts"), "utf-8");
+    const notification = fs.readFileSync(path.join(ROOT_DIR, "styles", "components", "notification.ts"), "utf-8");
+    const repoContentStyle = fs.readFileSync(
+      path.join(ROOT_DIR, "styles", "templates", "repo", "view_content.ts"),
+      "utf-8"
+    );
+    const repoContentTemplate = fs.readFileSync(path.join(ROOT_DIR, "templates", "repo", "view_content.tmpl"), "utf-8");
+
+    expect(navbar).toContain("> .item {\n        border-radius: ${otherThemeVars.border.radius};");
+    expect(notification).toContain("text-decoration: none;");
+    expect(repoContentTemplate).toContain('class="repo-code-navigation"');
+    expect(repoContentTemplate).toContain('class="repo-code-body"');
+    expect(repoContentTemplate).toContain('svg "octicon-terminal" 16');
+    expect(repoContentStyle).toContain("border-radius: 12px;");
+    expect(repoContentStyle).toContain("width: min(400px, calc(100vw - 32px));");
+    expect(repoContentStyle).toContain("grid-template-rows: 32px 32px;");
+    expect(repoContentStyle).toContain("border-radius: ${otherThemeVars.border.radius} !important;");
+    expect(repoContentStyle).toContain("font-size: 14px;");
+    expect(repoContentStyle).toContain("padding: 0 !important;");
+    expect(repoContentStyle).toContain(".repo-code-actions > li > a:hover");
   });
 
   it("keeps adapted templates in the standard template tree", () => {

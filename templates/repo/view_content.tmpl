@@ -82,28 +82,36 @@
 					{{svg "octicon-triangle-down" 14 "dropdown icon"}}
 				</summary>
 				<div class="content">
-					<div class="repo-code-clone">
-						<div class="repo-code-title">{{ctx.Locale.Tr "repo.clone_this_repo"}}</div>
-						<div class="clone-panel ui action tiny input">
-							{{template "repo/clone_buttons" .}}
+					<nav class="repo-code-navigation" aria-label="{{ctx.Locale.Tr "repo.code"}}">
+						<span class="repo-code-navigation-item active">{{ctx.Locale.Tr "admin.users.local"}}</span>
+					</nav>
+					<div class="repo-code-body">
+						<div class="repo-code-clone">
+							<div class="repo-code-title">
+								{{svg "octicon-terminal" 16}}
+								<span>{{ctx.Locale.Tr "repo.clone_this_repo"}}</span>
+							</div>
+							<div class="clone-panel ui action tiny input">
+								{{template "repo/clone_buttons" .}}
+							</div>
 						</div>
+						{{if or (not $.DisableDownloadSourceArchives) .CitationFile .OpenWithEditorApps}}
+						<hr>
+						<ul class="repo-code-actions">
+							{{if not $.DisableDownloadSourceArchives}}
+								<li><a class="archive-link" href="{{$.RepoLink}}/archive/{{PathEscapeSegments $.RefName}}.zip" rel="nofollow">{{svg "octicon-file-zip" 16}}{{ctx.Locale.Tr "repo.download_zip"}}</a></li>
+								<li><a class="archive-link" href="{{$.RepoLink}}/archive/{{PathEscapeSegments $.RefName}}.tar.gz" rel="nofollow">{{svg "octicon-file-zip" 16}}{{ctx.Locale.Tr "repo.download_tar"}}</a></li>
+								<li><a class="archive-link" href="{{$.RepoLink}}/archive/{{PathEscapeSegments $.RefName}}.bundle" rel="nofollow">{{svg "octicon-package" 16}}{{ctx.Locale.Tr "repo.download_bundle"}}</a></li>
+							{{end}}
+							{{if .CitationFile}}
+								<li><a class="citation-link" href="{{$.RepoLink}}/src/branch/{{$.BranchName}}/{{$.CitationFile}}">{{svg "octicon-cross-reference" 16}}{{ctx.Locale.Tr "repo.cite_this_repo"}}</a></li>
+							{{end}}
+							{{range .OpenWithEditorApps}}
+								<li><a class="js-clone-url-editor" data-href-template="{{.OpenURL}}">{{.IconHTML}}{{ctx.Locale.Tr "repo.open_with_editor" .DisplayName}}</a></li>
+							{{end}}
+						</ul>
+						{{end}}
 					</div>
-					{{if or (not $.DisableDownloadSourceArchives) .CitationFile .OpenWithEditorApps}}
-					<hr>
-					<ul class="repo-code-actions">
-						{{if not $.DisableDownloadSourceArchives}}
-							<li><a class="archive-link" href="{{$.RepoLink}}/archive/{{PathEscapeSegments $.RefName}}.zip" rel="nofollow">{{svg "octicon-file-zip" 16}}{{ctx.Locale.Tr "repo.download_zip"}}</a></li>
-							<li><a class="archive-link" href="{{$.RepoLink}}/archive/{{PathEscapeSegments $.RefName}}.tar.gz" rel="nofollow">{{svg "octicon-file-zip" 16}}{{ctx.Locale.Tr "repo.download_tar"}}</a></li>
-							<li><a class="archive-link" href="{{$.RepoLink}}/archive/{{PathEscapeSegments $.RefName}}.bundle" rel="nofollow">{{svg "octicon-package" 16}}{{ctx.Locale.Tr "repo.download_bundle"}}</a></li>
-						{{end}}
-						{{if .CitationFile}}
-							<li><a class="citation-link" href="{{$.RepoLink}}/src/branch/{{$.BranchName}}/{{$.CitationFile}}">{{svg "octicon-cross-reference" 16}}{{ctx.Locale.Tr "repo.cite_this_repo"}}</a></li>
-						{{end}}
-						{{range .OpenWithEditorApps}}
-							<li><a class="js-clone-url-editor" data-href-template="{{.OpenURL}}">{{.IconHTML}}{{ctx.Locale.Tr "repo.open_with_editor" .DisplayName}}</a></li>
-						{{end}}
-					</ul>
-					{{end}}
 				</div>
 				{{template "repo/clone_script" .}}{{/* Updates .js-clone-url and related elements. */}}
 			</details>

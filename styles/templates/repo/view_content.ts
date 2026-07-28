@@ -112,52 +112,44 @@ const repoToolbarDetails = css`
   }
 
   .gitea-github-theme-templates.repo-button-row .repo-code-dropdown > .content {
+    background: ${themeVars.color.menu};
+    border: 0;
+    border-radius: 12px;
     box-sizing: border-box;
+    box-shadow: ${themeVars.github.shadow.floating.small};
     direction: ltr;
     left: auto;
+    margin-top: 4px !important;
     min-width: 0;
-    padding: 16px 0 8px;
+    overflow: hidden;
+    padding: 0;
     right: 0;
-    width: min(420px, calc(100vw - 32px));
+    width: min(400px, calc(100vw - 32px));
   }
 
-  .gitea-github-theme-templates.repo-button-row .repo-code-clone {
-    padding: 0 16px;
-  }
-
-  .gitea-github-theme-templates.repo-button-row .repo-code-title {
-    font-weight: 600;
-    margin-bottom: 8px;
-  }
-
-  .gitea-github-theme-templates.repo-button-row .repo-code-dropdown .clone-panel {
-    align-items: center;
+  .gitea-github-theme-templates.repo-button-row .repo-code-navigation {
+    align-items: flex-start;
+    box-shadow: inset 0 -1px 0 ${themeVars.color.light.border};
     display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    height: auto !important;
-    min-height: 72px;
-    width: 100%;
+    height: 48px;
+    padding: 8px 8px 0;
   }
 
-  .gitea-github-theme-templates.repo-button-row .repo-code-dropdown .clone-panel > #repo-clone-https,
-  .gitea-github-theme-templates.repo-button-row .repo-code-dropdown .clone-panel > #repo-clone-ssh {
-    background: transparent !important;
-    border: 0 !important;
-    box-shadow: none !important;
-    color: ${themeVars.color.text.self} !important;
-    font-weight: 600;
+  .gitea-github-theme-templates.repo-button-row .repo-code-navigation-item {
+    align-items: center;
+    border-radius: ${otherThemeVars.border.radius};
+    color: ${themeVars.color.text.self};
+    display: flex;
+    height: 32px;
+    line-height: 21px;
     padding: 6px 8px;
     position: relative;
   }
 
-  .gitea-github-theme-templates.repo-button-row
-    .repo-code-dropdown
-    .clone-panel
-    > .primary:is(#repo-clone-https, #repo-clone-ssh)::after {
+  .gitea-github-theme-templates.repo-button-row .repo-code-navigation-item.active::after {
     background: ${themeVars.github.underlineNav.borderColor.active};
     border-radius: ${otherThemeVars.border.radius};
-    bottom: -5px;
+    bottom: -8px;
     content: "";
     height: 2px;
     left: 8px;
@@ -165,12 +157,88 @@ const repoToolbarDetails = css`
     right: 8px;
   }
 
+  .gitea-github-theme-templates.repo-button-row .repo-code-body {
+    padding: 16px 0 8px;
+  }
+
+  .gitea-github-theme-templates.repo-button-row .repo-code-clone {
+    padding: 0 16px;
+  }
+
+  .gitea-github-theme-templates.repo-button-row .repo-code-title {
+    align-items: center;
+    display: flex;
+    font-weight: 600;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+
+  .gitea-github-theme-templates.repo-button-row .repo-code-dropdown .clone-panel {
+    align-items: center;
+    column-gap: 0;
+    display: grid;
+    grid-template-columns: max-content max-content minmax(0, 1fr) 36px;
+    grid-template-rows: 32px 32px;
+    height: auto !important;
+    min-height: 72px;
+    row-gap: 8px;
+    width: 100%;
+  }
+
+  .gitea-github-theme-templates.repo-button-row .repo-code-dropdown .clone-panel > #repo-clone-https,
+  .gitea-github-theme-templates.repo-button-row .repo-code-dropdown .clone-panel > #repo-clone-ssh {
+    background: transparent !important;
+    border: 1px solid #0000 !important;
+    border-radius: ${otherThemeVars.border.radius} !important;
+    box-shadow: none !important;
+    box-sizing: border-box;
+    color: ${themeVars.color.text.self} !important;
+    font-size: 14px;
+    font-weight: 400;
+    grid-row: 1;
+    height: 32px;
+    line-height: 21px;
+    margin: 0;
+    min-height: 32px;
+    padding: 4px 12px !important;
+  }
+
+  .gitea-github-theme-templates.repo-button-row .repo-code-dropdown .clone-panel > #repo-clone-https {
+    grid-column: 1;
+  }
+
+  .gitea-github-theme-templates.repo-button-row .repo-code-dropdown .clone-panel > #repo-clone-ssh {
+    grid-column: 2;
+  }
+
+  .gitea-github-theme-templates.repo-button-row
+    .repo-code-dropdown
+    .clone-panel
+    > .primary:is(#repo-clone-https, #repo-clone-ssh) {
+    background: light-dark(${themeVars.github.controlKnob.bgColor.rest}, ${themeVars.color.hover.self}) !important;
+    border-color: ${themeVars.color.secondary.self} !important;
+    font-weight: 600;
+  }
+
+  .gitea-github-theme-templates.repo-button-row
+    .repo-code-dropdown
+    .clone-panel
+    > .basic:is(#repo-clone-https, #repo-clone-ssh):hover {
+    background: ${themeVars.github.control.transparent.bgColor.hover} !important;
+  }
+
   .gitea-github-theme-templates.repo-button-row .repo-code-dropdown .clone-panel > #repo-clone-url {
+    background: ${themeVars.color.box.header};
     border: 1px solid ${themeVars.color.light.border};
     border-radius: ${otherThemeVars.border.radius};
-    flex: 1 1 calc(100% - 40px);
     font-family: var(--font-monospace);
+    font-size: 12px;
+    grid-column: 1 / 4;
+    grid-row: 2;
+    height: 32px;
     min-width: 0;
+    padding: 3px 12px;
+    width: 100%;
   }
 
   .gitea-github-theme-templates.repo-button-row .repo-code-dropdown .clone-panel > #repo-clone-url:focus {
@@ -178,20 +246,65 @@ const repoToolbarDetails = css`
   }
 
   .gitea-github-theme-templates.repo-button-row .repo-code-dropdown .clone-panel > #clipboard-btn {
-    border: 0;
-    border-radius: ${otherThemeVars.border.radius};
-    flex: 0 0 32px;
+    align-items: center;
+    background: transparent !important;
+    border: 1px solid #0000 !important;
+    border-radius: ${otherThemeVars.border.radius} !important;
+    color: ${themeVars.color.text.light.num1};
+    display: grid;
+    font-size: 14px;
+    gap: 0;
+    grid-column: 4;
+    grid-row: 2;
     height: 32px;
-    padding: 0;
+    justify-content: center;
+    justify-self: end;
+    margin: 0;
+    padding: 0 !important;
     width: 32px;
   }
 
-  .gitea-github-theme-templates.repo-button-row .repo-code-dropdown > .content > hr {
+  .gitea-github-theme-templates.repo-button-row .repo-code-dropdown .clone-panel > #clipboard-btn:hover {
+    background: ${themeVars.github.control.transparent.bgColor.hover};
+    box-shadow: inset 0 0 0 1px ${themeVars.github.control.transparent.borderColor.active};
+  }
+
+  .gitea-github-theme-templates.repo-button-row .repo-code-body > hr {
     margin: 12px 0 8px;
   }
 
+  .gitea-github-theme-templates.repo-button-row .repo-code-actions {
+    list-style: none;
+    margin: 8px;
+    padding: 0;
+  }
+
+  .gitea-github-theme-templates.repo-button-row .repo-code-actions > li {
+    margin: 0;
+  }
+
+  .gitea-github-theme-templates.repo-button-row .repo-code-actions > li > a {
+    align-items: center;
+    border-radius: ${otherThemeVars.border.radius};
+    color: ${themeVars.color.text.self};
+    display: flex;
+    gap: 8px;
+    height: 32px;
+    line-height: 21px;
+    padding: 6px 8px;
+    text-decoration: none;
+  }
+
+  .gitea-github-theme-templates.repo-button-row .repo-code-actions > li > a:hover {
+    background: ${themeVars.github.control.transparent.bgColor.hover};
+    box-shadow: inset 0 0 0 1px ${themeVars.github.control.transparent.borderColor.active};
+    text-decoration: none;
+  }
+
   .gitea-github-theme-templates.repo-button-row .repo-code-actions svg {
-    color: ${themeVars.color.text.light.num1};
+    color: ${themeVars.color.text.light.num1} !important;
+    flex: 0 0 auto;
+    margin: 0 !important;
   }
 
   /*
@@ -332,12 +445,6 @@ const repoToolbarDetails = css`
 
   .page-content.repository.file.list .code-search + #repo-files-table > .repo-file-line:first-child {
     border-radius: 0;
-  }
-
-  /* Match Forgejo's native clone input to the 32px popup controls. */
-  .gitea-github-theme-templates.repo-button-row .clone-panel #repo-clone-url {
-    font-size: 13px;
-    height: 32px;
   }
 `;
 
