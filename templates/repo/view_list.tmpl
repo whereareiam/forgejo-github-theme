@@ -60,7 +60,13 @@
 						{{end}}
 					</div>
 					<div class="repo-latest-commit-message">
-						<span class="message-wrapper" title="{{.LatestCommit.Summary}}">{{RenderCommitMessageLinkSubject $.Context .LatestCommit.Message $latestCommitLink ($.Repository.ComposeMetas ctx)}}</span>
+						<span class="message-wrapper" title="{{.LatestCommit.Summary}}">{{template "repo/commit_message_subject" dict
+							"Context" $.Context
+							"Message" .LatestCommit.Message
+							"Summary" .LatestCommit.Summary
+							"CommitLink" $latestCommitLink
+							"Metas" ($.Repository.ComposeMetas ctx)
+						}}</span>
 						{{if IsMultilineCommitMessage .LatestCommit.Message}}
 							<button class="btn interact-fg js-toggle-commit-body repo-latest-commit-details" aria-expanded="false" aria-label="Show commit details" data-tooltip-content="Show commit details">{{svg "octicon-kebab-horizontal" 16}}</button>
 							<pre class="commit-body tw-hidden">{{RenderCommitBody $.Context .LatestCommit.Message ($.Repository.ComposeMetas ctx)}}</pre>
@@ -141,7 +147,13 @@
 			<div class="repo-file-cell message commit-summary {{if not $commit}}notready{{end}}">
 				{{if $commit}}
 					{{$commitLink := printf "%s/commit/%s" $.RepoLink (PathEscape $commit.ID.String)}}
-					{{RenderCommitMessageLinkSubject $.Context $commit.Message $commitLink ($.Repository.ComposeMetas ctx)}}
+					{{template "repo/commit_message_subject" dict
+						"Context" $.Context
+						"Message" $commit.Message
+						"Summary" $commit.Summary
+						"CommitLink" $commitLink
+						"Metas" ($.Repository.ComposeMetas ctx)
+					}}
 				{{else}}
 					<span class="ui active tiny slow centered inline loader"></span>
 				{{end}}

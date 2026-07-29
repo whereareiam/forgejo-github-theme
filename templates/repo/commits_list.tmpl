@@ -14,7 +14,13 @@
 							{{$commitLink = printf "%s/pulls/%d/commits/%s" $commitRepoLink $.Issue.Index (PathEscape $commitID)}}
 						{{end}}
 						<span class="commit-summary {{if gt $commit.ParentCount 1}}grey text{{end}}" title="{{$commit.Summary}}">
-							{{RenderCommitMessageLinkSubject $.Context $commit.Message $commitLink ($.Repository.ComposeMetas ctx)}}
+							{{template "repo/commit_message_subject" dict
+								"Context" $.Context
+								"Message" $commit.Message
+								"Summary" $commit.Summary
+								"CommitLink" $commitLink
+								"Metas" ($.Repository.ComposeMetas ctx)
+							}}
 						</span>
 					{{end}}
 					{{if IsMultilineCommitMessage $commit.Message}}

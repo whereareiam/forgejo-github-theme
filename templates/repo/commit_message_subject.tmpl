@@ -1,0 +1,26 @@
+{{/*
+	Render a commit subject while keeping a trailing GitHub-style pull-request
+	reference separate from the commit link.
+
+	Template attributes:
+	* Context
+	* Message
+	* Summary
+	* CommitLink
+	* Metas
+*/}}
+{{- $subjectParts := StringUtils.Cut .Summary " (#" -}}
+{{- $subject := index $subjectParts 0 -}}
+{{- $referenceTail := index $subjectParts 1 -}}
+{{- $hasReference := index $subjectParts 2 -}}
+{{- $referenceParts := StringUtils.Cut $referenceTail ")" -}}
+{{- $reference := index $referenceParts 0 -}}
+{{- $referenceRemainder := index $referenceParts 1 -}}
+{{- $hasClosingParenthesis := index $referenceParts 2 -}}
+{{- $renderedReference := RenderCommitMessage .Context (printf "#%s" $reference) .Metas -}}
+{{- $isLinkedReference := StringUtils.Contains (StringUtils.ToString $renderedReference) "class=\"ref-issue\"" -}}
+{{- if and $hasReference $hasClosingParenthesis (not $referenceRemainder) $isLinkedReference -}}
+	{{- RenderCommitMessageLinkSubject .Context $subject .CommitLink .Metas}} ({{$renderedReference}})
+{{- else -}}
+	{{- RenderCommitMessageLinkSubject .Context .Message .CommitLink .Metas -}}
+{{- end -}}

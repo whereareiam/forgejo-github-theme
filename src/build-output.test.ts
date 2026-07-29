@@ -172,6 +172,8 @@ describe("Forgejo 15 native integration", () => {
   const requiredTemplates = [
     "base/head_navbar.tmpl",
     "base/head_navbar_icons.tmpl",
+    "repo/commit_message_subject.tmpl",
+    "repo/commits_list.tmpl",
     "repo/global_header.tmpl",
     "repo/header.tmpl",
     "repo/home.tmpl",
@@ -350,6 +352,11 @@ describe("Forgejo 15 native integration", () => {
     const repoHomeStyle = fs.readFileSync(path.join(ROOT_DIR, "styles", "templates", "repo", "home.ts"), "utf-8");
     const viewListStyle = fs.readFileSync(path.join(ROOT_DIR, "styles", "templates", "repo", "view_list.ts"), "utf-8");
     const viewListTemplate = fs.readFileSync(path.join(ROOT_DIR, "templates", "repo", "view_list.tmpl"), "utf-8");
+    const commitsListTemplate = fs.readFileSync(path.join(ROOT_DIR, "templates", "repo", "commits_list.tmpl"), "utf-8");
+    const commitSubjectTemplate = fs.readFileSync(
+      path.join(ROOT_DIR, "templates", "repo", "commit_message_subject.tmpl"),
+      "utf-8"
+    );
 
     expect(viewListTemplate).toContain('class="repo-latest-commit-row"');
     expect(viewListTemplate).toContain('<h2 class="sr-only">Latest commit</h2>');
@@ -365,6 +372,13 @@ describe("Forgejo 15 native integration", () => {
     );
     expect(viewListTemplate).toContain('template "repo/shabox_badge"');
     expect(viewListTemplate).toContain('template "repo/commit_statuses"');
+    expect(viewListTemplate).toContain('template "repo/commit_message_subject"');
+    expect(commitsListTemplate).toContain('template "repo/commit_message_subject"');
+    expect(commitSubjectTemplate).toContain('StringUtils.Cut .Summary " (#"');
+    expect(commitSubjectTemplate).toContain('"class=\\"ref-issue\\""');
+    expect(commitSubjectTemplate).toContain(
+      "{{- RenderCommitMessageLinkSubject .Context $subject .CommitLink .Metas}} ({{$renderedReference}})"
+    );
     expect(viewListTemplate).not.toContain('{{template "repo/latest_commit" .}}');
     expect(viewListStyle).toContain("min-height: 52px;");
     expect(viewListStyle).toContain(".repo-latest-commit-row");
