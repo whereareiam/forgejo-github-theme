@@ -311,6 +311,41 @@ const repositoryHeader = css`
   .page-content.repository > .secondary-nav .ui.secondary.pointing.menu .active.item > .ui.label::after {
     content: none;
   }
+
+  @media (max-width: 767.98px) {
+    #navbar.repository-navbar {
+      padding-left: 8px;
+      padding-right: 8px;
+    }
+
+    .repository-tab-nav.page-content.repository > .secondary-nav > overflow-menu.ui.container {
+      padding-left: 8px;
+      padding-right: 8px;
+    }
+
+    .repository-tab-nav.page-content.repository .ui.secondary.pointing.menu .overflow-menu-items {
+      gap: 4px;
+    }
+
+    .page-content.repository > .repository-content-header {
+      margin-bottom: 16px;
+      padding-top: 16px;
+    }
+
+    .page-content.repository > .repository-content-header > .ui.container {
+      padding-bottom: 16px;
+    }
+
+    .page-content.repository > .repository-content-header .repo-header {
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .page-content.repository > .repository-content-header .repo-buttons {
+      justify-content: flex-start;
+      width: 100%;
+    }
+  }
 `;
 
 export default cssCombine(repositoryHeader);

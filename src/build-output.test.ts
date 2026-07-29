@@ -173,6 +173,7 @@ describe("Forgejo 15 native integration", () => {
     "base/head_navbar.tmpl",
     "base/head_navbar_icons.tmpl",
     "repo/commit_message_subject.tmpl",
+    "repo/commit_page.tmpl",
     "repo/commits_list.tmpl",
     "repo/global_header.tmpl",
     "repo/header.tmpl",
@@ -389,6 +390,9 @@ describe("Forgejo 15 native integration", () => {
     expect(viewListStyle).toContain(".repo-latest-commit-message > .message-wrapper a:hover");
     expect(viewListStyle).toContain("color: ${themeVars.github.fgColor.accent};");
     expect(viewListStyle).toContain(".repo-latest-commit-attribution:has(");
+    expect(viewListStyle).toContain("margin-left: 8px;");
+    expect(viewListStyle).toContain("#repo-files-table .repo-file-cell.name > svg");
+    expect(viewListStyle).toContain("color: ${themeVars.color.text.light.num1};");
     expect(viewListStyle).toContain("text-transform: capitalize;");
     expect(repoHomeStyle).toContain("column-gap: 12px;");
     expect(repoHomeStyle).toContain(".language-stats-details .item");
@@ -396,6 +400,59 @@ describe("Forgejo 15 native integration", () => {
     expect(repoSidebarStyle).toContain("margin-right: 0;");
     expect(repoSidebarStyle).toContain("margin-right: 4px;");
     expect(repoFilesStyle).not.toContain("&.repo-file-last-commit");
+  });
+
+  it("ports the Forgejo commit page to GitHub's header, metadata card, and diff layout", () => {
+    const commitPageStyle = fs.readFileSync(
+      path.join(ROOT_DIR, "styles", "templates", "repo", "commit_page.ts"),
+      "utf-8"
+    );
+    const commitPageTemplate = fs.readFileSync(path.join(ROOT_DIR, "templates", "repo", "commit_page.tmpl"), "utf-8");
+
+    expect(commitPageTemplate).toContain('class="page-content repository diff github-commit-page"');
+    expect(commitPageTemplate).toContain('id="github-commit-title">Commit <code>{{printf "%.7s" .CommitID}}');
+    expect(commitPageTemplate).toContain('class="github-commit-attribution"');
+    expect(commitPageTemplate).toContain('class="github-commit-card"');
+    expect(commitPageTemplate).toContain('class="github-commit-meta-row"');
+    expect(commitPageTemplate).toContain('class="github-commit-stats-row"');
+    expect(commitPageTemplate).toContain('data-clipboard-text="{{.CommitID}}"');
+    expect(commitPageTemplate).toContain("{{if and .Commit.Signature .Verification.Verified}}");
+    expect(commitPageTemplate).toContain('class="github-commit-file-tree"');
+    expect(commitPageTemplate).toContain('template "repo/diff/box"');
+    expect(commitPageTemplate).not.toContain('template "repo/commit_header"');
+    expect(commitPageStyle).toContain("> .repository-content-header");
+    expect(commitPageStyle).toContain("grid-template-columns: 273px minmax(0, 1fr);");
+    expect(commitPageStyle).toContain("min-height: 46px;");
+  });
+
+  it("keeps the adapted repository and commit layouts bounded at phone breakpoints", () => {
+    const headerStyle = fs.readFileSync(path.join(ROOT_DIR, "styles", "templates", "repo", "header.ts"), "utf-8");
+    const homeStyle = fs.readFileSync(path.join(ROOT_DIR, "styles", "templates", "repo", "home.ts"), "utf-8");
+    const viewContentStyle = fs.readFileSync(
+      path.join(ROOT_DIR, "styles", "templates", "repo", "view_content.ts"),
+      "utf-8"
+    );
+    const viewListStyle = fs.readFileSync(path.join(ROOT_DIR, "styles", "templates", "repo", "view_list.ts"), "utf-8");
+    const commitPageStyle = fs.readFileSync(
+      path.join(ROOT_DIR, "styles", "templates", "repo", "commit_page.ts"),
+      "utf-8"
+    );
+
+    for (const style of [headerStyle, homeStyle, viewContentStyle, viewListStyle, commitPageStyle]) {
+      expect(style).toContain("@media (max-width: 767.98px)");
+    }
+
+    expect(headerStyle).toContain("padding-left: 8px;");
+    expect(headerStyle).toContain(".repo-buttons");
+    expect(viewContentStyle).toContain("> .repo-button-row-left");
+    expect(viewContentStyle).toContain("> .repo-button-row-right");
+    expect(viewContentStyle).toContain("width: 100%;");
+    expect(viewContentStyle).toContain("max-height: calc(100vh - 48px);");
+    expect(homeStyle).toContain("grid-template-columns: 100%;");
+    expect(viewListStyle).toContain("max-width: none;");
+    expect(commitPageStyle).toContain(".github-commit-file-tree {\n        display: none;");
+    expect(commitPageStyle).toContain(".github-commit-meta-row");
+    expect(commitPageStyle).toContain("flex-direction: column;");
   });
 
   it("keeps adapted templates in the standard template tree", () => {

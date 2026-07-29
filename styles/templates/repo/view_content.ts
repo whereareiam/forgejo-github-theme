@@ -493,6 +493,55 @@ const repoToolbarDetails = css`
   .page-content.repository.file.list .code-search + #repo-files-table > .repo-file-line:first-child {
     border-radius: 0;
   }
+
+  @media (max-width: 767.98px) {
+    .gitea-github-theme-templates.repo-button-row {
+      align-items: stretch;
+      gap: 8px;
+    }
+
+    .gitea-github-theme-templates.repo-button-row > .repo-button-row-left,
+    .gitea-github-theme-templates.repo-button-row > .repo-button-row-right {
+      box-sizing: border-box;
+      width: 100%;
+    }
+
+    .gitea-github-theme-templates.repo-button-row > .repo-button-row-left {
+      align-items: stretch;
+    }
+
+    .gitea-github-theme-templates.repo-button-row > .repo-button-row-left > .js-branch-tag-selector {
+      flex: 1 1 160px;
+      min-width: 0;
+    }
+
+    .gitea-github-theme-templates.repo-button-row > .repo-button-row-right {
+      justify-content: flex-end;
+      overflow: visible;
+    }
+
+    .gitea-github-theme-templates.repo-button-row .repo-code-dropdown > .content {
+      max-height: calc(100vh - 96px);
+      overflow-y: auto;
+    }
+
+    .page-content.repository.file.list .repo-about-modal-overlay {
+      align-items: flex-end;
+      padding: 0;
+    }
+
+    .page-content.repository.file.list .repo-about-modal-card {
+      border-bottom: 0;
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+      max-height: calc(100vh - 48px);
+      width: 100%;
+    }
+
+    .page-content.repository.file.list .repo-about-modal-body > .field:not(:last-child) {
+      margin-bottom: 16px;
+    }
+  }
 `;
 
 export default cssCombine(repoButtonRow, repoToolbarDetails);

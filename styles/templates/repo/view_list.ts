@@ -92,7 +92,7 @@ const repoFileLastCommit = css`
   .repository.file.list #repo-files-table .repo-latest-commit-author {
     color: ${themeVars.color.text.self};
     display: block;
-    margin-left: 4px;
+    margin-left: 8px;
     max-width: 125px;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -426,6 +426,11 @@ const repoFileList = css`
     overflow: hidden;
   }
 
+  #repo-files-table .repo-file-cell.name > svg {
+    color: ${themeVars.color.text.light.num1};
+    flex: 0 0 auto;
+  }
+
   #repo-files-table .repo-file-cell.name > a,
   #repo-files-table .repo-file-cell.name > span {
     flex-shrink: 0;
@@ -441,7 +446,7 @@ const repoFileList = css`
 
   @media (max-width: 767.98px) {
     #repo-files-table .repo-file-cell.name {
-      max-width: 35vw;
+      max-width: none;
     }
   }
 
