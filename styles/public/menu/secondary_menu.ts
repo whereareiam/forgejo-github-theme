@@ -39,7 +39,7 @@ const secondaryMenu = css`
   /* 二级导航栏, 比如仓库的导航栏, 仓库列表的导航栏, 探索的类型导航栏 */
   .ui.secondary.pointing.menu {
     .overflow-menu-items {
-      gap: 4px;
+      gap: 8px;
       .item {
         padding: 5px 8px !important;
         margin-block-start: 0.5rem;

@@ -241,6 +241,10 @@ describe("Forgejo 15 native integration", () => {
 
   it("matches GitHub's measured repository navigation geometry", () => {
     const header = fs.readFileSync(path.join(ROOT_DIR, "styles", "templates", "repo", "header.ts"), "utf-8");
+    const secondaryMenu = fs.readFileSync(
+      path.join(ROOT_DIR, "styles", "public", "menu", "secondary_menu.ts"),
+      "utf-8"
+    );
     const navbarTemplate = fs.readFileSync(path.join(ROOT_DIR, "templates", "base", "head_navbar.tmpl"), "utf-8");
 
     expect(header).toContain("height: 52px;");
@@ -255,6 +259,7 @@ describe("Forgejo 15 native integration", () => {
     expect(header).toContain("padding: 6px 8px !important;");
     expect(header).toContain("line-height: 21px;");
     expect(header).toContain("bottom: -8px;");
+    expect(secondaryMenu).toContain(".overflow-menu-items {\n      gap: 8px;");
     expect(navbarTemplate).toContain("{{ctx.AvatarUtils.Avatar .Owner 16}}");
     expect(navbarTemplate).not.toContain('class="repository-navbar-owner-avatar"');
   });
