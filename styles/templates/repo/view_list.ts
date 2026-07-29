@@ -62,10 +62,26 @@ const repoFileLastCommit = css`
     display: flex;
     flex: 0 1 auto;
     min-width: 0;
+    position: relative;
     white-space: nowrap;
   }
 
-  .repository.file.list #repo-files-table .repo-latest-commit-attribution img.ui.avatar {
+  .repository.file.list #repo-files-table .repo-latest-commit-avatar {
+    align-items: center;
+    border-radius: 9999px;
+    display: flex;
+    flex: 0 0 20px;
+    height: 20px;
+    outline: none;
+    width: 20px;
+  }
+
+  .repository.file.list #repo-files-table .repo-latest-commit-avatar:focus-visible {
+    outline: 2px solid ${themeVars.github.fgColor.accent};
+    outline-offset: 2px;
+  }
+
+  .repository.file.list #repo-files-table .repo-latest-commit-avatar > img.ui.avatar {
     border-radius: 9999px;
     flex: 0 0 auto;
     height: 20px;
@@ -85,6 +101,98 @@ const repoFileLastCommit = css`
 
   .repository.file.list #repo-files-table a.repo-latest-commit-author:hover {
     color: ${themeVars.color.text.self};
+    text-decoration: underline;
+  }
+
+  .repository.file.list #repo-files-table .repo-latest-commit-author-card {
+    background: ${themeVars.color.menu};
+    border: 1px solid ${themeVars.color.light.border};
+    border-radius: ${otherThemeVars.border.radius};
+    bottom: calc(100% + 12px);
+    box-shadow: ${themeVars.github.shadow.floating.small};
+    box-sizing: border-box;
+    color: ${themeVars.color.text.self};
+    left: 0;
+    opacity: 0;
+    padding: 16px;
+    pointer-events: none;
+    position: absolute;
+    transform: translateY(4px);
+    transition:
+      opacity 120ms ease 300ms,
+      transform 120ms ease 300ms,
+      visibility 0s linear 420ms;
+    visibility: hidden;
+    white-space: normal;
+    width: min(360px, calc(100vw - 32px));
+    z-index: 100;
+  }
+
+  .repository.file.list
+    #repo-files-table
+    .repo-latest-commit-attribution:has(
+      > .repo-latest-commit-avatar:hover,
+      > .repo-latest-commit-author:hover,
+      > .repo-latest-commit-author-card:hover
+    )
+    > .repo-latest-commit-author-card {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+    transition-delay: 300ms;
+    visibility: visible;
+  }
+
+  .repository.file.list
+    #repo-files-table
+    .repo-latest-commit-attribution:has(> .repo-latest-commit-avatar:focus, > .repo-latest-commit-author:focus)
+    > .repo-latest-commit-author-card {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+    transition-delay: 0s;
+    visibility: visible;
+  }
+
+  .repository.file.list #repo-files-table .repo-latest-commit-author-card::after {
+    bottom: -12px;
+    content: "";
+    height: 12px;
+    left: 0;
+    position: absolute;
+    width: 140px;
+  }
+
+  .repository.file.list #repo-files-table .repo-latest-commit-author-card-profile {
+    align-items: center;
+    display: flex;
+    gap: 12px;
+  }
+
+  .repository.file.list #repo-files-table .repo-latest-commit-author-card-profile img.ui.avatar {
+    border-radius: 9999px;
+    flex: 0 0 48px;
+    height: 48px;
+    margin: 0;
+    width: 48px;
+  }
+
+  .repository.file.list #repo-files-table .repo-latest-commit-author-card-identity {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  .repository.file.list #repo-files-table .repo-latest-commit-author-card-context {
+    align-items: center;
+    color: ${themeVars.color.text.light.num1};
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+  }
+
+  .repository.file.list #repo-files-table .repo-latest-commit-author-card-context svg {
+    flex: 0 0 auto;
   }
 
   .repository.file.list #repo-files-table .repo-latest-commit-message {
@@ -110,6 +218,11 @@ const repoFileLastCommit = css`
 
   .repository.file.list #repo-files-table .repo-latest-commit-message > .message-wrapper a {
     color: inherit;
+  }
+
+  .repository.file.list #repo-files-table .repo-latest-commit-message > .message-wrapper a:hover {
+    color: ${themeVars.github.fgColor.accent};
+    text-decoration: underline;
   }
 
   .repository.file.list #repo-files-table .repo-latest-commit-details,

@@ -338,14 +338,26 @@ describe("Forgejo 15 native integration", () => {
       path.join(ROOT_DIR, "styles", "components", "repo", "repo_files.ts"),
       "utf-8"
     );
+    const repoSidebarStyle = fs.readFileSync(
+      path.join(ROOT_DIR, "styles", "components", "repo", "repo_sidebar.ts"),
+      "utf-8"
+    );
+    const repoHomeStyle = fs.readFileSync(path.join(ROOT_DIR, "styles", "templates", "repo", "home.ts"), "utf-8");
     const viewListStyle = fs.readFileSync(path.join(ROOT_DIR, "styles", "templates", "repo", "view_list.ts"), "utf-8");
     const viewListTemplate = fs.readFileSync(path.join(ROOT_DIR, "templates", "repo", "view_list.tmpl"), "utf-8");
 
     expect(viewListTemplate).toContain('class="repo-latest-commit-row"');
     expect(viewListTemplate).toContain('<h2 class="sr-only">Latest commit</h2>');
     expect(viewListTemplate).toContain('class="repo-latest-commit-primary"');
+    expect(viewListTemplate).toContain('class="repo-latest-commit-avatar" tabindex="0"');
+    expect(viewListTemplate).toContain('class="repo-latest-commit-author-card"');
+    expect(viewListTemplate).toContain('printf "author:%s" $latestCommitAuthorName');
+    expect(viewListTemplate).toContain('QueryEscape (printf "author:%s" $latestCommitAuthorName)');
     expect(viewListTemplate).toContain('class="repo-latest-commit-actions"');
     expect(viewListTemplate).toContain('{{printf "%.7s" .LatestCommit.ID.String}}');
+    expect(viewListTemplate).toContain(
+      "{{if and .LatestCommit.Signature .LatestCommitVerification .LatestCommitVerification.Verified}}"
+    );
     expect(viewListTemplate).toContain('template "repo/shabox_badge"');
     expect(viewListTemplate).toContain('template "repo/commit_statuses"');
     expect(viewListTemplate).not.toContain('{{template "repo/latest_commit" .}}');
@@ -355,7 +367,15 @@ describe("Forgejo 15 native integration", () => {
     expect(viewListStyle).toContain("clip: rect(0, 0, 0, 0);");
     expect(viewListStyle).toContain("min-height: 44px;");
     expect(viewListStyle).toContain("flex: 0 0 28px;");
+    expect(viewListStyle).toContain(".repo-latest-commit-message > .message-wrapper a:hover");
+    expect(viewListStyle).toContain("color: ${themeVars.github.fgColor.accent};");
+    expect(viewListStyle).toContain(".repo-latest-commit-attribution:has(");
     expect(viewListStyle).toContain("text-transform: capitalize;");
+    expect(repoHomeStyle).toContain("column-gap: 12px;");
+    expect(repoHomeStyle).toContain(".language-stats-details .item");
+    expect(repoHomeStyle).toContain("padding: 0;");
+    expect(repoSidebarStyle).toContain("margin-right: 0;");
+    expect(repoSidebarStyle).toContain("margin-right: 4px;");
     expect(repoFilesStyle).not.toContain("&.repo-file-last-commit");
   });
 

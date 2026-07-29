@@ -14,18 +14,49 @@
 				<div class="repo-latest-commit-loading ui active tiny slow centered inline">…</div>
 			{{else}}
 				{{$latestCommitLink := printf "%s/commit/%s" .RepoLink (PathEscape .LatestCommit.ID.String)}}
+				{{$latestCommitAuthorName := ""}}
+				{{$latestCommitAuthorDisplay := ""}}
+				{{if .LatestCommit.Author}}
+					{{$latestCommitAuthorName = .LatestCommit.Author.Name}}
+					{{$latestCommitAuthorDisplay = .LatestCommit.Author.Name}}
+				{{else if .LatestCommitUser}}
+					{{$latestCommitAuthorName = .LatestCommitUser.Name}}
+					{{$latestCommitAuthorDisplay = .LatestCommitUser.Name}}
+				{{end}}
+				{{if and .LatestCommitUser .LatestCommitUser.FullName DefaultShowFullName}}
+					{{$latestCommitAuthorDisplay = .LatestCommitUser.FullName}}
+				{{end}}
+				{{$latestCommitAuthorSearch := printf "%s/commits/%s/search?q=%s" .RepoLink .BranchNameSubURL (QueryEscape (printf "author:%s" $latestCommitAuthorName))}}
 				<div class="repo-latest-commit-primary">
 					<div class="repo-latest-commit-attribution">
-						{{if .LatestCommitUser}}
-							{{ctx.AvatarUtils.Avatar .LatestCommitUser 20}}
-							{{if and .LatestCommitUser.FullName DefaultShowFullName}}
-								<a class="repo-latest-commit-author" title="{{.LatestCommitUser.FullName}}" href="{{.LatestCommitUser.HomeLink}}"><strong>{{.LatestCommitUser.FullName}}</strong></a>
-							{{else}}
-								<a class="repo-latest-commit-author" title="{{if .LatestCommit.Author}}{{.LatestCommit.Author.Name}}{{else}}{{.LatestCommitUser.Name}}{{end}}" href="{{.LatestCommitUser.HomeLink}}"><strong>{{if .LatestCommit.Author}}{{.LatestCommit.Author.Name}}{{else}}{{.LatestCommitUser.Name}}{{end}}</strong></a>
-							{{end}}
-						{{else if .LatestCommit.Author}}
-							{{ctx.AvatarUtils.AvatarByEmail .LatestCommit.Author.Email .LatestCommit.Author.Name 20}}
-							<span class="repo-latest-commit-author" title="{{.LatestCommit.Author.Name}}"><strong>{{.LatestCommit.Author.Name}}</strong></span>
+						{{if $latestCommitAuthorName}}
+							<span class="repo-latest-commit-avatar" tabindex="0" aria-label="{{$latestCommitAuthorDisplay}}" aria-describedby="repo-latest-commit-author-card">
+								{{if .LatestCommitUser}}
+									{{ctx.AvatarUtils.Avatar .LatestCommitUser 20}}
+								{{else}}
+									{{ctx.AvatarUtils.AvatarByEmail .LatestCommit.Author.Email $latestCommitAuthorDisplay 20}}
+								{{end}}
+							</span>
+							<a class="repo-latest-commit-author" title="{{$latestCommitAuthorDisplay}}" href="{{$latestCommitAuthorSearch}}" aria-label="Commits by {{$latestCommitAuthorDisplay}}" aria-describedby="repo-latest-commit-author-card"><strong>{{$latestCommitAuthorDisplay}}</strong></a>
+							<div class="repo-latest-commit-author-card" id="repo-latest-commit-author-card" role="tooltip">
+								<div class="repo-latest-commit-author-card-profile">
+									{{if .LatestCommitUser}}
+										{{ctx.AvatarUtils.Avatar .LatestCommitUser 48}}
+									{{else}}
+										{{ctx.AvatarUtils.AvatarByEmail .LatestCommit.Author.Email $latestCommitAuthorDisplay 48}}
+									{{end}}
+									<div class="repo-latest-commit-author-card-identity">
+										<strong>{{$latestCommitAuthorDisplay}}</strong>
+										{{if and .LatestCommitUser (ne $latestCommitAuthorDisplay .LatestCommitUser.Name)}}
+											<span class="muted">@{{.LatestCommitUser.Name}}</span>
+										{{end}}
+									</div>
+								</div>
+								<div class="repo-latest-commit-author-card-context">
+									{{svg "octicon-git-commit" 16}}
+									<span>{{ctx.Locale.Tr "repo.issues.role.contributor_helper"}}</span>
+								</div>
+							</div>
 						{{end}}
 					</div>
 					<div class="repo-latest-commit-message">
@@ -34,7 +65,7 @@
 							<button class="btn interact-fg js-toggle-commit-body repo-latest-commit-details" aria-expanded="false" aria-label="Show commit details" data-tooltip-content="Show commit details">{{svg "octicon-kebab-horizontal" 16}}</button>
 							<pre class="commit-body tw-hidden">{{RenderCommitBody $.Context .LatestCommit.Message ($.Repository.ComposeMetas ctx)}}</pre>
 						{{end}}
-						{{if .LatestCommit.Signature}}
+						{{if and .LatestCommit.Signature .LatestCommitVerification .LatestCommitVerification.Verified}}
 							<a class="repo-latest-commit-signature" href="{{$latestCommitLink}}" rel="nofollow" aria-label="Commit signature">
 								{{template "repo/shabox_badge" dict "verification" .LatestCommitVerification}}
 							</a>

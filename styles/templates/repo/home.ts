@@ -107,6 +107,7 @@ const repositoryHome = css`
   }
 
   .page-content.repository.file.list .language-stats-details {
+    column-gap: 12px;
     display: flex;
     flex-wrap: wrap;
   }
@@ -114,15 +115,11 @@ const repositoryHome = css`
   .page-content.repository.file.list .language-stats-details .item {
     align-items: center;
     display: flex;
-    gap: 0.25em;
+    gap: 0;
     height: 30px;
     justify-content: center;
-    padding: 0 0.5em;
+    padding: 0;
     text-decoration: none;
-  }
-
-  .page-content.repository.file.list .language-stats-details .item:first-child {
-    padding-left: 0;
   }
 
   .page-content.repository.file.list .language-stats-details .color-icon {
