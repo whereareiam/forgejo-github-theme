@@ -20,13 +20,13 @@
 						<div class="repo-icon only-mobile" data-tooltip-content="{{ctx.Locale.Tr "repo.desc.archived"}}">{{svg "octicon-archive" 18}}</div>
 					{{end}}
 					{{if .IsPrivate}}
-						<span class="ui basic label not-mobile">{{ctx.Locale.Tr "repo.desc.private"}}</span>
+						<span class="ui basic label repository-visibility-label not-mobile">{{ctx.Locale.Tr "repo.desc.private"}}</span>
 						<div class="repo-icon only-mobile" data-tooltip-content="{{ctx.Locale.Tr "repo.desc.private"}}">{{svg "octicon-lock" 18}}</div>
 					{{else if .Owner.Visibility.IsPrivate}}
-						<span class="ui basic label not-mobile">{{ctx.Locale.Tr "repo.desc.internal"}}</span>
+						<span class="ui basic label repository-visibility-label not-mobile">{{ctx.Locale.Tr "repo.desc.internal"}}</span>
 						<div class="repo-icon only-mobile" data-tooltip-content="{{ctx.Locale.Tr "repo.desc.internal"}}">{{svg "octicon-shield-lock" 18}}</div>
 					{{else}}
-						<span class="ui basic label not-mobile">{{ctx.Locale.Tr "settings.visibility.public"}}</span>
+						<span class="ui basic label repository-visibility-label not-mobile">{{ctx.Locale.Tr "settings.visibility.public"}}</span>
 					{{end}}
 					{{if .IsTemplate}}
 						<span class="ui basic label not-mobile">{{ctx.Locale.Tr "repo.desc.template"}}</span>

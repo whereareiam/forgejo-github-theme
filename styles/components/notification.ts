@@ -61,11 +61,13 @@ const notificationToolbar = css`
             min-height: 32px;
             outline: 0;
             padding: 4px 12px;
+            text-decoration: none;
             &::before {
               display: none;
             }
             &:not(.active):hover {
               background: ${themeVars.github.control.transparent.bgColor.hover} !important;
+              text-decoration: none;
             }
             &.active {
               background: light-dark(

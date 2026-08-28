@@ -38,6 +38,7 @@ const navbarRight = css`
     .navbar-left {
       gap: 8px;
       > .item {
+        border-radius: ${otherThemeVars.border.radius};
         padding: 4px 8px;
         min-height: 20px;
         &:hover {

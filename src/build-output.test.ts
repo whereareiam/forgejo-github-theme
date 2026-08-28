@@ -163,6 +163,7 @@ describe("Forgejo 15 native integration", () => {
     "--color-selection-bg",
     ".repository-tab-nav.page-content.repository",
     ".repo-about-modal-overlay",
+    ".repo-code-navigation",
     ".button.primary:not(.ui)",
     ".vch__legend",
     ".codemirror-container",
@@ -171,6 +172,9 @@ describe("Forgejo 15 native integration", () => {
   const requiredTemplates = [
     "base/head_navbar.tmpl",
     "base/head_navbar_icons.tmpl",
+    "repo/commit_message_subject.tmpl",
+    "repo/commit_page.tmpl",
+    "repo/commits_list.tmpl",
     "repo/global_header.tmpl",
     "repo/header.tmpl",
     "repo/home.tmpl",
@@ -223,6 +227,46 @@ describe("Forgejo 15 native integration", () => {
     }
   });
 
+  it("ships GitHub's proportional font and applies its Primer stack", () => {
+    const css = fs.readFileSync(path.join(DIST_DIR, `${PREFIX}light.css`), "utf-8");
+    const sourceFont = path.join(ROOT_DIR, "public", "assets", "fonts", "MonaSansVF-v2.0.27.woff2");
+    const builtFont = path.join(DIST_DIR, "assets", "fonts", "MonaSansVF-v2.0.27.woff2");
+    const fontLicense = path.join(DIST_DIR, "assets", "fonts", "MonaSans-OFL.txt");
+
+    expect(css).toContain("font-family:Mona Sans VF");
+    expect(css).toContain("url(../fonts/MonaSansVF-v2.0.27.woff2)");
+    expect(css).toContain('--fonts-proportional:"Mona Sans VF", -apple-system, BlinkMacSystemFont');
+    expect(fs.existsSync(sourceFont)).toBe(true);
+    expect(fs.existsSync(builtFont)).toBe(true);
+    expect(fs.existsSync(fontLicense)).toBe(true);
+    expect(fs.statSync(builtFont).size).toBeGreaterThan(100_000);
+  });
+
+  it("matches GitHub's measured repository navigation geometry", () => {
+    const header = fs.readFileSync(path.join(ROOT_DIR, "styles", "templates", "repo", "header.ts"), "utf-8");
+    const secondaryMenu = fs.readFileSync(
+      path.join(ROOT_DIR, "styles", "public", "menu", "secondary_menu.ts"),
+      "utf-8"
+    );
+    const navbarTemplate = fs.readFileSync(path.join(ROOT_DIR, "templates", "base", "head_navbar.tmpl"), "utf-8");
+
+    expect(header).toContain("height: 52px;");
+    expect(header).toContain("padding-top: 16px;");
+    expect(header).toContain("border-bottom: 0;");
+    expect(header).toContain(".navbar-left > #navbar-logo.item");
+    expect(header).toContain("height: 48px;");
+    expect(header).toContain("gap: 8px;");
+    expect(header).toContain("margin: 0 7px;");
+    expect(header).toContain(".repository-navbar-breadcrumb > a.repository-navbar-name");
+    expect(header).toContain("margin: 0 0 8px !important;");
+    expect(header).toContain("padding: 6px 8px !important;");
+    expect(header).toContain("line-height: 21px;");
+    expect(header).toContain("bottom: -8px;");
+    expect(secondaryMenu).toContain(".overflow-menu-items {\n      gap: 8px;");
+    expect(navbarTemplate).toContain("{{ctx.AvatarUtils.Avatar .Owner 16}}");
+    expect(navbarTemplate).not.toContain('class="repository-navbar-owner-avatar"');
+  });
+
   it("does not emit selector families from the newer Gitea markup", () => {
     const css = fs.readFileSync(path.join(DIST_DIR, `${PREFIX}light.css`), "utf-8");
 
@@ -249,6 +293,166 @@ describe("Forgejo 15 native integration", () => {
     expect(notification).toContain("${themeVars.github.controlKnob.bgColor.rest},");
     expect(notification).toContain("${themeVars.color.hover.self}");
     expect(notification).toContain("font-weight: 600;");
+  });
+
+  it("keeps header and clone interactions aligned with GitHub controls", () => {
+    const navbar = fs.readFileSync(path.join(ROOT_DIR, "styles", "components", "navbar.ts"), "utf-8");
+    const notification = fs.readFileSync(path.join(ROOT_DIR, "styles", "components", "notification.ts"), "utf-8");
+    const repoContentStyle = fs.readFileSync(
+      path.join(ROOT_DIR, "styles", "templates", "repo", "view_content.ts"),
+      "utf-8"
+    );
+    const repoContentTemplate = fs.readFileSync(path.join(ROOT_DIR, "templates", "repo", "view_content.tmpl"), "utf-8");
+
+    expect(navbar).toContain("> .item {\n        border-radius: ${otherThemeVars.border.radius};");
+    expect(notification).toContain("text-decoration: none;");
+    expect(repoContentTemplate).toContain('class="repo-code-navigation"');
+    expect(repoContentTemplate).toContain('class="repo-code-body"');
+    expect(repoContentTemplate).toContain('svg "octicon-terminal" 16');
+    expect(repoContentStyle).toContain("border-radius: 12px;");
+    expect(repoContentStyle).toContain("width: min(400px, calc(100vw - 32px));");
+    expect(repoContentStyle).toContain("grid-template-rows: 32px 32px;");
+    expect(repoContentStyle).toContain("border-radius: ${otherThemeVars.border.radius} !important;");
+    expect(repoContentStyle).toContain("font-size: 14px;");
+    expect(repoContentStyle).toContain("padding: 0 !important;");
+    expect(repoContentStyle).toContain(".repo-code-actions > li > a:hover");
+  });
+
+  it("matches GitHub's repository About, visibility, and code-search details", () => {
+    const headerStyle = fs.readFileSync(path.join(ROOT_DIR, "styles", "templates", "repo", "header.ts"), "utf-8");
+    const headerTemplate = fs.readFileSync(path.join(ROOT_DIR, "templates", "repo", "header.tmpl"), "utf-8");
+    const repoContentStyle = fs.readFileSync(
+      path.join(ROOT_DIR, "styles", "templates", "repo", "view_content.ts"),
+      "utf-8"
+    );
+    const sidebarTemplate = fs.readFileSync(path.join(ROOT_DIR, "templates", "repo", "home_sidebar_top.tmpl"), "utf-8");
+
+    expect(sidebarTemplate).toContain("No description, website, or topics provided.");
+    expect(sidebarTemplate).not.toContain('ctx.Locale.Tr "repo.no_desc"');
+    expect(headerTemplate).toContain("repository-visibility-label");
+    expect(headerStyle).toContain("> .ui.label.repository-visibility-label");
+    expect(repoContentStyle).toContain(".repo-home-sidebar-top > .repo-about-block");
+    expect(repoContentStyle).toContain(".repo-about-block > .repo-about-heading");
+    expect(repoContentStyle).toContain("> .repo-description.no-description");
+    expect(repoContentStyle).toContain("font-style: italic;");
+    expect(repoContentStyle).toContain("min-height: 34px;");
+    expect(repoContentStyle).toContain("flex: 1 1 120px;");
+    expect(repoContentStyle).toContain("> .ui.dropdown.selection");
+    expect(repoContentStyle).toContain("border-radius: 0 !important;");
+  });
+
+  it("matches GitHub's latest-commit row while preserving Forgejo commit data", () => {
+    const repoFilesStyle = fs.readFileSync(
+      path.join(ROOT_DIR, "styles", "components", "repo", "repo_files.ts"),
+      "utf-8"
+    );
+    const repoSidebarStyle = fs.readFileSync(
+      path.join(ROOT_DIR, "styles", "components", "repo", "repo_sidebar.ts"),
+      "utf-8"
+    );
+    const repoHomeStyle = fs.readFileSync(path.join(ROOT_DIR, "styles", "templates", "repo", "home.ts"), "utf-8");
+    const viewListStyle = fs.readFileSync(path.join(ROOT_DIR, "styles", "templates", "repo", "view_list.ts"), "utf-8");
+    const viewListTemplate = fs.readFileSync(path.join(ROOT_DIR, "templates", "repo", "view_list.tmpl"), "utf-8");
+    const commitsListTemplate = fs.readFileSync(path.join(ROOT_DIR, "templates", "repo", "commits_list.tmpl"), "utf-8");
+    const commitSubjectTemplate = fs.readFileSync(
+      path.join(ROOT_DIR, "templates", "repo", "commit_message_subject.tmpl"),
+      "utf-8"
+    );
+
+    expect(viewListTemplate).toContain('class="repo-latest-commit-row"');
+    expect(viewListTemplate).toContain('<h2 class="sr-only">Latest commit</h2>');
+    expect(viewListTemplate).toContain('class="repo-latest-commit-primary"');
+    expect(viewListTemplate).toContain('class="repo-latest-commit-avatar" tabindex="0"');
+    expect(viewListTemplate).toContain('class="repo-latest-commit-author-card"');
+    expect(viewListTemplate).toContain('printf "author:%s" $latestCommitAuthorName');
+    expect(viewListTemplate).toContain('QueryEscape (printf "author:%s" $latestCommitAuthorName)');
+    expect(viewListTemplate).toContain('class="repo-latest-commit-actions"');
+    expect(viewListTemplate).toContain('{{printf "%.7s" .LatestCommit.ID.String}}');
+    expect(viewListTemplate).toContain(
+      "{{if and .LatestCommit.Signature .LatestCommitVerification .LatestCommitVerification.Verified}}"
+    );
+    expect(viewListTemplate).toContain('template "repo/shabox_badge"');
+    expect(viewListTemplate).toContain('template "repo/commit_statuses"');
+    expect(viewListTemplate).toContain('template "repo/commit_message_subject"');
+    expect(commitsListTemplate).toContain('template "repo/commit_message_subject"');
+    expect(commitSubjectTemplate).toContain('StringUtils.Cut .Summary " (#"');
+    expect(commitSubjectTemplate).toContain('"class=\\"ref-issue\\""');
+    expect(commitSubjectTemplate).toContain(
+      "{{- RenderCommitMessageLinkSubject .Context $subject .CommitLink .Metas}} ({{$renderedReference}})"
+    );
+    expect(viewListTemplate).not.toContain('{{template "repo/latest_commit" .}}');
+    expect(viewListStyle).toContain("min-height: 52px;");
+    expect(viewListStyle).toContain(".repo-latest-commit-row");
+    expect(viewListStyle).toContain(".repo-latest-commit-row > .sr-only");
+    expect(viewListStyle).toContain("clip: rect(0, 0, 0, 0);");
+    expect(viewListStyle).toContain("min-height: 44px;");
+    expect(viewListStyle).toContain("flex: 0 0 28px;");
+    expect(viewListStyle).toContain(".repo-latest-commit-message > .message-wrapper a:hover");
+    expect(viewListStyle).toContain("color: ${themeVars.github.fgColor.accent};");
+    expect(viewListStyle).toContain(".repo-latest-commit-attribution:has(");
+    expect(viewListStyle).toContain("margin-left: 8px;");
+    expect(viewListStyle).toContain("#repo-files-table .repo-file-cell.name > svg");
+    expect(viewListStyle).toContain("color: ${themeVars.color.text.light.num1};");
+    expect(viewListStyle).toContain("text-transform: capitalize;");
+    expect(repoHomeStyle).toContain("column-gap: 12px;");
+    expect(repoHomeStyle).toContain(".language-stats-details .item");
+    expect(repoHomeStyle).toContain("padding: 0;");
+    expect(repoSidebarStyle).toContain("margin-right: 0;");
+    expect(repoSidebarStyle).toContain("margin-right: 4px;");
+    expect(repoFilesStyle).not.toContain("&.repo-file-last-commit");
+  });
+
+  it("ports the Forgejo commit page to GitHub's header, metadata card, and diff layout", () => {
+    const commitPageStyle = fs.readFileSync(
+      path.join(ROOT_DIR, "styles", "templates", "repo", "commit_page.ts"),
+      "utf-8"
+    );
+    const commitPageTemplate = fs.readFileSync(path.join(ROOT_DIR, "templates", "repo", "commit_page.tmpl"), "utf-8");
+
+    expect(commitPageTemplate).toContain('class="page-content repository diff github-commit-page"');
+    expect(commitPageTemplate).toContain('id="github-commit-title">Commit <code>{{printf "%.7s" .CommitID}}');
+    expect(commitPageTemplate).toContain('class="github-commit-attribution"');
+    expect(commitPageTemplate).toContain('class="github-commit-card"');
+    expect(commitPageTemplate).toContain('class="github-commit-meta-row"');
+    expect(commitPageTemplate).toContain('class="github-commit-stats-row"');
+    expect(commitPageTemplate).toContain('data-clipboard-text="{{.CommitID}}"');
+    expect(commitPageTemplate).toContain("{{if and .Commit.Signature .Verification.Verified}}");
+    expect(commitPageTemplate).toContain('class="github-commit-file-tree"');
+    expect(commitPageTemplate).toContain('template "repo/diff/box"');
+    expect(commitPageTemplate).not.toContain('template "repo/commit_header"');
+    expect(commitPageStyle).toContain("> .repository-content-header");
+    expect(commitPageStyle).toContain("grid-template-columns: 273px minmax(0, 1fr);");
+    expect(commitPageStyle).toContain("min-height: 46px;");
+  });
+
+  it("keeps the adapted repository and commit layouts bounded at phone breakpoints", () => {
+    const headerStyle = fs.readFileSync(path.join(ROOT_DIR, "styles", "templates", "repo", "header.ts"), "utf-8");
+    const homeStyle = fs.readFileSync(path.join(ROOT_DIR, "styles", "templates", "repo", "home.ts"), "utf-8");
+    const viewContentStyle = fs.readFileSync(
+      path.join(ROOT_DIR, "styles", "templates", "repo", "view_content.ts"),
+      "utf-8"
+    );
+    const viewListStyle = fs.readFileSync(path.join(ROOT_DIR, "styles", "templates", "repo", "view_list.ts"), "utf-8");
+    const commitPageStyle = fs.readFileSync(
+      path.join(ROOT_DIR, "styles", "templates", "repo", "commit_page.ts"),
+      "utf-8"
+    );
+
+    for (const style of [headerStyle, homeStyle, viewContentStyle, viewListStyle, commitPageStyle]) {
+      expect(style).toContain("@media (max-width: 767.98px)");
+    }
+
+    expect(headerStyle).toContain("padding-left: 8px;");
+    expect(headerStyle).toContain(".repo-buttons");
+    expect(viewContentStyle).toContain("> .repo-button-row-left");
+    expect(viewContentStyle).toContain("> .repo-button-row-right");
+    expect(viewContentStyle).toContain("width: 100%;");
+    expect(viewContentStyle).toContain("max-height: calc(100vh - 48px);");
+    expect(homeStyle).toContain("grid-template-columns: 100%;");
+    expect(viewListStyle).toContain("max-width: none;");
+    expect(commitPageStyle).toContain(".github-commit-file-tree {\n        display: none;");
+    expect(commitPageStyle).toContain(".github-commit-meta-row");
+    expect(commitPageStyle).toContain("flex-direction: column;");
   });
 
   it("keeps adapted templates in the standard template tree", () => {

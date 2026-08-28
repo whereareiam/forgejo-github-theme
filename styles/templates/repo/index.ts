@@ -18,6 +18,7 @@
  */
 
 import { cssCombine } from "@lutinglt/gitea-github-theme/core";
+import commitPage from "./commit_page";
 import commitSignBadge from "./commit_sign_badge";
 import commitsList from "./commits_list";
 import header from "./header";
@@ -25,4 +26,4 @@ import home from "./home";
 import viewContent from "./view_content";
 import viewList from "./view_list";
 
-export default cssCombine(commitSignBadge, commitsList, viewContent, viewList, header, home);
+export default cssCombine(commitSignBadge, commitPage, commitsList, viewContent, viewList, header, home);

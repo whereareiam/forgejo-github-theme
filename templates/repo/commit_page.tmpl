@@ -1,0 +1,273 @@
+{{/* GitHub-style commit page using Forgejo 15 commit and diff data directly. */}}
+{{template "base/head" .}}
+<div role="main" aria-label="{{.Title}}" class="page-content repository diff github-commit-page">
+	{{template "repo/header" .}}
+	<div class="ui container fluid padded github-commit-page-container">
+		<section class="github-commit-page-header" aria-labelledby="github-commit-title">
+			<div class="github-commit-title-row">
+				<h1 class="github-commit-title" id="github-commit-title">Commit <code>{{printf "%.7s" .CommitID}}</code></h1>
+				<div class="github-commit-page-actions">
+					<a class="ui button" href="{{.SourcePath}}">
+						{{svg "octicon-file-code" 16}}
+						Browse files
+					</a>
+					{{if and ($.Permission.CanWrite $.UnitTypeCode) (not $.Repository.IsArchived) (not .IsDeleted)}}{{- /* */ -}}
+						<div class="ui dropdown button github-commit-operations" data-tooltip-content="{{ctx.Locale.Tr "repo.commit.operations"}}">
+							{{svg "octicon-kebab-horizontal" 16}}
+							<div class="menu">
+								<div class="ui header">{{ctx.Locale.Tr "repo.commit.operations"}}</div>
+								<div class="divider"></div>
+								<div class="item show-modal" data-modal="#create-branch-modal">
+									{{ctx.Locale.Tr "repo.branch.create_branch_operation"}}
+								</div>
+								<div class="item show-modal" data-modal="#create-tag-modal">
+									{{ctx.Locale.Tr "repo.tag.create_tag_operation"}}
+								</div>
+								<div class="item show-modal revert-button"
+									data-modal="#cherry-pick-modal"
+									data-modal-cherry-pick-type="revert"
+									data-modal-cherry-pick-header="{{ctx.Locale.Tr "repo.commit.revert-header" (ShortSha .CommitID)}}"
+									data-modal-cherry-pick-content="{{ctx.Locale.Tr "repo.commit.revert-content"}}"
+									data-modal-cherry-pick-submit="{{ctx.Locale.Tr "repo.commit.revert"}}">{{ctx.Locale.Tr "repo.commit.revert"}}</div>
+								<div class="item cherry-pick-button show-modal"
+									data-modal="#cherry-pick-modal"
+									data-modal-cherry-pick-type="cherry-pick"
+									data-modal-cherry-pick-header="{{ctx.Locale.Tr "repo.commit.cherry-pick-header" (ShortSha .CommitID)}}"
+									data-modal-cherry-pick-content="{{ctx.Locale.Tr "repo.commit.cherry-pick-content"}}"
+									data-modal-cherry-pick-submit="{{ctx.Locale.Tr "repo.commit.cherry-pick"}}">{{ctx.Locale.Tr "repo.commit.cherry-pick"}}</div>
+								{{if not .NoteRendered}}
+									<div id="commit-notes-add-button" class="item">
+										{{ctx.Locale.Tr "repo.diff.git-notes.add"}}
+									</div>
+								{{end}}
+							</div>
+						</div>
+						<div class="ui g-modal-confirm modal" id="cherry-pick-modal">
+							<div class="header">
+								<span id="cherry-pick-header"></span>
+							</div>
+							<div class="content">
+								<p id="cherry-pick-content" class="branch-dropdown"></p>
+								{{template "repo/branch_dropdown" dict "root" .
+									"noTag" true "disableCreateBranch" true
+									"branchForm" "branch-dropdown-form"
+									"branchURLPrefix" (printf "%s/_cherrypick/%s/" $.RepoLink .CommitID) "branchURLSuffix" ""
+									"setAction" true "submitForm" true}}
+								<form method="get" action="{{$.RepoLink}}/_cherrypick/{{.CommitID}}/{{PathEscapeSegments $.Repository.DefaultBranch}}" id="branch-dropdown-form">
+									<input type="hidden" name="ref" value="{{$.Repository.DefaultBranch}}">
+									<input type="hidden" name="refType" value="branch">
+									<input type="hidden" id="cherry-pick-type" name="cherry-pick-type"><br>
+									<button type="submit" id="cherry-pick-submit" class="ui primary button"></button>
+								</form>
+							</div>
+						</div>
+						<dialog id="create-branch-modal">
+							<article>
+								<header>{{ctx.Locale.Tr "repo.branch.new_branch"}}</header>
+								<form class="ui form" action="{{.RepoLink}}/branches/_new/commit/{{.CommitID}}" method="post">
+									<div class="content">
+										<div class="field">
+											<label><span class="text">{{ctx.Locale.Tr "repo.branch.new_branch_from" (ShortSha .CommitID)}}</span></label>
+										</div>
+										<div class="required field">
+											<label for="new_branch_name">{{ctx.Locale.Tr "repo.branch.name"}}</label>
+											<input id="new_branch_name" name="new_branch_name" required>
+										</div>
+									</div>
+									<div class="actions">
+										<button type="button" class="ui cancel button">{{ctx.Locale.Tr "settings.cancel"}}</button>
+										<button class="ui primary button">{{ctx.Locale.Tr "repo.branch.confirm_create_branch"}}</button>
+									</div>
+								</form>
+							</article>
+						</dialog>
+						<dialog id="create-tag-modal">
+							<article>
+								<header>{{ctx.Locale.Tr "repo.tag.create_tag_operation"}}</header>
+								<form class="ui form" action="{{.RepoLink}}/branches/_new/commit/{{.CommitID}}" method="post">
+									<div class="content">
+										<input type="hidden" name="create_tag" value="true">
+										<div class="field">
+											<label><span class="text">{{ctx.Locale.Tr "repo.tag.create_tag_from" (ShortSha .CommitID)}}</span></label>
+										</div>
+										<div class="required field">
+											<label for="new_tag_name">{{ctx.Locale.Tr "repo.release.tag_name"}}</label>
+											<input id="new_tag_name" name="new_branch_name" required>
+										</div>
+									</div>
+									<div class="actions">
+										<button type="button" class="ui cancel button">{{ctx.Locale.Tr "settings.cancel"}}</button>
+										<button class="ui primary button">{{ctx.Locale.Tr "repo.tag.confirm_create_tag"}}</button>
+									</div>
+								</form>
+							</article>
+						</dialog>
+					{{end}}
+				</div>
+			</div>
+
+			<div class="github-commit-attribution">
+				<span class="github-commit-avatar-stack">
+					{{if .Author}}
+						{{ctx.AvatarUtils.Avatar .Author 20}}
+					{{else}}
+						{{ctx.AvatarUtils.AvatarByEmail .Commit.Author.Email .Commit.Author.Name 20}}
+					{{end}}
+					{{if or (ne .Commit.Committer.Name .Commit.Author.Name) (ne .Commit.Committer.Email .Commit.Author.Email)}}
+						{{if ne .Verification.CommittingUser.ID 0}}
+							{{ctx.AvatarUtils.Avatar .Verification.CommittingUser 20}}
+						{{else}}
+							{{ctx.AvatarUtils.AvatarByEmail .Commit.Committer.Email .Commit.Committer.Name 20}}
+						{{end}}
+					{{end}}
+				</span>
+				{{if .Author}}
+					<a href="{{.Author.HomeLink}}">{{if .Author.FullName}}{{.Author.FullName}}{{else}}{{.Commit.Author.Name}}{{end}}</a>
+				{{else}}
+					<strong>{{.Commit.Author.Name}}</strong>
+				{{end}}
+				<span>authored {{DateUtils.TimeSince .Commit.Author.When}}</span>
+				{{if or (ne .Commit.Committer.Name .Commit.Author.Name) (ne .Commit.Committer.Email .Commit.Author.Email)}}
+					<span class="github-commit-attribution-separator">·</span>
+					<span>{{ctx.Locale.Tr "repo.diff.committed_by"}}</span>
+					{{if ne .Verification.CommittingUser.ID 0}}
+						<a href="{{.Verification.CommittingUser.HomeLink}}">{{.Commit.Committer.Name}}</a>
+					{{else}}
+						<strong>{{.Commit.Committer.Name}}</strong>
+					{{end}}
+				{{end}}
+				{{template "repo/commit_statuses" dict "Status" .CommitStatus "Statuses" .CommitStatuses}}
+				{{if and .Commit.Signature .Verification.Verified}}
+					<span class="github-commit-attribution-separator">·</span>
+					<span class="github-commit-verification" data-tooltip-content="{{.Verification.Reason}}">
+						{{svg "octicon-verified" 14}}
+						Verified
+					</span>
+				{{end}}
+			</div>
+
+			<div class="github-commit-card">
+				<div class="github-commit-message">
+					<div class="github-commit-summary">{{RenderCommitMessage $.Context .Commit.Message ($.Repository.ComposeMetas ctx)}}</div>
+					{{if IsMultilineCommitMessage .Commit.Message}}
+						<pre class="commit-body">{{RenderCommitBody $.Context .Commit.Message ($.Repository.ComposeMetas ctx)}}</pre>
+					{{end}}
+				</div>
+				<div class="github-commit-meta-row">
+					{{template "repo/commit_load_branches_and_tags" .}}
+					<div class="github-commit-identifiers">
+						{{range .Parents}}
+							<span class="github-commit-identifier">
+								<span>{{ctx.Locale.Tr "repo.diff.parent"}}</span>
+								{{if $.PageIsWiki}}
+									<a href="{{$.RepoLink}}/wiki/commit/{{PathEscape .}}">{{printf "%.7s" .}}</a>
+								{{else}}
+									<a href="{{$.RepoLink}}/commit/{{PathEscape .}}">{{printf "%.7s" .}}</a>
+								{{end}}
+							</span>
+						{{end}}
+						<span class="github-commit-identifier github-commit-identifier-current">
+							<span>{{ctx.Locale.Tr "repo.diff.commit"}}</span>
+							<code>{{printf "%.7s" .CommitID}}</code>
+							<button class="btn interact-bg github-commit-copy" data-clipboard-text="{{.CommitID}}" data-tooltip-content="{{ctx.Locale.Tr "copy_hash"}}" aria-label="{{ctx.Locale.Tr "copy_hash"}}">
+								{{svg "octicon-copy" 16}}
+							</button>
+						</span>
+					</div>
+				</div>
+				{{if not .DiffNotAvailable}}
+					<div class="github-commit-stats-row">
+						<div class="github-commit-files-changed">{{.Diff.NumFiles}} {{if eq .Diff.NumFiles 1}}file{{else}}files{{end}} changed</div>
+						<div class="github-commit-change-summary" data-tooltip-content="{{ctx.Locale.Tr "repo.diff.stats_desc_file" (Eval .Diff.TotalAddition "+" .Diff.TotalDeletion) .Diff.TotalAddition .Diff.TotalDeletion}}">
+							<span class="github-commit-additions">+{{.Diff.TotalAddition}}</span>
+							<span class="github-commit-deletions">-{{.Diff.TotalDeletion}}</span>
+							<span class="github-commit-change-bar" aria-hidden="true">
+								{{if gt .Diff.TotalAddition 0}}<span class="github-commit-change-bar-additions" style="flex-grow: {{.Diff.TotalAddition}}"></span>{{end}}
+								{{if gt .Diff.TotalDeletion 0}}<span class="github-commit-change-bar-deletions" style="flex-grow: {{.Diff.TotalDeletion}}"></span>{{end}}
+							</span>
+						</div>
+					</div>
+				{{end}}
+			</div>
+		</section>
+
+		{{if .NoteRendered}}
+			<div class="github-commit-note">
+				<div class="ui top attached header segment git-notes tw-flex tw-gap-1 tw-flex-wrap">
+					{{svg "octicon-note" 16 "tw-mr-2"}}
+					{{ctx.Locale.Tr "repo.diff.git-notes"}}:
+					{{if .NoteAuthor}}
+						<a href="{{.NoteAuthor.HomeLink}}">
+							{{if .NoteAuthor.FullName}}
+								<strong>{{.NoteAuthor.FullName}}</strong>
+							{{else}}
+								<strong>{{.NoteCommit.Author.Name}}</strong>
+							{{end}}
+						</a>
+					{{else}}
+						<strong>{{.NoteCommit.Author.Name}}</strong>
+					{{end}}
+					<span class="text grey tw-flex-1" id="note-authored-time">{{DateUtils.TimeSince .NoteCommit.Author.When}}</span>
+					{{if and ($.Permission.CanWrite $.UnitTypeCode) (not $.Repository.IsArchived) (not .IsDeleted)}}
+						<div class="ui tw-flex tw-items-center">
+							<button id="commit-notes-edit-button" class="ui tiny primary button tw-py-[6px] tw-px-[10px]">{{ctx.Locale.Tr "edit"}}</button>
+							<button class="ui tiny button red show-modal tw-py-[6px] tw-px-[10px]" data-modal="#delete-note-modal">{{ctx.Locale.Tr "remove"}}</button>
+						</div>
+						<div class="ui small modal" id="delete-note-modal">
+							<div class="header">{{ctx.Locale.Tr "repo.diff.git-notes.remove-header"}}</div>
+							<div class="content">
+								<p>{{ctx.Locale.Tr "repo.diff.git-notes.remove-body"}}</p>
+								<div class="text right actions">
+									<form action="{{.Link}}/notes/remove" method="post">
+										<button type="button" class="ui cancel button">{{ctx.Locale.Tr "settings.cancel"}}</button>
+										<button type="submit" class="ui red button">{{ctx.Locale.Tr "remove"}}</button>
+									</form>
+								</div>
+							</div>
+						</div>
+					{{end}}
+				</div>
+				<div id="commit-notes-display-area" class="ui bottom attached info segment git-notes">
+					<pre class="commit-body">{{.NoteRendered | SanitizeHTML}}</pre>
+				</div>
+			</div>
+		{{end}}
+		{{if and ($.Permission.CanWrite $.UnitTypeCode) (not $.Repository.IsArchived) (not .IsDeleted)}}
+			<div id="commit-notes-edit-area" class="ui bottom attached info segment git-notes tw-hidden">
+				<form id="commit-notes-edit-form" class="ui form" action="{{.Link}}/notes" method="post">
+					<div class="field">
+						<textarea name="notes">{{.NoteRaw}}</textarea>
+					</div>
+					<div class="field">
+						<div class="text right edit">
+							<button id="commit-notes-cancel-button" type="button" class="ui cancel button">{{ctx.Locale.Tr "cancel"}}</button>
+							<button id="commit-notes-save-button" type="submit" class="ui primary button">{{if .NoteRaw}}{{ctx.Locale.Tr "save"}}{{else}}{{ctx.Locale.Tr "add"}}{{end}}</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		{{end}}
+
+		<div class="github-commit-diff">
+			{{if and (not .DiffNotAvailable) (eq .Diff.NumFiles 1)}}
+				<div class="github-commit-single-file-diff">
+					<aside class="github-commit-file-tree" aria-label="File tree">
+						<h2 class="github-commit-file-tree-title">File tree</h2>
+						{{range $file := .Diff.Files}}
+							<a href="#diff-{{$file.NameHash}}" title="{{$file.Name}}">
+								{{svg "octicon-file-diff" 16}}
+								<span>{{$file.Name}}</span>
+							</a>
+						{{end}}
+					</aside>
+					<div class="github-commit-single-file-content">
+						{{template "repo/diff/box" .}}
+					</div>
+				</div>
+			{{else}}
+				{{template "repo/diff/box" .}}
+			{{end}}
+		</div>
+	</div>
+</div>
+{{template "base/footer" .}}

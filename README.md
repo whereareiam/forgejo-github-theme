@@ -47,10 +47,13 @@ accepted.
 
 1. Download the latest CSS theme file from the release page and place it in the `data/gitea/public/assets/css` directory
    (This directory may not be available by default and needs to be manually created)
-2. Modify `data/gitea/conf/app.ini` and append the CSS filename without the `theme-` prefix to the end of `THEMES` under
+2. Download `theme-github-fonts.tar.gz` from the same release and extract its `assets/fonts` directory into
+   `data/gitea/public`. This supplies the Mona Sans variable font used by GitHub; the packaged SIL Open Font License is
+   retained beside the font.
+3. Modify `data/gitea/conf/app.ini` and append the CSS filename without the `theme-` prefix to the end of `THEMES` under
    the `[ui]` section
-3. Restart Gitea
-4. Check the theme in the settings
+4. Restart Gitea
+5. Check the theme in the settings
 
 Example: If the theme filename is `theme-github-dark.css`, add `github-dark` to the end of `THEMES`
 

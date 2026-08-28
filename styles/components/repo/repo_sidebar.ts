@@ -50,20 +50,6 @@ const repoSidebarTop = css`
       a.muted:hover {
         text-decoration: none;
       }
-      /* 仓库描述本身 */
-      .repo-home-sidebar-header {
-        margin-top: 10px;
-      }
-      /* 仓库描述内容 */
-      .repo-description {
-        margin-top: 10px;
-        color: ${themeVars.color.text.self};
-      }
-      /* 仓库标签 */
-      #repo-topics {
-        margin: 8px 0px !important;
-        gap: 4px !important;
-      }
       #manage_topic {
         color: ${themeVars.color.text.light.num1} !important;
       }
@@ -135,7 +121,7 @@ const repoSidebarBottom = css`
       .language-stats-details .item {
         color: ${themeVars.color.text.light.num1};
         font-size: 12px;
-        margin-right: 8px;
+        margin-right: 0;
         .color-icon {
           height: 8px;
           width: 8px;
@@ -143,7 +129,7 @@ const repoSidebarBottom = css`
         }
         .tw-font-semibold {
           color: ${themeVars.color.text.self};
-          margin-right: 2px;
+          margin-right: 4px;
         }
       }
     }
