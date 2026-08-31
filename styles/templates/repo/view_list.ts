@@ -365,107 +365,113 @@ const repoFileLastCommit = css`
 const repoFileList = css`
   #repo-files-table {
     width: 100%;
-    display: grid;
-    grid-template-columns: 2fr 3fr auto;
-    border: 1px solid ${themeVars.color.secondary.self};
-    background: ${themeVars.color.box.body.self};
-    border-radius: ${otherThemeVars.border.radius};
-    margin: 10px 0;
-  }
-
-  @media (max-width: 767.98px) {
-    #repo-files-table {
-      grid-template-columns: auto 1fr auto;
-    }
-  }
-
-  #repo-files-table .repo-file-item {
-    display: contents;
-  }
-
-  #repo-files-table .repo-file-item:hover > .repo-file-cell,
-  #repo-files-table .parent-link:hover {
-    background: ${themeVars.color.hover.opaque};
-  }
-
-  #repo-files-table .repo-file-line,
-  #repo-files-table .repo-file-cell {
-    border-top: 1px solid ${themeVars.color.secondary.self};
-    padding: 8px 10px;
-  }
-
-  #repo-files-table .repo-file-line:first-child {
-    border-top: none;
-    border-radius: ${otherThemeVars.border.radius} ${otherThemeVars.border.radius} 0 0;
-  }
-
-  #repo-files-table .repo-file-item:last-child .repo-file-cell:first-child {
-    border-bottom-left-radius: calc(${otherThemeVars.border.radius} - 1px);
-  }
-
-  #repo-files-table .repo-file-item:last-child .repo-file-cell:last-child {
-    border-bottom-right-radius: calc(${otherThemeVars.border.radius} - 1px);
-  }
-
-  #repo-files-table .repo-file-line {
-    grid-column: 1 / span 3;
-    display: flex;
-    align-items: center;
-    gap: 0.5em;
-  }
-
-  #repo-files-table .repo-file-last-commit {
+    max-width: 100%;
     min-width: 0;
-    background: ${themeVars.color.box.header};
+    display: table;
+    table-layout: fixed;
+    border-collapse: separate;
+    border-spacing: 0;
+    overflow: hidden;
+    grid-template-columns: none;
   }
 
-  #repo-files-table .repo-file-cell.name {
-    display: flex;
-    align-items: center;
-    gap: 0.5em;
+  #repo-files-table > thead { display: table-header-group; }
+  #repo-files-table > tbody { display: table-row-group; }
+  #repo-files-table > thead > tr,
+  #repo-files-table > tbody > tr { display: table-row; }
+  #repo-files-table th,
+  #repo-files-table td {
+    display: table-cell;
+    box-sizing: border-box;
+    min-width: 0;
+  }
+  #repo-files-table thead th.tw-overflow-hidden {
+    width: 81.25%;
     overflow: hidden;
   }
-
-  #repo-files-table .repo-file-cell.name > svg {
-    color: ${themeVars.color.text.light.num1};
-    flex: 0 0 auto;
-  }
-
-  #repo-files-table .repo-file-cell.name > a,
-  #repo-files-table .repo-file-cell.name > span {
-    flex-shrink: 0;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  #repo-files-table .repo-file-cell.name .entry-name {
-    flex-shrink: 1;
-    min-width: 1ch;
-  }
-
-  @media (max-width: 767.98px) {
-    #repo-files-table .repo-file-cell.name {
-      max-width: none;
-    }
-  }
-
-  #repo-files-table .repo-file-cell.message {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    color: ${themeVars.color.text.light.num1};
-  }
-
-  #repo-files-table .repo-file-cell.age {
+  #repo-files-table thead th.age,
+  #repo-files-table tbody td.age {
+    width: 18.75%;
+    max-width: none;
     text-align: right;
     white-space: nowrap;
-    color: ${themeVars.color.text.light.num1};
+  }
+  #repo-files-table tbody td.name { width: 25%; }
+  #repo-files-table tbody td.message { width: 56.25%; }
+  #repo-files-table tbody td.name,
+  #repo-files-table tbody td.message,
+  #repo-files-table tbody td.name a,
+  #repo-files-table tbody td.message a {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  #repo-files-table thead tr.commit-list .tw-flex,
+  #repo-files-table thead tr.commit-list .latest-commit {
+    min-width: 0;
+    width: 100%;
+  }
+  #repo-files-table thead tr.commit-list .latest-commit {
+    align-items: center;
+    display: flex;
+    gap: 8px;
+    overflow: hidden;
+  }
+  #repo-files-table thead tr.commit-list .commit-summary {
+    align-items: center;
+    display: flex;
+    flex: 0 1 auto;
+    gap: 0;
+    min-width: 0;
+    max-width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  #repo-files-table thead tr.commit-list .commit-summary > .message-wrapper {
+    display: block;
+    flex: 0 1 auto;
+    min-width: 0;
+    max-width: calc(100% - 28px);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  #repo-files-table thead tr.commit-list .commit-summary > .ellipsis-button {
+    align-items: center;
+    display: inline-flex;
+    flex: 0 0 24px;
+    height: 24px;
+    justify-content: center;
+    margin: 0 0 0 4px;
+    min-height: 0;
+    padding: 0;
+    width: 24px;
+  }
+  #repo-files-table thead tr.commit-list .commit-summary > .commit-body {
+    background: ${themeVars.color.menu};
+    border: 1px solid ${themeVars.color.light.border};
+    border-radius: ${otherThemeVars.border.radius};
+    box-shadow: ${themeVars.github.shadow.floating.small};
+    box-sizing: border-box;
+    display: block;
+    margin: 4px 0 0;
+    max-width: 100%;
+    overflow-wrap: anywhere;
+    padding: 12px;
+    position: absolute;
+    top: 100%;
+    white-space: pre-wrap;
+    z-index: 100;
   }
 
-  #repo-files-table .repo-file-cell.notready.message .loader {
-    width: 16px;
-    height: 16px;
+  @media (max-width: 767.98px) {
+    #repo-files-table { table-layout: auto; }
+    #repo-files-table tbody td.message { display: none; }
+    #repo-files-table tbody td.name { width: auto; }
+    #repo-files-table thead th.age,
+    #repo-files-table tbody td.age { width: 110px; }
+    #repo-files-table thead th.tw-overflow-hidden { width: auto; }
   }
 `;
 
