@@ -15,11 +15,11 @@
 		<div class="repository-summary">
 			<a class="item muted" href="{{.RepoLink}}/branches">
 				{{svg "octicon-git-branch"}}
-				{{ctx.Locale.TrN .BranchesCount "repo.n_branch_one" "repo.n_branch_few" (printf "<b>%s</b>" (ctx.Locale.PrettyNumber .BranchesCount) | TrustHTML)}}
+				{{ctx.Locale.TrPluralString .BranchesCount "counters.n_branches" (printf "<b>%s</b>" (ctx.Locale.PrettyNumber .BranchesCount) | TrustHTML)}}
 			</a>
 			<a class="item muted" href="{{.RepoLink}}/tags">
 				{{svg "octicon-tag"}}
-				{{ctx.Locale.TrN .NumTags "repo.n_tag_one" "repo.n_tag_few" (printf "<b>%s</b>" (ctx.Locale.PrettyNumber .NumTags) | TrustHTML)}}
+				{{ctx.Locale.TrPluralString .NumTags "counters.n_tags" (printf "<b>%s</b>" (ctx.Locale.PrettyNumber .NumTags) | TrustHTML)}}
 			</a>
 		</div>
 		{{end}}

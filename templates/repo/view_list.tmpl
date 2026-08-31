@@ -1,10 +1,10 @@
-{{/* GitHub-style grid file list adapted to Forgejo 15 template data. */}}
+{{/* GitHub-style grid file list adapted to Forgejo 16 template data. */}}
 <div id="repo-files-table"
 	{{if .HasFilesWithoutLatestCommit}}
 		hx-indicator=".repo-file-cell.notready.message"
 		hx-trigger="load"
 		hx-swap="morph"
-		hx-post="{{.LastCommitLoaderURL}}"
+		hx-get="{{.LastCommitLoaderURL}}"
 	{{end}}
 >
 	<div class="gitea-github-theme-templates repo-file-line repo-file-last-commit">
@@ -93,7 +93,7 @@
 					{{end}}
 					{{if and (not .TreeNames) (.Permission.CanRead .UnitTypeCode) (not .IsEmptyRepo)}}
 						<a class="gitea-github-theme-latest-commit item muted" href="{{.RepoLink}}/commits/{{.BranchNameSubURL}}">
-							{{svg "octicon-history" 16}} <span>{{ctx.Locale.TrN .CommitsCount "repo.n_commit_one" "repo.n_commit_few" (printf "<b>%s</b>" (ctx.Locale.PrettyNumber .CommitsCount) | TrustHTML)}}</span>
+							{{svg "octicon-history" 16}} <span>{{ctx.Locale.TrPluralString .CommitsCount "counters.n_commits" (printf "<b>%s</b>" (ctx.Locale.PrettyNumber .CommitsCount) | TrustHTML)}}</span>
 						</a>
 					{{end}}
 					{{if and .TreeNames (not .IsViewFile) (not .IsBlame)}}{{/* IsViewDirectory (not home). */}}
