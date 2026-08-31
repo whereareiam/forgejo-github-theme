@@ -22,7 +22,7 @@ import { css, cssCombine, themeVars } from "@lutinglt/gitea-github-theme/core";
 // 仓库代码布局调整, 侧边栏宽度调整
 const repoGrid = css`
   .repo-grid-filelist-sidebar {
-    grid-template-columns: auto 312px;
+    grid-template-columns: minmax(0, 1fr) 312px;
     gap: 16px;
   }
 
