@@ -183,6 +183,7 @@ describe("Forgejo 15 native integration", () => {
     "repo/home_sidebar_top.tmpl",
     "repo/view_content.tmpl",
     "repo/view_list.tmpl",
+    "user/heatmap.tmpl",
   ];
 
   const unsupportedSelectorFamilies = [
@@ -460,6 +461,13 @@ describe("Forgejo 15 native integration", () => {
     for (const template of requiredTemplates) {
       expect(fs.existsSync(path.join(ROOT_DIR, "templates", template)), `missing template: ${template}`).toBe(true);
     }
+  });
+
+  it("keeps the native dated fallback for zero-contribution heatmap tooltips", () => {
+    const heatmapTemplate = fs.readFileSync(path.join(ROOT_DIR, "templates", "user", "heatmap.tmpl"), "utf-8");
+
+    expect(heatmapTemplate).toContain("data-heatmap-data");
+    expect(heatmapTemplate).not.toContain("data-locale-contributions-zero");
   });
 });
 
