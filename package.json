@@ -26,11 +26,10 @@
     "dev": "bun bundle && bun sync:theme",
     "commit": "bun fmt && bun bundle && bun vitest",
     "version": "bun scripts/version.ts",
-    "release": "bun bundle && bun update:locale",
+    "release": "bun bundle",
     "bundle:ci": "bun bundle && bun vitest",
     "sync:theme": "bun scripts/syncTheme.ts",
     "update:primer": "bun scripts/buildPrimerTSToken.ts",
-    "update:locale": "bun scripts/translate.ts",
     "update:gitea": "bun scripts/updateGitea.ts",
     "update:snapshot": "bun vitest --update",
     "install:clean": "rm -rf node_modules bun.lock bun.lockb && bun install"

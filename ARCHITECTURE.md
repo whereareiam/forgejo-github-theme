@@ -443,7 +443,6 @@ outputs static CSS strings.
 │   ├── buildPrimerTSToken.ts  # Generate primer/ TypeScript tokens from @primer/primitives
 │   ├── syncTheme.ts        # Sync build artifacts to remote Gitea instance
 │   ├── updateGitea.ts      # Update Gitea reference files
-│   ├── translate.ts        # Generate localization/translation files
 │   └── version.ts          # Version management
 ├── dist/                   # Build output (30+ CSS files)
 └── templates/              # Optional Gitea Go template overrides
@@ -601,6 +600,4 @@ For pixel-perfect GitHub color matching, use the `github` path with direct Prime
 
 - [CONTRIBUTING.md](CONTRIBUTING.md) — Development environment setup and contribution guide
 - [README.md](README.md) — User-facing installation and usage
-- [README_CN.md](README_CN.md) — Chinese user installation and usage
 - [primer/README.md](primer/README.md) — Auto-generated Primer token documentation
-- [CHANGELOG.md](CHANGELOG.md) — Release history
