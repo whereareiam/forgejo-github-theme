@@ -86,6 +86,8 @@ const heatmap = css`
     background-color: ${themeVars.color.tooltip.bg};
     color: ${themeVars.color.tooltip.text};
     border: 0;
+    font-size: 12px;
+    line-height: 19.5px;
     .tippy-content {
       font-size: 12px;
       font-weight: 400;
