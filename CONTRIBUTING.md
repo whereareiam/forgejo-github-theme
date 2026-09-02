@@ -39,6 +39,22 @@ If you believe you have a better approach, feel free to submit an Issue.
 >
 > When submitting a PR, please run `bun commit`
 
+### Pull Requests and Release Notes
+
+Submit changes through a pull request targeting `dev`. Use a specific, release-note-friendly title in the form
+`Area: Description`, for example `Templates: Fix commit status badge rendering`.
+
+Apply exactly one primary release label:
+
+- `feature` for new user-facing capabilities or themes
+- `change` for intentional style, template, or compatibility improvements
+- `bug` for regressions and incorrect rendering
+- `dependencies` for dependency and build-tool updates
+- `skip-changelog` for internal changes that should not appear in release notes
+
+Add `major` when the change requires a major version bump. It modifies version resolution but does not create a separate
+release-notes section.
+
 ## Development Environment
 
 The theme depends on the Bun runtime. Please ensure Bun is installed in your environment. Bun 1.3.14 or later is

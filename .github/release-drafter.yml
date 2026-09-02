@@ -1,0 +1,60 @@
+name-template: "$RESOLVED_VERSION"
+tag-template: "$RESOLVED_VERSION"
+change-template: "* $TITLE by @$AUTHOR in [#$NUMBER]($URL)"
+change-title-escapes: "\\<*_&"
+category-template: "## $TITLE"
+no-changes-template: "* No changes"
+
+template: |
+  # Release $RESOLVED_VERSION
+
+  <!-- Replace this summary before publishing the release. -->
+  [Short summary of the release.]
+
+  # Compatibility
+
+  This release targets Forgejo `[major version]`.
+
+  It was tested against Forgejo `[version]`, including the bundled template overrides.
+
+  # Changelog
+
+  $CHANGES
+
+categories:
+  - title: "Features"
+    exclusive: true
+    labels:
+      - "feature"
+
+  - title: "Changes"
+    exclusive: true
+    labels:
+      - "change"
+
+  - title: "Fixes"
+    exclusive: true
+    labels:
+      - "bug"
+
+  - title: "Dependencies"
+    exclusive: true
+    labels:
+      - "dependencies"
+
+exclude-labels:
+  - "skip-changelog"
+
+version-resolver:
+  major:
+    labels:
+      - "major"
+  minor:
+    labels:
+      - "feature"
+  patch:
+    labels:
+      - "change"
+      - "bug"
+      - "dependencies"
+  default: patch
