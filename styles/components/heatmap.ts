@@ -53,7 +53,8 @@ const heatmap = css`
       outline: 0.5px solid ${themeVars.github.contribution.default.borderColor.num0};
       outline-offset: -0.5px;
       &:hover {
-        outline: 0.5px solid ${themeVars.color.text.self} !important;
+        outline: 1px solid ${themeVars.color.tooltip.text} !important;
+        outline-offset: -1px;
       }
       &[style="fill: var(--color-secondary-alpha-60);"] {
         fill: ${themeVars.github.contribution.default.bgColor.num0} !important;
@@ -78,6 +79,17 @@ const heatmap = css`
         fill: ${themeVars.github.themeExtra.contribution.default.bgColor.num5} !important;
         outline-color: ${themeVars.github.themeExtra.contribution.default.borderColor.num5};
       }
+    }
+  }
+  /* Forgejo's heatmap tooltip is unthemed; scope the GitHub treatment to hovered cells. */
+  body:has(#user-heatmap .vch__day__square:hover) .tippy-box:not([data-theme]) {
+    background-color: ${themeVars.color.tooltip.bg};
+    color: ${themeVars.color.tooltip.text};
+    .tippy-content {
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 19.5px;
+      padding: 4px 8px;
     }
   }
 `;
