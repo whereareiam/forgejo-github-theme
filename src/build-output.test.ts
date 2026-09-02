@@ -306,6 +306,7 @@ describe("Forgejo 15 native integration", () => {
     const repoContentTemplate = fs.readFileSync(path.join(ROOT_DIR, "templates", "repo", "view_content.tmpl"), "utf-8");
 
     expect(navbar).toContain("> .item {\n        border-radius: ${otherThemeVars.border.radius};");
+    expect(navbar).toContain(".navbar-right:not(:has(.user-menu)) > a.item {\n      align-items: center;");
     expect(notification).toContain("text-decoration: none;");
     expect(repoContentTemplate).toContain('class="repo-code-navigation"');
     expect(repoContentTemplate).toContain('class="repo-code-body"');
