@@ -70,17 +70,6 @@ const tippyBox = css`
         padding: 4px 8px;
       }
     }
-    /* Contribution cells use Forgejo's unthemed tippy instance. Match GitHub's compact tooltip. */
-    &:not([data-theme]) {
-      background-color: ${themeVars.color.tooltip.bg};
-      color: ${themeVars.color.tooltip.text};
-      .tippy-content {
-        font-size: 12px;
-        font-weight: 400;
-        line-height: 19.5px;
-        padding: 4px 8px;
-      }
-    }
   }
 `;
 

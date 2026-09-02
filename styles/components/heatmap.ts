@@ -81,6 +81,17 @@ const heatmap = css`
       }
     }
   }
+  /* Forgejo's heatmap tooltip is unthemed; scope the GitHub treatment to hovered cells. */
+  body:has(#user-heatmap .vch__day__square:hover) .tippy-box:not([data-theme]) {
+    background-color: ${themeVars.color.tooltip.bg};
+    color: ${themeVars.color.tooltip.text};
+    .tippy-content {
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 19.5px;
+      padding: 4px 8px;
+    }
+  }
 `;
 
 // 动态
