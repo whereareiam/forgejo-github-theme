@@ -40,7 +40,9 @@ const dropdown = css`
         align-items: center;
         align-content: center;
         padding: 6px 8px !important;
-        min-height: 32px;
+        line-height: 20px;
+        height: 32px !important;
+        min-height: 32px !important;
         border-radius: ${otherThemeVars.border.radius} !important;
         gap: 8px;
         &:not(.emoji) {
@@ -146,6 +148,18 @@ const dropdown = css`
       .scrolling.menu:last-child {
         border-radius: 0 0 12px 12px !important;
       }
+    }
+  }
+  /* GitHub keeps the dashboard context menu on the same compact menu grid. */
+  .ui.floating.dropdown > .menu.context.user.overflow {
+    padding: 8px 0;
+    width: 192px;
+    > .header {
+      line-height: 20px;
+      padding: 0 16px 8px;
+    }
+    > .scrolling.menu {
+      padding: 0;
     }
   }
   /* 修复下拉菜单元素溢出问题 */
