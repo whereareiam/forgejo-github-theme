@@ -52,7 +52,8 @@
 				</span>
 				<div class="menu user-menu">
 					<div class="header">
-						{{ctx.Locale.Tr "signed_in_as"}} <strong>{{.SignedUser.Name}}</strong>
+						{{ctx.AvatarUtils.Avatar .SignedUser 32 "user-menu-avatar"}}
+						<strong>{{.SignedUser.Name}}</strong>
 					</div>
 
 					<div class="divider"></div>
@@ -97,7 +98,8 @@
 				</span>
 				<div class="menu user-menu">
 					<div class="header">
-						{{ctx.Locale.Tr "signed_in_as"}} <strong>{{.SignedUser.Name}}</strong>
+						{{ctx.AvatarUtils.Avatar .SignedUser 32 "user-menu-avatar"}}
+						<strong>{{.SignedUser.Name}}</strong>
 					</div>
 
 					<div class="divider"></div>

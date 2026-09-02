@@ -154,21 +154,45 @@ const navbarRight = css`
     }
     /* 用户菜单 */
     .navbar-right .user-menu {
-      width: ${fallbackVar(customThemeVars.userMenuWidth, "192px")};
+      width: ${fallbackVar(customThemeVars.userMenuWidth, "256px")};
       max-width: 320px;
+      padding: 8px !important;
       > .header {
         font-size: 14px;
-        font-weight: 400;
+        align-items: center;
+        display: flex;
+        gap: 8px;
+        line-height: 24px;
         margin: 0;
-        padding: 16px 16px 8px 16px;
+        min-height: 32px;
+        padding: 0 8px;
+        text-transform: none;
         strong {
           font-weight: 600;
+          line-height: 24px;
+          text-transform: none;
+        }
+        .user-menu-avatar {
+          border-radius: 9999px;
+          flex: 0 0 auto;
+          height: 32px;
+          width: 32px;
         }
       }
       > .divider {
-        margin: 8px;
-        width: calc(100% - 16px);
+        margin: 8px 0;
+        width: 100%;
       }
+      > .item {
+        margin: 0 !important;
+        height: 32px !important;
+        min-height: 32px !important;
+        width: 100%;
+      }
+    }
+    .navbar-right .ui.dropdown > .menu > .item {
+      height: 32px !important;
+      min-height: 32px !important;
     }
   }
   /* 手机下的导航栏 */
