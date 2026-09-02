@@ -53,7 +53,8 @@ const heatmap = css`
       outline: 0.5px solid ${themeVars.github.contribution.default.borderColor.num0};
       outline-offset: -0.5px;
       &:hover {
-        outline: 0.5px solid ${themeVars.color.text.self} !important;
+        outline: 1px solid ${themeVars.color.tooltip.text} !important;
+        outline-offset: -1px;
       }
       &[style="fill: var(--color-secondary-alpha-60);"] {
         fill: ${themeVars.github.contribution.default.bgColor.num0} !important;
