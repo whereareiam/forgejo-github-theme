@@ -165,6 +165,7 @@ describe("Forgejo 15 native integration", () => {
     ".repo-about-modal-overlay",
     ".repo-code-navigation",
     ".button.primary:not(.ui)",
+    ".total-contributions",
     ".vch__legend",
     ".codemirror-container",
   ];

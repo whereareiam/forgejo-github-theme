@@ -30,6 +30,10 @@ const heatmap = css`
       padding-left: 20px;
       padding-right: 8px;
     }
+    .total-contributions {
+      bottom: 12px;
+      color: ${themeVars.color.text.light.num1};
+    }
     > div:not(.total-contributions) {
       padding: 12px 20px;
       box-shadow:
