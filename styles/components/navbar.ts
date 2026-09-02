@@ -162,11 +162,15 @@ const navbarRight = css`
         align-items: center;
         display: flex;
         gap: 8px;
+        line-height: 24px;
         margin: 0;
         min-height: 32px;
         padding: 0 8px 8px;
+        text-transform: none;
         strong {
           font-weight: 600;
+          line-height: 24px;
+          text-transform: none;
         }
         .user-menu-avatar {
           border-radius: 9999px;
