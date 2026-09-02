@@ -26,4 +26,3 @@ tar -zcf dist/theme-github.tar.gz --remove-files dist/theme-github-*.css
 
 tar -zcf dist/theme-github-templates.tar.gz templates
 tar -zcf dist/theme-github-fonts.tar.gz -C dist assets/fonts
-tar -zcf dist/theme-github-translations.tar.gz --remove-files dist/options

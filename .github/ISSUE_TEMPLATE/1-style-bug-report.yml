@@ -7,9 +7,9 @@ body:
       value: |
         !!! Please read the readme and ensure that the theme is used correctly before submitting !!!
         1. Please use the latest theme and refresh the page with Ctrl+F5 to see if the Bug has disappeared.
-        2. Please check the CHANGELOG.md file in the project root directory for descriptions of fixes related to this Bug.
+        2. Please check the project's release notes for descriptions of fixes related to this bug.
         3. If there are related descriptions, you can check if the Bug has been fixed by compiling the development version yourself in the README.md.
-        4. Please check if there is the same error in the default Gitea theme, confirming that it is not a theme problem.
+        4. Please check if there is the same error in the default Forgejo theme, confirming that it is not a theme problem.
   - type: input
     id: theme-version
     attributes:
@@ -21,10 +21,10 @@ body:
     validations:
       required: true
   - type: input
-    id: gitea-version
+    id: forgejo-version
     attributes:
-      label: Gitea Version
-      description: What version of Gitea are you using?
+      label: Forgejo Version
+      description: What version of Forgejo are you using?
       placeholder: ex. 1.24.5
     validations:
       required: true
@@ -76,10 +76,10 @@ body:
     validations:
       required: false
   - type: textarea
-    id: gitea-screenshot
+    id: forgejo-screenshot
     attributes:
-      label: Screenshot of the default Gitea theme
-      description: Please upload a screenshot of the default Gitea theme.
+      label: Screenshot of the default Forgejo theme
+      description: Please upload a screenshot of the default Forgejo theme.
     validations:
       required: false
   - type: textarea

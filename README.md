@@ -1,42 +1,33 @@
 <h1 align="center">
-  <p>Gitea GitHub Theme</p>
-  <img src="https://img.shields.io/github/issues-raw/lutinglt/gitea-github-theme?style=for-the-badge&labelColor=25292e&color=1a7f37">
-  <img src="https://img.shields.io/github/issues-closed-raw/lutinglt/gitea-github-theme?style=for-the-badge&labelColor=25292e&color=8250df">
-  <img src="https://img.shields.io/github/downloads/lutinglt/gitea-github-theme/total?style=for-the-badge&labelColor=25292e&color=1f6feb">
-  <img src="https://img.shields.io/github/downloads/lutinglt/gitea-github-theme/latest/total?style=for-the-badge&labelColor=25292e&color=238636">
+  <p>Forgejo GitHub Theme</p>
+  <img src="https://img.shields.io/github/issues-raw/whereareiam/forgejo-github-theme?style=for-the-badge&labelColor=25292e&color=1a7f37">
+  <img src="https://img.shields.io/github/issues-closed-raw/whereareiam/forgejo-github-theme?style=for-the-badge&labelColor=25292e&color=8250df">
+  <img src="https://img.shields.io/github/downloads/whereareiam/forgejo-github-theme/total?style=for-the-badge&labelColor=25292e&color=1f6feb">
+  <img src="https://img.shields.io/github/downloads/whereareiam/forgejo-github-theme/latest/total?style=for-the-badge&labelColor=25292e&color=238636">
 </h1>
 
 <h4 align="center">
 
-A Gitea theme that pursues GitHub style not only in colors but also in styling details.
+A Forgejo theme that pursues GitHub style not only in colors but also in styling details.
 
 </h4>
 
-![Dashboard](https://raw.githubusercontent.com/lutinglt/gitea-github-theme/assets/screenshots/dashboard.png)
+![Dashboard](.github/assets/screenshots/dashboard.png)
 
-## Forgejo 15 Target
+## Compatibility
 
-This fork targets Forgejo `15.0.5+gitea-1.22.0` while retaining the upstream theme engine and design system. Styles
-address Forgejo's native markup directly in the existing `styles` pipeline; they do not layer a newer-Gitea selector set
-over compatibility aliases. Adapted Go templates live in the top-level `templates` tree. The standard `bun bundle`
-command generates all themes in `dist`; generated CSS remains excluded from Git.
+This project is a Forgejo-focused fork of [Gitea GitHub Theme](https://github.com/lutinglt/gitea-github-theme). It
+retains the upstream theme engine and design system while adapting styles and templates to Forgejo's native markup.
 
-The included templates are version-bound and should not be installed on another Forgejo release without reviewing its
-routes and template data.
+The standard `bun bundle` command generates all themes in `dist`; generated CSS remains excluded from Git. The included
+templates are version-bound and should not be installed on another Forgejo release without reviewing its routes and
+template data.
 
-## Version Number Explanation
+Releases are not tied to a Forgejo version number. Each release states the supported Forgejo major version and the exact
+Forgejo version used for testing in its release notes.
 
-The theme version number is kept consistent with the Gitea version number
-
-Gitea version number format: `1.major.minor`
-
-Theoretically, minor version changes in Gitea do not modify the frontend layout, so the minor version of the theme is
-applicable to all Gitea versions with the same major version number.
-
-For example: Theme version `1.24.5` is applicable to Gitea versions `>=1.24.0` `<1.25.0`
-
-Only the latest released Gitea version is maintained. Issues and PRs for other older theme versions will not be
-accepted.
+This project is licensed under the Apache License 2.0. See [LICENSE](LICENSE) and [NOTICE](NOTICE) for the upstream
+copyright and attribution information.
 
 ## Installation
 
@@ -45,19 +36,28 @@ accepted.
 > Because the project uses new CSS features, ensure styles are applied correctly by keeping Chrome/Edge >= 120,
 > Firefox >= 121, Safari >= 16.5
 
-1. Download the latest CSS theme file from the release page and place it in the `data/gitea/public/assets/css` directory
-   (This directory may not be available by default and needs to be manually created)
-2. Download `theme-github-fonts.tar.gz` from the same release and extract its `assets/fonts` directory into
-   `data/gitea/public`. This supplies the Mona Sans variable font used by GitHub; the packaged SIL Open Font License is
-   retained beside the font.
-3. Modify `data/gitea/conf/app.ini` and append the CSS filename without the `theme-` prefix to the end of `THEMES` under
-   the `[ui]` section
-4. Restart Gitea
-5. Check the theme in the settings
+Choose one of the following ways to obtain the assets:
+
+- Download the packaged archives from the [latest release](https://github.com/whereareiam/forgejo-github-theme/releases/latest).
+- Run the [Development Build](https://github.com/whereareiam/forgejo-github-theme/actions/workflows/development-build.yml)
+  workflow manually and download its artifact.
+- Build the assets locally with the commands in [Using the Development Version](#using-the-development-version-of-the-theme).
+
+Install the resulting files using your Forgejo data directory (commonly `data/gitea` in the official container):
+
+1. Extract the CSS archive(s), then place the contained `*.css` files in `<forgejo-data>/public/assets/css` (create the
+   directory if necessary).
+2. Extract `theme-github-fonts.tar.gz` into `<forgejo-data>/public`. This supplies the Mona Sans variable font; its SIL
+   Open Font License is included beside the font.
+3. Extract the optional `theme-github-templates.tar.gz` archive into `<forgejo-data>`.
+4. Modify `<forgejo-data>/conf/app.ini` and append the CSS filename without the `theme-` prefix to `THEMES` under
+   the `[ui]` section.
+5. Restart Forgejo.
+6. Select the theme in the Forgejo settings.
 
 Example: If the theme filename is `theme-github-dark.css`, add `github-dark` to the end of `THEMES`
 
-Example `data/gitea/conf/app.ini`:
+Example `<forgejo-data>/conf/app.ini`:
 
 ```ini
 [ui]
@@ -66,39 +66,26 @@ THEMES = gitea-auto, gitea-light, gitea-dark, github-auto, github-light, github-
 
 > [!TIP]
 >
-> When THEMES is not set, Gitea will use all themes
+> When `THEMES` is not set, Forgejo will use all themes
 
 > [!IMPORTANT]
 >
 > Automatic color theme requires both light and dark theme files.
 
-For details, please refer to the Gitea documentation
-[Gitea docs](https://docs.gitea.com/next/administration/customizing-gitea#customizing-the-look-of-gitea)
+For details, refer to the [Forgejo documentation](https://forgejo.org/docs/latest/administration/customizing-gitea/).
 
 ### Template File Installation (Optional)
 
 > [!IMPORTANT]
 >
-> The template modifies Gitea's layout to make it closer to GitHub's layout. Do not use template files across versions,
-> as this may lead to missing functionality, Gitea instance failing to start, and other issues.
+> The template modifies Forgejo's layout to make it closer to GitHub's layout. Do not use template files across versions,
+> as this may lead to missing functionality, Forgejo failing to start, and other issues.
 >
-> Template layout is bound to the Gitea instance and will affect all themes, impacting the experience of other
+> Template layout is bound to the Forgejo instance and will affect all themes, impacting the experience of other
 > non-project themes.
 
-1. Download the latest template files from the release page and place them in the `data/gitea/templates` directory (This
-   directory may not be available by default and needs to be manually created)
-2. Restart Gitea
-
-### Translation File Installation (Optional)
-
-> [!TIP]
->
-> Translation files are only needed when using this project's template files to provide support for non-English
-> languages.
-
-1. Download the latest translation files from the release page and place them in the `data/gitea/options/locale`
-   directory (This directory may not be available by default and needs to be manually created)
-2. Restart Gitea
+1. Download the latest template archive from the release page and extract it into `<forgejo-data>`.
+2. Restart Forgejo
 
 ## Screenshots
 
@@ -180,14 +167,14 @@ THEMES = github-pink-auto, github-pink-light, github-pink-dark, github-pink-soft
 <img src="https://raw.githubusercontent.com/lutinglt/gitea-github-theme/assets/screenshots/pink/pink-soft-dark.png"/>
 </details>
 
-### Gitea Themes
+### Gitea-Compatible Themes
 
 ```ini
 THEMES = github-gitea-auto, github-gitea-light, github-gitea-dark
 ```
 
 <details>
-<summary>Gitea</summary>
+<summary>Gitea-compatible</summary>
 <h4>theme-github-gitea-light.css</h4>
 <img src="https://raw.githubusercontent.com/lutinglt/gitea-github-theme/assets/screenshots/gitea/gitea-light.png"/>
 <h4>theme-github-gitea-dark.css</h4>
@@ -249,28 +236,18 @@ Add the following code at the beginning or end of the theme's CSS file
 | --custom-org-repolist-columns     | Number of repository list columns on organization page   | 1       | 1      | 1/2       |       |       |
 | --custom-org-userlist-columns     | Number of user list columns on organization page         | 2       | 1      | 1/2       |       |       |
 
-## Using Development Version of the Theme
+## Using the Development Version of the Theme
 
-You might want to use the development version of the theme instead of the released version
+You might want to use the development version of the theme instead of the released version.
 
-Please ensure you have Bun environment installed, Bun 1.3.14 or above is recommended
+Please ensure you have Bun 1.3.14 or above installed.
 
 ```bash
-git clone https://github.com/lutinglt/gitea-github-theme.git
-cd gitea-github-theme
+git clone https://github.com/whereareiam/forgejo-github-theme.git
+cd forgejo-github-theme
 bun install
 bun bundle
 ```
 
-After compilation, theme files will be generated in the `dist` directory. You can place the theme files into the
-`gitea/public/assets/css` directory, then add the theme name to the end of `THEMES` in `gitea/conf/app.ini`
-
-## Star History
-
-<a href="https://www.star-history.com/#lutinglt/gitea-github-theme&type=date&legend=top-left">
- <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=lutinglt/gitea-github-theme&type=date&theme=dark&legend=top-left" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=lutinglt/gitea-github-theme&type=date&legend=top-left" />
-   <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=lutinglt/gitea-github-theme&type=date&legend=top-left" />
- </picture>
-</a>
+After compilation, CSS files are generated in `dist`. Install them as described above. The full release packaging step,
+including templates and fonts, is available through the repository's CI workflow.
