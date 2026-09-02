@@ -1,0 +1,33 @@
+name: Development Build
+
+on:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: Branch, tag, or commit to build.
+        required: true
+        default: dev
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ inputs.ref }}
+
+      - name: Build release assets
+        uses: ./.github/actions/build-release-assets
+
+      - name: Upload development artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: forgejo-theme-dev-${{ github.run_number }}
+          path: dist/*.tar.gz
+          if-no-files-found: error
+          retention-days: 14

@@ -1,12 +1,52 @@
-name: pr
+name: Pull Request
 
 on:
   pull_request:
+    types:
+      - opened
+      - edited
+      - reopened
+      - synchronize
+      - ready_for_review
     branches:
-      - main
+      - dev
+  pull_request_target:
+    types:
+      - opened
+      - edited
+      - reopened
+      - synchronize
+      - labeled
+      - unlabeled
+      - ready_for_review
+    branches:
+      - dev
+
+concurrency:
+  group: pr-${{ github.event_name }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
 
 jobs:
+  require-release-label:
+    if: github.event_name == 'pull_request_target'
+    runs-on: ubuntu-latest
+    permissions:
+      issues: read
+      pull-requests: read
+    steps:
+      - name: Verify pull request release label
+        uses: mheap/github-action-required-labels@v5
+        with:
+          mode: exactly
+          count: 1
+          labels: "^(feature|change|bug|dependencies|skip-changelog)$"
+          use_regex: true
+          message: >-
+            Add one release label: feature, change, bug, dependencies, or skip-changelog. Add major as an optional
+            version modifier.
+
   checks:
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
