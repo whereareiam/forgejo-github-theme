@@ -165,7 +165,7 @@ const navbarRight = css`
         line-height: 24px;
         margin: 0;
         min-height: 32px;
-        padding: 0 8px 8px;
+        padding: 0 8px;
         text-transform: none;
         strong {
           font-weight: 600;
