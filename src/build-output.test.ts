@@ -183,6 +183,7 @@ describe("Forgejo 15 native integration", () => {
     "repo/home_sidebar_top.tmpl",
     "repo/view_content.tmpl",
     "repo/view_list.tmpl",
+    "user/dashboard/navbar.tmpl",
     "user/heatmap.tmpl",
   ];
 
@@ -464,6 +465,33 @@ describe("Forgejo 15 native integration", () => {
     }
   });
 
+  it("keeps the dashboard context switcher markup scoped for GitHub styling", () => {
+    const dashboardNavbar = fs.readFileSync(
+      path.join(ROOT_DIR, "templates", "user", "dashboard", "navbar.tmpl"),
+      "utf-8"
+    );
+    const dashboardStyles = fs.readFileSync(path.join(ROOT_DIR, "styles", "components", "dashboard.ts"), "utf-8");
+
+    expect(dashboardNavbar).toContain("context-switcher");
+    expect(dashboardNavbar).toContain("context-switcher-item");
+    expect(dashboardNavbar).toContain('svg "octicon-check" 14');
+    expect(dashboardStyles).toContain(".context-switcher-menu");
+    expect(dashboardStyles).toContain("width: 320px;");
+    expect(dashboardStyles).toContain(".context-switcher-check");
+    expect(dashboardStyles).toContain("left: 54px;");
+    expect(dashboardStyles).toContain("font-weight: 400;");
+    expect(dashboardStyles).toContain("line-height: 21px;");
+    expect(dashboardStyles).toContain("flex: 0 0 14px;");
+    expect(dashboardStyles).toContain("border-radius: 9999px;");
+    expect(dashboardStyles).toContain("&.context-switcher-selected");
+    expect(dashboardStyles).toContain("right: 8px;");
+    expect(dashboardStyles).toContain("left: -8px;");
+    expect(dashboardStyles).toContain(".context-switcher-marker");
+    expect(dashboardStyles).toContain("width: 4px;");
+    expect(dashboardStyles).toContain("bottom: 3px;");
+    expect(dashboardStyles).toContain("top: 3px;");
+    expect(dashboardNavbar).toContain("Avatar .SignedUser 14");
+    expect(dashboardNavbar).toContain("Avatar . 14");
   it("keeps the native dated fallback for zero-contribution heatmap tooltips", () => {
     const heatmapTemplate = fs.readFileSync(path.join(ROOT_DIR, "templates", "user", "heatmap.tmpl"), "utf-8");
 
