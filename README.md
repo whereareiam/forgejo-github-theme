@@ -38,10 +38,13 @@ copyright and attribution information.
 
 Choose one of the following ways to obtain the assets:
 
-- Download the packaged archives from the [latest release](https://github.com/whereareiam/forgejo-github-theme/releases/latest).
-- Run the [Development Build](https://github.com/whereareiam/forgejo-github-theme/actions/workflows/development-build.yml)
+- Download the packaged archives from the
+  [latest release](https://github.com/whereareiam/forgejo-github-theme/releases/latest).
+- Run the
+  [Development Build](https://github.com/whereareiam/forgejo-github-theme/actions/workflows/development-build.yml)
   workflow manually and download its artifact.
-- Build the assets locally with the commands in [Using the Development Version](#using-the-development-version-of-the-theme).
+- Build the assets locally with the commands in
+  [Using the Development Version](#using-the-development-version-of-the-theme).
 
 Install the resulting files using your Forgejo data directory (commonly `data/gitea` in the official container):
 
@@ -53,8 +56,8 @@ Install the resulting files using your Forgejo data directory (commonly `data/gi
 3. Extract `theme-github-fonts.tar.gz` into `<forgejo-data>/public`. This supplies the Mona Sans variable font; its SIL
    Open Font License is included beside the font.
 4. Extract the optional `theme-github-templates.tar.gz` archive into `<forgejo-data>`.
-5. Modify `<forgejo-data>/conf/app.ini` and append the CSS filename without the `theme-` prefix to `THEMES` under
-   the `[ui]` section.
+5. Modify `<forgejo-data>/conf/app.ini` and append the CSS filename without the `theme-` prefix to `THEMES` under the
+   `[ui]` section.
 6. Restart Forgejo.
 7. Select the theme in the Forgejo settings.
 
@@ -81,8 +84,8 @@ For details, refer to the [Forgejo documentation](https://forgejo.org/docs/lates
 
 > [!IMPORTANT]
 >
-> The template modifies Forgejo's layout to make it closer to GitHub's layout. Do not use template files across versions,
-> as this may lead to missing functionality, Forgejo failing to start, and other issues.
+> The template modifies Forgejo's layout to make it closer to GitHub's layout. Do not use template files across
+> versions, as this may lead to missing functionality, Forgejo failing to start, and other issues.
 >
 > Template layout is bound to the Forgejo instance and will affect all themes, impacting the experience of other
 > non-project themes.
