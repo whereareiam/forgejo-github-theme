@@ -45,15 +45,18 @@ Choose one of the following ways to obtain the assets:
 
 Install the resulting files using your Forgejo data directory (commonly `data/gitea` in the official container):
 
-1. Extract the CSS archive(s), then place the contained `*.css` files in `<forgejo-data>/public/assets/css` (create the
-   directory if necessary).
-2. Extract `theme-github-fonts.tar.gz` into `<forgejo-data>/public`. This supplies the Mona Sans variable font; its SIL
+1. Extract `theme-github-base.tar.gz`, then place the contained `*.css` files in `<forgejo-data>/public/assets/css`
+   (create the directory if necessary). This archive contains the standard light, dark, auto, and soft-dark themes.
+2. Optionally extract `theme-github-accessibility.tar.gz` for colorblind and high-contrast themes, or
+   `theme-github-extras.tar.gz` for Pink, Gitea-compatible, and Catppuccin themes. Place their CSS files in the same
+   `<forgejo-data>/public/assets/css` directory.
+3. Extract `theme-github-fonts.tar.gz` into `<forgejo-data>/public`. This supplies the Mona Sans variable font; its SIL
    Open Font License is included beside the font.
-3. Extract the optional `theme-github-templates.tar.gz` archive into `<forgejo-data>`.
-4. Modify `<forgejo-data>/conf/app.ini` and append the CSS filename without the `theme-` prefix to `THEMES` under
+4. Extract the optional `theme-github-templates.tar.gz` archive into `<forgejo-data>`.
+5. Modify `<forgejo-data>/conf/app.ini` and append the CSS filename without the `theme-` prefix to `THEMES` under
    the `[ui]` section.
-5. Restart Forgejo.
-6. Select the theme in the Forgejo settings.
+6. Restart Forgejo.
+7. Select the theme in the Forgejo settings.
 
 Example: If the theme filename is `theme-github-dark.css`, add `github-dark` to the end of `THEMES`
 
