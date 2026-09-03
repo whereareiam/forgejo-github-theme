@@ -23,9 +23,122 @@ import { labelStyle } from "@lutinglt/gitea-github-theme/styles/common";
 const dashboard = css`
   .page-content.dashboard {
     /* 仪表板切换控制用户按钮 */
-    .ui.dropdown > .menu.context.user.overflow > .scrolling.menu {
+    .context-switcher > .context-switcher-menu > .scrolling.menu {
       animation: none; /* 去掉嵌套菜单导致的多余动画 */
-      box-shadow: 0px 0px 0px 1px ${themeVars.color.secondary.self} !important;
+    }
+
+    .context-switcher > .context-switcher-menu {
+      padding: 0;
+      width: 320px;
+      max-width: min(320px, calc(100vw - 32px));
+
+      > .header {
+        border-bottom: 1px solid ${themeVars.color.secondary.self};
+        font-size: 14px;
+        font-weight: 600;
+        line-height: 20px;
+        margin: 0;
+        padding: 12px 16px 10px;
+      }
+
+      > .scrolling.menu {
+        max-height: 320px;
+        overflow-y: auto;
+        padding: 8px 0;
+
+        > .context-switcher-item {
+          border-radius: 6px;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          height: 32px;
+          margin: 0 8px;
+          padding: 5px 8px;
+          width: calc(100% - 16px);
+          font-size: 14px;
+          font-weight: 400;
+          line-height: 21px;
+          position: relative;
+          overflow: visible;
+          --color-hover: ${themeVars.github.control.transparent.bgColor.hover};
+          --color-active: transparent;
+
+          &:not(:first-child)::after {
+            background: ${themeVars.color.secondary.self};
+            content: "";
+            height: 1px;
+            left: 54px;
+            pointer-events: none;
+            position: absolute;
+            right: 8px;
+            top: 0;
+            z-index: 3;
+          }
+
+          > .context-switcher-marker {
+            background: transparent;
+            border-radius: 2px;
+            bottom: 3px;
+            height: auto;
+            left: -8px;
+            pointer-events: none;
+            position: absolute;
+            top: 3px;
+            width: 4px;
+            z-index: 1;
+          }
+
+          &:hover,
+          &:active {
+            background: var(--color-hover);
+            box-shadow: none;
+          }
+
+          &:hover > .context-switcher-marker,
+          &:focus-visible > .context-switcher-marker {
+            background: ${themeVars.github.borderColor.accent.emphasis};
+          }
+
+          &.context-switcher-selected:not(:hover) {
+            background: transparent;
+          }
+
+          > .context-switcher-check {
+            align-items: center;
+            color: ${themeVars.color.text.light.num1};
+            display: inline-flex;
+            flex: 0 0 16px;
+            height: 16px;
+            justify-content: center;
+            opacity: 0;
+            width: 16px;
+
+            svg {
+              margin: 0;
+            }
+          }
+
+          &.context-switcher-selected > .context-switcher-check {
+            opacity: 1;
+          }
+
+          > img.ui.avatar {
+            border-radius: 9999px;
+            flex: 0 0 14px;
+            height: 14px;
+            margin: 0;
+            width: 14px;
+          }
+
+          > .truncated-item-name {
+            line-height: 21px;
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+          }
+        }
+      }
     }
   }
   /* 首页仪表板, 避免选中管理员后台的维护管理面板 */

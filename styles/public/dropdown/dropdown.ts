@@ -35,7 +35,7 @@ const dropdown = css`
         box-shadow: none !important;
       }
       /* 忽略隐藏 */
-      > .item:not(.tw-hidden) {
+      > .item:not(.tw-hidden):not(.context-switcher-item) {
         display: flex !important;
         align-items: center;
         align-content: center;
@@ -69,7 +69,7 @@ const dropdown = css`
         &:active {
           background-color: ${themeVars.github.control.transparent.bgColor.active} !important;
         }
-        &.selected {
+        &.selected:not(.context-switcher-item) {
           background-color: ${themeVars.color.active} !important;
           &:hover {
             background-color: ${themeVars.github.control.transparent.bgColor.hover} !important;
@@ -78,8 +78,8 @@ const dropdown = css`
             background-color: ${themeVars.github.control.transparent.bgColor.active} !important;
           }
         }
-        &.active,
-        &.selected {
+        &.active:not(.context-switcher-item),
+        &.selected:not(.context-switcher-item) {
           &:after {
             ${activeItemAfterStyle};
           }
@@ -151,7 +151,7 @@ const dropdown = css`
     }
   }
   /* GitHub keeps the dashboard context menu on the same compact menu grid. */
-  .ui.floating.dropdown > .menu.context.user.overflow {
+  .context-switcher > .context-switcher-menu {
     padding: 8px 0;
     width: 192px;
     > .header {
@@ -181,7 +181,7 @@ const dropdown = css`
   }
   /* 修复按钮阴影被覆盖缺少边框线的问题 */
   /* 仓库动态页面的右侧按钮, 比如时间周期 */
-  .ui.floating.dropdown .menu {
+  .ui.floating.dropdown > .menu {
     box-shadow: ${themeVars.github.shadow.floating.small} !important;
   }
 `;
