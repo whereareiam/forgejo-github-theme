@@ -1,0 +1,62 @@
+<div class="ui container fluid">
+	{{if or (not .LinkAccountMode) (and .LinkAccountMode .LinkAccountModeSignIn)}}
+	{{template "base/alert" .}}
+	{{end}}
+	<div class="signin-branding">
+		<img class="signin-logo" width="48" height="48" src="{{AssetUrlPrefix}}/img/logo.svg" alt="{{ctx.Locale.Tr "logo"}}">
+		{{if .LinkAccountMode}}
+		<h4 class="ui top attached header center signin-title">
+			{{ctx.Locale.Tr "auth.oauth_signin_title"}}
+		</h4>
+		{{else}}
+		<div class="signin-title" role="heading" aria-level="1">Sign in to {{AppDisplayName}}</div>
+		{{end}}
+	</div>
+	<div class="ui attached segment">
+		{{if .EnableInternalSignIn}}
+		<form class="ui form tw-mb-4" action="{{.SignInLink}}" method="post">
+			<div class="field {{if and (.Err_UserName) (or (not .LinkAccountMode) (and .LinkAccountMode .LinkAccountModeSignIn))}}error{{end}}">
+				<label for="user_name">{{ctx.Locale.Tr "home.uname_holder"}}</label>
+				<input id="user_name" type="text" name="user_name" value="{{.user_name}}" autofocus required autocorrect="off" autocapitalize="none">
+			</div>
+			{{if or (not .DisablePassword) .LinkAccountMode}}
+			<div class="field {{if and (.Err_Password) (or (not .LinkAccountMode) (and .LinkAccountMode .LinkAccountModeSignIn))}}error{{end}}">
+				<div class="signin-field-label">
+					<label for="password">{{ctx.Locale.Tr "password"}}</label>
+					{{if not .LinkAccountMode}}
+						<a href="{{AppSubUrl}}/user/forgot_password">{{ctx.Locale.Tr "auth.forgot_password"}}</a>
+					{{end}}
+				</div>
+				<input id="password" name="password" type="password" value="{{.password}}" autocomplete="current-password" required>
+			</div>
+			{{end}}
+
+			{{template "user/auth/captcha" .}}
+
+			<div class="field">
+				<button class="ui primary button tw-w-full">
+					{{if .LinkAccountMode}}
+						{{ctx.Locale.Tr "auth.oauth_signin_submit"}}
+					{{else}}
+						{{ctx.Locale.Tr "sign_in"}}
+					{{end}}
+				</button>
+			</div>
+		</form>
+		{{end}}
+
+		{{template "custom/signin_mid"}}
+
+		{{template "user/auth/oauth_container" .}}
+	</div>
+</div>
+
+{{if and (not .DisablePassword) .ShowRegistrationButton}}
+<div class="ui container fluid">
+	<div class="signin-footer ui attached segment header top tw-max-w-2xl tw-m-auto tw-flex tw-flex-col tw-items-center">
+		<div class="field">
+			{{ctx.Locale.Tr "auth.hint_register" (printf "%s/user/sign_up" AppSubUrl)}}
+		</div>
+	</div>
+</div>
+{{end}}

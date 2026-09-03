@@ -183,6 +183,8 @@ describe("Forgejo 15 native integration", () => {
     "repo/home_sidebar_top.tmpl",
     "repo/view_content.tmpl",
     "repo/view_list.tmpl",
+    "user/auth/oauth_container.tmpl",
+    "user/auth/signin_inner.tmpl",
     "user/heatmap.tmpl",
   ];
 
@@ -469,6 +471,27 @@ describe("Forgejo 15 native integration", () => {
 
     expect(heatmapTemplate).toContain("data-heatmap-data");
     expect(heatmapTemplate).not.toContain("data-locale-contributions-zero");
+  });
+
+  it("matches GitHub's sign-in form structure", () => {
+    const signInTemplate = fs.readFileSync(
+      path.join(ROOT_DIR, "templates", "user", "auth", "signin_inner.tmpl"),
+      "utf-8"
+    );
+    const oauthTemplate = fs.readFileSync(
+      path.join(ROOT_DIR, "templates", "user", "auth", "oauth_container.tmpl"),
+      "utf-8"
+    );
+
+    expect(signInTemplate).toContain("signin-field-label");
+    expect(signInTemplate).toContain("signin-logo");
+    expect(signInTemplate).toContain('role="heading" aria-level="1"');
+    expect(signInTemplate).toContain("Sign in to {{AppDisplayName}}");
+    expect(signInTemplate).not.toContain('class="required field');
+    expect(signInTemplate).not.toContain('name="remember"');
+    expect(signInTemplate).toContain('href="{{AppSubUrl}}/user/forgot_password"');
+    expect(oauthTemplate).toContain("Continue with {{$provider.DisplayName}}");
+    expect(oauthTemplate).not.toContain("sign_in_with_provider");
   });
 });
 

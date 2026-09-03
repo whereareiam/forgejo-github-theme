@@ -32,22 +32,58 @@ const signIn = css`
         }
       }
     }
-    .ui.top.attached.header {
+    .signin-branding {
+      align-items: center;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .signin-logo {
+      display: block;
+      height: 48px;
+      width: 48px;
+    }
+    .signin-title {
       border: 0;
+      color: inherit;
       font-size: 20px;
       font-weight: 600;
-      background-color: unset !important;
+      line-height: 1.5;
+      margin: 0;
+      padding: 0;
       text-align: center;
-      padding: 16px;
+      white-space: nowrap;
+    }
+    .ui.top.attached.header {
+      background-color: unset !important;
     }
 
     .ui.attached.segment {
       border: 0;
-      padding: 16px 0 0 0;
+      padding: 0;
+      form.tw-mb-4 {
+        margin-bottom: 0 !important;
+      }
       .field:not(.inline) {
+        margin-bottom: 16px;
         label {
           font-size: 14px;
           font-weight: 600;
+          margin-bottom: 4px;
+        }
+        .signin-field-label {
+          align-items: baseline;
+          display: flex;
+          justify-content: space-between;
+          width: 100%;
+          label {
+            margin-bottom: 4px;
+          }
+          a {
+            font-size: 14px;
+            font-weight: 400;
+          }
         }
         input {
           background: unset;
@@ -69,6 +105,13 @@ const signIn = css`
         }
       }
     }
+    .signin-footer {
+      border: 0;
+      font-size: 14px;
+      font-weight: 400;
+      gap: 16px;
+      padding: 16px 0 0;
+    }
     .ui.top.attached.header.segment {
       font-size: 14px;
       font-weight: 400;
@@ -77,4 +120,14 @@ const signIn = css`
   }
 `;
 
-export default cssCombine(signIn);
+const signInTitle = css`
+  .page-content.user.signin .signin-title {
+    align-self: center;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 30px;
+    white-space: nowrap;
+  }
+`;
+
+export default cssCombine(signIn, signInTitle);
