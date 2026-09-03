@@ -152,6 +152,9 @@ const navbarRight = css`
         }
       }
     }
+    .navbar-right:not(:has(.user-menu)) > a.item {
+      align-items: center;
+    }
     /* 用户菜单 */
     .navbar-right .user-menu {
       width: ${fallbackVar(customThemeVars.userMenuWidth, "256px")};

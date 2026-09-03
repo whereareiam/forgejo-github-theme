@@ -184,6 +184,7 @@ describe("Forgejo 15 native integration", () => {
     "repo/view_content.tmpl",
     "repo/view_list.tmpl",
     "user/dashboard/navbar.tmpl",
+    "user/heatmap.tmpl",
   ];
 
   const unsupportedSelectorFamilies = [
@@ -307,6 +308,7 @@ describe("Forgejo 15 native integration", () => {
     const repoContentTemplate = fs.readFileSync(path.join(ROOT_DIR, "templates", "repo", "view_content.tmpl"), "utf-8");
 
     expect(navbar).toContain("> .item {\n        border-radius: ${otherThemeVars.border.radius};");
+    expect(navbar).toContain(".navbar-right:not(:has(.user-menu)) > a.item {\n      align-items: center;");
     expect(notification).toContain("text-decoration: none;");
     expect(repoContentTemplate).toContain('class="repo-code-navigation"');
     expect(repoContentTemplate).toContain('class="repo-code-body"');
@@ -490,6 +492,11 @@ describe("Forgejo 15 native integration", () => {
     expect(dashboardStyles).toContain("top: 3px;");
     expect(dashboardNavbar).toContain("Avatar .SignedUser 14");
     expect(dashboardNavbar).toContain("Avatar . 14");
+  it("keeps the native dated fallback for zero-contribution heatmap tooltips", () => {
+    const heatmapTemplate = fs.readFileSync(path.join(ROOT_DIR, "templates", "user", "heatmap.tmpl"), "utf-8");
+
+    expect(heatmapTemplate).toContain("data-heatmap-data");
+    expect(heatmapTemplate).not.toContain("data-locale-contributions-zero");
   });
 });
 
