@@ -1,0 +1,42 @@
+name: forgejo-github-theme
+
+services:
+  forgejo-init:
+    image: alpine:3.22
+    user: "0:0"
+    command:
+      [
+        "sh",
+        "-ec",
+        "mkdir -p /var/lib/gitea/custom/public/assets/css /var/lib/gitea/custom/public/assets/fonts
+        /var/lib/gitea/custom/templates && chown -R 1000:1000 /var/lib/gitea",
+      ]
+    volumes:
+      - forgejo-dev-data:/var/lib/gitea
+
+  forgejo:
+    image: code.forgejo.org/forgejo/forgejo:16.0.3-rootless
+    container_name: forgejo-github-theme-dev
+    environment:
+      USER_GID: "1000"
+      USER_UID: "1000"
+      FORGEJO__server__ROOT_URL: http://localhost:3000/
+      FORGEJO__server__SSH_PORT: "2222"
+      FORGEJO__server__LANDING_PAGE: login
+      FORGEJO__security__INSTALL_LOCK: "true"
+      FORGEJO__ui__DEFAULT_THEME: github-auto
+      FORGEJO__ui__THEMES: "${FORGEJO_PREVIEW_THEMES:-github-auto,github-catppuccin-auto,github-catppuccin-frappe,github-catppuccin-latte,github-catppuccin-macchiato,github-catppuccin-mocha,github-colorblind-auto,github-colorblind-dark,github-colorblind-light,github-dark,github-gitea-auto,github-gitea-dark,github-gitea-light,github-high-contrast-auto,github-high-contrast-colorblind-auto,github-high-contrast-colorblind-dark,github-high-contrast-colorblind-light,github-high-contrast-dark,github-high-contrast-light,github-high-contrast-soft-dark,github-high-contrast-tritanopia-auto,github-high-contrast-tritanopia-dark,github-high-contrast-tritanopia-light,github-light,github-pink-auto,github-pink-dark,github-pink-light,github-pink-soft-dark,github-soft-dark,github-tritanopia-auto,github-tritanopia-dark,github-tritanopia-light}"
+    ports:
+      - "3000:3000"
+      - "2222:22"
+    depends_on:
+      forgejo-init:
+        condition: service_completed_successfully
+    volumes:
+      - forgejo-dev-data:/var/lib/gitea
+      - ../dist:/var/lib/gitea/custom/public/assets/css:ro
+      - ../dist/assets/fonts:/var/lib/gitea/custom/public/assets/fonts:ro
+      - ./.generated/templates:/var/lib/gitea/custom/templates:ro
+
+volumes:
+  forgejo-dev-data:

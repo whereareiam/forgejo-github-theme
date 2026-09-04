@@ -5,3 +5,4 @@ bun.lockb
 package-lock.json
 .env
 .VSCodeCounter
+/dev/.generated/

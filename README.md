@@ -257,3 +257,40 @@ bun bundle
 
 After compilation, CSS files are generated in `dist`. Install them as described above. The full release packaging step,
 including templates and fonts, is available through the repository's CI workflow.
+
+### Local Forgejo Preview
+
+For faster iteration on CSS and templates, run the pinned local Forgejo preview. Its Compose file and helper code live
+under `dev/`; Docker and Bun are required.
+
+```bash
+bun dev:forgejo:watch
+```
+
+Open [http://localhost:3000](http://localhost:3000). The preview skips Forgejo's first-run setup, selects `github-auto`
+by default, and signs in automatically as `whereareiam`, including when a public page is opened first. Set
+`FORGEJO_PREVIEW_AUTO_LOGIN=false` to keep the normal sign-in page; the default credentials are `whereareiam` / `preview`.
+The watcher rebuilds the theme and restarts Forgejo
+after source changes so CSS and template updates are visible. The local Forgejo data is kept in the Docker volume
+`forgejo-dev-data`.
+
+The checked-in fixture snapshot under `dev/fixtures` restores `whereareiam/identica-docs` and the `arcadeya/devops`
+organization repository. It includes the recorded `identica-docs` Actions history as display-only data; no runner is
+configured and no workflow executes during seeding. It also restores the repositories' original creation times and
+their recorded public activity, including pushes, tags, and releases, so the profile activity timeline is useful for
+visual checks.
+
+Override the local login before starting when needed:
+
+```bash
+FORGEJO_PREVIEW_USER=alice FORGEJO_PREVIEW_PASSWORD='local-password' bun dev:forgejo
+```
+
+Stop the preview with:
+
+```bash
+bun dev:forgejo:stop
+```
+
+To rebuild and sync once without watching, use `bun dev:forgejo`. After a later manual build, use `bun dev:forgejo:sync`
+to copy the generated files into the running container.

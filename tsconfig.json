@@ -36,5 +36,15 @@
       "@lutinglt/gitea-github-theme/primer": ["./primer"]
     }
   },
-  "include": ["src", "styles", "themes", "scripts", "primer", "vite.config.ts", "theme.config.ts", "eslint.config.ts"]
+  "include": [
+    "src",
+    "styles",
+    "themes",
+    "scripts",
+    "dev",
+    "primer",
+    "vite.config.ts",
+    "theme.config.ts",
+    "eslint.config.ts"
+  ]
 }
