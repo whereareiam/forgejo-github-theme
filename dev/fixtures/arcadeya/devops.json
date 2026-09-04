@@ -1,0 +1,148 @@
+{
+  "actions": {
+    "action_run": [],
+    "action_task": [],
+    "action_run_job": [],
+    "action_artifact": [],
+    "action_task_step": [],
+    "action_task_output": []
+  },
+  "releases": [
+    {
+      "body": "",
+      "name": "feat: rename deploy runner label",
+      "draft": false,
+      "tag_name": "v1",
+      "prerelease": false,
+      "target_commitish": ""
+    },
+    {
+      "body": "",
+      "name": "v2",
+      "draft": false,
+      "tag_name": "v2",
+      "prerelease": false,
+      "target_commitish": ""
+    },
+    {
+      "body": "",
+      "name": "v3",
+      "draft": false,
+      "tag_name": "v3",
+      "prerelease": false,
+      "target_commitish": ""
+    },
+    {
+      "body": "",
+      "name": "v4",
+      "draft": false,
+      "tag_name": "v4",
+      "prerelease": false,
+      "target_commitish": ""
+    },
+    {
+      "body": "",
+      "name": "fix(ci): simplify oidc token validation action",
+      "draft": false,
+      "tag_name": "v5",
+      "prerelease": false,
+      "target_commitish": ""
+    },
+    {
+      "body": "",
+      "name": "feat(ci): resolve tags from checked out sources",
+      "draft": false,
+      "tag_name": "v6",
+      "prerelease": false,
+      "target_commitish": ""
+    },
+    {
+      "body": "",
+      "name": "feat(ci): add optional git source checkout",
+      "draft": false,
+      "tag_name": "v7",
+      "prerelease": false,
+      "target_commitish": ""
+    },
+    {
+      "body": "",
+      "name": "feat(ci): add Artifact Keeper OIDC registry login",
+      "draft": false,
+      "tag_name": "v8",
+      "prerelease": false,
+      "target_commitish": ""
+    },
+    {
+      "body": "",
+      "name": "v9",
+      "draft": false,
+      "tag_name": "v9",
+      "prerelease": false,
+      "target_commitish": ""
+    },
+    {
+      "body": "",
+      "name": "fix(ci): support direct Artifact Keeper registry routing",
+      "draft": false,
+      "tag_name": "v10",
+      "prerelease": false,
+      "target_commitish": ""
+    },
+    {
+      "body": "",
+      "name": "fix(ci): derive images registry paths",
+      "draft": false,
+      "tag_name": "v11",
+      "prerelease": false,
+      "target_commitish": ""
+    },
+    {
+      "body": "",
+      "name": "feat(ci): support subdirectory Docker builds",
+      "draft": false,
+      "tag_name": "v12",
+      "prerelease": false,
+      "target_commitish": ""
+    },
+    {
+      "body": "",
+      "name": "fix(ci): enter configured image build directory",
+      "draft": false,
+      "tag_name": "v13",
+      "prerelease": false,
+      "target_commitish": ""
+    },
+    {
+      "body": "",
+      "name": "fix(ci): report OIDC exchange failures",
+      "draft": false,
+      "tag_name": "v14",
+      "prerelease": false,
+      "target_commitish": ""
+    },
+    {
+      "body": "",
+      "name": "refactor(ci): compose reusable deployment primitives",
+      "draft": false,
+      "tag_name": "v15",
+      "prerelease": false,
+      "target_commitish": ""
+    },
+    {
+      "body": "",
+      "name": "refactor(ci): derive repository deployment settings",
+      "draft": false,
+      "tag_name": "v16",
+      "prerelease": false,
+      "target_commitish": ""
+    },
+    {
+      "body": "",
+      "name": "feat(ci): support workload image rollouts",
+      "draft": false,
+      "tag_name": "v17",
+      "prerelease": false,
+      "target_commitish": ""
+    }
+  ]
+}
