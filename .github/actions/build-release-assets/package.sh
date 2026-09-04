@@ -22,5 +22,5 @@ bun release
     theme-github-pink-*.css theme-github-gitea-*.css theme-github-catppuccin-*.css
 )
 
-tar -zcf dist/theme-github-templates.tar.gz templates
+tar -zcf dist/theme-github-templates.tar.gz templates -C dist assets/js
 tar -zcf dist/theme-github-fonts.tar.gz -C dist assets/fonts

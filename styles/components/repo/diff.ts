@@ -18,6 +18,8 @@
  */
 
 import { css, cssCombine, otherThemeVars, themeVars } from "@lutinglt/gitea-github-theme/core";
+import diffFileTreeLayout from "./diff_file_tree";
+import diffControls from "../diff_controls";
 import { activeItemAfterStyle } from "@lutinglt/gitea-github-theme/styles/common";
 
 const diff = css`
@@ -194,4 +196,4 @@ const diffFileTree = css`
     }
   }
 `;
-export default cssCombine(diff, diffFileBoxHeader, diffFileBoxCodeDiff, diffFileTree);
+export default cssCombine(diff, diffFileBoxHeader, diffFileBoxCodeDiff, diffFileTree, diffControls, diffFileTreeLayout);

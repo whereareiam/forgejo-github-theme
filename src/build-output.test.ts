@@ -175,6 +175,7 @@ describe("Forgejo 15 native integration", () => {
     "base/head_navbar_icons.tmpl",
     "repo/commit_message_subject.tmpl",
     "repo/commit_page.tmpl",
+    "repo/diff/box.tmpl",
     "repo/commits_list.tmpl",
     "repo/global_header.tmpl",
     "repo/header.tmpl",
@@ -424,6 +425,17 @@ describe("Forgejo 15 native integration", () => {
     expect(commitPageTemplate).toContain('class="github-commit-file-tree"');
     expect(commitPageTemplate).toContain('template "repo/diff/box"');
     expect(commitPageTemplate).not.toContain('template "repo/commit_header"');
+    const diffBoxTemplate = fs.readFileSync(path.join(ROOT_DIR, "templates", "repo", "diff", "box.tmpl"), "utf-8");
+    expect(diffBoxTemplate).toContain('class="diff-file-tree-panel not-mobile"');
+    expect(diffBoxTemplate).toContain('class="diff-file-tree-scroll"');
+    expect(diffBoxTemplate).toContain('class="diff-file-tree-controls"');
+    expect(diffBoxTemplate).toContain('id="diff-file-tree"');
+    expect(diffBoxTemplate).toContain('id="diff-content-container"');
+    expect(diffBoxTemplate).toContain('class="diff-detail-box diff-box diff-content-controls"');
+    expect(diffBoxTemplate).toContain('class="diff-content-controls-left"');
+    expect(diffBoxTemplate).toContain('class="diff-content-controls-right diff-detail-actions button-row"');
+    expect(diffBoxTemplate).toContain('class="diff-content-body"');
+    expect(diffBoxTemplate).toContain("const diffTreeVisible = localStorage?.getItem('diff_file_tree_visible') !== 'false';");
     expect(commitPageStyle).toContain("> .repository-content-header");
     expect(commitPageStyle).toContain("grid-template-columns: 273px minmax(0, 1fr);");
     expect(commitPageStyle).toContain("min-height: 46px;");
