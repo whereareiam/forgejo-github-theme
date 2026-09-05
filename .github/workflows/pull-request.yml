@@ -112,3 +112,10 @@ jobs:
         with:
           name: fonts
           path: dist/assets/fonts
+
+      - name: Upload JavaScript assets
+        if: steps.build.outcome == 'success'
+        uses: actions/upload-artifact@v7
+        with:
+          name: scripts
+          path: dist/assets/js
