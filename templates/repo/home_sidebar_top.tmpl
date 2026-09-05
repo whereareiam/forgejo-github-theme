@@ -57,6 +57,11 @@
 						{{svg "octicon-repo-forked"}} <b>{{CountFmt .Repository.NumForks}}</b> {{ctx.Locale.Tr "repo.forks"}}
 					</a>
 				{{end}}
+                <div class="repo-mobile-summary only-mobile">
+                    <a class="flex-text-block muted" href="{{.RepoLink}}/branches">{{svg "octicon-git-branch" 16}}{{.BranchesCount}} {{if eq .BranchesCount 1}}branch{{else}}branches{{end}}</a>
+                    <a class="flex-text-block muted" href="{{.RepoLink}}/tags">{{svg "octicon-tag" 16}}{{.NumTags}} {{if eq .NumTags 1}}tag{{else}}tags{{end}}</a>
+                </div>
+                <div class="repo-mobile-visibility only-mobile">{{if .Repository.IsPrivate}}{{svg "octicon-lock" 16}}{{else}}{{svg "octicon-globe" 16}}{{end}}{{if .Repository.IsPrivate}}Private{{else if .Repository.Owner.Visibility.IsPrivate}}Internal{{else}}Public{{end}} repository</div>
 				<div class="flex-text-block muted" {{if not (eq .Repository.Size 0)}}data-tooltip-content="{{.Repository.SizeDetailsString ctx.Locale}}"{{end}}>
 					{{$fileSizeFields := ctx.Locale.TrSize .Repository.Size}}
 					{{svg "octicon-database"}} <b>{{$fileSizeFields.PrettyNumber}}</b> {{$fileSizeFields.TranslatedUnit}}

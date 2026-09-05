@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-import { css, cssCombine, otherThemeVars } from "@lutinglt/gitea-github-theme/core";
+import { css, cssCombine, otherThemeVars, themeVars } from "@lutinglt/gitea-github-theme/core";
 
 const repositoryHome = css`
   /*
@@ -27,11 +27,44 @@ const repositoryHome = css`
  */
   .page-content.repository.file.list .repo-grid-filelist-sidebar {
     display: grid;
-    gap: 16px;
-    grid-template-columns: minmax(0, 1fr) 312px;
+    column-gap: 40px;
+    row-gap: 16px;
+    grid-template-columns: minmax(0, 1fr) 272px;
     grid-template-rows: auto auto 1fr;
   }
 
+  .page-content.repository.file.list:has(.repo-grid-filelist-sidebar) > .ui.container,
+  .page-content.repository.file.list:has(.repo-grid-filelist-sidebar) > .repository-content-header > .ui.container {
+    width: calc(100% - 64px);
+    max-width: 1216px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .page-content.repository.file.list:has(.repo-grid-filelist-sidebar) > .repository-content-header > .ui.container {
+    padding-bottom: 16px;
+  }
+  .page-content.repository.file.list .repo-home-sidebar-top .repo-home-sidebar-header {
+    margin-top: 0;
+    line-height: 24px;
+  }
+  .page-content.repository.file.list .repo-home-sidebar-top .repo-description {
+    font-size: 16px;
+    line-height: 24px;
+  }
+  .page-content.repository.file.list .repo-code-search {
+    border-top: 1px solid ${themeVars.color.light.border};
+    margin-top: 16px;
+  }
+  .page-content.repository.file.list .repo-code-search > summary {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 16px;
+    cursor: pointer;
+  }
+  .page-content.repository.file.list .repo-code-search > form {
+    padding: 0 16px 16px;
+  }
   .page-content.repository.file.list .repo-home-filelist {
     grid-column: 1;
     grid-row: 1 / 4;
@@ -58,6 +91,11 @@ const repositoryHome = css`
 
   .page-content.repository.file.list .flex-relaxed-list > .divider {
     margin: 0;
+  }
+
+  .page-content.repository.file.list .repo-home-sidebar-top,
+  .page-content.repository.file.list .repo-home-sidebar-bottom {
+    padding-left: 0;
   }
 
   .page-content.repository.file.list .repo-home-sidebar-header {
@@ -128,6 +166,97 @@ const repositoryHome = css`
   }
 
   @media (max-width: 767.98px) {
+    .page-content.repository.file.list:has(.repo-grid-filelist-sidebar) > .repository-content-header > .ui.container {
+      border-bottom: 0;
+      padding-bottom: 0;
+    }
+    .page-content.repository.file.list
+      .repo-home-sidebar-metadata
+      > a:has(:is(.octicon-star, .octicon-repo-forked, .octicon-eye)) {
+      text-transform: lowercase;
+    }
+
+    .page-content.repository.file.list:has(.repo-grid-filelist-sidebar) .repo-header > .flex-item {
+      display: none;
+    }
+    .page-content.repository.file.list:has(.repo-grid-filelist-sidebar) .repo-header > .repo-buttons > a[href$=".rss"] {
+      display: none;
+    }
+    .page-content.repository.file.list:has(.repo-grid-filelist-sidebar) #watch-button .text.not-mobile,
+    .page-content.repository.file.list:has(.repo-grid-filelist-sidebar) a[href$="/fork"] .text.not-mobile {
+      display: inline !important;
+    }
+    .page-content.repository.file.list .repo-about-heading {
+      display: none;
+    }
+    .page-content.repository.file.list .repo-home-sidebar-metadata {
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 8px 16px;
+    }
+    .page-content.repository.file.list .repo-home-sidebar-metadata > a:has(.octicon-book),
+    .page-content.repository.file.list .repo-home-sidebar-metadata > div:has(.octicon-database) {
+      display: none;
+    }
+    .page-content.repository.file.list .repo-home-sidebar-metadata > a:has(.octicon-star) {
+      order: 1;
+    }
+    .page-content.repository.file.list .repo-home-sidebar-metadata > a:has(.octicon-repo-forked) {
+      order: 2;
+    }
+    .page-content.repository.file.list .repo-home-sidebar-metadata > a:has(.octicon-eye) {
+      order: 3;
+    }
+    .page-content.repository.file.list .repo-mobile-summary {
+      display: flex;
+      order: 4;
+      gap: 16px;
+    }
+    .page-content.repository.file.list .repo-home-sidebar-metadata > a:has(.octicon-pulse) {
+      order: 5;
+    }
+    .page-content.repository.file.list .repo-mobile-visibility {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      order: 6;
+      width: 100%;
+      color: ${themeVars.color.text.light.num1};
+    }
+    .page-content.repository.file.list .repo-home-sidebar-top {
+      padding-bottom: 16px;
+      border-bottom: 1px solid ${themeVars.color.light.border};
+    }
+    .page-content.repository.file.list .repo-button-row {
+      flex-wrap: nowrap;
+      align-items: center;
+    }
+    .page-content.repository.file.list .repo-button-row > .repo-button-row-left,
+    .page-content.repository.file.list .repo-button-row > .repo-button-row-right {
+      width: auto;
+    }
+    .page-content.repository.file.list .repo-button-row > .repo-button-row-left {
+      flex-grow: 0;
+    }
+    .page-content.repository.file.list .repo-button-row > .repo-button-row-left > .js-branch-tag-selector {
+      flex: 0 0 auto;
+    }
+    .page-content.repository.file.list .repo-button-row .repository-summary,
+    .page-content.repository.file.list .repo-button-row .repo-find-file,
+    .page-content.repository.file.list .repo-button-row .repo-add-file {
+      display: none;
+    }
+    .page-content.repository.file.list .repo-code-dropdown > summary > span {
+      display: none;
+    }
+    .page-content.repository.file.list .repo-mobile-actions {
+      order: 2;
+    }
+
+    .page-content.repository.file.list:has(.repo-grid-filelist-sidebar) > .ui.container,
+    .page-content.repository.file.list:has(.repo-grid-filelist-sidebar) > .repository-content-header > .ui.container {
+      width: calc(100% - 32px);
+    }
     .page-content.repository.file.list .repo-grid-filelist-sidebar {
       grid-template-columns: 100%;
       grid-template-rows: auto auto auto;
