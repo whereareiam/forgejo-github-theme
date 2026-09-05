@@ -29,7 +29,7 @@ const issueSidebar = css`
   /* 创建PR页面 */
   .page-content.repository.diff.compare.pull,
   /* 工单&创建工单&PR页面侧边栏 */
-  .page-content.repository.issue {
+  .page-content.repository.issue:not(.github-conversation) {
     .issue-content {
       img.ui.avatar {
         border-radius: 9999px;
