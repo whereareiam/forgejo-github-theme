@@ -1,0 +1,454 @@
+.page-content.repository.actions.github-actions-list:not(.settings) {
+  --actions-sidebar-width: 336px;
+  padding-top: 0;
+  margin-top: 0 !important;
+  .actions-list-shell {
+    width: 100%;
+  }
+  .actions-layout {
+    display: grid;
+    grid-template-columns: var(--actions-sidebar-width) minmax(0, 1fr);
+    min-height: calc(100dvh - 100px);
+  }
+  .actions-sidebar {
+    padding: 16px 8px;
+    border-right: 1px solid var(--color-light-border);
+  }
+  .actions-sidebar-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 4px 8px 8px;
+    gap: 8px;
+  }
+  .actions-sidebar-heading h2 {
+    margin: 0;
+    font-size: 20px;
+    line-height: 28px;
+    font-weight: 600;
+  }
+  .actions-sidebar-heading .ui.button {
+    height: 28px;
+    min-height: 28px;
+    padding: 3px 8px;
+    font-size: 12px;
+    margin: 0;
+  }
+  .actions-menu.ui.menu {
+    width: 100%;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+    margin: 0;
+  }
+  .actions-menu::before,
+  .actions-menu .item::before {
+    display: none;
+  }
+  .actions-menu .item {
+    overflow: visible;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+    min-height: 32px;
+    margin: 0 8px;
+    padding: 6px 8px;
+    border: 0;
+    border-radius: var(--border-radius);
+    color: var(--color-text);
+    font-size: 14px;
+    line-height: 20px;
+    background: transparent;
+  }
+  .actions-workflow-divider {
+    height: 1px;
+    margin: 8px 0;
+    background: var(--color-light-border);
+  }
+  .actions-menu .item .content {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .actions-menu .item:hover {
+    text-decoration: none;
+    background: var(--github-control-transparent-bgColor-hover);
+  }
+  .actions-menu .item.active {
+    background: var(--github-control-transparent-bgColor-active);
+    font-weight: 600;
+  }
+  .actions-menu.ui.menu .item.active::before {
+    display: block !important;
+    content: "";
+    position: absolute;
+    left: -8px;
+    top: 4px;
+    height: 24px;
+    width: 4px;
+    background: var(--color-primary);
+    border-radius: var(--border-radius);
+  }
+  .actions-main {
+    min-width: 0;
+    padding: 16px 24px 32px;
+  }
+  .actions-heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .actions-heading h1 {
+    font-size: 20px;
+    line-height: 28px;
+    font-weight: 400;
+    margin: 4px 0 0;
+    overflow-wrap: anywhere;
+  }
+  .actions-heading p {
+    color: var(--color-text-light-1);
+    font-size: 14px;
+    line-height: 21px;
+    margin: 0;
+  }
+  .actions-search {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 300px;
+    flex-shrink: 0;
+    height: 32px;
+    padding: 0 8px;
+    border: 1px solid var(--color-light-border);
+    border-radius: var(--border-radius);
+    color: var(--color-text-light-1);
+  }
+  .actions-search:focus-within {
+    outline: 2px solid var(--color-primary);
+    outline-offset: -1px;
+  }
+  .actions-search input {
+    background: transparent;
+    padding: 0;
+    border: 0;
+    box-shadow: none;
+    outline: none;
+    width: 100%;
+    min-width: 0;
+    font: 14px/21px var(--fonts-proportional);
+  }
+  .actions-filters.ui.menu {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 64px;
+    margin: 0;
+    padding: 16px;
+    border: 1px solid var(--color-light-border);
+    border-bottom: 0;
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
+    background: var(--color-box-header);
+  }
+  .actions-run-count {
+    margin-right: auto;
+    font-size: 14px;
+    line-height: 21px;
+    white-space: nowrap;
+  }
+  .actions-filters > .item {
+    padding: 4px 8px;
+    min-height: 32px;
+    font-size: 14px;
+    color: var(--color-text-light-1);
+  }
+  .actions-filters #status_dropdown {
+    order: 1;
+  }
+  .actions-filters #actor_dropdown {
+    order: 2;
+  }
+  .actions-filters > .ui.dropdown {
+    border-radius: var(--border-radius);
+    &:hover,
+    &.active {
+      background: var(--github-control-transparent-bgColor-hover);
+    }
+    &:focus-visible {
+      outline: 2px solid var(--color-primary);
+      outline-offset: -2px;
+    }
+    & > .menu {
+      width: 320px;
+      max-width: calc(100vw - 32px);
+      left: auto;
+      right: 0;
+      margin-top: 4px;
+      & > .header {
+        margin: 0;
+        padding: 12px 16px 4px;
+        font-size: 14px;
+        line-height: 21px;
+        text-transform: none;
+      }
+      & > .search.input {
+        width: calc(100% - 16px);
+        margin: 8px;
+      }
+      & > .search.input > input {
+        background: var(--color-body);
+        box-shadow: none;
+        font-size: 14px;
+      }
+      & > .search.input > .icon {
+        left: 0;
+        right: auto;
+      }
+      & > .item {
+        text-decoration: none;
+        font-weight: 400;
+      }
+      & > .item.active {
+        font-weight: 600;
+        background: var(--github-control-transparent-bgColor-hover);
+      }
+    }
+    & .actions-filter-check {
+      flex: 0 0 16px;
+    }
+    & .item:not(.active) > .actions-filter-check {
+      visibility: hidden;
+    }
+  }
+  .actions-menu .item:focus-visible,
+  .actions-run-options:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: -2px;
+  }
+  .run-list > .flex-item:hover {
+    background: var(--github-control-transparent-bgColor-hover);
+  }
+  .run-list .flex-item-title > a:hover {
+    color: var(--color-primary);
+    text-decoration: none;
+  }
+  .run-list details[open] > .actions-run-options {
+    background: var(--github-control-transparent-bgColor-active);
+  }
+  .run-list {
+    margin: 0;
+    border-radius: 0 0 var(--border-radius) var(--border-radius);
+  }
+  .run-list > .flex-item {
+    display: grid;
+    grid-template-columns: 16px minmax(0, 1fr) minmax(250px, 45%);
+    gap: 8px;
+    min-height: 78px;
+    padding: 16px;
+  }
+  .run-list > .flex-item[hidden] {
+    display: none;
+  }
+  .run-list .flex-item-leading {
+    margin-top: 4px;
+  }
+  .run-list .flex-item-main {
+    min-width: 0;
+    gap: 4px;
+  }
+  .run-list .flex-item-title {
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: 600;
+    min-width: 0;
+  }
+  .run-list .flex-item-title > a {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .run-list .flex-item-body {
+    font-size: 12px;
+    line-height: 18px;
+    overflow-wrap: anywhere;
+  }
+  .run-list .flex-item-body a {
+    text-decoration: underline;
+  }
+  .run-list .flex-item-trailing {
+    width: 100%;
+    max-width: none;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 156px 28px;
+    gap: 8px;
+    margin: 0;
+    min-width: 0;
+    align-items: center;
+  }
+  .run-list .run-list-ref {
+    justify-self: start;
+    min-width: 0;
+    max-width: 100%;
+    font-size: 12px;
+    line-height: 18px;
+    border: 0;
+  }
+  .run-list-item-right {
+    font-size: 12px;
+    line-height: 18px;
+  }
+  .run-list-meta {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .actions-run-options {
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    border: 0;
+    border-radius: var(--border-radius);
+    color: var(--color-text-light-1);
+  }
+  .actions-run-options:hover {
+    background: var(--github-control-transparent-bgColor-hover);
+  }
+  .actions-main > .ui.info.message {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0;
+    border-radius: 0;
+    box-shadow: none;
+    padding: 16px;
+    font-size: 14px;
+  }
+  #workflow_dispatch_dropdown > .menu {
+    width: 360px;
+    max-width: calc(100vw - 32px);
+    left: auto;
+    right: 0;
+  }
+  #workflow_dispatch_dropdown .message {
+    padding: 16px;
+    margin: 0;
+    background: var(--color-menu);
+  }
+  .actions-search-empty {
+    text-align: center;
+    padding: 32px;
+    color: var(--color-text-light-1);
+  }
+  .actions-search-empty[hidden] {
+    display: none;
+  }
+  @media (max-width: 1200px) {
+    --actions-sidebar-width: 256px;
+    .run-list > .flex-item {
+      grid-template-columns: 16px minmax(0, 1fr) 210px;
+    }
+    .run-list .flex-item-trailing {
+      grid-template-columns: minmax(0, 1fr) 28px;
+    }
+    .run-list .run-list-ref {
+      grid-column: 1;
+    }
+    .run-list-item-right {
+      grid-column: 1;
+    }
+    .run-list .flex-item-trailing > details {
+      grid-column: 2;
+      grid-row: 1 / 3;
+    }
+  }
+  @media (max-width: 767.98px) {
+    .actions-filters {
+      position: relative;
+    }
+    .actions-filters > .ui.dropdown {
+      position: static;
+    }
+    .actions-filters > .ui.dropdown > .menu {
+      top: 100%;
+      left: 0 !important;
+      right: auto !important;
+      margin-top: 4px;
+    }
+
+    .actions-layout {
+      display: block;
+    }
+    .actions-sidebar {
+      border-right: 0;
+      border-bottom: 1px solid var(--color-light-border);
+      padding: 8px;
+    }
+    .actions-menu.ui.menu {
+      display: flex;
+      flex-direction: row;
+      overflow: auto;
+    }
+    .actions-menu .item {
+      flex: 0 0 auto;
+    }
+    .actions-workflow-divider,
+    .actions-menu.ui.menu .item.active::before {
+      display: none !important;
+    }
+    .actions-main {
+      padding: 16px;
+    }
+    .actions-heading {
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .actions-search {
+      width: 100%;
+    }
+    .actions-filters.ui.menu {
+      flex-wrap: wrap;
+      padding: 8px;
+      gap: 0;
+    }
+    .actions-run-count {
+      flex-basis: 100%;
+      padding: 4px 8px;
+    }
+    .run-list > .flex-item {
+      grid-template-columns: 16px minmax(0, 1fr);
+      padding: 12px;
+    }
+    .run-list .flex-item-title > a {
+      white-space: normal;
+    }
+    .run-list .flex-item-trailing {
+      grid-column: 2;
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+      text-align: left;
+      flex-wrap: wrap;
+    }
+    .run-list-item-right {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .run-list .flex-item-trailing > details {
+      margin-left: auto;
+    }
+    .actions-main > .ui.info.message {
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+  }
+}

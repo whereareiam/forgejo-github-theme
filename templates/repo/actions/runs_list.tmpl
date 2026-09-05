@@ -1,0 +1,66 @@
+<div class="flex-list run-list">
+	{{if not .Runs}}
+	<div class="empty-placeholder">
+		{{svg "octicon-no-entry" 48}}
+		<h2>{{if $.IsFiltered}}{{ctx.Locale.Tr "actions.runs.no_results"}}{{else}}{{ctx.Locale.Tr "actions.runs.no_runs"}}{{end}}</h2>
+	</div>
+	{{end}}
+	{{range .Runs}}
+		<div class="flex-item tw-items-center">
+			<div class="flex-item-leading">
+				{{template "repo/actions/status" (dict "status" .Status.String)}}
+			</div>
+			<div class="flex-item-main">
+				<div class="flex-item-title">
+					<a title="{{.Title}}" href="{{if .Link}}{{.Link}}{{else}}{{$.Link}}/{{.Index}}{{end}}#summary">
+						{{if .Title}}{{.Title}}{{else}}{{ctx.Locale.Tr "actions.runs.empty_commit_message"}}{{end}}
+					</a>
+					{{if .Prioritize}}<span class="ui label">{{ctx.Locale.Tr "actions.runs.prioritized_run"}}</span>{{end}}
+				</div>
+				<div class="flex-item-body">
+					<b>{{if not $.CurWorkflow}}{{.WorkflowID}} {{end}}#{{.Index}}</b> -
+					{{if .IsScheduledRun -}}
+						{{ctx.Locale.Tr "actions.runs.scheduled_description" .CommitLink (ShortSha .CommitSHA)}}
+					{{else if .IsDispatchedRun -}}
+						{{ctx.Locale.Tr "actions.runs.workflow_dispatch_description" .CommitLink (ShortSha .CommitSHA) .TriggerUser.HomeLink .TriggerUser.GetDisplayName}}
+					{{else -}}
+						{{ctx.Locale.Tr "actions.runs.on_push_description" .CommitLink (ShortSha .CommitSHA) .TriggerUser.HomeLink .TriggerUser.GetDisplayName}}
+					{{end -}}
+				</div>
+			</div>
+			<div class="flex-item-trailing">
+				{{if .IsRefDeleted}}
+					<span class="ui label run-list-ref gt-ellipsis tw-line-through" data-tooltip-content="{{.PrettyRef}}">{{.PrettyRef}}</span>
+				{{else}}
+					<a class="ui label run-list-ref gt-ellipsis" href="{{.RefLink}}" data-tooltip-content="{{.PrettyRef}}">{{.PrettyRef}}</a>
+				{{end}}
+				<div class="run-list-item-right">
+					<div class="run-list-meta">{{svg "octicon-calendar" 16}}{{DateUtils.TimeSince .Updated}}</div>
+					<div class="run-list-meta">{{svg "octicon-stopwatch" 16}}{{.Duration}}</div>
+				</div>
+				<details class="dropdown dir-rtl">
+					<summary class="actions-run-options" aria-label="{{ctx.Locale.Tr "actions.runs.options"}}">
+						{{svg "octicon-kebab-horizontal" 16}}
+					</summary>
+					<form id="de_prioritize_{{.Index}}" method="post">
+						<input type="hidden" name="workflow" value="{{$.CurWorkflow}}">
+						<input type="hidden" name="actor" value="{{$.CurActor}}">
+						<input type="hidden" name="status" value="{{$.CurStatus}}">
+						<input type="hidden" name="page" value="{{$.Page.Paginater.Current}}">
+					</form>
+					<div class="content">
+						<ul>
+							<li>
+								<button form="de_prioritize_{{.Index}}" formaction="{{.Link}}/prioritize" {{if or (not ($.Permission.CanWrite $.UnitTypeActions)) .Prioritize .Status.IsDone}}disabled{{end}}>{{ctx.Locale.Tr "actions.runs.prioritize_run"}}</button>
+							</li>
+							<li>
+								<button form="de_prioritize_{{.Index}}" formaction="{{.Link}}/deprioritize" {{if or (not ($.Permission.CanWrite $.UnitTypeActions)) (not .Prioritize) .Status.IsDone}}disabled{{end}}>{{ctx.Locale.Tr "actions.runs.deprioritize_run"}}</button>
+							</li>
+						</ul>
+					</div>
+				</details>
+			</div>
+		</div>
+	{{end}}
+</div>
+{{template "base/paginate" .}}
