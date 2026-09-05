@@ -75,7 +75,7 @@ so this template should be kept as small as possible, DO NOT put large component
 	</span>
 {{- end -}}
 {{- if $commit -}}
-	<span class="gitea-github-theme-sha">{{- ShortSha $commit.ID.String -}}</span>
+	<span class="gitea-github-theme-sha">{{- if $.ShortHash}}{{$.ShortHash}}{{else}}{{ShortSha $commit.ID.String}}{{end -}}</span>
 </a>
 {{- end -}}
 

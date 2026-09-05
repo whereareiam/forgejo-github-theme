@@ -1,6 +1,5 @@
 {{template "base/head" .}}
-<div role="main" aria-label="{{.Title}}" class="page-content repository view issue pull github-conversation{{if eq .Issue.PosterID .SignedUserID}} own-conversation{{end}}{{if not .Issue.IsPull}} github-issue-conversation{{end}}">
-	{{if .Issue.IsPull}}{{template "repo/header" .}}{{end}}
+<div role="main" aria-label="{{.Title}}" class="page-content repository view issue pull github-conversation{{if eq .Issue.PosterID .SignedUserID}} own-conversation{{end}}{{if not .Issue.IsPull}} github-issue-conversation{{else}} github-pull-review{{end}}">
 	<div class="ui container">
 		{{template "repo/issue/view_title" .}}
 		{{if .Issue.IsPull}}
@@ -11,4 +10,5 @@
 </div>
 <template id="conversation-upload-icon">{{svg "octicon-paperclip" 16}}</template>
 <script src="{{AssetUrlPrefix}}/js/issue-conversation.js" defer></script>
+{{if .Issue.IsPull}}<script src="{{AssetUrlPrefix}}/js/pull-review.js" defer></script>{{end}}
 {{template "base/footer" .}}

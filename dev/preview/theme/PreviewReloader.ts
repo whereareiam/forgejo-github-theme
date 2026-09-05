@@ -45,7 +45,7 @@ export class PreviewReloader {
         writeFileSync(
           file,
           template.replace(
-            /(src="{{AssetUrlPrefix}}\/js\/[^"?]+\.js)(?:\?preview=[^"]*)?/g,
+            /((?:src="{{AssetUrlPrefix}}\/js\/[^"?]+\.js|href="{{AssetUrlPrefix}}\/css\/[^"?]+\.css))(?:\?preview=[^"]*)?/g,
             `$1?preview=${this.revision}`
           )
         );

@@ -1,0 +1,85 @@
+/* PR date groups build on the global commit-row component. */
+.github-pull-review .pull-commit-group {
+  position: relative;
+  margin-left: 16px;
+  padding: 0 0 16px 24px;
+  &::before {
+    content: "";
+    position: absolute;
+    top: 32px;
+    bottom: 8px;
+    left: -1px;
+    width: 2px;
+    background: var(--color-secondary);
+  }
+  & > h3 {
+    margin: 0 0 8px;
+    padding: 4px 0;
+    font-size: 14px;
+    line-height: 21px;
+    font-weight: 400;
+    color: var(--color-text-light-1);
+    & > svg {
+      position: absolute;
+      top: 6px;
+      left: -8px;
+    }
+  }
+  & > ul {
+    border: 1px solid var(--color-secondary);
+    border-radius: var(--border-radius);
+    & > li.gitea-github-theme-commit {
+      min-width: 0;
+      min-height: 64px;
+      grid-template-columns: minmax(0, 1fr) max-content max-content;
+      grid-template-areas: "primary metadata actions" "secondary metadata actions";
+      gap: 4px 8px;
+      & .message {
+        min-width: 0;
+      }
+      & .commit-summary {
+        font-size: 16px;
+        line-height: 24px;
+        font-weight: 600;
+        overflow-wrap: anywhere;
+      }
+      & .metadata {
+        line-height: 18px;
+        flex-wrap: wrap;
+      }
+      & .metadata img.ui.avatar {
+        width: 16px;
+        height: 16px;
+        margin: 0;
+      }
+      & .extra a.commit-id-short {
+        border: 0;
+        padding: 0;
+        background: transparent;
+        color: var(--color-text-light-1);
+        font-size: 12px;
+      }
+      & .actions svg {
+        width: 16px;
+        height: 16px;
+      }
+    }
+  }
+}
+@media (max-width: 767.98px) {
+  .github-pull-review .pull-commit-group {
+    margin-left: 8px;
+    padding-left: 16px;
+    & > ul > li.gitea-github-theme-commit {
+      grid-template-areas: "primary primary" "secondary secondary" "metadata actions";
+      grid-template-columns: minmax(0, 1fr) auto;
+      padding: 8px;
+      & .extra {
+        justify-content: flex-start;
+      }
+      & .actions {
+        justify-content: flex-end;
+      }
+    }
+  }
+}
