@@ -1,4 +1,4 @@
-import { css, otherThemeVars, themeVars } from "@lutinglt/gitea-github-theme/core";
+import { css, themeVars } from "@lutinglt/gitea-github-theme/core";
 
 // Shared by commit and pull-request diffs; Forgejo still owns the Vue tree.
 export default css`
@@ -49,107 +49,6 @@ export default css`
     margin: 0;
     overflow: visible;
     position: static;
-  }
-  .repository #diff-file-tree .diff-file-tree-items {
-    width: 100%;
-    overflow: visible;
-    padding: 0;
-  }
-  .repository #diff-file-tree .sub-items {
-    position: relative;
-  }
-  .repository #diff-file-tree .sub-items::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 2px;
-    border-left: 1px solid transparent;
-    pointer-events: none;
-  }
-  .repository #diff-file-tree:hover .sub-items::before,
-  .repository #diff-file-tree:focus-within .sub-items::before {
-    border-color: ${themeVars.color.light.border};
-  }
-  .repository #diff-file-tree .sub-items {
-    margin-left: 8px;
-    gap: 0;
-    padding-left: 0;
-    border: 0;
-  }
-  .repository #diff-file-tree .item-directory,
-  .repository #diff-file-tree .item-file.item-file {
-    display: flex;
-    align-items: center;
-    position: relative;
-    gap: 8px;
-    height: 32px;
-    min-height: 32px;
-    margin: 0;
-    padding: 0 4px;
-    border-radius: ${otherThemeVars.border.radius};
-    font-size: 14px;
-    line-height: 20px;
-    color: ${themeVars.color.text.self};
-    text-decoration: none;
-    cursor: pointer;
-  }
-  .repository #diff-file-tree .item-file.item-file {
-    padding-left: 24px;
-  }
-  .repository #diff-file-tree .item-directory:hover,
-  .repository #diff-file-tree .item-file.item-file:hover {
-    background: ${themeVars.github.control.transparent.bgColor.hover};
-    box-shadow: none;
-  }
-  .repository #diff-file-tree :is(.item-file, .item-directory):focus-visible {
-    outline: 2px solid ${themeVars.github.fgColor.accent};
-    outline-offset: -2px;
-  }
-  .repository #diff-file-tree .item-file.selected {
-    background: ${themeVars.github.control.transparent.bgColor.active};
-  }
-  .repository #diff-file-tree .item-file.selected::after {
-    left: -8px;
-    height: 24px;
-    top: 4px;
-  }
-  .repository #diff-file-tree .gt-ellipsis {
-    min-width: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-  .repository #diff-file-tree .item-directory > svg:first-child {
-    width: 12px;
-    height: 12px;
-    flex: 0 0 12px;
-    min-width: 12px;
-    min-height: 12px;
-    color: ${themeVars.color.text.light.num1};
-  }
-  .repository #diff-file-tree .item-directory > svg:nth-child(2) {
-    display: none;
-  }
-  .repository #diff-file-tree .item-directory[aria-expanded="false"] > svg:nth-child(2) {
-    display: block;
-    color: ${themeVars.color.text.light.num1} !important;
-  }
-  .repository #diff-file-tree .item-directory[aria-expanded="false"] > .diff-tree-directory-icon {
-    display: none;
-  }
-  .repository #diff-file-tree .diff-tree-directory-icon {
-    color: ${themeVars.color.text.light.num1} !important;
-  }
-  .repository #diff-file-tree .item-file > svg:not(.diff-tree-status) {
-    display: none;
-  }
-  .repository #diff-file-tree .item-file > svg.diff-tree-status {
-    order: -1;
-    flex: 0 0 16px;
-  }
-  .repository #diff-file-tree [data-tree-filtered] {
-    display: none !important;
   }
   .repository #diff-file-boxes > [data-tree-filtered] {
     display: none !important;

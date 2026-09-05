@@ -2,7 +2,7 @@
 {{template "base/head" .}}
 {{$showSidebar := and (not .TreeNames) (not .HideRepoInfo) (not .IsBlame)}}
 <div role="main" aria-label="{{.Title}}" class="page-content repository file list {{if .IsBlame}}blame{{end}}">
-	{{template "repo/header" .}}
+	{{if not .TreeNames}}{{template "repo/header" .}}{{end}}
 	<div class="ui container {{if or .TreeNames .IsBlame}}fluid padded{{end}}">
 		{{template "base/alert" .}}
 
@@ -28,8 +28,12 @@
 			{{template "repo/code/fork_sync_message" .}}
 		{{end}}
 
-		<div class="{{if $showSidebar}}repo-grid-filelist-sidebar{{else}}repo-grid-filelist-only{{end}}">
-			<div class="repo-home-filelist">
+		<div {{if .TreeNames}}id="repo-source-browser"{{end}} class="{{if $showSidebar}}repo-grid-filelist-sidebar{{else if .TreeNames}}repo-source-browser{{else}}repo-grid-filelist-only{{end}}">
+            {{if .TreeNames}}
+                {{template "repo/source_tree" .}}
+                <div class="resizable-divider not-mobile" role="separator" aria-label="Resize file tree" aria-orientation="vertical" aria-valuemin="200" aria-valuenow="320" aria-valuemax="480" data-resize-container="#repo-source-browser" data-resize-content-minimum-width="320" data-resize-default-width="320" data-resize-maximum-width="480" data-resize-minimum-width="200" data-resize-storage-key="repo_file_tree_width" data-resize-variable="--repo-file-tree-width" tabindex="0"></div>
+            {{end}}
+			<div class="repo-home-filelist{{if .TreeNames}} repo-source-main{{end}}">
 				{{template "repo/view_content" .}}
 			</div>
 			{{if $showSidebar}}

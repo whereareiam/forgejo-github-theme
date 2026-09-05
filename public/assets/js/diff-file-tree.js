@@ -97,9 +97,9 @@
             group.toggleAttribute("data-tree-filtered", !visible);
             visit(group, `${path}/`, level + 1);
           }
-          if (!row.querySelector(".diff-tree-directory-icon")) {
+          if (!row.querySelector(".tree-directory-icon")) {
             const icon = document.getElementById("diff-tree-icon-directory").content.firstElementChild.cloneNode(true);
-            icon.classList.add("diff-tree-directory-icon");
+            icon.classList.add("tree-directory-icon");
             row.insertBefore(icon, row.querySelector("span"));
           }
           // Reveal matching descendants when searching, including Vue's lazy subtrees.
@@ -112,7 +112,7 @@
           row.setAttribute("aria-selected", row.classList.contains("selected"));
           row.tabIndex = -1;
           if (file) row.title = file.Name;
-          if (!row.querySelector(".diff-tree-status")) {
+          if (!row.querySelector(".tree-file-icon")) {
             const kind = row.querySelector(".octicon-diff-added")
               ? "added"
               : row.querySelector(".octicon-diff-removed")
@@ -120,7 +120,7 @@
                 : "diff";
             const icon = document.getElementById(`diff-tree-icon-${kind}`)?.content.firstElementChild.cloneNode(true);
             if (icon) {
-              icon.classList.add("diff-tree-status");
+              icon.classList.add("tree-file-icon");
               row.prepend(icon);
             }
           }
@@ -168,32 +168,6 @@
     else excludedExtensions.add(checkbox.value);
     revealMatches = true;
     schedule();
-  });
-  tree.addEventListener("keydown", event => {
-    const row = event.target.closest('[role="treeitem"]');
-    if (!row) return;
-    const rows = visibleRows();
-    const index = rows.indexOf(row);
-    let target;
-    if (event.key === "ArrowDown") target = rows[Math.min(index + 1, rows.length - 1)];
-    if (event.key === "ArrowUp") target = rows[Math.max(index - 1, 0)];
-    if (event.key === "Home") target = rows[0];
-    if (event.key === "End") target = rows.at(-1);
-    if (event.key === "ArrowRight" && row.matches(".item-directory")) {
-      if (row.getAttribute("aria-expanded") === "false") row.click();
-      else target = rows[index + 1];
-    }
-    if (event.key === "ArrowLeft") {
-      if (row.matches(".item-directory") && row.getAttribute("aria-expanded") === "true") row.click();
-      else target = row.parentElement.closest(".sub-items")?.previousElementSibling;
-    }
-    if ((event.key === "Enter" || event.key === " ") && row.matches(".item-directory")) row.click();
-    if (target || ["ArrowLeft", "ArrowRight", " "].includes(event.key)) event.preventDefault();
-    if (target) {
-      row.tabIndex = -1;
-      target.tabIndex = 0;
-      target.focus();
-    }
   });
   tree.addEventListener("click", schedule);
   new MutationObserver(schedule).observe(tree, {
