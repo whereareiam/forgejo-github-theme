@@ -139,4 +139,97 @@ const checkBoxAndRadio = css`
   }
 `;
 
-export default cssCombine(input, checkBoxAndRadio);
+// Opt-in search group for native Forgejo query/mode/submit controls.
+const searchControl = css`
+  .ui.form.theme-search-control > .ui.action.input {
+    display: flex;
+    align-items: stretch;
+    height: 32px;
+    min-width: 0;
+    border: 1px solid ${themeVars.color.light.border};
+    border-radius: ${otherThemeVars.border.radius};
+    background: ${themeVars.color.body};
+    box-shadow: none;
+    &:has(> input:focus-visible) {
+      outline: 2px solid ${themeVars.github.fgColor.accent};
+      outline-offset: -1px;
+    }
+    & > input[type="search"] {
+      min-width: 0;
+      width: 0;
+      flex: 1 1 0;
+      height: 30px;
+      padding: 5px 12px;
+      font-size: 14px;
+      line-height: 20px;
+      background: transparent;
+      border: 0;
+      border-radius: inherit;
+      box-shadow: none;
+      outline: none;
+    }
+    & > .ui.selection.dropdown,
+    & > .ui.button {
+      flex: 0 0 auto;
+      height: 30px;
+      min-height: 30px;
+      margin: 0;
+      border: 0;
+      border-left: 1px solid ${themeVars.color.light.border};
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+      color: ${themeVars.color.text.light.num1};
+      &:hover {
+        background: ${themeVars.color.hover.self};
+      }
+      &:focus-visible {
+        outline: 2px solid ${themeVars.github.fgColor.accent};
+        outline-offset: -2px;
+      }
+    }
+    & > .ui.selection.dropdown {
+      display: flex;
+      align-items: center;
+      width: auto;
+      min-width: 88px;
+      padding: 5px 28px 5px 8px;
+      font-size: 12px;
+      line-height: 20px;
+      & > .text {
+        margin: 0;
+        line-height: 20px;
+      }
+      & > .dropdown.icon {
+        top: 50%;
+        transform: translateY(-50%);
+        right: 8px;
+        padding: 0;
+        margin: 0;
+        width: 16px;
+        height: 16px;
+      }
+      & > .menu {
+        left: auto;
+        right: 0;
+        width: 200px;
+        min-width: 200px;
+        margin-top: 4px;
+      }
+    }
+    & > .ui.button {
+      display: grid;
+      place-items: center;
+      width: 32px;
+      padding: 0 !important;
+      border-radius: 0 ${otherThemeVars.border.radius} ${otherThemeVars.border.radius} 0;
+      & > svg {
+        width: 16px;
+        height: 16px;
+        margin: 0;
+      }
+    }
+  }
+`;
+
+export default cssCombine(input, checkBoxAndRadio, searchControl);

@@ -228,6 +228,7 @@ const repositoryHome = css`
       border-bottom: 1px solid ${themeVars.color.light.border};
     }
     .page-content.repository.file.list .repo-button-row {
+      position: relative;
       flex-wrap: nowrap;
       align-items: center;
     }
@@ -245,6 +246,15 @@ const repositoryHome = css`
     .page-content.repository.file.list .repo-button-row .repo-find-file,
     .page-content.repository.file.list .repo-button-row .repo-add-file {
       display: none;
+    }
+    .page-content.repository.file.list .repo-code-dropdown {
+      position: static;
+    }
+    .page-content.repository.file.list .repo-button-row .repo-code-dropdown > .content {
+      left: 0;
+      right: 0;
+      top: 100%;
+      width: auto;
     }
     .page-content.repository.file.list .repo-code-dropdown > summary > span {
       display: none;
