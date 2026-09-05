@@ -20,8 +20,9 @@
 import { cssCombine } from "@lutinglt/gitea-github-theme/core";
 import issue from "./issue";
 import issueComment from "./issue_comment";
+import issueOverview from "./issue_overview";
 import issueList from "./issue_list";
 import issueSidebar from "./issue_sidebar";
 import issueTimeline from "./issue_timeline";
 
-export default cssCombine(issue, issueComment, issueList, issueSidebar, issueTimeline);
+export default cssCombine(issue, issueComment, issueList, issueOverview, issueSidebar, issueTimeline);

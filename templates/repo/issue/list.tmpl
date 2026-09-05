@@ -1,0 +1,58 @@
+{{template "base/head" .}}
+<div role="main" aria-label="{{.Title}}" class="page-content repository issue-list{{if .PageIsIssueList}} github-issues{{end}}">
+	{{if .PageIsIssueList}}{{template "repo/issue/sidebar" .}}{{else}}{{template "repo/header" .}}{{end}}
+	<div class="ui container issue-list-main">
+	{{template "base/alert" .}}
+
+	{{if .PinnedIssues}}
+		<div id="issue-pins" {{if .IsRepoAdmin}}data-is-repo-admin{{end}}>
+			{{range .PinnedIssues}}
+				<div class="issue-card tw-break-anywhere {{if $.IsRepoAdmin}}tw-cursor-grab{{end}}" data-move-url="{{$.Link}}/move_pin" data-issue-id="{{.ID}}">
+					{{template "repo/issue/card" (dict "Issue" . "Page" $ "isPinnedIssueCard" true)}}
+				</div>
+			{{end}}
+		</div>
+	{{end}}
+
+		<div class="list-header list-header-issues">
+			{{if not .PageIsIssueList}}{{template "repo/issue/navbar" .}}{{else}}<div class="issue-list-title"><button type="button" class="theme-icon-button" data-issue-sidebar-toggle aria-expanded="false" aria-label="Expand sidebar">{{svg "octicon-sidebar-expand" 16}}</button><h1>{{if eq .ViewType "assigned"}}Assigned to me{{else if eq .ViewType "created_by"}}Created by me{{else if eq .ViewType "mentioned"}}Mentioned{{else}}All issues{{end}}</h1></div>{{end}}
+			{{if not .PageIsIssueList}}{{template "repo/issue/search" .}}{{end}}
+			{{if not .Repository.IsArchived}}
+				{{if .PageIsIssueList}}
+					<a class="primary button issue-list-new" href="{{.RepoLink}}/issues/new{{if .NewIssueChooseTemplate}}/choose{{end}}">{{ctx.Locale.Tr "repo.issues.new"}}</a>
+				{{else}}
+					<a class="primary button new-pr-button issue-list-new{{if not .PullRequestCtx.Allowed}} disabled{{end}}" href="{{if .PullRequestCtx.Allowed}}{{.Repository.Link}}/compare/{{.Repository.DefaultBranch | PathEscapeSegments}}...{{if ne .Repository.Owner.Name .PullRequestCtx.BaseRepo.Owner.Name}}{{PathEscape .Repository.Owner.Name}}:{{end}}{{.Repository.DefaultBranch | PathEscapeSegments}}{{end}}">{{ctx.Locale.Tr "repo.pulls.new"}}</a>
+				{{end}}
+			{{else}}
+				{{if not .PageIsIssueList}}
+					<a class="primary button issue-list-new{{if not .PullRequestCtx.Allowed}} disabled{{end}}" href="{{if .PullRequestCtx.Allowed}}{{.PullRequestCtx.BaseRepo.Link}}/compare/{{.PullRequestCtx.BaseRepo.DefaultBranch | PathEscapeSegments}}...{{if ne .Repository.Owner.Name .PullRequestCtx.BaseRepo.Owner.Name}}{{PathEscape .Repository.Owner.Name}}:{{end}}{{.Repository.DefaultBranch | PathEscapeSegments}}{{end}}">{{ctx.Locale.Tr "action.compare_commits_general"}}</a>
+				{{end}}
+			{{end}}
+		</div>
+
+        {{if .PageIsIssueList}}{{template "repo/issue/search" .}}{{end}}
+
+		{{template "repo/issue/filters" .}}
+
+		<div id="issue-actions" class="issue-list-toolbar tw-hidden">
+			<div class="issue-list-toolbar-left">
+				{{template "repo/issue/openclose" .}}
+				<!-- Total Tracked Time -->
+				{{if .TotalTrackedTime}}
+					<div class="ui compact tiny secondary menu">
+						<span class="item" data-tooltip-content='{{ctx.Locale.Tr "tracked_time_summary"}}'>
+							{{svg "octicon-clock"}}
+							{{.TotalTrackedTime | Sec2Time}}
+						</span>
+					</div>
+				{{end}}
+			</div>
+			<div class="issue-list-toolbar-right">
+				{{template "repo/issue/filter_actions" .}}
+			</div>
+		</div>
+		{{template "shared/issuelist" dict "." . "listType" "repo"}}
+	</div>
+</div>
+<script src="{{AssetUrlPrefix}}/js/issue-list.js" defer></script>
+{{template "base/footer" .}}
