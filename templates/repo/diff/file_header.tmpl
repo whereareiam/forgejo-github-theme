@@ -1,0 +1,70 @@
+{{$file := .file}}{{$ := .root}}{{$isExpandable := .isExpandable}}{{$isReviewFile := .isReviewFile}}{{$showFileViewToggle := .showFileViewToggle}}
+						<div class="diff-file-header sticky-2nd-row ui top attached header tw-font-normal tw-flex tw-items-center tw-justify-between tw-flex-wrap">
+							<div class="diff-file-name tw-flex tw-flex-1 tw-items-center tw-gap-1 tw-flex-wrap">
+								<button aria-label="Collapse file" aria-expanded="true" class="fold-file btn interact-bg tw-p-1{{if not $isExpandable}} tw-invisible{{end}}">
+									{{if $file.ShouldBeHidden}}
+										{{svg "octicon-chevron-right" 18}}
+									{{else}}
+										{{svg "octicon-chevron-down" 18}}
+									{{end}}
+								</button>
+								<div class="file tw-flex tw-items-center tw-font-mono tw-flex-1"><h3 class="diff-file-heading"><a class="muted file-link" title="{{if $file.IsRenamed}}{{$file.OldName}} → {{end}}{{$file.Name}}" href="#diff-{{$file.NameHash}}">{{if $file.IsRenamed}}{{$file.OldName}} → {{end}}{{$file.Name}}</a></h3>
+									{{if $file.IsLFSFile}} ({{ctx.Locale.Tr "repo.stored_lfs"}}){{end}}
+										<button class="btn interact-fg tw-p-2" data-clipboard-text="{{$file.Name}}" data-tooltip-content="{{ctx.Locale.Tr "copy_path"}}">{{svg "octicon-copy" 14}}</button>
+                                    {{if eq $file.Type 1}}{{svg "octicon-file-added" 16 "diff-file-status text green"}}{{else if eq $file.Type 3}}{{svg "octicon-file-removed" 16 "diff-file-status text red"}}{{else if not (or $file.IsBin $file.IsIncomplete $file.IsSubmodule)}}<button type="button" class="btn interact-bg diff-expand-file" aria-label="Expand all lines: {{$file.Name}}" title="Expand all lines">{{svg "octicon-unfold" 16}}</button>{{end}}
+									{{if $file.IsGenerated}}
+										<span class="ui label">{{ctx.Locale.Tr "repo.diff.generated"}}</span>
+									{{end}}
+									{{if $file.IsVendored}}
+										<span class="ui label">{{ctx.Locale.Tr "repo.diff.vendored"}}</span>
+									{{end}}
+									{{if and $file.Mode $file.OldMode}}
+										{{$old := ctx.Locale.Tr ($file.ModeTranslationKey $file.OldMode)}}
+										{{$new := ctx.Locale.Tr ($file.ModeTranslationKey $file.Mode)}}
+										<span class="tw-mx-2 tw-font-mono tw-whitespace-nowrap">{{ctx.Locale.Tr "git.filemode.changed_filemode" $old $new}}</span>
+									{{else if and $file.Mode (ne $file.Mode "100644")}}
+										<span class="tw-mx-2 tw-font-mono tw-whitespace-nowrap">{{ctx.Locale.Tr ($file.ModeTranslationKey $file.Mode)}}</span>
+									{{end}}
+								</div>
+							</div>
+							<div class="diff-file-header-actions tw-flex tw-items-center button-row tw-flex-wrap">
+                                {{if not $file.IsBin}}{{template "repo/diff/change_summary" dict "Addition" $file.Addition "Deletion" $file.Deletion}}{{else}}<span>{{ctx.Locale.Tr "repo.diff.bin"}}</span>{{end}}
+								{{if $showFileViewToggle}}
+									<div class="ui compact icon buttons">
+										<button class="ui tiny basic button file-view-toggle" data-toggle-selector="#diff-source-{{$file.NameHash}}" data-tooltip-content="{{ctx.Locale.Tr "repo.file_view_source"}}">{{svg "octicon-code"}}</button>
+										<button class="ui tiny basic button file-view-toggle active" data-toggle-selector="#diff-rendered-{{$file.NameHash}}" data-tooltip-content="{{ctx.Locale.Tr "repo.file_view_rendered"}}">{{svg "octicon-file"}}</button>
+									</div>
+								{{end}}
+								{{if $file.IsProtected}}
+									<span class="ui basic label">{{ctx.Locale.Tr "repo.diff.protected"}}</span>
+								{{end}}
+								{{if and $isReviewFile $file.HasChangedSinceLastReview}}
+									<span class="changed-since-last-review unselectable not-mobile">{{ctx.Locale.Tr "repo.pulls.has_changed_since_last_review"}}</span>
+								{{end}}
+                                <details class="theme-menu diff-file-menu">
+                                    <summary class="theme-icon-button" aria-label="More options">{{svg "octicon-kebab-horizontal" 16}}</summary>
+                                    <div class="theme-menu-popover">
+                                        <button type="button" data-clipboard-text="{{$file.Name}}">{{ctx.Locale.Tr "copy_path"}}</button>
+								{{if not (or $file.IsIncomplete $file.IsBin $file.IsSubmodule)}}
+									<button class="unescape-button">{{ctx.Locale.Tr "repo.unescape_control_characters"}}</button>
+									<button class="escape-button tw-hidden">{{ctx.Locale.Tr "repo.escape_control_characters"}}</button>
+								{{end}}
+								{{if and (not $file.IsSubmodule) (not $.PageIsWiki)}}
+									{{if $file.IsDeleted}}
+										<a class="diff-file-action" rel="nofollow" href="{{$.BeforeSourcePath}}/{{PathEscapeSegments $file.Name}}">{{ctx.Locale.Tr "repo.diff.view_file"}}</a>
+									{{else}}
+										<a class="diff-file-action" rel="nofollow" href="{{$.SourcePath}}/{{PathEscapeSegments $file.Name}}">{{ctx.Locale.Tr "repo.diff.view_file"}}</a>
+										{{if and $.HeadBranchIsEditable (not $file.IsLFSFile)}}
+											<a class="diff-file-action" rel="nofollow" href="{{$.SourceRepoLink}}/_edit/{{PathEscapeSegments $.HeadBranch}}/{{PathEscapeSegments $file.Name}}">{{ctx.Locale.Tr "repo.editor.edit_this_file"}}</a>
+										{{end}}
+									{{end}}
+								{{end}}
+                                    </div>
+                                </details>
+								{{if $isReviewFile}}
+									<label data-link="{{$.Issue.Link}}/viewed-files" data-headcommit="{{$.AfterCommitID}}" class="viewed-file-form unselectable{{if $file.IsViewed}} viewed-file-checked-form{{end}}">
+										<input type="checkbox" name="{{$file.GetDiffFileName}}" autocomplete="off"{{if $file.IsViewed}} checked{{end}}> {{ctx.Locale.Tr "repo.pulls.has_viewed_file"}}
+									</label>
+								{{end}}
+							</div>
+						</div>

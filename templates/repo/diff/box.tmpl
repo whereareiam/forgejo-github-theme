@@ -1,4 +1,4 @@
-{{$showFileTree := (and (not .DiffNotAvailable) (gt .Diff.NumFiles 1))}}
+{{$showFileTree := (and (not .DiffNotAvailable) (gt .Diff.NumFiles 0))}}
 <div>
 	{{if not .DiffNotAvailable}}
 		{{if and .IsShowingOnlySingleCommit .PageIsPullFiles}}
@@ -84,6 +84,10 @@
 								new MutationObserver(() => diffTreeBtn.classList.toggle('active', !document.getElementById('diff-file-tree').classList.contains('tw-hidden'))).observe(document.getElementById('diff-file-tree'), {attributes: true, attributeFilter: ['class']});
 							</script>
 						{{end}}
+                        <div class="diff-code-search">
+                            <label class="diff-search-field">{{svg "octicon-search" 16}}<input type="search" id="diff-code-search" placeholder="Search within code" aria-label="Search within code" autocomplete="off"></label>
+                            <div class="diff-search-navigation" hidden><span id="diff-search-count" role="status"></span><button class="btn interact-bg" type="button" data-search-direction="-1" aria-label="Previous match">{{svg "octicon-chevron-up" 16}}</button><button class="btn interact-bg" type="button" data-search-direction="1" aria-label="Next match">{{svg "octicon-chevron-down" 16}}</button></div>
+                        </div>
 					</div>
 					<div class="diff-content-controls-right diff-detail-actions button-row">
 						{{if and .PageIsPullFiles $.SignedUserID (not .IsArchived) (not .DiffNotAvailable)}}
@@ -94,8 +98,7 @@
 								<progress id="viewed-files-summary" value="{{.Diff.NumViewedFiles}}" max="{{.Diff.NumFiles}}"></progress>
 							</div>
 						{{end}}
-						{{template "repo/diff/whitespace_dropdown" .}}
-						{{template "repo/diff/options_dropdown" .}}
+						{{template "repo/diff/view_settings" .}}
 						{{if .PageIsPullFiles}}
 							<div id="diff-commit-select" data-issuelink="{{$.Issue.Link}}" data-queryparams="?style={{if $.IsSplitStyle}}split{{else}}unified{{end}}&whitespace={{$.WhitespaceBehavior}}&show-outdated={{$.ShowOutdatedComments}}" data-filter_changes_by_commit="{{ctx.Locale.Tr "repo.pulls.filter_changes_by_commit"}}">
 								{{/*
@@ -134,76 +137,7 @@
 					{{$isExpandable := or (gt $file.Addition 0) (gt $file.Deletion 0) $file.IsBin}}
 					{{$isReviewFile := and $.IsSigned $.PageIsPullFiles (not $.IsArchived) $.IsShowingAllCommits}}
 					<div class="diff-file-box diff-box file-content {{TabSizeClass $.Editorconfig $file.Name}} tw-mt-0" id="diff-{{$file.NameHash}}" data-old-filename="{{$file.OldName}}" data-new-filename="{{$file.Name}}" {{if or ($file.ShouldBeHidden) (not $isExpandable)}}data-folded="true"{{end}}>
-						<h4 class="diff-file-header sticky-2nd-row ui top attached header tw-font-normal tw-flex tw-items-center tw-justify-between tw-flex-wrap">
-							<div class="diff-file-name tw-flex tw-flex-1 tw-items-center tw-gap-1 tw-flex-wrap">
-								<button class="fold-file btn interact-bg tw-p-1{{if not $isExpandable}} tw-invisible{{end}}">
-									{{if $file.ShouldBeHidden}}
-										{{svg "octicon-chevron-right" 18}}
-									{{else}}
-										{{svg "octicon-chevron-down" 18}}
-									{{end}}
-								</button>
-								<div class="tw-font-semibold tw-flex tw-items-center tw-font-mono">
-									{{if $file.IsBin}}
-										<span class="tw-ml-0.5 tw-mr-2">
-											{{ctx.Locale.Tr "repo.diff.bin"}}
-										</span>
-									{{else}}
-										{{template "repo/diff/stats" dict "file" . "root" $}}
-									{{end}}
-								</div>
-								<span class="file tw-flex tw-items-center tw-font-mono tw-flex-1"><a class="muted file-link" title="{{if $file.IsRenamed}}{{$file.OldName}} → {{end}}{{$file.Name}}" href="#diff-{{$file.NameHash}}">{{if $file.IsRenamed}}{{$file.OldName}} → {{end}}{{$file.Name}}</a>
-									{{if .IsLFSFile}} ({{ctx.Locale.Tr "repo.stored_lfs"}}){{end}}
-										<button class="btn interact-fg tw-p-2" data-clipboard-text="{{$file.Name}}" data-tooltip-content="{{ctx.Locale.Tr "copy_path"}}">{{svg "octicon-copy" 14}}</button>
-									{{if $file.IsGenerated}}
-										<span class="ui label">{{ctx.Locale.Tr "repo.diff.generated"}}</span>
-									{{end}}
-									{{if $file.IsVendored}}
-										<span class="ui label">{{ctx.Locale.Tr "repo.diff.vendored"}}</span>
-									{{end}}
-									{{if and $file.Mode $file.OldMode}}
-										{{$old := ctx.Locale.Tr ($file.ModeTranslationKey $file.OldMode)}}
-										{{$new := ctx.Locale.Tr ($file.ModeTranslationKey $file.Mode)}}
-										<span class="tw-mx-2 tw-font-mono tw-whitespace-nowrap">{{ctx.Locale.Tr "git.filemode.changed_filemode" $old $new}}</span>
-									{{else if $file.Mode}}
-										<span class="tw-mx-2 tw-font-mono tw-whitespace-nowrap">{{ctx.Locale.Tr ($file.ModeTranslationKey $file.Mode)}}</span>
-									{{end}}
-								</span>
-							</div>
-							<div class="diff-file-header-actions tw-flex tw-items-center button-row tw-flex-wrap">
-								{{if $showFileViewToggle}}
-									<div class="ui compact icon buttons">
-										<button class="ui tiny basic button file-view-toggle" data-toggle-selector="#diff-source-{{$file.NameHash}}" data-tooltip-content="{{ctx.Locale.Tr "repo.file_view_source"}}">{{svg "octicon-code"}}</button>
-										<button class="ui tiny basic button file-view-toggle active" data-toggle-selector="#diff-rendered-{{$file.NameHash}}" data-tooltip-content="{{ctx.Locale.Tr "repo.file_view_rendered"}}">{{svg "octicon-file"}}</button>
-									</div>
-								{{end}}
-								{{if $file.IsProtected}}
-									<span class="ui basic label">{{ctx.Locale.Tr "repo.diff.protected"}}</span>
-								{{end}}
-								{{if and $isReviewFile $file.HasChangedSinceLastReview}}
-									<span class="changed-since-last-review unselectable not-mobile">{{ctx.Locale.Tr "repo.pulls.has_changed_since_last_review"}}</span>
-								{{end}}
-								{{if not (or $file.IsIncomplete $file.IsBin $file.IsSubmodule)}}
-									<button class="ui basic tiny button unescape-button not-mobile">{{ctx.Locale.Tr "repo.unescape_control_characters"}}</button>
-									<button class="ui basic tiny button escape-button tw-hidden">{{ctx.Locale.Tr "repo.escape_control_characters"}}</button>
-								{{end}}
-								{{if and (not $file.IsSubmodule) (not $.PageIsWiki)}}
-									{{if $file.IsDeleted}}
-										<a class="ui basic tiny button" rel="nofollow" href="{{$.BeforeSourcePath}}/{{PathEscapeSegments .Name}}">{{ctx.Locale.Tr "repo.diff.view_file"}}</a>
-									{{else}}
-										<a class="ui basic tiny button" rel="nofollow" href="{{$.SourcePath}}/{{PathEscapeSegments .Name}}">{{ctx.Locale.Tr "repo.diff.view_file"}}</a>
-										{{if and $.HeadBranchIsEditable (not $file.IsLFSFile)}}
-											<a class="ui basic tiny button" rel="nofollow" href="{{$.SourceRepoLink}}/_edit/{{PathEscapeSegments $.HeadBranch}}/{{PathEscapeSegments .Name}}">{{ctx.Locale.Tr "repo.editor.edit_this_file"}}</a>
-										{{end}}
-									{{end}}
-								{{end}}
-								{{if $isReviewFile}}
-									<label data-link="{{$.Issue.Link}}/viewed-files" data-headcommit="{{$.AfterCommitID}}" class="viewed-file-form unselectable{{if $file.IsViewed}} viewed-file-checked-form{{end}}">
-										<input type="checkbox" name="{{$file.GetDiffFileName}}" autocomplete="off"{{if $file.IsViewed}} checked{{end}}> {{ctx.Locale.Tr "repo.pulls.has_viewed_file"}}
-									</label>
-								{{end}}
-							</div>
-						</h4>
+						{{template "repo/diff/file_header" dict "file" $file "root" $ "isExpandable" $isExpandable "isReviewFile" $isReviewFile "showFileViewToggle" $showFileViewToggle}}
 						<div class="diff-file-body ui attached unstackable table segment" {{if and $file.IsViewed $.IsShowingAllCommits}}data-folded="true"{{end}}>
 							<div id="diff-source-{{$file.NameHash}}" class="file-body file-code unicode-escaped code-diff{{if $.IsSplitStyle}} code-diff-split{{else}} code-diff-unified{{end}}{{if $showFileViewToggle}} tw-hidden{{end}}">
 								{{if or $file.IsIncomplete $file.IsBin}}
@@ -258,6 +192,7 @@
 		</div>
 			</div>
 		</div>
+        <script src="{{AssetUrlPrefix}}/js/diff-view.js" defer></script>
 		{{if $showFileTree}}
 			<script src="{{AssetUrlPrefix}}/js/resizable-divider.js" defer></script>
             <script src="{{AssetUrlPrefix}}/js/diff-file-tree.js" defer></script>

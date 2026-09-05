@@ -20,27 +20,27 @@
 import { css, cssCombine, otherThemeVars, themeVars } from "@lutinglt/gitea-github-theme/core";
 
 const commitPage = css`
-  .page-content.repository.diff.github-commit-page {
+  .page-content.repository.diff.commit-page {
     > .repository-content-header {
       display: none;
     }
 
-    > .github-commit-page-container.ui.container.fluid.padded {
+    > .commit-page-container.ui.container.fluid.padded {
       margin: 0;
       max-width: none;
       padding: 24px;
       width: 100%;
     }
 
-    .github-commit-title-row {
+    .commit-title-row {
       align-items: center;
       display: flex;
       gap: 16px;
       justify-content: space-between;
-      min-height: 36px;
+      min-height: 39px;
     }
 
-    .github-commit-title {
+    .commit-title {
       color: ${themeVars.color.text.self};
       font-size: 24px;
       font-weight: 400;
@@ -49,23 +49,24 @@ const commitPage = css`
       min-width: 0;
     }
 
-    .github-commit-title code {
-      background: transparent;
+    .commit-title code {
+      background: ${themeVars.color.box.header};
+      border-radius: 4px;
       color: inherit;
       font-size: inherit;
       line-height: inherit;
-      padding: 0;
+      padding: 0 4px;
     }
 
-    .github-commit-page-actions {
+    .commit-page-actions {
       align-items: center;
       display: flex;
       flex: 0 0 auto;
       gap: 8px;
     }
 
-    .github-commit-page-actions > .ui.button,
-    .github-commit-page-actions > .ui.dropdown.button {
+    .commit-page-actions > .ui.button,
+    .commit-page-actions > .ui.dropdown.button {
       align-items: center;
       background: ${themeVars.color.button};
       border: 1px solid ${themeVars.color.light.border};
@@ -82,18 +83,18 @@ const commitPage = css`
       padding: 5px 12px;
     }
 
-    .github-commit-page-actions > .ui.button:hover,
-    .github-commit-page-actions > .ui.dropdown.button:hover {
+    .commit-page-actions > .ui.button:hover,
+    .commit-page-actions > .ui.dropdown.button:hover {
       background: ${themeVars.color.hover.self};
       border-color: ${themeVars.color.light.border};
     }
 
-    .github-commit-page-actions > .github-commit-operations.ui.dropdown.button {
+    .commit-page-actions > .commit-operations.ui.dropdown.button {
       padding-left: 8px;
       padding-right: 8px;
     }
 
-    .github-commit-attribution {
+    .commit-attribution {
       align-items: center;
       color: ${themeVars.color.text.light.num1};
       display: flex;
@@ -105,7 +106,7 @@ const commitPage = css`
       min-height: 21px;
     }
 
-    .github-commit-avatar-stack {
+    .commit-avatar-stack {
       display: inline-flex;
       flex: 0 0 auto;
       margin-right: 4px;
@@ -113,7 +114,7 @@ const commitPage = css`
       position: relative;
     }
 
-    .github-commit-avatar-stack > img.ui.avatar {
+    .commit-avatar-stack > img.ui.avatar {
       border: 1px solid ${themeVars.github.avatar.borderColor};
       border-radius: 9999px;
       height: 20px;
@@ -121,25 +122,25 @@ const commitPage = css`
       width: 20px;
     }
 
-    .github-commit-avatar-stack > img.ui.avatar + img.ui.avatar {
+    .commit-avatar-stack > img.ui.avatar + img.ui.avatar {
       margin-left: -11px;
     }
 
-    .github-commit-attribution a {
+    .commit-attribution a {
       color: ${themeVars.color.text.self};
       font-weight: 600;
     }
 
-    .github-commit-attribution a:hover {
+    .commit-attribution a:hover {
       color: ${themeVars.color.text.self};
       text-decoration: underline;
     }
 
-    .github-commit-attribution-separator {
+    .commit-attribution-separator {
       margin: 0 4px;
     }
 
-    .github-commit-verification {
+    .commit-verification {
       align-items: center;
       border: 1px solid ${themeVars.github.borderColor.success.emphasis};
       border-radius: 9999px;
@@ -153,7 +154,7 @@ const commitPage = css`
       padding: 0 8px;
     }
 
-    .github-commit-card {
+    .commit-card {
       background: ${themeVars.color.box.body.self};
       border: 1px solid ${themeVars.color.light.border};
       border-radius: ${otherThemeVars.border.radius};
@@ -161,26 +162,29 @@ const commitPage = css`
       overflow: hidden;
     }
 
-    .github-commit-message {
+    .commit-message {
       box-sizing: border-box;
-      min-height: 63px;
-      padding: 8px 12px;
+      min-height: 43px;
+      padding: 11px 12px;
     }
 
-    .github-commit-summary {
+    .commit-summary {
       color: ${themeVars.color.text.self};
       font-family: var(--fonts-monospace);
       font-size: 14px;
       font-weight: 400;
       line-height: 21px;
       overflow-wrap: anywhere;
+      overflow: visible;
+      white-space: pre-wrap;
+      text-overflow: clip;
     }
 
-    .github-commit-summary a {
+    .commit-summary a {
       color: ${themeVars.github.fgColor.accent};
     }
 
-    .github-commit-message > .commit-body {
+    .commit-message > .commit-body {
       color: ${themeVars.color.text.self};
       font-family: var(--fonts-monospace);
       font-size: 12px;
@@ -190,7 +194,7 @@ const commitPage = css`
       white-space: pre-wrap;
     }
 
-    .github-commit-meta-row {
+    .commit-meta-row {
       align-items: center;
       border-top: 1px solid ${themeVars.color.light.border};
       box-sizing: border-box;
@@ -202,14 +206,14 @@ const commitPage = css`
       padding: 8px 12px;
     }
 
-    .github-commit-card .branch-and-tag-area {
+    .commit-card .branch-and-tag-area {
       align-items: center;
       display: flex;
       flex: 1 1 auto;
       min-width: 0;
     }
 
-    .github-commit-card .branch-and-tag-area > .ellipsis-button.ui.button {
+    .commit-card .branch-and-tag-area > .ellipsis-button.ui.button {
       align-items: center;
       background: ${themeVars.github.bgColor.accent.muted};
       border: 0;
@@ -223,31 +227,46 @@ const commitPage = css`
       padding: 0 8px;
     }
 
-    .github-commit-card .branch-and-tag-area > .ellipsis-button.ui.button::before {
+    .commit-card .branch-and-tag-area > .ellipsis-button.ui.button::before {
       content: "Branches and tags";
       font-size: 12px;
       font-weight: 500;
       line-height: 20px;
     }
 
-    .github-commit-card .branch-and-tag-detail {
+    .commit-card .branch-and-tag-detail {
       min-width: 0;
     }
+    .commit-card .branch-and-tag-detail > .tw-flex {
+      margin-top: 0 !important;
+      align-items: center;
+      gap: 8px;
+    }
+    .commit-card .branch-area a {
+      color: ${themeVars.github.fgColor.accent};
+      background: ${themeVars.github.bgColor.accent.muted};
+      border: 0 !important;
+      font-size: 12px;
+      padding: 1px 6px !important;
+    }
+    .commit-identifiers > a {
+      color: ${themeVars.color.text.self};
+    }
 
-    .github-commit-card .branch-and-tag-detail > .divider {
+    .commit-card .branch-and-tag-detail > .divider {
       display: none;
     }
 
-    .github-commit-card .branch-and-tag-detail > div:first-of-type {
+    .commit-card .branch-and-tag-detail > div:nth-child(2) {
       display: none;
     }
 
-    .github-commit-card .branch-and-tag-detail .ui.label {
+    .commit-card .branch-and-tag-detail .ui.label {
       border-radius: ${otherThemeVars.border.radius};
       margin: 0 4px 0 0;
     }
 
-    .github-commit-identifiers {
+    .commit-identifiers {
       align-items: center;
       color: ${themeVars.color.text.light.num1};
       display: flex;
@@ -260,15 +279,15 @@ const commitPage = css`
       line-height: 20px;
     }
 
-    .github-commit-identifier {
+    .commit-identifier {
       align-items: center;
       display: inline-flex;
       gap: 6px;
       white-space: nowrap;
     }
 
-    .github-commit-identifier a,
-    .github-commit-identifier code {
+    .commit-identifier a,
+    .commit-identifier code {
       background: transparent;
       color: ${themeVars.color.text.self};
       font-family: inherit;
@@ -278,11 +297,11 @@ const commitPage = css`
       text-underline-offset: 2px;
     }
 
-    .github-commit-identifier-current code {
+    .commit-identifier-current code {
       text-decoration: none;
     }
 
-    .github-commit-copy.btn {
+    .commit-copy.btn {
       align-items: center;
       border-radius: ${otherThemeVars.border.radius};
       color: ${themeVars.color.text.light.num1};
@@ -293,12 +312,12 @@ const commitPage = css`
       width: 28px;
     }
 
-    .github-commit-copy.btn:hover {
+    .commit-copy.btn:hover {
       background: ${themeVars.github.control.transparent.bgColor.hover};
       color: ${themeVars.color.text.self};
     }
 
-    .github-commit-stats-row {
+    .commit-stats-row {
       align-items: center;
       border-top: 1px solid ${themeVars.color.light.border};
       box-sizing: border-box;
@@ -310,207 +329,73 @@ const commitPage = css`
       padding: 7px 12px;
     }
 
-    .github-commit-files-changed {
+    .commit-files-changed {
       color: ${themeVars.color.text.self};
       font-size: 14px;
       font-weight: 600;
       line-height: 21px;
     }
 
-    .github-commit-change-summary {
-      align-items: center;
-      color: ${themeVars.color.text.light.num1};
-      display: flex;
-      font-family: var(--fonts-monospace);
-      font-size: 12px;
-      gap: 6px;
-    }
-
-    .github-commit-additions {
-      color: ${themeVars.github.fgColor.success};
-    }
-
-    .github-commit-deletions {
-      color: var(--color-red);
-    }
-
-    .github-commit-change-bar {
-      border-radius: 2px;
-      display: flex;
-      gap: 2px;
-      height: 8px;
-      overflow: hidden;
-      width: 52px;
-    }
-
-    .github-commit-change-bar > span {
-      min-width: 3px;
-    }
-
-    .github-commit-change-bar-additions {
-      background: ${themeVars.github.bgColor.success.emphasis};
-    }
-
-    .github-commit-change-bar-deletions {
-      background: ${themeVars.github.bgColor.danger.emphasis};
-    }
-
-    .github-commit-note {
+    .commit-note {
       margin-top: 16px;
     }
 
-    .github-commit-diff {
+    .commit-diff {
       border-top: 1px solid ${themeVars.color.light.border};
       margin: 24px -24px 0;
-      padding: 0 24px;
-    }
-
-    .github-commit-single-file-diff {
-      display: grid;
-      grid-template-columns: 273px minmax(0, 1fr);
-    }
-
-    .github-commit-file-tree {
-      border-right: 1px solid ${themeVars.color.light.border};
-      box-sizing: border-box;
-      min-width: 0;
-      padding: 24px 24px 0 0;
-    }
-
-    .github-commit-file-tree-title {
-      color: ${themeVars.color.text.self};
-      font-size: 14px;
-      font-weight: 600;
-      line-height: 21px;
-      margin: 0 0 8px;
-    }
-
-    .github-commit-file-tree a {
-      align-items: center;
-      border-radius: ${otherThemeVars.border.radius};
-      color: ${themeVars.color.text.self};
-      display: flex;
-      font-size: 14px;
-      gap: 8px;
-      line-height: 21px;
-      min-height: 32px;
-      overflow: hidden;
-      padding: 4px 8px;
-      text-decoration: none;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-
-    .github-commit-file-tree a:hover {
-      background: ${themeVars.github.control.transparent.bgColor.hover};
-    }
-
-    .github-commit-single-file-content {
-      min-width: 0;
-      padding: 16px 0 0 24px;
-    }
-
-    .github-commit-diff > .diff-box > .diff-detail-box,
-    .github-commit-single-file-content > .diff-box > .diff-detail-box {
-      background: ${themeVars.color.body};
-      box-sizing: border-box;
-      height: 50px;
-      margin: 0;
-      padding: 8px 0;
-    }
-
-    .github-commit-diff .diff-detail-box .diff-detail-stats {
-      display: none !important;
-    }
-
-    .github-commit-diff .diff-file-box .diff-file-header {
-      background: ${themeVars.color.box.header};
-      border-color: ${themeVars.color.light.border};
-      box-sizing: border-box;
-      min-height: 46px;
-      padding: 6px 8px;
-    }
-
-    .github-commit-diff .diff-file-box .diff-file-header .file-link {
-      color: ${themeVars.color.text.self};
-      font-size: 14px;
-      font-weight: 600;
-    }
-
-    .github-commit-diff .diff-file-box .diff-file-body {
-      border-color: ${themeVars.color.light.border};
-    }
-
-    .github-commit-diff #diff-file-tree {
-      flex-basis: 273px;
-      max-width: 273px;
-      padding: 8px 24px 0 0;
-    }
-
-    .github-commit-diff #diff-content-container {
-      min-width: 0;
-      padding-left: 24px;
-    }
-
-    .github-commit-single-file-content #diff-content-container {
-      padding-left: 0;
+      padding: 0;
     }
 
     @media (max-width: 767.98px) {
-      > .github-commit-page-container.ui.container.fluid.padded {
+      > .commit-page-container.ui.container.fluid.padded {
         padding: 16px;
       }
 
-      .github-commit-title-row {
-        align-items: flex-start;
-        flex-direction: column;
+      .commit-title-row {
+        align-items: center;
       }
 
-      .github-commit-title {
-        font-size: 20px;
-        line-height: 30px;
+      .commit-title {
+        font-size: 24px;
+        line-height: 36px;
       }
 
-      .github-commit-page-actions {
-        flex-wrap: wrap;
-        width: 100%;
+      .commit-page-actions {
+        gap: 4px;
       }
-
-      .github-commit-message {
-        min-height: 0;
+      .commit-page-actions > a.ui.button {
+        width: 32px;
+        padding: 0;
+        justify-content: center;
       }
-
-      .github-commit-meta-row {
-        align-items: flex-start;
-        flex-direction: column;
-      }
-
-      .github-commit-identifiers {
-        justify-content: flex-start;
-        width: 100%;
-      }
-
-      .github-commit-stats-row {
-        align-items: flex-start;
-        flex-direction: column;
-      }
-
-      .github-commit-single-file-diff {
-        display: block;
-      }
-
-      .github-commit-file-tree {
+      .commit-page-actions > a > span {
         display: none;
       }
 
-      .github-commit-single-file-content {
-        padding-left: 0;
+      .commit-message {
+        min-height: 0;
       }
 
-      .github-commit-diff {
+      .commit-meta-row {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .commit-identifiers {
+        justify-content: flex-start;
+        width: 100%;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+      }
+
+      .commit-stats-row {
+        flex-wrap: nowrap;
+      }
+
+      .commit-diff {
         margin-left: -16px;
         margin-right: -16px;
-        padding: 0 16px;
+        padding: 0;
       }
     }
   }
