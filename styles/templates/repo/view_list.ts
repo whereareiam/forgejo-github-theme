@@ -20,9 +20,14 @@
 import { css, cssCombine, otherThemeVars, themeVars } from "@lutinglt/gitea-github-theme/core";
 
 const repoFileLastCommit = css`
+  .repository.file.list #repo-file-commit-box {
+    display: block;
+  }
   .repository.file.list :is(#repo-files-table, #repo-file-commit-box) {
     & .gitea-github-theme-templates.repo-file-line.repo-file-last-commit {
       gap: 0;
+      flex-direction: column;
+      align-items: stretch;
       min-height: 52px;
       padding: 4px;
     }
@@ -278,20 +283,19 @@ const repoFileLastCommit = css`
       height: 28px;
     }
 
-    & .repo-latest-commit-message > .commit-body {
-      background: ${themeVars.color.menu};
-      border: 1px solid ${themeVars.color.light.border};
-      border-radius: ${otherThemeVars.border.radius};
-      box-shadow: ${themeVars.github.shadow.floating.small};
-      box-sizing: border-box;
-      margin: 4px 0 0;
-      max-width: min(480px, calc(100vw - 32px));
-      padding: 12px;
-      position: absolute;
-      right: 0;
-      top: 100%;
+    & .repo-latest-commit-body {
+      border-top: 1px solid ${themeVars.color.light.border};
+      margin: 0;
+      padding: 12px 16px;
+      color: ${themeVars.color.text.light.num1};
+      font: 12px/18px var(--fonts-proportional);
       white-space: pre-wrap;
-      z-index: 100;
+      overflow-wrap: anywhere;
+      min-width: 0;
+      width: 100%;
+    }
+    & .repo-latest-commit-body[hidden] {
+      display: none;
     }
 
     & .repo-latest-commit-actions {

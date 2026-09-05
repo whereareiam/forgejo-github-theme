@@ -58,8 +58,7 @@
 							"Metas" ($.Repository.ComposeMetas ctx)
 						}}</span>
 						{{if IsMultilineCommitMessage .LatestCommit.Message}}
-							<button class="btn interact-fg js-toggle-commit-body repo-latest-commit-details" aria-expanded="false" aria-label="Show commit details" data-tooltip-content="Show commit details">{{svg "octicon-kebab-horizontal" 16}}</button>
-							<pre class="commit-body tw-hidden">{{RenderCommitBody $.Context .LatestCommit.Message ($.Repository.ComposeMetas ctx)}}</pre>
+							<button class="btn interact-fg repo-latest-commit-details" aria-expanded="false" aria-controls="repo-latest-commit-body" aria-label="Show commit details" data-tooltip-content="Show commit details">{{svg "octicon-kebab-horizontal" 16}}</button>
 						{{end}}
 						{{if and .LatestCommit.Signature .LatestCommitVerification .LatestCommitVerification.Verified}}
 							<a class="repo-latest-commit-signature" href="{{$latestCommitLink}}" rel="nofollow" aria-label="Commit signature">
@@ -94,3 +93,7 @@
 				</div>
 			{{end}}
 		</div>
+{{if and .LatestCommit (IsMultilineCommitMessage .LatestCommit.Message)}}
+<pre id="repo-latest-commit-body" class="repo-latest-commit-body" hidden>{{RenderCommitBody $.Context .LatestCommit.Message ($.Repository.ComposeMetas ctx)}}</pre>
+<script src="{{AssetUrlPrefix}}/js/latest-commit-details.js" defer></script>
+{{end}}
