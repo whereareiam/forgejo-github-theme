@@ -273,6 +273,10 @@ const repoToolbarDetails = css`
     margin: 12px 0 8px;
   }
 
+  .gitea-github-theme-templates.repo-button-row .repo-code-body > .repo-code-search:not([open]) + hr {
+    margin-top: 0;
+  }
+
   .gitea-github-theme-templates.repo-button-row .repo-code-actions {
     list-style: none;
     margin: 8px;
