@@ -1,7 +1,8 @@
 (() => {
-  const page = document.querySelector(".github-issues");
+  const page = document.querySelector(".github-issues, .github-pull-list");
   if (!page) return;
   const mobile = matchMedia("(max-width: 767.98px)");
+  const isPullList = page.classList.contains("github-pull-list");
   let collapsed = mobile.matches;
   try {
     if (!mobile.matches) collapsed = localStorage.getItem("issue_sidebar_collapsed") === "true";
@@ -9,7 +10,7 @@
     /* Optional preference. */
   }
   function update() {
-    page.classList.toggle("issue-navigation-collapsed", collapsed);
+    if (!isPullList) page.classList.toggle("issue-navigation-collapsed", collapsed);
     for (const button of page.querySelectorAll("[data-issue-sidebar-toggle]"))
       button.setAttribute("aria-expanded", !collapsed);
   }
@@ -32,8 +33,8 @@
   const form = page.querySelector(".issue-list-search");
   const input = form?.querySelector('input[name="q"]');
   if (!input) return;
-  input.setAttribute("aria-label", "Search Issues");
-  input.placeholder = "Search Issues";
+  input.setAttribute("aria-label", isPullList ? "Search pull requests" : "Search Issues");
+  input.placeholder = isPullList ? "Search all pull requests" : "Search Issues";
   const toolbar = page.querySelector("#issue-filters");
   const filterRow = toolbar?.querySelector(".issue-list-toolbar-right");
   if (filterRow) {
@@ -66,14 +67,30 @@
     for (const row of page.querySelectorAll("#issue-list > .flex-item")) {
       const labels = row.querySelector(".labels-list");
       const main = row.querySelector(".flex-item-main");
-      if (labels?.textContent.trim() && labels.parentElement !== main) main.append(labels);
+      if (!isPullList && labels?.textContent.trim() && labels.parentElement !== main) main.append(labels);
     }
   };
   decorateRows();
   const issues = page.querySelector("#issue-list");
   if (issues) new MutationObserver(decorateRows).observe(issues, { childList: true, subtree: true });
+  const empty = page.querySelector("#issue-list > .tw-text-center");
+  if (isPullList && empty && !input.value.trim()) {
+    const state = new URL(location.href).searchParams.get("state") || "open";
+    empty.querySelector("h3").textContent =
+      state === "open"
+        ? "There aren’t any open pull requests."
+        : state === "closed"
+          ? "There aren’t any closed pull requests."
+          : "There aren’t any pull requests.";
+    const icon = page.querySelector('[data-test-name="open-issue-count"] svg')?.cloneNode(true);
+    if (icon) {
+      icon.setAttribute("width", "24");
+      icon.setAttribute("height", "24");
+      empty.prepend(icon);
+    }
+  }
   const filters = page.querySelector("#issue-filters");
-  if (filters) {
+  if (filters && !isPullList) {
     for (const anchor of filters.querySelectorAll(".switch > a")) {
       const text = [...anchor.childNodes].find(node => node.nodeType === Node.TEXT_NODE && node.textContent.trim());
       const match = text?.textContent.trim().match(/^([\d.,\s]+)\s+(.+)$/);
