@@ -295,3 +295,8 @@ bun dev:forgejo:stop
 
 To rebuild and sync once without watching, use `bun dev:forgejo`. After a later manual build, use `bun dev:forgejo:sync`
 to copy the generated files into the running container.
+
+The preview automatically reloads open pages after a successful rebuild or `dev:forgejo:sync`. Each refresh uses
+versioned theme stylesheets (including auto-theme imports) and custom scripts, so browser cache clearing is unnecessary.
+Run `bun dev:forgejo:watch` while editing to rebuild, restart, and reload automatically. These reload hooks exist only
+in `dev/.generated/templates` and the local preview output; release archives contain the normal theme assets.

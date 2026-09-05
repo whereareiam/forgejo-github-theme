@@ -6,6 +6,7 @@ import { ForgejoCompose } from "./forgejo/ForgejoCompose.ts";
 import { ForgejoReadiness } from "./forgejo/ForgejoReadiness.ts";
 import { PreviewAdmin } from "./forgejo/PreviewAdmin.ts";
 import { FixtureSeeder } from "./fixtures/FixtureSeeder.ts";
+import { PreviewReloader } from "./theme/PreviewReloader.ts";
 import { ThemeBuilder } from "./theme/ThemeBuilder.ts";
 import { ThemeSynchronizer } from "./theme/ThemeSynchronizer.ts";
 import { SourceWatcher } from "./watch/SourceWatcher.ts";
@@ -13,6 +14,7 @@ import { SourceWatcher } from "./watch/SourceWatcher.ts";
 export class PreviewApplication {
   private readonly config: PreviewConfig;
   private readonly builder: ThemeBuilder;
+  private readonly reloader: PreviewReloader;
   private readonly compose: ForgejoCompose;
   private readonly readiness: ForgejoReadiness;
   private readonly synchronizer: ThemeSynchronizer;
@@ -25,6 +27,7 @@ export class PreviewApplication {
     this.config = config;
     const runner = new CommandRunner(config.projectDirectory);
     this.builder = new ThemeBuilder(runner);
+    this.reloader = new PreviewReloader(config);
     this.compose = new ForgejoCompose(config, runner);
     this.readiness = new ForgejoReadiness(config);
     this.synchronizer = new ThemeSynchronizer(this.compose);
@@ -44,7 +47,9 @@ export class PreviewApplication {
         return;
       case PREVIEW_COMMANDS.sync:
         this.autoLogin.prepare();
+        this.reloader.prepare();
         this.synchronizer.sync();
+        this.reloader.publish();
         return;
       case PREVIEW_COMMANDS.watch:
         await this.watch();
@@ -60,8 +65,10 @@ export class PreviewApplication {
   private async start(): Promise<void> {
     this.autoLogin.prepare();
     this.builder.build();
+    this.reloader.prepare();
     this.compose.start();
     await this.readiness.wait();
+    this.reloader.publish();
     this.admin.ensure();
     await this.fixtureSeeder.seed();
     console.log(
@@ -75,8 +82,10 @@ export class PreviewApplication {
     return this.watcher.watch(() => {
       this.autoLogin.prepare();
       this.builder.build();
+      this.reloader.prepare();
       this.synchronizer.sync();
-      console.log("Theme preview updated; reload the local Forgejo page.");
+      this.reloader.publish();
+      console.log("Theme preview updated; open preview pages reload automatically.");
     });
   }
 
