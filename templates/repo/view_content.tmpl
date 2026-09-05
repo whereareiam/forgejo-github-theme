@@ -106,7 +106,7 @@
                         {{if and (not (StringUtils.HasPrefix .BranchNameSubURL "commit")) (or .CodeIndexerDisabled (and (not .TagName) (eq .Repository.DefaultBranch .BranchName)))}}
                             <details class="repo-code-search">
                                 <summary>{{svg "octicon-search" 16}}Search code</summary>
-                                <form class="ui form ignore-dirty" action="{{.RepoLink}}/search/{{if .CodeIndexerDisabled}}{{.BranchNameSubURL}}{{end}}" method="get" data-test-tag="codesearch">
+                                <form class="ui form ignore-dirty theme-search-control" action="{{.RepoLink}}/search/{{if .CodeIndexerDisabled}}{{.BranchNameSubURL}}{{end}}" method="get" data-test-tag="codesearch">
 				<input type="hidden" name="path" value="{{.TreePath | PathEscapeSegments}}">
 				{{template "shared/search/combo_multi"
 						dict

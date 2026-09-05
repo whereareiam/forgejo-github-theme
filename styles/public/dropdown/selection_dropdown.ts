@@ -23,8 +23,8 @@ import { activeItemAfterStyle } from "@lutinglt/gitea-github-theme/styles/common
 // 选择框的下拉菜单看起来像普通按钮
 const selectionDropdown = css`
   /* 排除可搜索输入框和 Forgejo 15 的仓库拥有者选择框 */
-  .ui.selection.dropdown:not(.search):not(:has(> #uid)),
-  .ui.selection.dropdown.active:not(.search):not(:has(> #uid)) {
+  .ui.selection.dropdown:not(.search):not(:has(> #uid)):not(.theme-search-control .dropdown),
+  .ui.selection.dropdown.active:not(.search):not(:has(> #uid)):not(.theme-search-control .dropdown) {
     background-color: ${themeVars.color.button};
     border-color: ${themeVars.color.light.border};
     border-radius: ${otherThemeVars.border.radius};
