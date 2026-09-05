@@ -42,10 +42,18 @@
 
 	<div class="repo-button-row-right">
 		{{if $isTreePathRoot}}
-			<a href="{{.Repository.Link}}/find/{{.BranchNameSubURL}}" class="ui compact basic button repo-find-file">
-				{{svg "octicon-search" 16}}
-				<span>{{ctx.Locale.Tr "repo.find_file.go_to_file"}}</span>
-			</a>
+            <div class="repo-file-picker" data-tree-url="{{.RepoLink}}/tree-list/{{.BranchNameSubURL}}" data-source-url="{{.RepoLink}}/src/{{.BranchNameSubURL}}">
+                <label class="diff-search-field repo-find-file">
+                    {{svg "octicon-search" 16}}
+                    <input id="repo-go-to-file" type="text" role="combobox" aria-label="Go to file" placeholder="Go to file" autocomplete="off" aria-autocomplete="list" aria-expanded="false" aria-controls="repo-file-picker-results">
+                    <kbd aria-hidden="true">T</kbd><button type="button" class="btn repo-picker-clear" aria-label="Clear file search" hidden>{{svg "octicon-x-circle-fill" 16}}</button>
+                </label>
+                <template id="repo-picker-file-icon">{{svg "octicon-file" 16}}</template>
+                <template id="repo-picker-directory-icon">{{svg "octicon-file-directory-fill" 16}}</template>
+                <div id="repo-file-picker-results" class="repo-file-picker-results theme-menu-popover" role="listbox" aria-label="Files" hidden></div>
+                <div class="repo-file-picker-status" role="status" aria-live="polite"></div>
+                <noscript><a href="{{.Repository.Link}}/find/{{.BranchNameSubURL}}">Go to file</a></noscript>
+            </div>
 		{{end}}
 
 		{{if and .CanWriteCode .IsViewBranch (not .Repository.IsMirror) (not .Repository.IsArchived) (not .IsViewFile)}}
@@ -158,3 +166,5 @@
 {{end}}
 
 <script src="{{AssetUrlPrefix}}/js/details-menu.js" defer></script>
+
+<script src="{{AssetUrlPrefix}}/js/repo-file-picker.js" defer></script>
