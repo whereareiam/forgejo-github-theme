@@ -153,6 +153,63 @@ export default css`
     height: 28px;
     padding: 0 !important;
   }
+  .diff-deleted-placeholder {
+    height: 300px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid ${themeVars.color.light.border};
+    border-top: 0;
+    border-radius: 0 0 ${otherThemeVars.border.radius} ${otherThemeVars.border.radius};
+    color: ${themeVars.color.text.light.num1};
+    font-size: 14px;
+  }
+  .diff-load-deleted {
+    color: ${themeVars.github.fgColor.accent};
+    font-size: 16px;
+    font-weight: 600;
+  }
+  .diff-load-deleted:hover {
+    text-decoration: underline;
+  }
+  .diff-deleted-skeleton {
+    position: absolute;
+    left: 16px;
+    top: 36%;
+    opacity: 0.55;
+    width: 300px;
+    pointer-events: none;
+  }
+  .diff-deleted-skeleton i {
+    display: block;
+    height: 12px;
+    margin-bottom: 12px;
+    border-radius: 2px;
+    background: ${themeVars.color.box.header};
+    width: 72%;
+  }
+  .diff-deleted-skeleton i:nth-child(2) {
+    width: 90%;
+    margin-left: 18px;
+  }
+  .diff-deleted-skeleton i:nth-child(3) {
+    width: 80%;
+    margin-left: 18px;
+  }
+  .diff-deleted-skeleton i:nth-child(4) {
+    width: 16%;
+  }
+  .diff-deleted-placeholder > :not(.diff-deleted-skeleton) {
+    position: relative;
+  }
+  .repository #diff-file-boxes [data-deleted-diff-hidden] > .diff-file-body,
+  .repository #diff-file-boxes [data-folded="true"] > .diff-deleted-placeholder,
+  .repository #diff-file-boxes .diff-deleted-placeholder[hidden] {
+    display: none;
+  }
   .repository #diff-file-boxes .diff-file-body {
     border-color: ${themeVars.color.light.border};
   }

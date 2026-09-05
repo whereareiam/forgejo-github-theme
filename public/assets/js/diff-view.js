@@ -9,6 +9,14 @@
   let current = -1;
   let searchTimer;
 
+  function showDeletedDiff(box) {
+    box.removeAttribute("data-deleted-diff-hidden");
+    const placeholder = box.querySelector(".diff-deleted-placeholder");
+    if (placeholder) placeholder.hidden = true;
+  }
+  container.addEventListener("click", event => {
+    if (event.target.closest(".diff-load-deleted")) showDeletedDiff(event.target.closest(".diff-file-box"));
+  });
   function highlight(scroll = false) {
     document.querySelector(".diff-search-current-line")?.classList.remove("diff-search-current-line");
     if (window.CSS?.highlights) {
@@ -21,6 +29,7 @@
     const result = results[current];
     if (scroll) {
       const box = result.line.closest(".diff-file-box");
+      showDeletedDiff(box);
       if (box.dataset.folded === "true") box.querySelector(".fold-file").click();
       result.line.scrollIntoView({ block: "center" });
     }
@@ -129,6 +138,10 @@
   });
   const boxes = document.getElementById("diff-file-boxes");
   function updateFoldLabels() {
+    // Forgejo's initial hunk labels omit the first @, while loaded excerpts include both.
+    for (const code of container.querySelectorAll(".tag-code .code-inner")) {
+      if (/^@ [+-]/.test(code.textContent)) code.prepend(document.createTextNode("@"));
+    }
     for (const box of boxes?.querySelectorAll(".diff-file-box") || []) {
       const expand = box.querySelector(".diff-expand-file");
       if (expand) expand.hidden = !box.querySelector(".code-expander-button");
