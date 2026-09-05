@@ -414,15 +414,14 @@ describe("Forgejo 15 native integration", () => {
     );
     const commitPageTemplate = fs.readFileSync(path.join(ROOT_DIR, "templates", "repo", "commit_page.tmpl"), "utf-8");
 
-    expect(commitPageTemplate).toContain('class="page-content repository diff github-commit-page"');
-    expect(commitPageTemplate).toContain('id="github-commit-title">Commit <code>{{printf "%.7s" .CommitID}}');
-    expect(commitPageTemplate).toContain('class="github-commit-attribution"');
-    expect(commitPageTemplate).toContain('class="github-commit-card"');
-    expect(commitPageTemplate).toContain('class="github-commit-meta-row"');
-    expect(commitPageTemplate).toContain('class="github-commit-stats-row"');
+    expect(commitPageTemplate).toContain('class="page-content repository diff commit-page"');
+    expect(commitPageTemplate).toContain('id="commit-title">Commit <code>{{printf "%.7s" .CommitID}}');
+    expect(commitPageTemplate).toContain('class="commit-attribution"');
+    expect(commitPageTemplate).toContain('class="commit-card"');
+    expect(commitPageTemplate).toContain('class="commit-meta-row"');
+    expect(commitPageTemplate).toContain('class="commit-stats-row"');
     expect(commitPageTemplate).toContain('data-clipboard-text="{{.CommitID}}"');
     expect(commitPageTemplate).toContain("{{if and .Commit.Signature .Verification.Verified}}");
-    expect(commitPageTemplate).toContain('class="github-commit-file-tree"');
     expect(commitPageTemplate).toContain('template "repo/diff/box"');
     expect(commitPageTemplate).not.toContain('template "repo/commit_header"');
     const diffBoxTemplate = fs.readFileSync(path.join(ROOT_DIR, "templates", "repo", "diff", "box.tmpl"), "utf-8");
@@ -435,10 +434,14 @@ describe("Forgejo 15 native integration", () => {
     expect(diffBoxTemplate).toContain('class="diff-content-controls-left"');
     expect(diffBoxTemplate).toContain('class="diff-content-controls-right diff-detail-actions button-row"');
     expect(diffBoxTemplate).toContain('class="diff-content-body"');
-    expect(diffBoxTemplate).toContain("const diffTreeVisible = localStorage?.getItem('diff_file_tree_visible') !== 'false';");
+    expect(diffBoxTemplate).toContain(
+      "const diffTreeVisible = localStorage?.getItem('diff_file_tree_visible') !== 'false';"
+    );
     expect(commitPageStyle).toContain("> .repository-content-header");
-    expect(commitPageStyle).toContain("grid-template-columns: 273px minmax(0, 1fr);");
-    expect(commitPageStyle).toContain("min-height: 46px;");
+    const diffViewStyle = fs.readFileSync(path.join(ROOT_DIR, "styles", "components", "repo", "diff_view.ts"), "utf8");
+    expect(diffViewStyle).toContain("min-height: 46px;");
+    expect(diffBoxTemplate).toContain('template "repo/diff/file_header"');
+    expect(commitPageTemplate).toContain('template "repo/diff/change_summary"');
   });
 
   it("keeps the adapted repository and commit layouts bounded at phone breakpoints", () => {
@@ -466,8 +469,8 @@ describe("Forgejo 15 native integration", () => {
     expect(viewContentStyle).toContain("max-height: calc(100vh - 48px);");
     expect(homeStyle).toContain("grid-template-columns: 100%;");
     expect(viewListStyle).toContain("max-width: none;");
-    expect(commitPageStyle).toContain(".github-commit-file-tree {\n        display: none;");
-    expect(commitPageStyle).toContain(".github-commit-meta-row");
+    expect(commitPageStyle).toContain("overflow-x: auto;");
+    expect(commitPageStyle).toContain(".commit-meta-row");
     expect(commitPageStyle).toContain("flex-direction: column;");
   });
 

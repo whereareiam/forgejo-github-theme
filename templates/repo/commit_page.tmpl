@@ -1,18 +1,17 @@
-{{/* GitHub-style commit page using Forgejo 15 commit and diff data directly. */}}
+{{/* GitHub-style commit page using Forgejo commit and diff data directly. */}}
 {{template "base/head" .}}
-<div role="main" aria-label="{{.Title}}" class="page-content repository diff github-commit-page">
-	{{template "repo/header" .}}
-	<div class="ui container fluid padded github-commit-page-container">
-		<section class="github-commit-page-header" aria-labelledby="github-commit-title">
-			<div class="github-commit-title-row">
-				<h1 class="github-commit-title" id="github-commit-title">Commit <code>{{printf "%.7s" .CommitID}}</code></h1>
-				<div class="github-commit-page-actions">
-					<a class="ui button" href="{{.SourcePath}}">
+<div role="main" aria-label="{{.Title}}" class="page-content repository diff commit-page">
+	<div class="ui container fluid padded commit-page-container">
+		<section class="commit-page-header" aria-labelledby="commit-title">
+			<div class="commit-title-row">
+				<h1 class="commit-title" id="commit-title">Commit <code>{{printf "%.7s" .CommitID}}</code></h1>
+				<div class="commit-page-actions">
+					<a class="ui button" href="{{.SourcePath}}" aria-label="Browse files">
 						{{svg "octicon-file-code" 16}}
-						Browse files
+						<span>Browse files</span>
 					</a>
 					{{if and ($.Permission.CanWrite $.UnitTypeCode) (not $.Repository.IsArchived) (not .IsDeleted)}}{{- /* */ -}}
-						<div class="ui dropdown button github-commit-operations" data-tooltip-content="{{ctx.Locale.Tr "repo.commit.operations"}}">
+						<div class="ui dropdown button commit-operations" data-tooltip-content="{{ctx.Locale.Tr "repo.commit.operations"}}">
 							{{svg "octicon-kebab-horizontal" 16}}
 							<div class="menu">
 								<div class="ui header">{{ctx.Locale.Tr "repo.commit.operations"}}</div>
@@ -106,8 +105,8 @@
 				</div>
 			</div>
 
-			<div class="github-commit-attribution">
-				<span class="github-commit-avatar-stack">
+			<div class="commit-attribution">
+				<span class="commit-avatar-stack">
 					{{if .Author}}
 						{{ctx.AvatarUtils.Avatar .Author 20}}
 					{{else}}
@@ -126,9 +125,9 @@
 				{{else}}
 					<strong>{{.Commit.Author.Name}}</strong>
 				{{end}}
-				<span>authored {{DateUtils.TimeSince .Commit.Author.When}}</span>
+				<span>{{if or (ne .Commit.Committer.Name .Commit.Author.Name) (ne .Commit.Committer.Email .Commit.Author.Email)}}authored{{else}}committed{{end}} {{DateUtils.TimeSince .Commit.Author.When}}</span>
 				{{if or (ne .Commit.Committer.Name .Commit.Author.Name) (ne .Commit.Committer.Email .Commit.Author.Email)}}
-					<span class="github-commit-attribution-separator">·</span>
+					<span class="commit-attribution-separator">·</span>
 					<span>{{ctx.Locale.Tr "repo.diff.committed_by"}}</span>
 					{{if ne .Verification.CommittingUser.ID 0}}
 						<a href="{{.Verification.CommittingUser.HomeLink}}">{{.Commit.Committer.Name}}</a>
@@ -138,27 +137,28 @@
 				{{end}}
 				{{template "repo/commit_statuses" dict "Status" .CommitStatus "Statuses" .CommitStatuses}}
 				{{if and .Commit.Signature .Verification.Verified}}
-					<span class="github-commit-attribution-separator">·</span>
-					<span class="github-commit-verification" data-tooltip-content="{{.Verification.Reason}}">
+					<span class="commit-attribution-separator">·</span>
+					<span class="commit-verification" data-tooltip-content="{{.Verification.Reason}}">
 						{{svg "octicon-verified" 14}}
 						Verified
 					</span>
 				{{end}}
 			</div>
 
-			<div class="github-commit-card">
-				<div class="github-commit-message">
-					<div class="github-commit-summary">{{RenderCommitMessage $.Context .Commit.Message ($.Repository.ComposeMetas ctx)}}</div>
+			<div class="commit-card">
+				<div class="commit-message">
+					<div class="commit-summary">{{RenderCommitMessage $.Context .Commit.Message ($.Repository.ComposeMetas ctx)}}</div>
 					{{if IsMultilineCommitMessage .Commit.Message}}
 						<pre class="commit-body">{{RenderCommitBody $.Context .Commit.Message ($.Repository.ComposeMetas ctx)}}</pre>
 					{{end}}
 				</div>
-				<div class="github-commit-meta-row">
+				<div class="commit-meta-row">
 					{{template "repo/commit_load_branches_and_tags" .}}
-					<div class="github-commit-identifiers">
+					<div class="commit-identifiers">
+                        <a href="{{.Link}}.patch">patch</a><a href="{{.Link}}.diff">diff</a><span>·</span>
 						{{range .Parents}}
-							<span class="github-commit-identifier">
-								<span>{{ctx.Locale.Tr "repo.diff.parent"}}</span>
+							<span class="commit-identifier">
+								<span>{{len $.Parents}} {{ctx.Locale.Tr "repo.diff.parent"}}</span>
 								{{if $.PageIsWiki}}
 									<a href="{{$.RepoLink}}/wiki/commit/{{PathEscape .}}">{{printf "%.7s" .}}</a>
 								{{else}}
@@ -166,33 +166,26 @@
 								{{end}}
 							</span>
 						{{end}}
-						<span class="github-commit-identifier github-commit-identifier-current">
+						<span class="commit-identifier commit-identifier-current">
 							<span>{{ctx.Locale.Tr "repo.diff.commit"}}</span>
 							<code>{{printf "%.7s" .CommitID}}</code>
-							<button class="btn interact-bg github-commit-copy" data-clipboard-text="{{.CommitID}}" data-tooltip-content="{{ctx.Locale.Tr "copy_hash"}}" aria-label="{{ctx.Locale.Tr "copy_hash"}}">
+							<button class="btn interact-bg commit-copy" data-clipboard-text="{{.CommitID}}" data-tooltip-content="{{ctx.Locale.Tr "copy_hash"}}" aria-label="{{ctx.Locale.Tr "copy_hash"}}">
 								{{svg "octicon-copy" 16}}
 							</button>
 						</span>
 					</div>
 				</div>
 				{{if not .DiffNotAvailable}}
-					<div class="github-commit-stats-row">
-						<div class="github-commit-files-changed">{{.Diff.NumFiles}} {{if eq .Diff.NumFiles 1}}file{{else}}files{{end}} changed</div>
-						<div class="github-commit-change-summary" data-tooltip-content="{{ctx.Locale.Tr "repo.diff.stats_desc_file" (Eval .Diff.TotalAddition "+" .Diff.TotalDeletion) .Diff.TotalAddition .Diff.TotalDeletion}}">
-							<span class="github-commit-additions">+{{.Diff.TotalAddition}}</span>
-							<span class="github-commit-deletions">-{{.Diff.TotalDeletion}}</span>
-							<span class="github-commit-change-bar" aria-hidden="true">
-								{{if gt .Diff.TotalAddition 0}}<span class="github-commit-change-bar-additions" style="flex-grow: {{.Diff.TotalAddition}}"></span>{{end}}
-								{{if gt .Diff.TotalDeletion 0}}<span class="github-commit-change-bar-deletions" style="flex-grow: {{.Diff.TotalDeletion}}"></span>{{end}}
-							</span>
-						</div>
+					<div class="commit-stats-row">
+						<div class="commit-files-changed">{{.Diff.NumFiles}} {{if eq .Diff.NumFiles 1}}file{{else}}files{{end}} changed</div>
+						{{template "repo/diff/change_summary" dict "Addition" .Diff.TotalAddition "Deletion" .Diff.TotalDeletion}}
 					</div>
 				{{end}}
 			</div>
 		</section>
 
 		{{if .NoteRendered}}
-			<div class="github-commit-note">
+			<div class="commit-note">
 				<div class="ui top attached header segment git-notes tw-flex tw-gap-1 tw-flex-wrap">
 					{{svg "octicon-note" 16 "tw-mr-2"}}
 					{{ctx.Locale.Tr "repo.diff.git-notes"}}:
@@ -248,25 +241,8 @@
 			</div>
 		{{end}}
 
-		<div class="github-commit-diff">
-			{{if and (not .DiffNotAvailable) (eq .Diff.NumFiles 1)}}
-				<div class="github-commit-single-file-diff">
-					<aside class="github-commit-file-tree" aria-label="File tree">
-						<h2 class="github-commit-file-tree-title">File tree</h2>
-						{{range $file := .Diff.Files}}
-							<a href="#diff-{{$file.NameHash}}" title="{{$file.Name}}">
-								{{svg "octicon-file-diff" 16}}
-								<span>{{$file.Name}}</span>
-							</a>
-						{{end}}
-					</aside>
-					<div class="github-commit-single-file-content">
-						{{template "repo/diff/box" .}}
-					</div>
-				</div>
-			{{else}}
-				{{template "repo/diff/box" .}}
-			{{end}}
+		<div class="commit-diff">
+			{{template "repo/diff/box" .}}
 		</div>
 	</div>
 </div>

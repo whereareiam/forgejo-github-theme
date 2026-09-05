@@ -1,0 +1,14 @@
+{{$total := Eval .Addition "+" .Deletion}}
+{{$added := .Addition}}{{$deleted := .Deletion}}
+{{if gt $total 5}}{{$added = Eval .Addition "*" 5 "/" $total}}{{$deleted = Eval .Deletion "*" 5 "/" $total}}{{end}}
+<span class="diff-change-summary" aria-label="{{.Addition}} additions and {{.Deletion}} deletions">
+	{{if gt .Addition 0}}<span class="diff-additions">+{{.Addition}}</span>{{end}}
+	{{if gt .Deletion 0}}<span class="diff-deletions">-{{.Deletion}}</span>{{end}}
+	<span class="diff-change-bar" aria-hidden="true">
+		{{template "repo/diff/change_square" dict "Index" 1 "Added" $added "Deleted" $deleted}}
+		{{template "repo/diff/change_square" dict "Index" 2 "Added" $added "Deleted" $deleted}}
+		{{template "repo/diff/change_square" dict "Index" 3 "Added" $added "Deleted" $deleted}}
+		{{template "repo/diff/change_square" dict "Index" 4 "Added" $added "Deleted" $deleted}}
+		{{template "repo/diff/change_square" dict "Index" 5 "Added" $added "Deleted" $deleted}}
+	</span>
+</span>

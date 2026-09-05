@@ -1,0 +1,21 @@
+<details class="theme-menu diff-view-settings">
+	<summary class="theme-icon-button" aria-label="Open diff view settings">{{svg "octicon-gear" 16}}</summary>
+	<div class="theme-menu-popover">
+		<span class="theme-menu-title">Layout</span>
+		<a href="?style=unified&amp;whitespace={{.WhitespaceBehavior}}&amp;show-outdated={{.ShowOutdatedComments}}"><input type="radio" tabindex="-1" {{if not .IsSplitStyle}}checked{{end}}>Unified</a>
+		<a href="?style=split&amp;whitespace={{.WhitespaceBehavior}}&amp;show-outdated={{.ShowOutdatedComments}}"><input type="radio" tabindex="-1" {{if .IsSplitStyle}}checked{{end}}>Split</a>
+		{{if .PageIsPullFiles}}<hr><label><input type="checkbox" id="diff-minimize-comments">Minimize comments</label>{{end}}
+		<hr>
+		<a href="?style={{if .IsSplitStyle}}split{{else}}unified{{end}}&amp;whitespace={{if eq .WhitespaceBehavior "ignore-all"}}show-all{{else}}ignore-all{{end}}&amp;show-outdated={{.ShowOutdatedComments}}"><input type="checkbox" tabindex="-1" {{if eq .WhitespaceBehavior "ignore-all"}}checked{{end}}>Hide whitespace</a>
+		<label><input type="checkbox" id="diff-compact-lines" checked>Compact line height</label>
+		<hr>
+		<button type="button" id="expand-files-btn">{{ctx.Locale.Tr "repo.pulls.expand_files"}}</button>
+		<button type="button" id="collapse-files-btn">{{ctx.Locale.Tr "repo.pulls.collapse_files"}}</button>
+        {{if .Issue.Index}}
+            <hr>
+            <a href="{{$.RepoLink}}/pulls/{{.Issue.Index}}.patch" download>{{ctx.Locale.Tr "repo.diff.download_patch"}}</a>
+            <a href="{{$.RepoLink}}/pulls/{{.Issue.Index}}.diff" download>{{ctx.Locale.Tr "repo.diff.download_diff"}}</a>
+            <a href="?style={{if .IsSplitStyle}}split{{else}}unified{{end}}&amp;whitespace={{.WhitespaceBehavior}}&amp;show-outdated={{if .ShowOutdatedComments}}false{{else}}true{{end}}">{{if .ShowOutdatedComments}}{{ctx.Locale.Tr "repo.issues.review.option.hide_outdated_comments"}}{{else}}{{ctx.Locale.Tr "repo.issues.review.option.show_outdated_comments"}}{{end}}</a>
+        {{end}}
+	</div>
+</details>
