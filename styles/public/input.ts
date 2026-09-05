@@ -84,16 +84,47 @@ const input = css`
 const checkBoxAndRadio = css`
   /* 复选框 */
   input[type="checkbox"],
-  .ui.checkbox input[type="checkbox"] {
+  .ui.checkbox input[type="checkbox"],
+  .markup .task-list-item input[type="checkbox"] {
+    appearance: none;
+    box-sizing: border-box;
+    display: inline-grid;
+    place-content: center;
+    flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+    vertical-align: middle;
+    border: 1px solid ${themeVars.github.borderColor.emphasis};
+    border-radius: 3px;
     background-color: ${themeVars.color.body};
-    border-color: ${themeVars.github.borderColor.emphasis};
+    cursor: pointer;
+    &:focus-visible {
+      outline: 2px solid ${themeVars.github.fgColor.accent};
+      outline-offset: 2px;
+    }
+    &:disabled {
+      cursor: default;
+      opacity: 0.5;
+    }
     &:checked,
     &:indeterminate {
       background-color: ${themeVars.github.bgColor.accent.emphasis};
       border-color: ${themeVars.github.bgColor.accent.emphasis};
     }
     &::before {
+      content: "";
+      width: 10px;
+      height: 10px;
       background-color: ${themeVars.github.fgColor.onEmphasis};
+      clip-path: polygon(14% 44%, 0 59%, 38% 95%, 100% 20%, 84% 7%, 36% 66%);
+      visibility: hidden;
+    }
+    &:checked::before {
+      visibility: visible;
+    }
+    &:indeterminate::before {
+      clip-path: inset(40% 0);
+      visibility: visible;
     }
   }
   /* 单选框 */
