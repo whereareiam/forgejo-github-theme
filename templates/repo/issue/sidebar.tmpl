@@ -1,0 +1,21 @@
+<aside class="issue-navigation" aria-label="Issues sidebar navigation">
+    <div class="issue-navigation-content">
+    <nav aria-label="Issue filters">
+        <a class="{{if or (eq .ViewType "all") (not .ViewType)}}active{{end}}" href="{{.RepoLink}}/issues?type=all&amp;state=open">{{svg "octicon-issue-opened" 16}}Issues</a>
+        {{if .IsSigned}}
+            <a class="{{if eq .ViewType "assigned"}}active{{end}}" href="{{.RepoLink}}/issues?type=assigned&amp;state=open">{{svg "octicon-people" 16}}Assigned to me</a>
+            <a class="{{if eq .ViewType "created_by"}}active{{end}}" href="{{.RepoLink}}/issues?type=created_by&amp;state=open">{{svg "octicon-person" 16}}Created by me</a>
+            <a class="{{if eq .ViewType "mentioned"}}active{{end}}" href="{{.RepoLink}}/issues?type=mentioned&amp;state=open">{{svg "octicon-mention" 16}}Mentioned</a>
+        {{end}}
+        <a href="{{.RepoLink}}/issues?sort=recentupdate&amp;state=all">{{svg "octicon-history" 16}}Recent activity</a>
+    </nav>
+    <hr>
+    <nav aria-label="Pages">
+        <a href="{{.RepoLink}}/milestones">{{svg "octicon-milestone" 16}}{{ctx.Locale.Tr "repo.milestones"}}</a>
+        <a href="{{.RepoLink}}/issues?state=all">{{svg "octicon-eye" 16}}All states</a>
+        <a href="https://forgejo.org/docs/latest/user/issue-search/" target="_blank" rel="noopener noreferrer">{{svg "octicon-question" 16}}Search syntax</a>
+        <a href="{{.RepoLink}}/labels">{{svg "octicon-tag" 16}}{{ctx.Locale.Tr "repo.labels"}}</a>
+    </nav>
+    </div>
+    <button type="button" class="issue-navigation-toggle" data-issue-sidebar-toggle aria-expanded="true">{{svg "octicon-sidebar-expand" 16}}Collapse sidebar</button>
+</aside>

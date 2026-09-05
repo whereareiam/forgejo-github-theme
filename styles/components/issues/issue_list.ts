@@ -185,131 +185,112 @@ const issuePins = css`
 
 const issueRows = css`
   :is(
-      .page-content.repository.milestone-issue-list,
-      .page-content.dashboard.issues,
-      .page-content.user.notification,
-      .page-content.repository.issue-list
-    )
-    #issue-list
-    > .flex-item {
-    align-items: center;
-    min-height: 64px;
-    padding: 0;
-  }
+    .page-content.repository.milestone-issue-list,
+    .page-content.dashboard.issues,
+    .page-content.user.notification,
+    .page-content.repository.issue-list
+  ) {
+    & #issue-list > .flex-item {
+      align-items: center;
+      min-height: 64px;
+      padding: 0;
+    }
 
-  :is(
-      .page-content.repository.milestone-issue-list,
-      .page-content.dashboard.issues,
-      .page-content.user.notification,
-      .page-content.repository.issue-list
-    )
-    #issue-list
-    > .flex-item:last-child {
-    border-bottom-left-radius: ${otherThemeVars.border.radius};
-    border-bottom-right-radius: ${otherThemeVars.border.radius};
-  }
+    & #issue-list > .flex-item:last-child {
+      border-bottom-left-radius: ${otherThemeVars.border.radius};
+      border-bottom-right-radius: ${otherThemeVars.border.radius};
+    }
 
-  :is(
-      .page-content.repository.milestone-issue-list,
-      .page-content.dashboard.issues,
-      .page-content.user.notification,
-      .page-content.repository.issue-list
-    )
-    #issue-list
-    > .flex-item:hover {
-    background-color: ${themeVars.color.hover.opaque};
-  }
+    & #issue-list > .flex-item:hover {
+      background-color: ${themeVars.color.hover.opaque};
+    }
 
-  :is(
-      .page-content.repository.milestone-issue-list,
-      .page-content.dashboard.issues,
-      .page-content.user.notification,
-      .page-content.repository.issue-list
-    )
-    #issue-list
-    > .flex-item:has(:checked) {
-    background-color: ${themeVars.github.bgColor.accent.muted};
-  }
+    & #issue-list > .flex-item:has(:checked) {
+      background-color: ${themeVars.github.bgColor.accent.muted};
+    }
 
-  :is(
-      .page-content.repository.milestone-issue-list,
-      .page-content.dashboard.issues,
-      .page-content.user.notification,
-      .page-content.repository.issue-list
-    )
-    #issue-list
-    > .flex-item
-    > .flex-item-icon {
-    align-self: flex-start;
-    margin-top: 14px;
-    margin-left: 16px;
-  }
+    & #issue-list > .flex-item > .flex-item-icon {
+      align-self: flex-start;
+      margin-top: 14px;
+      margin-left: 16px;
+    }
 
-  :is(
-      .page-content.repository.milestone-issue-list,
-      .page-content.dashboard.issues,
-      .page-content.user.notification,
-      .page-content.repository.issue-list
-    )
-    #issue-list
-    > .flex-item
-    > .flex-item-icon
-    > input.issue-checkbox {
-    margin-right: 8px !important;
-  }
+    & #issue-list > .flex-item > .flex-item-icon > input.issue-checkbox {
+      margin-right: 8px !important;
+    }
 
-  :is(
-      .page-content.repository.milestone-issue-list,
-      .page-content.dashboard.issues,
-      .page-content.user.notification,
-      .page-content.repository.issue-list
-    )
-    #issue-list
-    > .flex-item
-    > .flex-item-main {
-    gap: 4px;
-  }
+    & #issue-list > .flex-item > .flex-item-main {
+      gap: 4px;
+    }
 
-  :is(
-      .page-content.repository.milestone-issue-list,
-      .page-content.dashboard.issues,
-      .page-content.user.notification,
-      .page-content.repository.issue-list
-    )
-    #issue-list
-    > .flex-item
-    > .flex-item-main
-    > .flex-item-header {
-    padding-top: 8px;
-  }
+    & #issue-list > .flex-item > .flex-item-main > .flex-item-header {
+      padding-top: 8px;
+    }
 
-  :is(
-      .page-content.repository.milestone-issue-list,
-      .page-content.dashboard.issues,
-      .page-content.user.notification,
-      .page-content.repository.issue-list
-    )
-    #issue-list
-    > .flex-item
-    > .flex-item-main
-    > .flex-item-header
-    > .flex-item-trailing {
-    margin-right: 32px;
-  }
+    & #issue-list > .flex-item > .flex-item-main > .flex-item-header > .flex-item-trailing {
+      margin-right: 32px;
+    }
 
-  :is(
-      .page-content.repository.milestone-issue-list,
-      .page-content.dashboard.issues,
-      .page-content.user.notification,
-      .page-content.repository.issue-list
-    )
-    #issue-list
-    > .flex-item
-    > .flex-item-main
-    > .flex-item-body {
-    font-size: 12px;
-    padding-bottom: 8px;
+    & #issue-list > .flex-item > .flex-item-main > .flex-item-body {
+      font-size: 12px;
+      padding-bottom: 8px;
+    }
   }
 `;
 
-export default cssCombine(issueList, issueListMobile, issuePins, issueRows);
+// Repository lists share one row layout; legacy dashboard rows retain their spacing.
+const repositoryRows = css`
+  .page-content.repository.issue-list:is(.github-issues, .github-pull-list) {
+    & #issue-list > .flex-item {
+      align-items: flex-start;
+      padding: 8px 16px 10px;
+      gap: 8px;
+    }
+    & #issue-list > .flex-item > .flex-item-icon {
+      display: flex;
+      margin: 0;
+      padding-top: 6px;
+      gap: 12px;
+    }
+    & #issue-list > .flex-item > .flex-item-icon > input.issue-checkbox {
+      margin: 0 !important;
+      flex-shrink: 0;
+    }
+    & #issue-list > .flex-item > .flex-item-main {
+      gap: 0;
+    }
+    & #issue-list > .flex-item > .flex-item-main > .flex-item-header {
+      padding: 0;
+      min-height: 24px;
+    }
+    & #issue-list > .flex-item > .flex-item-main > .flex-item-header > .flex-item-trailing {
+      margin-right: 0;
+    }
+    & #issue-list > .flex-item > .flex-item-main > .flex-item-body {
+      padding: 0;
+      line-height: 18px;
+    }
+    & #issue-list .labels-list {
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 4px;
+      line-height: 18px;
+    }
+    & #issue-list .labels-list > a {
+      display: inline-flex;
+    }
+    & #issue-list .labels-list .ui.label {
+      margin: 0;
+      padding: 0 6px;
+      font-size: 12px;
+      line-height: 18px;
+    }
+    @media (max-width: 767.98px) {
+      & #issue-list > .flex-item {
+        padding: 12px;
+      }
+    }
+  }
+`;
+
+export default cssCombine(issueList, issueListMobile, issuePins, issueRows, repositoryRows);
