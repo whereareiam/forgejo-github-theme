@@ -61,7 +61,8 @@ const repoFileLastCommit = css`
     & .repo-latest-commit-attribution {
       align-items: center;
       display: flex;
-      flex: 0 1 auto;
+      flex: 0 0 auto;
+      max-width: 100%;
       min-width: 0;
       position: relative;
       white-space: nowrap;
@@ -94,10 +95,9 @@ const repoFileLastCommit = css`
       color: ${themeVars.color.text.self};
       display: block;
       margin-left: 8px;
-      max-width: 125px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+      min-width: 0;
+      overflow-wrap: anywhere;
+      white-space: normal;
     }
 
     & a.repo-latest-commit-author:hover {
