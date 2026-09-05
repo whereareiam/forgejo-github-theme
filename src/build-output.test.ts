@@ -110,9 +110,19 @@ describe("构建产物基本验证", () => {
   it("无多余主题文件", () => {
     const actualFiles = fs.readdirSync(DIST_DIR).filter(f => f.endsWith(".css"));
     const expectedSet = new Set(EXPECTED_THEME_FILES);
-    const extra = actualFiles.filter(f => !expectedSet.has(f));
+    const extra = actualFiles.filter(f => !expectedSet.has(f) && f !== "pull-commits.css");
     expect(extra, `存在多余主题文件: ${extra.join(", ")}`).toEqual([]);
   });
+});
+
+it("ships the PR commit stylesheet with its template and valid CSS", async () => {
+  const { transform } = await import("lightningcss");
+  const code = fs.readFileSync(path.join(DIST_DIR, "pull-commits.css"));
+  expect(code.equals(fs.readFileSync(path.join(ROOT_DIR, "public/pull-commits.css")))).toBe(true);
+  expect(() => transform({ code, filename: "pull-commits.css" })).not.toThrow();
+  expect(fs.readFileSync(path.join(ROOT_DIR, "templates/repo/pulls/commits.tmpl"), "utf-8")).toContain(
+    "/css/pull-commits.css"
+  );
 });
 
 describe("非 auto 主题 CSS 内容验证", () => {
@@ -383,7 +393,10 @@ describe("Forgejo 15 native integration", () => {
     expect(latestCommitTemplate).toContain('template "repo/shabox_badge"');
     expect(latestCommitTemplate).toContain('template "repo/commit_statuses"');
     expect(latestCommitTemplate).toContain('template "repo/commit_message_subject"');
-    expect(commitsListTemplate).toContain('template "repo/commit_message_subject"');
+    expect(commitsListTemplate).toContain('template "repo/commit_list_item"');
+    expect(fs.readFileSync(path.join(ROOT_DIR, "templates/repo/commit_list_item.tmpl"), "utf-8")).toContain(
+      'template "repo/commit_message_subject"'
+    );
     expect(commitSubjectTemplate).toContain('StringUtils.Cut .Summary " (#"');
     expect(commitSubjectTemplate).toContain('"class=\\"ref-issue\\""');
     expect(commitSubjectTemplate).toContain(

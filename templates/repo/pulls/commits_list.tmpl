@@ -1,0 +1,15 @@
+{{/* Retain Forgejo's chronological grouping and reuse the history-row component. */}}
+{{$previousDate := ""}}
+{{range .Commits}}
+  {{$time := .Committer.When}}{{if not $time}}{{$time = .Author.When}}{{end}}
+  {{$date := $time.Format "2006-01-02"}}
+  {{if ne $date $previousDate}}
+    {{if ne $previousDate ""}}</ul></article>{{end}}
+    {{$previousDate = $date}}
+    <article class="pull-commit-group">
+      <h3>{{svg "octicon-git-commit" 16}}Commits on {{$time.Format "Jan 2, 2006"}}</h3>
+      <ul class="gitea-github-theme-templates-commits-list">
+  {{end}}
+    {{template "repo/commit_list_item" dict "Commit" . "Page" $}}
+{{end}}
+{{if ne $previousDate ""}}</ul></article>{{end}}
