@@ -1,6 +1,6 @@
 {{template "base/head" .}}
-<div role="main" aria-label="{{.Title}}" class="page-content repository issue-list{{if .PageIsIssueList}} github-issues{{end}}">
-	{{if .PageIsIssueList}}{{template "repo/issue/sidebar" .}}{{else}}{{template "repo/header" .}}{{end}}
+<div role="main" aria-label="{{.Title}}" class="page-content repository issue-list{{if .PageIsIssueList}} github-issues{{else}} github-pull-list{{end}}">
+	{{if .PageIsIssueList}}{{template "repo/issue/sidebar" .}}{{end}}
 	<div class="ui container issue-list-main">
 	{{template "base/alert" .}}
 
@@ -15,8 +15,23 @@
 	{{end}}
 
 		<div class="list-header list-header-issues">
-			{{if not .PageIsIssueList}}{{template "repo/issue/navbar" .}}{{else}}<div class="issue-list-title"><button type="button" class="theme-icon-button" data-issue-sidebar-toggle aria-expanded="false" aria-label="Expand sidebar">{{svg "octicon-sidebar-expand" 16}}</button><h1>{{if eq .ViewType "assigned"}}Assigned to me{{else if eq .ViewType "created_by"}}Created by me{{else if eq .ViewType "mentioned"}}Mentioned{{else}}All issues{{end}}</h1></div>{{end}}
-			{{if not .PageIsIssueList}}{{template "repo/issue/search" .}}{{end}}
+			{{if not .PageIsIssueList}}
+                <details class="theme-menu pull-list-presets">
+                    <summary class="ui button">Filters {{svg "octicon-triangle-down" 12}}</summary>
+                    <div class="theme-menu-popover">
+                        <a href="{{.RepoLink}}/pulls?type=all&amp;state=open">Open pull requests</a>
+                        <a href="{{.RepoLink}}/pulls?type=all&amp;state=closed">Closed pull requests</a>
+                        <a href="{{.RepoLink}}/pulls?type=all&amp;state=all">All pull requests</a>
+                        {{if .IsSigned}}
+                            <hr><a href="{{.RepoLink}}/pulls?type=created_by&amp;state=open">Created by me</a>
+                            <a href="{{.RepoLink}}/pulls?type=assigned&amp;state=open">Assigned to me</a>
+                            <a href="{{.RepoLink}}/pulls?type=mentioned&amp;state=open">Mentioning me</a>
+                            <a href="{{.RepoLink}}/pulls?type=review_requested&amp;state=open">Review requested</a>
+                        {{end}}
+                    </div>
+                </details>
+            {{else}}<div class="issue-list-title"><button type="button" class="theme-icon-button" data-issue-sidebar-toggle aria-expanded="false" aria-label="Expand sidebar">{{svg "octicon-sidebar-expand" 16}}</button><h1>{{if eq .ViewType "assigned"}}Assigned to me{{else if eq .ViewType "created_by"}}Created by me{{else if eq .ViewType "mentioned"}}Mentioned{{else}}All issues{{end}}</h1></div>{{end}}
+			{{if not .PageIsIssueList}}{{template "repo/issue/search" .}}<nav class="ui compact menu pull-list-pages" aria-label="Issue pages"><a class="item" href="{{.RepoLink}}/labels">{{svg "octicon-tag" 16}}{{ctx.Locale.Tr "repo.labels"}}</a><a class="item" href="{{.RepoLink}}/milestones">{{svg "octicon-milestone" 16}}{{ctx.Locale.Tr "repo.milestones"}}</a></nav>{{end}}
 			{{if not .Repository.IsArchived}}
 				{{if .PageIsIssueList}}
 					<a class="primary button issue-list-new" href="{{.RepoLink}}/issues/new{{if .NewIssueChooseTemplate}}/choose{{end}}">{{ctx.Locale.Tr "repo.issues.new"}}</a>
@@ -55,4 +70,5 @@
 	</div>
 </div>
 <script src="{{AssetUrlPrefix}}/js/issue-list.js" defer></script>
+{{if not .PageIsIssueList}}<script src="{{AssetUrlPrefix}}/js/details-menu.js" defer></script>{{end}}
 {{template "base/footer" .}}
