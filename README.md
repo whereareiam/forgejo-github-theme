@@ -56,7 +56,7 @@ Install the resulting files using your Forgejo data directory (commonly `data/gi
 3. Extract `theme-github-fonts.tar.gz` into `<forgejo-data>/public`. This supplies the Mona Sans variable font; its SIL
    Open Font License is included beside the font.
 4. Extract the optional `theme-github-templates.tar.gz` archive into `<forgejo-data>`. It includes the templates and
-   their required JavaScript assets.
+   their required JavaScript and page-specific CSS assets under `public/assets`.
 5. Modify `<forgejo-data>/conf/app.ini` and append the CSS filename without the `theme-` prefix to `THEMES` under the
    `[ui]` section.
 6. Restart Forgejo.

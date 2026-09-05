@@ -22,5 +22,18 @@ bun release
     theme-github-pink-*.css theme-github-gitea-*.css theme-github-catppuccin-*.css
 )
 
-tar -zcf dist/theme-github-templates.tar.gz templates -C dist assets/js
+# Template assets must extract beside templates under the documented custom root.
+# Keep page-specific styles out of theme packs; they are required by the templates.
+template_stage=$(mktemp -d)
+trap 'rm -rf "$template_stage"' EXIT
+mkdir -p "$template_stage/public/assets/css" "$template_stage/public/assets/js"
+cp -R templates "$template_stage/templates"
+cp -R dist/assets/js/. "$template_stage/public/assets/js/"
+for stylesheet in dist/*.css; do
+  case "${stylesheet##*/}" in
+    theme-*) ;;
+    *) cp "$stylesheet" "$template_stage/public/assets/css/" ;;
+  esac
+done
+tar -zcf dist/theme-github-templates.tar.gz -C "$template_stage" templates public
 tar -zcf dist/theme-github-fonts.tar.gz -C dist assets/fonts
