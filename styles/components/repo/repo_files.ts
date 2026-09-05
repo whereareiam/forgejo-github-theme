@@ -68,7 +68,6 @@ const repoFiles = css`
   }
   .repository.file.list {
     #repo-files-table {
-      margin: 16px 0;
       /* 头部最后一次提交 */
       .repo-file-line {
         padding-right: 16px;
@@ -78,21 +77,6 @@ const repoFiles = css`
           padding-left: 16px;
           svg {
             margin-right: 2px;
-          }
-        }
-      }
-      /* 文件列表 */
-      .repo-file-item {
-        .repo-file-cell {
-          height: 40px;
-          &.name {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding-left: 16px;
-          }
-          &.age {
-            padding-right: 16px;
           }
         }
       }

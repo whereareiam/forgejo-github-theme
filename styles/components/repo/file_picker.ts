@@ -95,7 +95,10 @@ export default css`
   .repo-button-row-right:has(.repo-file-picker) .repo-add-file {
     min-width: 98px;
   }
-  .repo-button-row-right:has(.repo-file-picker) .repo-code-dropdown > summary {
+  .gitea-github-theme-templates.repo-button-row
+    .repo-button-row-right:has(.repo-file-picker)
+    .repo-code-dropdown
+    > summary.ui.primary.button {
     padding: 5px 8px !important;
     gap: 4px;
   }
