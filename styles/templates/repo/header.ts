@@ -312,6 +312,48 @@ const repositoryHeader = css`
     content: none;
   }
 
+  /* Forgejo's labeled wrappers otherwise retain extra line-box height around 28px controls. */
+  .page-content.repository .repo-buttons.button-row {
+    align-items: center;
+    gap: 8px;
+  }
+  .page-content.repository .repo-buttons.button-row > form,
+  .page-content.repository .repo-buttons.button-row > details,
+  .page-content.repository .repo-buttons.button-row .ui.labeled.button {
+    display: inline-flex;
+    align-items: center;
+    vertical-align: middle;
+    height: 28px;
+    min-height: 28px;
+    margin: 0;
+    padding: 0;
+    line-height: 20px;
+  }
+  .page-content.repository .repo-buttons.button-row .ui.labeled.button > .ui.button,
+  .page-content.repository .repo-buttons.button-row .ui.labeled.button > .ui.label,
+  .page-content.repository .repo-buttons.button-row > a.ui.button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    height: 28px;
+    min-height: 28px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    font-size: 12px;
+    line-height: 20px;
+  }
+  .page-content.repository .repo-buttons.button-row .ui.labeled.button > .ui.button > .text {
+    line-height: 20px;
+  }
+  .page-content.repository .repo-buttons.button-row .ui.labeled.button > .ui.button > svg,
+  .page-content.repository .repo-buttons.button-row > a.ui.button > svg {
+    display: block;
+    margin-top: 0;
+    margin-bottom: 0;
+    top: auto;
+  }
+
   @media (max-width: 767.98px) {
     #navbar.repository-navbar .navbar-left {
       flex-wrap: nowrap;
