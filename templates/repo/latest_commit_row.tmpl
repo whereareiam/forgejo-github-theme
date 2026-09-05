@@ -1,0 +1,96 @@
+<div class="repo-latest-commit-row">
+			<h2 class="sr-only">Latest commit</h2>
+			{{if not .LatestCommit}}
+				<div class="repo-latest-commit-loading ui active tiny slow centered inline">…</div>
+			{{else}}
+				{{$latestCommitLink := printf "%s/commit/%s" .RepoLink (PathEscape .LatestCommit.ID.String)}}
+				{{$latestCommitAuthorName := ""}}
+				{{$latestCommitAuthorDisplay := ""}}
+				{{if .LatestCommit.Author}}
+					{{$latestCommitAuthorName = .LatestCommit.Author.Name}}
+					{{$latestCommitAuthorDisplay = .LatestCommit.Author.Name}}
+				{{else if .LatestCommitUser}}
+					{{$latestCommitAuthorName = .LatestCommitUser.Name}}
+					{{$latestCommitAuthorDisplay = .LatestCommitUser.Name}}
+				{{end}}
+				{{if and .LatestCommitUser .LatestCommitUser.FullName DefaultShowFullName}}
+					{{$latestCommitAuthorDisplay = .LatestCommitUser.FullName}}
+				{{end}}
+				{{$latestCommitAuthorSearch := printf "%s/commits/%s/search?q=%s" .RepoLink .BranchNameSubURL (QueryEscape (printf "author:%s" $latestCommitAuthorName))}}
+				<div class="repo-latest-commit-primary">
+					<div class="repo-latest-commit-attribution">
+						{{if $latestCommitAuthorName}}
+							<span class="repo-latest-commit-avatar" tabindex="0" aria-label="{{$latestCommitAuthorDisplay}}" aria-describedby="repo-latest-commit-author-card">
+								{{if .LatestCommitUser}}
+									{{ctx.AvatarUtils.Avatar .LatestCommitUser 20}}
+								{{else}}
+									{{ctx.AvatarUtils.AvatarByEmail .LatestCommit.Author.Email $latestCommitAuthorDisplay 20}}
+								{{end}}
+							</span>
+							<a class="repo-latest-commit-author" title="{{$latestCommitAuthorDisplay}}" href="{{$latestCommitAuthorSearch}}" aria-label="Commits by {{$latestCommitAuthorDisplay}}" aria-describedby="repo-latest-commit-author-card"><strong>{{$latestCommitAuthorDisplay}}</strong></a>
+							<div class="repo-latest-commit-author-card" id="repo-latest-commit-author-card" role="tooltip">
+								<div class="repo-latest-commit-author-card-profile">
+									{{if .LatestCommitUser}}
+										{{ctx.AvatarUtils.Avatar .LatestCommitUser 48}}
+									{{else}}
+										{{ctx.AvatarUtils.AvatarByEmail .LatestCommit.Author.Email $latestCommitAuthorDisplay 48}}
+									{{end}}
+									<div class="repo-latest-commit-author-card-identity">
+										<strong>{{$latestCommitAuthorDisplay}}</strong>
+										{{if and .LatestCommitUser (ne $latestCommitAuthorDisplay .LatestCommitUser.Name)}}
+											<span class="muted">@{{.LatestCommitUser.Name}}</span>
+										{{end}}
+									</div>
+								</div>
+								<div class="repo-latest-commit-author-card-context">
+									{{svg "octicon-git-commit" 16}}
+									<span>{{ctx.Locale.Tr "repo.issues.role.contributor_helper"}}</span>
+								</div>
+							</div>
+						{{end}}
+					</div>
+					<div class="repo-latest-commit-message">
+						<span class="message-wrapper" title="{{.LatestCommit.Summary}}">{{template "repo/commit_message_subject" dict
+							"Context" $.Context
+							"Message" .LatestCommit.Message
+							"Summary" .LatestCommit.Summary
+							"CommitLink" $latestCommitLink
+							"Metas" ($.Repository.ComposeMetas ctx)
+						}}</span>
+						{{if IsMultilineCommitMessage .LatestCommit.Message}}
+							<button class="btn interact-fg js-toggle-commit-body repo-latest-commit-details" aria-expanded="false" aria-label="Show commit details" data-tooltip-content="Show commit details">{{svg "octicon-kebab-horizontal" 16}}</button>
+							<pre class="commit-body tw-hidden">{{RenderCommitBody $.Context .LatestCommit.Message ($.Repository.ComposeMetas ctx)}}</pre>
+						{{end}}
+						{{if and .LatestCommit.Signature .LatestCommitVerification .LatestCommitVerification.Verified}}
+							<a class="repo-latest-commit-signature" href="{{$latestCommitLink}}" rel="nofollow" aria-label="Commit signature">
+								{{template "repo/shabox_badge" dict "verification" .LatestCommitVerification}}
+							</a>
+						{{end}}
+						{{if .LatestCommitStatuses}}
+							<span class="repo-latest-commit-status">
+								{{template "repo/commit_statuses" dict "Status" .LatestCommitStatus "Statuses" .LatestCommitStatuses}}
+							</span>
+						{{end}}
+					</div>
+				</div>
+				<div class="repo-latest-commit-actions">
+					{{if .LatestCommit.Committer}}
+						<span class="gitea-github-theme-latest-time">
+							<a href="{{$latestCommitLink}}" class="muted" rel="nofollow">{{printf "%.7s" .LatestCommit.ID.String}}</a>
+							<span aria-hidden="true">·</span>
+							{{DateUtils.TimeSince .LatestCommit.Committer.When}}
+						</span>
+					{{end}}
+					{{if and (not .TreeNames) (.Permission.CanRead .UnitTypeCode) (not .IsEmptyRepo)}}
+						<a class="gitea-github-theme-latest-commit item muted" href="{{.RepoLink}}/commits/{{.BranchNameSubURL}}">
+							{{svg "octicon-history" 16}} <span>{{ctx.Locale.TrPluralString .CommitsCount "counters.n_commits" (printf "<b>%s</b>" (ctx.Locale.PrettyNumber .CommitsCount) | TrustHTML)}}</span>
+						</a>
+					{{end}}
+					{{if .TreeNames}}{{/* IsViewDirectory (not home). */}}
+						<a class="gitea-github-theme-latest-commit item muted" href="{{.RepoLink}}/commits/{{.BranchNameSubURL}}/{{.TreePath | PathEscapeSegments}}">
+							{{svg "octicon-history" 16}}<span>{{ctx.Locale.Tr "repo.file_history"}}</span>
+						</a>
+					{{end}}
+				</div>
+			{{end}}
+		</div>

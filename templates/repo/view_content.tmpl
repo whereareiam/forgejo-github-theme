@@ -9,7 +9,7 @@
 
 <div class="gitea-github-theme-templates repo-button-row">
 	<div class="repo-button-row-left">
-		{{template "repo/branch_dropdown" dict "root" .}}
+		{{if not .TreeNames}}{{template "repo/branch_dropdown" dict "root" .}}{{else}}<button type="button" class="theme-icon-button repo-source-show-tree" data-source-tree-toggle aria-label="Show file tree">{{svg "octicon-sidebar-expand" 16}}</button>{{end}}
 
 		{{if and $isTreePathRoot (.Permission.CanRead $.UnitTypeCode) (not .IsEmptyRepo)}}
 		<div class="repository-summary">
@@ -30,7 +30,7 @@
 				{{- range $i, $v := .TreeNames -}}
 					<span class="breadcrumb-divider">/</span>
 					{{- if eq $i $treeNameIdxLast -}}
-						<span class="active section" title="{{$v}}">{{$v}}</span>
+						<h1 class="active section repo-file-title" title="{{$v}}">{{$v}}</h1>
 						<button class="btn interact-fg tw-p-2" data-clipboard-text="{{$.TreePath}}" data-tooltip-content="{{ctx.Locale.Tr "copy_path"}}">{{svg "octicon-copy" 14}}</button>
 					{{- else -}}
 						{{$p := index $.Paths $i}}<span class="section"><a href="{{$.BranchLink}}/{{PathEscapeSegments $p}}" title="{{$v}}">{{$v}}</a></span>
@@ -42,18 +42,7 @@
 
 	<div class="repo-button-row-right">
 		{{if $isTreePathRoot}}
-            <div class="repo-file-picker" data-tree-url="{{.RepoLink}}/tree-list/{{.BranchNameSubURL}}" data-source-url="{{.RepoLink}}/src/{{.BranchNameSubURL}}">
-                <label class="diff-search-field repo-find-file">
-                    {{svg "octicon-search" 16}}
-                    <input id="repo-go-to-file" type="text" role="combobox" aria-label="Go to file" placeholder="Go to file" autocomplete="off" aria-autocomplete="list" aria-expanded="false" aria-controls="repo-file-picker-results">
-                    <kbd aria-hidden="true">T</kbd><button type="button" class="btn repo-picker-clear" aria-label="Clear file search" hidden>{{svg "octicon-x-circle-fill" 16}}</button>
-                </label>
-                <template id="repo-picker-file-icon">{{svg "octicon-file" 16}}</template>
-                <template id="repo-picker-directory-icon">{{svg "octicon-file-directory-fill" 16}}</template>
-                <div id="repo-file-picker-results" class="repo-file-picker-results theme-menu-popover" role="listbox" aria-label="Files" hidden></div>
-                <div class="repo-file-picker-status" role="status" aria-live="polite"></div>
-                <noscript><a href="{{.Repository.Link}}/find/{{.BranchNameSubURL}}">Go to file</a></noscript>
-            </div>
+            {{template "repo/file_picker" .}}
 		{{end}}
 
 		{{if and .CanWriteCode .IsViewBranch (not .Repository.IsMirror) (not .Repository.IsArchived) (not .IsViewFile)}}

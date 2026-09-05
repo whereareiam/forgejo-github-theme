@@ -21,7 +21,6 @@ import { css, cssCombine, otherThemeVars, themeVars } from "@lutinglt/gitea-gith
 import diffView from "./diff_view";
 import diffFileTreeLayout from "./diff_file_tree";
 import diffControls from "../diff_controls";
-import { activeItemAfterStyle } from "@lutinglt/gitea-github-theme/styles/common";
 
 const diff = css`
   /* 这里的折叠行和代码行高度与 GitHub 的 release 和 review 的差异对比时的高度一致, 不需要像 commit 中的差异对比那样行高过高 */
@@ -177,32 +176,4 @@ const diffFileBoxCodeDiff = css`
   }
 `;
 // 差异对比左侧文件树
-const diffFileTree = css`
-  #diff-file-tree {
-    margin-right: 8px;
-    .diff-file-tree-items {
-      .item-file.item-file {
-        position: relative;
-        margin-left: 8px;
-        &.selected:after {
-          ${activeItemAfterStyle}
-        }
-      }
-      .item-file.item-file,
-      .item-directory.item-directory {
-        &:hover {
-          box-shadow: inset 0 0 0 1px ${themeVars.github.control.transparent.borderColor.active};
-        }
-      }
-    }
-  }
-`;
-export default cssCombine(
-  diff,
-  diffFileBoxHeader,
-  diffFileBoxCodeDiff,
-  diffFileTree,
-  diffControls,
-  diffFileTreeLayout,
-  diffView
-);
+export default cssCombine(diff, diffFileBoxHeader, diffFileBoxCodeDiff, diffControls, diffFileTreeLayout, diffView);

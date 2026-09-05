@@ -53,7 +53,7 @@
                                 <div class="theme-menu-popover"></div>
                             </details>
                         </div>
-						<div id="diff-file-tree" class="tw-hidden"></div>
+						<div id="diff-file-tree" class="file-tree tw-hidden"></div>
                         <template id="diff-tree-icon-directory">{{svg "octicon-file-directory-open-fill" 16}}</template>
                         <template id="diff-tree-icon-added">{{svg "octicon-file-added" 16 "text green"}}</template>
                         <template id="diff-tree-icon-removed">{{svg "octicon-file-removed" 16 "text red"}}</template>
@@ -203,6 +203,7 @@
 		{{if $showFileTree}}
 			<script src="{{AssetUrlPrefix}}/js/resizable-divider.js" defer></script>
             <script src="{{AssetUrlPrefix}}/js/diff-file-tree.js" defer></script>
+            <script src="{{AssetUrlPrefix}}/js/tree-navigation.js" defer></script>
             <script src="{{AssetUrlPrefix}}/js/details-menu.js" defer></script>
 		{{end}}
 

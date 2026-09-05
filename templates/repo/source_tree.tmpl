@@ -1,0 +1,17 @@
+<aside class="repo-source-panel">
+    <div class="repo-source-title"><button type="button" class="theme-icon-button" data-source-tree-toggle aria-expanded="true" aria-label="Hide file tree">{{svg "octicon-sidebar-expand" 16}}</button><h2>Files</h2></div>
+    <div class="repo-source-branch">{{template "repo/branch_dropdown" dict "root" .}}<a class="theme-icon-button theme-icon-button-outlined" href="{{.RepoLink}}/search/{{if .IsViewCommit}}branch/{{PathEscapeSegments .Repository.DefaultBranch}}{{else}}{{.BranchNameSubURL}}{{end}}" aria-label="Search this repository">{{svg "octicon-search" 16}}</a></div>
+    {{template "repo/file_picker" .}}
+    <nav id="repo-source-tree" class="file-tree repo-source-tree" aria-label="File tree navigation" data-api-url="{{AppSubUrl}}/api/v1/repos/{{PathEscape .Repository.Owner.Name}}/{{PathEscape .Repository.Name}}/git/trees/{{PathEscape .CommitID}}?recursive=true" data-source-url="{{.RepoLink}}/src/{{.BranchNameSubURL}}" data-current-path="{{.TreePath}}">
+        <div class="repo-source-tree-status" role="status">Loading files…</div>
+        <div class="file-tree-items" role="tree" aria-label="Files"></div>
+    </nav>
+    <template id="repo-tree-file">{{svg "octicon-file" 16 "tree-file-icon"}}</template>
+    <template id="repo-tree-folder">{{svg "octicon-file-directory-fill" 16}}</template>
+    <template id="repo-tree-folder-open">{{svg "octicon-file-directory-open-fill" 16 "tree-directory-icon"}}</template>
+    <template id="repo-tree-chevron-right">{{svg "octicon-chevron-right" 12}}</template>
+    <template id="repo-tree-chevron-down">{{svg "octicon-chevron-down" 12}}</template>
+</aside>
+<script src="{{AssetUrlPrefix}}/js/resizable-divider.js" defer></script>
+<script src="{{AssetUrlPrefix}}/js/tree-navigation.js" defer></script>
+<script src="{{AssetUrlPrefix}}/js/repo-source-browser.js" defer></script>

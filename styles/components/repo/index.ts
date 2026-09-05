@@ -20,6 +20,8 @@
 import { cssCombine } from "@lutinglt/gitea-github-theme/core";
 import commit from "./commit";
 import diff from "./diff";
+import fileTree from "../file_tree";
+import sourceBrowser from "./source_browser";
 import filePicker from "./file_picker";
 import milestones from "./milestones";
 import packages from "./packages";
@@ -33,6 +35,8 @@ export default cssCombine(
   commit,
   diff,
   filePicker,
+  fileTree,
+  sourceBrowser,
   milestones,
   packages,
   release,

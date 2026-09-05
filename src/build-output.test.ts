@@ -358,27 +358,31 @@ describe("Forgejo 15 native integration", () => {
     const repoHomeStyle = fs.readFileSync(path.join(ROOT_DIR, "styles", "templates", "repo", "home.ts"), "utf-8");
     const viewListStyle = fs.readFileSync(path.join(ROOT_DIR, "styles", "templates", "repo", "view_list.ts"), "utf-8");
     const viewListTemplate = fs.readFileSync(path.join(ROOT_DIR, "templates", "repo", "view_list.tmpl"), "utf-8");
+    const latestCommitTemplate = fs.readFileSync(
+      path.join(ROOT_DIR, "templates", "repo", "latest_commit_row.tmpl"),
+      "utf-8"
+    );
     const commitsListTemplate = fs.readFileSync(path.join(ROOT_DIR, "templates", "repo", "commits_list.tmpl"), "utf-8");
     const commitSubjectTemplate = fs.readFileSync(
       path.join(ROOT_DIR, "templates", "repo", "commit_message_subject.tmpl"),
       "utf-8"
     );
 
-    expect(viewListTemplate).toContain('class="repo-latest-commit-row"');
-    expect(viewListTemplate).toContain('<h2 class="sr-only">Latest commit</h2>');
-    expect(viewListTemplate).toContain('class="repo-latest-commit-primary"');
-    expect(viewListTemplate).toContain('class="repo-latest-commit-avatar" tabindex="0"');
-    expect(viewListTemplate).toContain('class="repo-latest-commit-author-card"');
-    expect(viewListTemplate).toContain('printf "author:%s" $latestCommitAuthorName');
-    expect(viewListTemplate).toContain('QueryEscape (printf "author:%s" $latestCommitAuthorName)');
-    expect(viewListTemplate).toContain('class="repo-latest-commit-actions"');
-    expect(viewListTemplate).toContain('{{printf "%.7s" .LatestCommit.ID.String}}');
-    expect(viewListTemplate).toContain(
+    expect(latestCommitTemplate).toContain('class="repo-latest-commit-row"');
+    expect(latestCommitTemplate).toContain('<h2 class="sr-only">Latest commit</h2>');
+    expect(latestCommitTemplate).toContain('class="repo-latest-commit-primary"');
+    expect(latestCommitTemplate).toContain('class="repo-latest-commit-avatar" tabindex="0"');
+    expect(latestCommitTemplate).toContain('class="repo-latest-commit-author-card"');
+    expect(latestCommitTemplate).toContain('printf "author:%s" $latestCommitAuthorName');
+    expect(latestCommitTemplate).toContain('QueryEscape (printf "author:%s" $latestCommitAuthorName)');
+    expect(latestCommitTemplate).toContain('class="repo-latest-commit-actions"');
+    expect(latestCommitTemplate).toContain('{{printf "%.7s" .LatestCommit.ID.String}}');
+    expect(latestCommitTemplate).toContain(
       "{{if and .LatestCommit.Signature .LatestCommitVerification .LatestCommitVerification.Verified}}"
     );
-    expect(viewListTemplate).toContain('template "repo/shabox_badge"');
-    expect(viewListTemplate).toContain('template "repo/commit_statuses"');
-    expect(viewListTemplate).toContain('template "repo/commit_message_subject"');
+    expect(latestCommitTemplate).toContain('template "repo/shabox_badge"');
+    expect(latestCommitTemplate).toContain('template "repo/commit_statuses"');
+    expect(latestCommitTemplate).toContain('template "repo/commit_message_subject"');
     expect(commitsListTemplate).toContain('template "repo/commit_message_subject"');
     expect(commitSubjectTemplate).toContain('StringUtils.Cut .Summary " (#"');
     expect(commitSubjectTemplate).toContain('"class=\\"ref-issue\\""');
@@ -386,13 +390,14 @@ describe("Forgejo 15 native integration", () => {
       "{{- RenderCommitMessageLinkSubject .Context $subject .CommitLink .Metas}} ({{$renderedReference}})"
     );
     expect(viewListTemplate).not.toContain('{{template "repo/latest_commit" .}}');
+    expect(viewListTemplate).toContain('template "repo/latest_commit_row"');
     expect(viewListStyle).toContain("min-height: 52px;");
     expect(viewListStyle).toContain(".repo-latest-commit-row");
     expect(viewListStyle).toContain(".repo-latest-commit-row > .sr-only");
     expect(viewListStyle).toContain("clip: rect(0, 0, 0, 0);");
     expect(viewListStyle).toContain("min-height: 44px;");
     expect(viewListStyle).toContain("flex: 0 0 28px;");
-    expect(viewListStyle).toContain(".repo-latest-commit-message > .message-wrapper a:hover");
+    expect(viewListStyle.replace(/\s+/g, " ")).toContain(".repo-latest-commit-message > .message-wrapper a:hover");
     expect(viewListStyle).toContain("color: ${themeVars.github.fgColor.accent};");
     expect(viewListStyle).toContain(".repo-latest-commit-attribution:has(");
     expect(viewListStyle).toContain("margin-left: 8px;");
