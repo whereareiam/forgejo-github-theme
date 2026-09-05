@@ -20,353 +20,344 @@
 import { css, cssCombine, otherThemeVars, themeVars } from "@lutinglt/gitea-github-theme/core";
 
 const repoFileLastCommit = css`
-  .repository.file.list
-    :is(#repo-files-table, #repo-file-commit-box)
-    .gitea-github-theme-templates.repo-file-line.repo-file-last-commit {
-    gap: 0;
-    min-height: 52px;
-    padding: 4px;
-  }
+  .repository.file.list :is(#repo-files-table, #repo-file-commit-box) {
+    & .gitea-github-theme-templates.repo-file-line.repo-file-last-commit {
+      gap: 0;
+      min-height: 52px;
+      padding: 4px;
+    }
 
-  .repository.file.list :is(#repo-files-table, #repo-file-commit-box) .repo-latest-commit-row {
-    align-items: center;
-    display: flex;
-    gap: 8px;
-    justify-content: space-between;
-    min-height: 44px;
-    min-width: 0;
-    padding: 8px;
-    width: 100%;
-  }
+    & .repo-latest-commit-row {
+      align-items: center;
+      display: flex;
+      gap: 8px;
+      justify-content: space-between;
+      min-height: 44px;
+      min-width: 0;
+      padding: 8px;
+      width: 100%;
+    }
 
-  .repository.file.list :is(#repo-files-table, #repo-file-commit-box) .repo-latest-commit-row > .sr-only {
-    border: 0;
-    clip: rect(0, 0, 0, 0);
-    height: 1px;
-    margin: -1px;
-    overflow: hidden;
-    padding: 0;
-    position: absolute;
-    white-space: nowrap;
-    width: 1px;
-  }
-
-  .repository.file.list :is(#repo-files-table, #repo-file-commit-box) .repo-latest-commit-primary {
-    align-items: center;
-    display: flex;
-    flex: 1 1 auto;
-    gap: 8px;
-    min-width: 0;
-  }
-
-  .repository.file.list :is(#repo-files-table, #repo-file-commit-box) .repo-latest-commit-attribution {
-    align-items: center;
-    display: flex;
-    flex: 0 1 auto;
-    min-width: 0;
-    position: relative;
-    white-space: nowrap;
-  }
-
-  .repository.file.list :is(#repo-files-table, #repo-file-commit-box) .repo-latest-commit-avatar {
-    align-items: center;
-    border-radius: 9999px;
-    display: flex;
-    flex: 0 0 20px;
-    height: 20px;
-    outline: none;
-    width: 20px;
-  }
-
-  .repository.file.list :is(#repo-files-table, #repo-file-commit-box) .repo-latest-commit-avatar:focus-visible {
-    outline: 2px solid ${themeVars.github.fgColor.accent};
-    outline-offset: 2px;
-  }
-
-  .repository.file.list :is(#repo-files-table, #repo-file-commit-box) .repo-latest-commit-avatar > img.ui.avatar {
-    border-radius: 9999px;
-    flex: 0 0 auto;
-    height: 20px;
-    margin: 0;
-    width: 20px;
-  }
-
-  .repository.file.list :is(#repo-files-table, #repo-file-commit-box) .repo-latest-commit-author {
-    color: ${themeVars.color.text.self};
-    display: block;
-    margin-left: 8px;
-    max-width: 125px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  .repository.file.list :is(#repo-files-table, #repo-file-commit-box) a.repo-latest-commit-author:hover {
-    color: ${themeVars.color.text.self};
-    text-decoration: underline;
-  }
-
-  .repository.file.list :is(#repo-files-table, #repo-file-commit-box) .repo-latest-commit-author-card {
-    background: ${themeVars.color.menu};
-    border: 1px solid ${themeVars.color.light.border};
-    border-radius: ${otherThemeVars.border.radius};
-    bottom: calc(100% + 12px);
-    box-shadow: ${themeVars.github.shadow.floating.small};
-    box-sizing: border-box;
-    color: ${themeVars.color.text.self};
-    left: 0;
-    opacity: 0;
-    padding: 16px;
-    pointer-events: none;
-    position: absolute;
-    transform: translateY(4px);
-    transition:
-      opacity 120ms ease 300ms,
-      transform 120ms ease 300ms,
-      visibility 0s linear 420ms;
-    visibility: hidden;
-    white-space: normal;
-    width: min(360px, calc(100vw - 32px));
-    z-index: 100;
-  }
-
-  .repository.file.list
-    :is(#repo-files-table, #repo-file-commit-box)
-    .repo-latest-commit-attribution:has(
-      > .repo-latest-commit-avatar:hover,
-      > .repo-latest-commit-author:hover,
-      > .repo-latest-commit-author-card:hover
-    )
-    > .repo-latest-commit-author-card {
-    opacity: 1;
-    pointer-events: auto;
-    transform: translateY(0);
-    transition-delay: 300ms;
-    visibility: visible;
-  }
-
-  .repository.file.list
-    :is(#repo-files-table, #repo-file-commit-box)
-    .repo-latest-commit-attribution:has(> .repo-latest-commit-avatar:focus, > .repo-latest-commit-author:focus)
-    > .repo-latest-commit-author-card {
-    opacity: 1;
-    pointer-events: auto;
-    transform: translateY(0);
-    transition-delay: 0s;
-    visibility: visible;
-  }
-
-  .repository.file.list :is(#repo-files-table, #repo-file-commit-box) .repo-latest-commit-author-card::after {
-    bottom: -12px;
-    content: "";
-    height: 12px;
-    left: 0;
-    position: absolute;
-    width: 140px;
-  }
-
-  .repository.file.list :is(#repo-files-table, #repo-file-commit-box) .repo-latest-commit-author-card-profile {
-    align-items: center;
-    display: flex;
-    gap: 12px;
-  }
-
-  .repository.file.list
-    :is(#repo-files-table, #repo-file-commit-box)
-    .repo-latest-commit-author-card-profile
-    img.ui.avatar {
-    border-radius: 9999px;
-    flex: 0 0 48px;
-    height: 48px;
-    margin: 0;
-    width: 48px;
-  }
-
-  .repository.file.list :is(#repo-files-table, #repo-file-commit-box) .repo-latest-commit-author-card-identity {
-    display: flex;
-    flex-direction: column;
-    min-width: 0;
-  }
-
-  .repository.file.list :is(#repo-files-table, #repo-file-commit-box) .repo-latest-commit-author-card-context {
-    align-items: center;
-    color: ${themeVars.color.text.light.num1};
-    display: flex;
-    gap: 8px;
-    margin-top: 12px;
-  }
-
-  .repository.file.list :is(#repo-files-table, #repo-file-commit-box) .repo-latest-commit-author-card-context svg {
-    flex: 0 0 auto;
-  }
-
-  .repository.file.list :is(#repo-files-table, #repo-file-commit-box) .repo-latest-commit-message {
-    align-items: center;
-    display: flex;
-    flex: 1 1 auto;
-    gap: 8px;
-    height: 28px;
-    min-width: 0;
-    position: relative;
-  }
-
-  .repository.file.list :is(#repo-files-table, #repo-file-commit-box) .repo-latest-commit-message > .message-wrapper {
-    color: ${themeVars.color.text.light.num1};
-    display: block;
-    flex: 1 1 auto;
-    line-height: 21px;
-    min-width: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  .repository.file.list :is(#repo-files-table, #repo-file-commit-box) .repo-latest-commit-message > .message-wrapper a {
-    color: inherit;
-  }
-
-  .repository.file.list
-    :is(#repo-files-table, #repo-file-commit-box)
-    .repo-latest-commit-message
-    > .message-wrapper
-    a:hover {
-    color: ${themeVars.github.fgColor.accent};
-    text-decoration: underline;
-  }
-
-  .repository.file.list :is(#repo-files-table, #repo-file-commit-box) .repo-latest-commit-details,
-  .repository.file.list :is(#repo-files-table, #repo-file-commit-box) .repo-latest-commit-signature,
-  .repository.file.list :is(#repo-files-table, #repo-file-commit-box) .repo-latest-commit-status > :first-child {
-    align-items: center;
-    background: transparent !important;
-    border: 1px solid transparent !important;
-    border-radius: ${otherThemeVars.border.radius};
-    box-shadow: none !important;
-    color: ${themeVars.color.text.light.num1};
-    display: inline-flex;
-    flex: 0 0 28px;
-    height: 28px;
-    justify-content: center;
-    margin: 0;
-    padding: 5px;
-    width: 28px;
-  }
-
-  .repository.file.list :is(#repo-files-table, #repo-file-commit-box) .repo-latest-commit-details:hover,
-  .repository.file.list :is(#repo-files-table, #repo-file-commit-box) .repo-latest-commit-signature:hover,
-  .repository.file.list :is(#repo-files-table, #repo-file-commit-box) .repo-latest-commit-status > :first-child:hover {
-    background: ${themeVars.github.control.transparent.bgColor.hover} !important;
-  }
-
-  .repository.file.list :is(#repo-files-table, #repo-file-commit-box) .repo-latest-commit-details svg,
-  .repository.file.list :is(#repo-files-table, #repo-file-commit-box) .repo-latest-commit-signature svg,
-  .repository.file.list :is(#repo-files-table, #repo-file-commit-box) .repo-latest-commit-status svg {
-    color: currentcolor;
-    height: 16px;
-    margin: 0;
-    width: 16px;
-  }
-
-  .repository.file.list :is(#repo-files-table, #repo-file-commit-box) .repo-latest-commit-signature .signature {
-    align-items: center;
-    background: transparent !important;
-    border: 0 !important;
-    display: flex;
-    height: 16px;
-    justify-content: center;
-    padding: 0;
-    width: 16px;
-  }
-
-  .repository.file.list :is(#repo-files-table, #repo-file-commit-box) .repo-latest-commit-signature .signature img {
-    display: none;
-  }
-
-  .repository.file.list :is(#repo-files-table, #repo-file-commit-box) .repo-latest-commit-status {
-    display: inline-flex;
-    flex: 0 0 28px;
-    height: 28px;
-  }
-
-  .repository.file.list :is(#repo-files-table, #repo-file-commit-box) .repo-latest-commit-message > .commit-body {
-    background: ${themeVars.color.menu};
-    border: 1px solid ${themeVars.color.light.border};
-    border-radius: ${otherThemeVars.border.radius};
-    box-shadow: ${themeVars.github.shadow.floating.small};
-    box-sizing: border-box;
-    margin: 4px 0 0;
-    max-width: min(480px, calc(100vw - 32px));
-    padding: 12px;
-    position: absolute;
-    right: 0;
-    top: 100%;
-    white-space: pre-wrap;
-    z-index: 100;
-  }
-
-  .repository.file.list :is(#repo-files-table, #repo-file-commit-box) .repo-latest-commit-actions {
-    align-items: center;
-    display: flex;
-    flex: 0 0 auto;
-    gap: 8px;
-  }
-
-  .repository.file.list :is(#repo-files-table, #repo-file-commit-box) .gitea-github-theme-latest-time {
-    align-items: center;
-    color: ${themeVars.color.text.light.num1};
-    display: flex;
-    font-size: 12px;
-    gap: 4px;
-    height: 28px;
-    line-height: 18px;
-    white-space: nowrap;
-  }
-
-  .repository.file.list :is(#repo-files-table, #repo-file-commit-box) .gitea-github-theme-latest-commit {
-    align-items: center;
-    border-radius: ${otherThemeVars.border.radius};
-    display: inline-flex;
-    font-size: 12px;
-    font-weight: 500;
-    gap: 4px;
-    height: 28px;
-    margin: 0;
-    min-height: 28px;
-    padding: 0 8px;
-    text-transform: capitalize;
-    white-space: nowrap;
-  }
-
-  .repository.file.list :is(#repo-files-table, #repo-file-commit-box) .gitea-github-theme-latest-commit b {
-    font-weight: 500;
-  }
-
-  .repository.file.list :is(#repo-files-table, #repo-file-commit-box) .gitea-github-theme-latest-commit:hover {
-    background: ${themeVars.github.control.transparent.bgColor.hover};
-    color: inherit;
-    text-decoration: none;
-  }
-
-  .repository.file.list :is(#repo-files-table, #repo-file-commit-box) .gitea-github-theme-latest-commit svg {
-    color: ${themeVars.github.button.invisible.iconColor.rest};
-  }
-
-  @media (max-width: 1011.98px) {
-    .repository.file.list :is(#repo-files-table, #repo-file-commit-box) .gitea-github-theme-latest-commit {
-      justify-content: center;
+    & .repo-latest-commit-row > .sr-only {
+      border: 0;
+      clip: rect(0, 0, 0, 0);
+      height: 1px;
+      margin: -1px;
+      overflow: hidden;
       padding: 0;
+      position: absolute;
+      white-space: nowrap;
+      width: 1px;
+    }
+
+    & .repo-latest-commit-primary {
+      align-items: center;
+      display: flex;
+      flex: 1 1 auto;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    & .repo-latest-commit-attribution {
+      align-items: center;
+      display: flex;
+      flex: 0 1 auto;
+      min-width: 0;
+      position: relative;
+      white-space: nowrap;
+    }
+
+    & .repo-latest-commit-avatar {
+      align-items: center;
+      border-radius: 9999px;
+      display: flex;
+      flex: 0 0 20px;
+      height: 20px;
+      outline: none;
+      width: 20px;
+    }
+
+    & .repo-latest-commit-avatar:focus-visible {
+      outline: 2px solid ${themeVars.github.fgColor.accent};
+      outline-offset: 2px;
+    }
+
+    & .repo-latest-commit-avatar > img.ui.avatar {
+      border-radius: 9999px;
+      flex: 0 0 auto;
+      height: 20px;
+      margin: 0;
+      width: 20px;
+    }
+
+    & .repo-latest-commit-author {
+      color: ${themeVars.color.text.self};
+      display: block;
+      margin-left: 8px;
+      max-width: 125px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    & a.repo-latest-commit-author:hover {
+      color: ${themeVars.color.text.self};
+      text-decoration: underline;
+    }
+
+    & .repo-latest-commit-author-card {
+      background: ${themeVars.color.menu};
+      border: 1px solid ${themeVars.color.light.border};
+      border-radius: ${otherThemeVars.border.radius};
+      bottom: calc(100% + 12px);
+      box-shadow: ${themeVars.github.shadow.floating.small};
+      box-sizing: border-box;
+      color: ${themeVars.color.text.self};
+      left: 0;
+      opacity: 0;
+      padding: 16px;
+      pointer-events: none;
+      position: absolute;
+      transform: translateY(4px);
+      transition:
+        opacity 120ms ease 300ms,
+        transform 120ms ease 300ms,
+        visibility 0s linear 420ms;
+      visibility: hidden;
+      white-space: normal;
+      width: min(360px, calc(100vw - 64px));
+      z-index: 100;
+    }
+
+    &
+      .repo-latest-commit-attribution:has(
+        > .repo-latest-commit-avatar:hover,
+        > .repo-latest-commit-author:hover,
+        > .repo-latest-commit-author-card:hover
+      )
+      > .repo-latest-commit-author-card {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+      transition-delay: 300ms;
+      visibility: visible;
+    }
+
+    &
+      .repo-latest-commit-attribution:has(> .repo-latest-commit-avatar:focus, > .repo-latest-commit-author:focus)
+      > .repo-latest-commit-author-card {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+      transition-delay: 0s;
+      visibility: visible;
+    }
+
+    & .repo-latest-commit-author-card::after {
+      bottom: -12px;
+      content: "";
+      height: 12px;
+      left: 0;
+      position: absolute;
+      width: 140px;
+    }
+
+    & .repo-latest-commit-author-card-profile {
+      align-items: center;
+      display: flex;
+      gap: 12px;
+    }
+
+    & .repo-latest-commit-author-card-profile img.ui.avatar {
+      border-radius: 9999px;
+      flex: 0 0 48px;
+      height: 48px;
+      margin: 0;
+      width: 48px;
+    }
+
+    & .repo-latest-commit-author-card-identity {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    & .repo-latest-commit-author-card-context {
+      align-items: center;
+      color: ${themeVars.color.text.light.num1};
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    & .repo-latest-commit-author-card-context svg {
+      flex: 0 0 auto;
+    }
+
+    & .repo-latest-commit-message {
+      align-items: center;
+      display: flex;
+      flex: 1 1 auto;
+      gap: 8px;
+      height: 28px;
+      min-width: 0;
+      position: relative;
+    }
+
+    & .repo-latest-commit-message > .message-wrapper {
+      color: ${themeVars.color.text.light.num1};
+      display: block;
+      flex: 1 1 auto;
+      line-height: 21px;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    & .repo-latest-commit-message > .message-wrapper a {
+      color: inherit;
+    }
+
+    & .repo-latest-commit-message > .message-wrapper a:hover {
+      color: ${themeVars.github.fgColor.accent};
+      text-decoration: underline;
+    }
+
+    & .repo-latest-commit-details,
+    & .repo-latest-commit-signature,
+    & .repo-latest-commit-status > :first-child {
+      align-items: center;
+      background: transparent !important;
+      border: 1px solid transparent !important;
+      border-radius: ${otherThemeVars.border.radius};
+      box-shadow: none !important;
+      color: ${themeVars.color.text.light.num1};
+      display: inline-flex;
+      flex: 0 0 28px;
+      height: 28px;
+      justify-content: center;
+      margin: 0;
+      padding: 5px;
       width: 28px;
     }
 
-    .repository.file.list :is(#repo-files-table, #repo-file-commit-box) .gitea-github-theme-latest-commit > span {
+    & .repo-latest-commit-details:hover,
+    & .repo-latest-commit-signature:hover,
+    & .repo-latest-commit-status > :first-child:hover {
+      background: ${themeVars.github.control.transparent.bgColor.hover} !important;
+    }
+
+    & .repo-latest-commit-details svg,
+    & .repo-latest-commit-signature svg,
+    & .repo-latest-commit-status svg {
+      color: currentcolor;
+      height: 16px;
+      margin: 0;
+      width: 16px;
+    }
+
+    & .repo-latest-commit-signature .signature {
+      align-items: center;
+      background: transparent !important;
+      border: 0 !important;
+      display: flex;
+      height: 16px;
+      justify-content: center;
+      padding: 0;
+      width: 16px;
+    }
+
+    & .repo-latest-commit-signature .signature img {
       display: none;
     }
-  }
 
-  @media (max-width: 767.98px) {
-    .repository.file.list :is(#repo-files-table, #repo-file-commit-box) .repo-latest-commit-message,
-    .repository.file.list :is(#repo-files-table, #repo-file-commit-box) .gitea-github-theme-latest-time {
-      display: none;
+    & .repo-latest-commit-status {
+      display: inline-flex;
+      flex: 0 0 28px;
+      height: 28px;
+    }
+
+    & .repo-latest-commit-message > .commit-body {
+      background: ${themeVars.color.menu};
+      border: 1px solid ${themeVars.color.light.border};
+      border-radius: ${otherThemeVars.border.radius};
+      box-shadow: ${themeVars.github.shadow.floating.small};
+      box-sizing: border-box;
+      margin: 4px 0 0;
+      max-width: min(480px, calc(100vw - 32px));
+      padding: 12px;
+      position: absolute;
+      right: 0;
+      top: 100%;
+      white-space: pre-wrap;
+      z-index: 100;
+    }
+
+    & .repo-latest-commit-actions {
+      align-items: center;
+      display: flex;
+      flex: 0 0 auto;
+      gap: 8px;
+    }
+
+    & .gitea-github-theme-latest-time {
+      align-items: center;
+      color: ${themeVars.color.text.light.num1};
+      display: flex;
+      font-size: 12px;
+      gap: 4px;
+      height: 28px;
+      line-height: 18px;
+      white-space: nowrap;
+    }
+
+    & .gitea-github-theme-latest-commit {
+      align-items: center;
+      border-radius: ${otherThemeVars.border.radius};
+      display: inline-flex;
+      font-size: 12px;
+      font-weight: 500;
+      gap: 4px;
+      height: 28px;
+      margin: 0;
+      min-height: 28px;
+      padding: 0 8px;
+      text-transform: capitalize;
+      white-space: nowrap;
+    }
+
+    & .gitea-github-theme-latest-commit b {
+      font-weight: 500;
+    }
+
+    & .gitea-github-theme-latest-commit:hover {
+      background: ${themeVars.github.control.transparent.bgColor.hover};
+      color: inherit;
+      text-decoration: none;
+    }
+
+    & .gitea-github-theme-latest-commit svg {
+      color: ${themeVars.github.button.invisible.iconColor.rest};
+    }
+
+    @media (max-width: 1011.98px) {
+      & .gitea-github-theme-latest-commit {
+        justify-content: center;
+        padding: 0;
+        width: 28px;
+      }
+
+      & .gitea-github-theme-latest-commit > span {
+        display: none;
+      }
+    }
+
+    @media (max-width: 767.98px) {
+      & .repo-latest-commit-message,
+      & .gitea-github-theme-latest-time {
+        display: none;
+      }
     }
   }
 `;
@@ -375,7 +366,7 @@ const repoFileList = css`
   #repo-files-table {
     width: 100%;
     display: grid;
-    grid-template-columns: 2fr 3fr auto;
+    grid-template-columns: minmax(0, 40%) minmax(0, 1fr) 136px;
     border: 1px solid ${themeVars.color.secondary.self};
     background: ${themeVars.color.box.body.self};
     border-radius: ${otherThemeVars.border.radius};
@@ -400,7 +391,13 @@ const repoFileList = css`
   #repo-files-table .repo-file-line,
   #repo-files-table .repo-file-cell {
     border-top: 1px solid ${themeVars.color.secondary.self};
-    padding: 8px 10px;
+    padding: 8px 16px;
+  }
+
+  #repo-files-table .repo-file-cell {
+    min-width: 0;
+    height: 41px;
+    line-height: 24px;
   }
 
   #repo-files-table .repo-file-line:first-child {
@@ -420,7 +417,7 @@ const repoFileList = css`
     grid-column: 1 / -1;
     display: flex;
     align-items: center;
-    gap: 0.5em;
+    gap: 8px;
   }
 
   #repo-files-table .repo-file-last-commit {
@@ -431,7 +428,7 @@ const repoFileList = css`
   #repo-files-table .repo-file-cell.name {
     display: flex;
     align-items: center;
-    gap: 0.5em;
+    gap: 8px;
     overflow: hidden;
   }
 

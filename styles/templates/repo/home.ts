@@ -41,7 +41,7 @@ const repositoryHome = css`
     margin-right: auto;
   }
   .page-content.repository.file.list:has(.repo-grid-filelist-sidebar) > .repository-content-header > .ui.container {
-    padding-bottom: 16px;
+    padding-bottom: 18px;
   }
   .page-content.repository.file.list .repo-home-sidebar-top .repo-home-sidebar-header {
     margin-top: 0;
