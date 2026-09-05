@@ -17,7 +17,11 @@ export class SourceWatcher {
       const current = this.snapshot.read();
       if (current === previous) continue;
       previous = current;
-      onChange();
+      try {
+        onChange();
+      } catch (error) {
+        console.error("Preview rebuild failed; waiting for the next source change.", error);
+      }
     }
   }
 
