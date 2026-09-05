@@ -61,11 +61,11 @@
 					</a>
 					{{end}}
 					{{template "repo/watch_unwatch" $}}
-					{{if not $.DisableStars}}
-					{{template "repo/star_unstar" $}}
-					{{end}}
 					{{if not $.DisableForks}}
 					{{template "repo/header_fork" $}}
+					{{end}}
+					{{if not $.DisableStars}}
+					{{template "repo/star_unstar" $}}
 					{{end}}
 					{{if and $.IsModerationEnabled $.IsSigned (not $.IsRepositoryAdmin)}}
 					<button class="ui small compact jump dropdown icon button" data-tooltip-content="{{ctx.Locale.Tr "repo.more_operations"}}" aria-label="{{ctx.Locale.Tr "toggle_menu"}}">

@@ -313,6 +313,30 @@ const repositoryHeader = css`
   }
 
   @media (max-width: 767.98px) {
+    #navbar.repository-navbar .navbar-left {
+      flex-wrap: nowrap;
+    }
+    #navbar.repository-navbar .repository-navbar-breadcrumb.not-mobile {
+      display: flex !important;
+      order: 1;
+      flex: 1;
+      min-width: 0;
+    }
+    #navbar.repository-navbar .repository-navbar-owner,
+    #navbar.repository-navbar .repository-navbar-separator {
+      display: none;
+    }
+    #navbar.repository-navbar .repository-navbar-name {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: block;
+    }
+    #navbar.repository-navbar .navbar-mobile-right {
+      order: 2;
+      flex-shrink: 0;
+    }
+
     #navbar.repository-navbar {
       padding-left: 8px;
       padding-right: 8px;

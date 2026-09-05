@@ -370,12 +370,12 @@ const repoFileList = css`
     border: 1px solid ${themeVars.color.secondary.self};
     background: ${themeVars.color.box.body.self};
     border-radius: ${otherThemeVars.border.radius};
-    margin: 10px 0;
+    margin: 0 0 16px;
   }
 
   @media (max-width: 767.98px) {
     #repo-files-table {
-      grid-template-columns: auto 1fr auto;
+      grid-template-columns: minmax(0, 1fr) max-content;
     }
   }
 
@@ -408,7 +408,7 @@ const repoFileList = css`
   }
 
   #repo-files-table .repo-file-line {
-    grid-column: 1 / span 3;
+    grid-column: 1 / -1;
     display: flex;
     align-items: center;
     gap: 0.5em;
