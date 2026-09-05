@@ -20,10 +20,20 @@
 import { cssCombine } from "@lutinglt/gitea-github-theme/core";
 import issue from "./issue";
 import issueComment from "./issue_comment";
-import issueOverview from "./issue_overview";
-import pullList from "./pull_list";
+import issueConversation from "./issue_conversation";
 import issueList from "./issue_list";
+import issueOverview from "./issue_overview";
 import issueSidebar from "./issue_sidebar";
 import issueTimeline from "./issue_timeline";
+import pullList from "./pull_list";
 
-export default cssCombine(issue, issueComment, issueList, issueOverview, pullList, issueSidebar, issueTimeline);
+export default cssCombine(
+  issue,
+  issueComment,
+  issueList,
+  issueOverview,
+  pullList,
+  issueConversation,
+  issueSidebar,
+  issueTimeline
+);
