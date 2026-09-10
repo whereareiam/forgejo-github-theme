@@ -17,15 +17,17 @@
  * limitations under the License.
  */
 
-import { css, cssCombine } from "@lutinglt/gitea-github-theme/core";
+import { css, cssCombine, themeVars } from "@lutinglt/gitea-github-theme/core";
 
 // 注册/登录界面
 const signIn = css`
-  .page-content.user.signin {
+  .page-content.user.signin,
+  .page-content.user.twofa-challenge {
     .ui.grid {
       justify-content: center;
       > .column {
         width: 384px;
+        max-width: 100%;
         padding: 16px;
         > .ui.container {
           max-width: unset;
@@ -130,4 +132,79 @@ const signInTitle = css`
   }
 `;
 
-export default cssCombine(signIn, signInTitle);
+const twoFactor = css`
+  /* Use a dedicated challenge layout instead of Forgejo's legacy .signin grid,
+     whose desktop rules force authentication forms to a fixed 800px width. */
+  .page-content.user.twofa-challenge {
+    .twofa-challenge-column {
+      width: 384px;
+      max-width: 100%;
+      margin: 0 auto;
+      padding: 48px 16px 32px;
+    }
+    .signin-logo {
+      width: 44px;
+      height: 44px;
+    }
+    .twofa-heading {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      text-align: center;
+    }
+    .signin-title {
+      white-space: normal;
+      overflow-wrap: anywhere;
+    }
+    .twofa-description {
+      margin: 0;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .ui.attached.segment .field:not(.inline) {
+      margin-bottom: 24px;
+      input {
+        text-align: center;
+        padding: 4px 32px;
+        line-height: 20px;
+      }
+    }
+    .ui.button {
+      font-weight: 500;
+      line-height: 20px;
+      margin: 0;
+      padding: 5px 16px;
+    }
+    .twofa-options {
+      margin-top: 16px;
+      > summary.ui.button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        list-style: none;
+        &::marker,
+        &::-webkit-details-marker {
+          display: none;
+        }
+      }
+      &[open] > summary .svg {
+        transform: rotate(180deg);
+      }
+      .ui.button {
+        width: 100%;
+        min-height: 40px;
+        height: auto;
+        margin: 0;
+        white-space: normal;
+      }
+    }
+    .twofa-options-content {
+      border-top: 1px solid ${themeVars.color.light.border};
+      margin-top: 16px;
+      padding-top: 16px;
+    }
+  }
+`;
+
+export default cssCombine(signIn, signInTitle, twoFactor);

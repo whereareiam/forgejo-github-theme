@@ -152,8 +152,22 @@ const navbarRight = css`
         }
       }
     }
-    .navbar-right:not(:has(.user-menu)) > a.item {
-      align-items: center;
+    .navbar-right:not(:has(.user-menu)) {
+      gap: 8px;
+      > a.item {
+        align-items: center;
+        justify-content: center;
+        min-height: 32px;
+        padding: 4px 8px;
+        border: 1px solid transparent;
+        border-radius: ${otherThemeVars.border.radius};
+        &.navbar-register {
+          border-color: ${themeVars.color.light.border};
+        }
+        &:hover {
+          background-color: ${themeVars.color.nav.hoverBg};
+        }
+      }
     }
     /* 用户菜单 */
     .navbar-right .user-menu {
