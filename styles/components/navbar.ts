@@ -201,9 +201,6 @@ const navbarRight = css`
   /* 手机下的导航栏 */
   @media (max-width: 767.98px) {
     #navbar {
-      &.navbar-menu-open {
-        gap: 8px;
-      }
       .navbar-mobile-right {
         gap: 8px;
         > .item {

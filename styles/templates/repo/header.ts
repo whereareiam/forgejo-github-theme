@@ -356,7 +356,7 @@ const repositoryHeader = css`
 
   @media (max-width: 767.98px) {
     #navbar.repository-navbar .navbar-left {
-      flex-wrap: nowrap;
+      min-width: 0;
     }
     #navbar.repository-navbar .repository-navbar-breadcrumb.not-mobile {
       display: flex !important;
