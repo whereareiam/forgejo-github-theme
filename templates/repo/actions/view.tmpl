@@ -1,0 +1,49 @@
+{{template "base/head" .}}
+
+<div class="page-content repository github-actions-run">
+<link rel="stylesheet" href="{{AssetUrlPrefix}}/css/actions-run.css">
+
+	<div id="repo-action-view"
+		data-run-index="{{.RunIndex}}"
+		data-run-id="{{.RunID}}"
+		data-job-index="{{.JobIndex}}"
+		data-attempt-number="{{.AttemptNumber}}"
+		data-actions-url="{{.ActionsURL}}"
+		data-workflow-name="{{.WorkflowName}}"
+		data-workflow-url="{{.WorkflowURL}}"
+		data-workflow-source-url="{{.WorkflowSourceURL}}"
+		data-initial-post-response="{{.InitialData}}"
+		data-initial-artifacts-response="{{.InitialArtifactsData}}"
+		data-locale-approve="{{ctx.Locale.Tr "repo.pulls.poster_manage_approval"}}"
+		data-locale-cancel="{{ctx.Locale.Tr "cancel"}}"
+		data-locale-rerun="{{ctx.Locale.Tr "rerun"}}"
+		data-locale-rerun-all="{{ctx.Locale.Tr "rerun_all"}}"
+		data-locale-delete="{{ctx.Locale.Tr "actions.runs.delete.button"}}"
+		data-locale-delete-error="{{ctx.Locale.Tr "actions.runs.delete.error"}}"
+		data-locale-confirm-delete="{{ctx.Locale.Tr "actions.runs.delete.confirm_action"}}"
+		data-locale-status-unknown="{{ctx.Locale.Tr "actions.status.unknown"}}"
+		data-locale-status-waiting="{{ctx.Locale.Tr "actions.status.waiting"}}"
+		data-locale-status-running="{{ctx.Locale.Tr "actions.status.running"}}"
+		data-locale-status-success="{{ctx.Locale.Tr "actions.status.success"}}"
+		data-locale-status-failure="{{ctx.Locale.Tr "actions.status.failure"}}"
+		data-locale-status-cancelled="{{ctx.Locale.Tr "actions.status.cancelled"}}"
+		data-locale-status-skipped="{{ctx.Locale.Tr "actions.status.skipped"}}"
+		data-locale-status-blocked="{{ctx.Locale.Tr "actions.status.blocked"}}"
+		data-locale-artifacts-title="{{ctx.Locale.Tr "artifacts"}}"
+		data-locale-confirm-delete-artifact="{{ctx.Locale.Tr "confirm_delete_artifact"}}"
+		data-locale-show-timestamps="{{ctx.Locale.Tr "show_timestamps"}}"
+		data-locale-show-log-seconds="{{ctx.Locale.Tr "show_log_seconds"}}"
+		data-locale-show-full-screen="{{ctx.Locale.Tr "show_full_screen"}}"
+		data-locale-download-logs="{{ctx.Locale.Tr "download_logs"}}"
+		data-locale-run-attempt-label="{{ctx.Locale.Tr "actions.runs.run_attempt_label"}}"
+		data-locale-viewing-out-of-date-run="{{ctx.Locale.Tr "actions.runs.viewing_out_of_date_run"}}"
+		data-locale-view-most-recent-run="{{ctx.Locale.Tr "actions.runs.view_most_recent_run"}}"
+		data-locale-pre-execution-error="{{ctx.Locale.Tr "actions.workflow.pre_execution_error"}}"
+		data-locale-pre-execution-warning="{{ctx.Locale.Tr "actions.workflow.pre_execution_warning"}}"
+	>
+	</div>
+</div>
+
+<template id="actions-nav-icons"><span data-icon="home">{{svg "octicon-home" 16}}</span><span data-icon="file">{{svg "octicon-file-code" 16}}</span></template>
+<script src="{{AssetUrlPrefix}}/js/actions-run.js" defer></script>
+{{template "base/footer" .}}

@@ -1,0 +1,462 @@
+.page-content.repository.github-actions-run,
+.full.height:has(> .action-view-right):has(.github-actions-run) {
+  padding-top: 0;
+  margin-top: 0 !important;
+  .action-view-container.ui.container {
+    width: 100%;
+    margin: 0;
+    padding: 16px 32px 32px;
+  }
+  .action-view-header.action-view-header {
+    margin: 0 0 16px;
+  }
+  .actions-run-back {
+    display: inline-block;
+    color: var(--color-text-light-1);
+    font-size: 14px;
+    line-height: 21px;
+    margin-bottom: 8px;
+  }
+  .action-info-summary {
+    gap: 16px;
+    align-items: center;
+  }
+  .action-info-summary-title {
+    gap: 8px;
+    min-width: 0;
+  }
+  .action-info-summary-title-text {
+    font-size: 20px;
+    line-height: 28px;
+    font-weight: 600;
+    margin: 0;
+    overflow-wrap: anywhere;
+  }
+  .actions-run-index {
+    font-weight: 400;
+    color: var(--color-text-light-1);
+  }
+  .action-info-summary-actions {
+    flex-shrink: 0;
+    display: flex;
+    gap: 8px;
+  }
+  .action-info-summary-actions .ui.button {
+    height: 32px;
+    min-height: 32px;
+    padding: 5px 12px;
+    margin: 0;
+    font-size: 14px;
+  }
+  .action-summary {
+    display: none;
+    font-size: 12px;
+    line-height: 18px;
+    margin-left: 28px;
+  }
+  .action-summary + .action-summary {
+    display: none;
+  }
+  .action-view-body {
+    display: grid;
+    grid-template-columns: 280px minmax(0, 1fr);
+    gap: 48px;
+    align-items: start;
+  }
+  .action-view-left.action-view-left.action-view-left {
+    overflow: visible;
+    margin: 0;
+    width: auto;
+    min-width: 0;
+    max-width: none;
+  }
+  .actions-summary-link,
+  .actions-workflow-source {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 8px;
+    margin: 0;
+    border-radius: var(--border-radius);
+    font-size: 14px;
+    line-height: 20px;
+    color: var(--color-text);
+  }
+  .actions-summary-link {
+    position: relative;
+    font-weight: 400;
+    margin-bottom: 8px;
+  }
+  .actions-summary-link[aria-current="page"] {
+    font-weight: 600;
+    background: var(--github-control-transparent-bgColor-active);
+  }
+  .actions-summary-link[aria-current="page"]::before {
+    display: block;
+    content: "";
+    position: absolute;
+    left: -8px;
+    top: 4px;
+    height: 24px;
+    width: 4px;
+    background: var(--color-primary);
+    border-radius: var(--border-radius);
+  }
+  .actions-jobs-heading {
+    font-size: 12px;
+    line-height: 18px;
+    color: var(--color-text-light-1);
+    margin: 0 0 8px;
+    padding: 8px 0 16px;
+    border-bottom: 1px solid var(--color-light-border);
+  }
+  .actions-details-heading {
+    font-size: 12px;
+    line-height: 18px;
+    color: var(--color-text-light-1);
+    margin: 16px 0 8px;
+    padding: 16px 8px 0;
+    border-top: 1px solid var(--color-light-border);
+  }
+  .actions-workflow-source > svg,
+  .actions-summary-link > svg {
+    flex-shrink: 0;
+    color: var(--color-text-light-1);
+  }
+  .job-brief-item.job-brief-item.job-brief-item {
+    margin: 0 0 4px;
+    padding: 6px 8px;
+    min-height: 32px;
+    font-size: 14px;
+    line-height: 20px;
+  }
+  .job-brief-item .step-summary-duration {
+    font-size: 12px;
+  }
+  .actions-summary-link,
+  .actions-workflow-source,
+  .job-brief-item.job-brief-item {
+    text-decoration: none;
+    &:hover {
+      text-decoration: none;
+      color: var(--color-text);
+      background: var(--github-control-transparent-bgColor-hover);
+    }
+    &:focus-visible {
+      outline: 2px solid var(--color-primary);
+      outline-offset: -2px;
+    }
+  }
+  .actions-summary-link[aria-current="page"]:hover,
+  .job-brief-item.job-brief-item.selected:hover {
+    background: var(--github-control-transparent-bgColor-active);
+  }
+  .actions-job-card {
+    text-decoration: none;
+    &:hover {
+      text-decoration: none;
+      color: var(--color-primary);
+    }
+    &:focus-visible {
+      outline: 2px solid var(--color-primary);
+      outline-offset: 2px;
+    }
+    &:active {
+      background: var(--github-control-transparent-bgColor-active);
+    }
+  }
+  .job-step-summary:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: -2px;
+  }
+  .job-brief-item.selected {
+    background: var(--github-control-transparent-bgColor-active);
+  }
+  .action-view-right {
+    min-width: 0;
+    width: auto;
+    margin: 0;
+    border: 1px solid var(--color-light-border);
+    box-shadow: none;
+    border-radius: var(--border-radius);
+    min-height: calc(100dvh - 260px);
+    background: var(--color-menu);
+  }
+  .job-info-header {
+    height: 80px !important;
+    padding: 16px !important;
+    background: var(--color-menu);
+    border-bottom: 1px solid var(--color-light-border);
+  }
+  .job-info-header-title {
+    color: var(--color-primary) !important;
+    font-size: 16px;
+    line-height: 28px;
+    font-weight: 600;
+  }
+  .job-info-header-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .job-info-header-left {
+    min-width: 0;
+  }
+  .job-info-header-detail {
+    margin: 0 !important;
+    color: var(--color-text-light-1);
+    font-size: 12px;
+    line-height: 18px;
+  }
+  .job-step-container {
+    padding: 8px;
+  }
+  .job-step-section {
+    margin: 0 !important;
+  }
+  .job-step-summary.job-step-summary {
+    height: 40px;
+    min-height: 40px;
+    padding: 8px !important;
+    gap: 8px;
+    color: var(--color-text-light-1);
+    font: 14px/21px var(--fonts-proportional);
+    border-radius: var(--border-radius);
+  }
+  .job-step-summary .octicon-check-circle-fill {
+    color: var(--color-text-light-1) !important;
+  }
+  .job-step-summary:hover {
+    background: var(--github-control-transparent-bgColor-hover);
+  }
+  .job-step-summary.selected {
+    top: 80px;
+    background: var(--color-box-header) !important;
+  }
+  .job-step-summary .step-summary-duration {
+    font: 12px/18px var(--fonts-proportional);
+    color: var(--color-text-light-1);
+  }
+  .job-step-logs {
+    padding: 8px 0;
+    background: var(--color-console-bg);
+    overflow: auto;
+  }
+  .job-log-line {
+    font: 12px/20px var(--fonts-monospace);
+  }
+  .actions-log-search {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .actions-log-search input {
+    width: 256px;
+    max-width: 100%;
+    height: 32px;
+    padding: 5px 12px;
+    border: 1px solid var(--color-light-border);
+    border-radius: var(--border-radius);
+    background: var(--color-body);
+    color: var(--color-text);
+    font-size: 14px;
+    box-shadow: none;
+  }
+  .actions-log-search span {
+    font-size: 12px;
+    color: var(--color-text-light-1);
+  }
+  .job-log-line[hidden] {
+    display: none;
+  }
+  .actions-run-overview {
+    min-width: 0;
+    grid-column: 2;
+    grid-row: 1;
+  }
+  .actions-run-facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px 48px;
+    padding: 20px;
+    border: 1px solid var(--color-light-border);
+    border-radius: var(--border-radius);
+    margin-bottom: 16px;
+  }
+  .actions-fact-label {
+    display: block;
+    width: 100%;
+    color: var(--color-text-light-1);
+    font-size: 12px;
+    line-height: 18px;
+    margin-bottom: 6px;
+  }
+  .actions-run-trigger {
+    flex: 0 1 280px;
+    display: flex;
+    align-content: start;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0 8px;
+    min-width: 0;
+  }
+  .actions-run-trigger > a {
+    font-size: 14px;
+    color: var(--color-text);
+  }
+  .actions-run-trigger .actions-summary-commit {
+    font-size: 12px;
+    font-family: var(--fonts-monospace);
+    text-decoration: underline;
+  }
+  .actions-run-trigger .actions-summary-branch {
+    padding: 0 6px;
+    font-size: 12px;
+    background: var(--color-primary-alpha-10);
+    color: var(--color-primary);
+    border-radius: var(--border-radius);
+  }
+  .actions-run-fact strong {
+    font-size: 14px;
+    line-height: 21px;
+    text-transform: capitalize;
+  }
+  .actions-workflow-card {
+    padding: 20px;
+    border: 1px solid var(--color-light-border);
+    border-radius: var(--border-radius);
+    background: var(--color-menu);
+  }
+  .actions-workflow-title {
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: 600;
+    color: var(--color-text);
+  }
+  .actions-job-cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    padding: 48px 0;
+  }
+  .actions-job-card {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 200px;
+    max-width: 100%;
+    padding: 12px;
+    border: 1px solid var(--color-light-border);
+    border-radius: var(--border-radius);
+    background: var(--color-box-header);
+    color: var(--color-text);
+  }
+  .actions-job-card strong {
+    overflow-wrap: anywhere;
+    font-size: 14px;
+  }
+  .actions-job-duration {
+    margin-left: auto;
+    font-size: 12px;
+    color: var(--color-text-light-1);
+  }
+  &:not(.actions-summary-mode) .actions-run-overview {
+    display: none;
+  }
+  &.actions-summary-mode .action-view-right {
+    display: none;
+  }
+  &.actions-summary-mode .job-brief-item.selected {
+    font-weight: 400;
+    background: transparent;
+    &:hover {
+      background: var(--github-control-transparent-bgColor-hover);
+    }
+  }
+  &.actions-summary-mode .job-brief-item.selected::after {
+    display: none;
+  }
+  @media (max-width: 1011.98px) {
+    .action-view-body {
+      grid-template-columns: 224px minmax(0, 1fr);
+      gap: 24px;
+    }
+  }
+  @media (max-width: 767.98px) {
+    .action-view-container.ui.container {
+      padding: 16px;
+    }
+    .action-info-summary {
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .action-info-summary-actions {
+      flex-wrap: wrap;
+    }
+    .action-view-header.action-view-header {
+      margin-bottom: 24px;
+    }
+    .action-view-body {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .action-view-left.action-view-left.action-view-left {
+      width: 100%;
+    }
+    .job-brief-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+    .job-brief-item.job-brief-item.job-brief-item {
+      flex: 1;
+    }
+    .actions-jobs-heading {
+      padding: 4px 0 8px;
+    }
+    .actions-workflow-source,
+    .actions-details-heading {
+      display: none;
+    }
+    .action-view-right,
+    .actions-run-overview {
+      width: 100%;
+    }
+    .actions-run-facts {
+      gap: 16px;
+      padding: 16px;
+    }
+    .actions-run-trigger {
+      flex-basis: 100%;
+    }
+    .actions-workflow-card {
+      padding: 16px;
+    }
+    .actions-job-cards {
+      padding: 24px 0;
+      gap: 12px;
+    }
+    .actions-job-card {
+      width: 100%;
+    }
+    .actions-log-search input {
+      width: 170px;
+    }
+    .actions-log-search span {
+      display: none;
+    }
+    .job-step-summary.job-step-summary {
+      font-size: 12px;
+    }
+  }
+}
+
+/* Forgejo teleports the job panel outside the run mount in fullscreen mode. */
+.full.height:has(.github-actions-run) > .action-view-right {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  overflow: auto;
+  border-radius: 0;
+}
