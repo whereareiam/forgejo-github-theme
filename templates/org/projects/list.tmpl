@@ -1,0 +1,14 @@
+{{template "base/head" .}}
+{{if .ContextUser.IsOrganization}}
+	<div role="main" aria-label="{{.Title}}" class="page-content organization projects">
+		{{template "org/header" .}}
+		<div class="ui container">
+			{{template "projects/list" .}}
+		</div>
+	</div>
+{{else}}
+	{{template "user/profile_layout_start" .}}
+	{{template "user/profile_projects" .}}
+	{{template "user/profile_layout_end" .}}
+{{end}}
+{{template "base/footer" .}}

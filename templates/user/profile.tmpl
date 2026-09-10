@@ -1,0 +1,100 @@
+{{template "base/head" .}}
+{{template "user/profile_layout_start" .}}
+{{if eq .TabName "activity"}}
+	<section class="profile-activity">
+		<h2 class="profile-subpage-title">{{ctx.Locale.Tr "user.activity"}}</h2>
+		{{if eq .SignedUserID .ContextUser.ID}}
+		<p id="visibility-hint">
+			{{if .ContextUser.KeepActivityPrivate}}
+				{{ctx.Locale.Tr "user.public_activity.visibility_hint.self_private" (print AppSubUrl "/user/settings#keep-activity-private")}}
+			{{else}}
+				{{if eq .ContextUser.Visibility 2}}
+					{{ctx.Locale.Tr "user.public_activity.visibility_hint.self_private_profile" (print AppSubUrl "/user/settings#visibility-setting")}}
+				{{else}}
+					{{ctx.Locale.Tr "user.public_activity.visibility_hint.self_public" (print AppSubUrl "/user/settings#keep-activity-private")}}
+				{{end}}
+			{{end}}
+		</p>
+		{{else}}
+			{{if .IsAdmin}}
+			<div id="visibility-hint" class="ui info message">
+				{{if or .ContextUser.KeepActivityPrivate (eq .ContextUser.Visibility 2)}}
+					{{ctx.Locale.Tr "user.public_activity.visibility_hint.admin_private"}}
+				{{else}}
+					{{ctx.Locale.Tr "user.public_activity.visibility_hint.admin_public"}}
+				{{end}}
+			</div>
+			{{else}}
+				{{if .ContextUser.KeepActivityPrivate}}
+					<p id="visibility-hint">{{ctx.Locale.Tr "user.disabled_public_activity"}}</p>
+				{{end}}
+			{{end}}
+		{{end}}
+		{{if or .IsAdmin (eq .SignedUserID .ContextUser.ID) (not .ContextUser.KeepActivityPrivate)}}
+			{{template "user/heatmap" .}}
+			<h3 class="profile-section-title">{{ctx.Locale.Tr "repo.activity"}}</h3>
+			{{template "user/profile_activity_feed" .}}
+		{{end}}
+	</section>
+{{else if eq .TabName "stars"}}
+	<section class="profile-stars">
+		<h2 class="profile-subpage-title">{{ctx.Locale.Tr "user.starred"}}</h2>
+		{{template "user/profile_repository_search" .}}
+		{{template "user/profile_repositories" .}}
+		{{template "base/paginate" .}}
+	</section>
+{{else if eq .TabName "watching"}}
+	<section class="profile-stars">
+		<h2 class="profile-subpage-title">{{ctx.Locale.Tr "user.watched"}}</h2>
+		{{template "user/profile_repository_search" .}}
+		{{template "user/profile_repositories" .}}
+		{{template "base/paginate" .}}
+	</section>
+{{else if eq .TabName "following"}}
+	{{template "user/profile_people" .}}
+{{else if eq .TabName "followers"}}
+	{{template "user/profile_people" .}}
+{{else if eq .TabName "overview"}}
+	<section class="profile-readme">
+		<div class="profile-readme-heading"><a href="{{.ContextUser.HomeLink}}/.profile">{{.ContextUser.Name}} / .profile</a></div>
+	<div id="readme_profile" class="{{if not .IsProfileReadmePlain}}markup{{end}}">
+	{{if .IsProfileReadmePlain}}
+		<pre>{{.ProfileReadme}}</pre>
+	{{else}}
+		{{.ProfileReadme}}
+	{{end}}
+	</div>
+	</section>
+{{else if and FederationEnabled (eq .TabName "feed")}}
+	<section class="profile-federation">
+	<h2 class="profile-subpage-title">{{ctx.Locale.Tr "user.activitypub_feed.feed"}}</h2>
+	{{if eq .SignedUserID .ContextUser.ID}}
+		{{if .FollowingFeeds}}
+			{{template "user/dashboard/ap_feed" .}}
+		{{else}}
+			<div class="profile-empty">{{template "user/dashboard/ap_feed_guide" .}}</div>
+		{{end}}
+	{{end}}
+	</section>
+{{else}}
+	{{template "user/profile_repository_search" .}}
+	{{template "user/profile_repositories" .}}
+	{{template "base/paginate" .}}
+{{end}}
+{{template "user/profile_layout_end" .}}
+<div class="ui g-modal-confirm delete modal" id="block-user">
+	<div class="header">
+		{{ctx.Locale.Tr "user.block_user"}}
+	</div>
+	<div class="content">
+		<p>{{ctx.Locale.Tr "user.block_user.detail"}}</p>
+		<ul>
+			<li>{{ctx.Locale.Tr "user.block_user.detail_1"}}</li>
+			<li>{{ctx.Locale.Tr "user.block_user.detail_2"}}</li>
+			<li>{{ctx.Locale.Tr "user.block_user.detail_3"}}</li>
+		</ul>
+	</div>
+	{{template "base/modal_actions_confirm" .}}
+</div>
+
+{{template "base/footer" .}}
