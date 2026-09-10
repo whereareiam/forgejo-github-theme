@@ -555,6 +555,35 @@ describe("Forgejo 15 native integration", () => {
     expect(oauthTemplate).toContain("Continue with {{$provider.DisplayName}}");
     expect(oauthTemplate).not.toContain("sign_in_with_provider");
   });
+
+  it("preserves Forgejo's native two-factor form contracts in the shared challenge layout", () => {
+    const authDirectory = path.join(ROOT_DIR, "templates", "user", "auth");
+    const challenge = fs.readFileSync(path.join(authDirectory, "twofa_challenge.tmpl"), "utf-8");
+
+    for (const [file, recovery] of [
+      ["twofa.tmpl", "false"],
+      ["twofa_scratch.tmpl", "true"],
+    ]) {
+      const page = fs.readFileSync(path.join(authDirectory, file), "utf-8");
+      expect(page).toContain(`"user/auth/twofa_challenge" (dict "ctxData" . "Recovery" ${recovery})`);
+      expect(page).toContain('{{template "base/head" .}}');
+      expect(page).toContain('{{template "base/footer" .}}');
+    }
+
+    expect(challenge).toContain('action="{{.Link}}" method="post"');
+    expect(challenge).toContain('{{template "base/alert" .}}');
+    expect(challenge).toContain('id="passcode" name="passcode" type="text"');
+    expect(challenge).toContain('autocomplete="one-time-code"');
+    expect(challenge).toContain('inputmode="numeric" pattern="[0-9]*" autofocus required');
+    expect(challenge).toContain('id="token" name="token" type="text"');
+    expect(challenge).toContain('autocomplete="off" autocapitalize="none" spellcheck="false" autofocus required');
+    expect(challenge).toContain('aria-label="{{ctx.Locale.Tr "passcode"}}"');
+    expect(challenge).toContain('aria-label="{{ctx.Locale.Tr "auth.scratch_code"}}"');
+    expect(challenge).toContain('href="{{AppSubUrl}}/user/two_factor"');
+    expect(challenge).toContain('href="{{AppSubUrl}}/user/two_factor/scratch"');
+    expect(challenge).not.toContain('class="page-content user signin');
+    expect(challenge).not.toContain("tw-max-w-2xl");
+  });
 });
 
 describe("auto 主题 CSS 内容验证", () => {

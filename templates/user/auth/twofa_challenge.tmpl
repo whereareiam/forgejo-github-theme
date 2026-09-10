@@ -1,0 +1,43 @@
+{{$recovery := .Recovery}}
+{{with .ctxData}}
+<div role="main" aria-label="{{.Title}}" class="page-content user twofa-challenge">
+	<div class="twofa-challenge-column">
+		<div class="signin-branding">
+			<img class="signin-logo" width="44" height="44" src="{{AssetUrlPrefix}}/img/logo.svg" alt="{{ctx.Locale.Tr "logo"}}">
+			<div class="twofa-heading">
+				<h1 class="signin-title">{{if $recovery}}Two-factor recovery{{else}}{{ctx.Locale.Tr "twofa"}}{{end}}</h1>
+				<p class="twofa-description" id="twofa-description">
+					{{if $recovery}}
+						If you are unable to access your device or cannot receive a two-factor authentication code, enter your single-use recovery key to verify your identity.
+					{{else}}
+						Enter the code from your two-factor authentication app or browser extension below.
+					{{end}}
+				</p>
+			</div>
+		</div>
+		{{template "base/alert" .}}
+		<div class="ui attached segment">
+			<form class="ui form" action="{{.Link}}" method="post">
+				<div class="field">
+					{{if $recovery}}
+						<input id="token" name="token" type="text" aria-label="{{ctx.Locale.Tr "auth.scratch_code"}}" aria-describedby="twofa-description" placeholder="XXXXXXXXXX" autocomplete="off" autocapitalize="none" spellcheck="false" autofocus required>
+					{{else}}
+						<input id="passcode" name="passcode" type="text" aria-label="{{ctx.Locale.Tr "passcode"}}" aria-describedby="twofa-description" placeholder="XXXXXX" autocomplete="one-time-code" spellcheck="false" inputmode="numeric" pattern="[0-9]*" autofocus required>
+					{{end}}
+				</div>
+				<button class="ui primary button tw-w-full" type="submit">{{ctx.Locale.Tr "auth.verify"}}</button>
+			</form>
+		</div>
+		<details class="twofa-options">
+			<summary class="ui button">More options {{svg "octicon-triangle-down" 16}}</summary>
+			<div class="twofa-options-content">
+				{{if $recovery}}
+					<a class="ui button" href="{{AppSubUrl}}/user/two_factor">{{ctx.Locale.Tr "auth.use_onetime_code"}}</a>
+				{{else}}
+					<a class="ui button" href="{{AppSubUrl}}/user/two_factor/scratch">{{ctx.Locale.Tr "auth.use_scratch_code"}}</a>
+				{{end}}
+			</div>
+		</details>
+	</div>
+</div>
+{{end}}

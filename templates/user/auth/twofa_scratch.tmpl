@@ -1,0 +1,3 @@
+{{template "base/head" .}}
+{{template "user/auth/twofa_challenge" (dict "ctxData" . "Recovery" true)}}
+{{template "base/footer" .}}
