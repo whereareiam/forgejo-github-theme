@@ -22,7 +22,8 @@ import { css, cssCombine, themeVars } from "@lutinglt/gitea-github-theme/core";
 // 注册/登录界面
 const signIn = css`
   .page-content.user.signin,
-  .page-content.user.twofa-challenge {
+  .page-content.user.twofa-challenge,
+  .registration-panel {
     .ui.grid {
       justify-content: center;
       > .column {
@@ -55,7 +56,8 @@ const signIn = css`
       margin: 0;
       padding: 0;
       text-align: center;
-      white-space: nowrap;
+      white-space: normal;
+      overflow-wrap: anywhere;
     }
     .ui.top.attached.header {
       background-color: unset !important;
@@ -129,6 +131,18 @@ const signInTitle = css`
     font-weight: 600;
     line-height: 30px;
     white-space: nowrap;
+  }
+`;
+
+const registration = css`
+  .registration-panel {
+    width: 384px;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 16px;
+    .signin-footer {
+      text-align: center;
+    }
   }
 `;
 
@@ -207,4 +221,4 @@ const twoFactor = css`
   }
 `;
 
-export default cssCombine(signIn, signInTitle, twoFactor);
+export default cssCombine(signIn, signInTitle, registration, twoFactor);
