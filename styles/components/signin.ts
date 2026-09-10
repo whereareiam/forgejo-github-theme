@@ -26,9 +26,32 @@ const signIn = css`
       justify-content: center;
       > .column {
         width: 384px;
+        max-width: 100%;
         padding: 16px;
         > .ui.container {
           max-width: unset;
+        }
+      }
+    }
+    /* Forgejo combines a fixed desktop form width with an !important max-width
+       utility. The sign-in column must own the width for every authentication step. */
+    .ui.form {
+      max-width: 100% !important;
+      > .ui.top.attached.header {
+        border: 0;
+        font-size: 20px;
+        font-weight: 600;
+        line-height: 1.5;
+        padding: 0 0 24px;
+        text-align: center;
+      }
+      > .ui.attached.segment > .inline.field {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 12px;
+        > .button {
+          margin: 0;
         }
       }
     }
