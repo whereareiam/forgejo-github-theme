@@ -204,6 +204,8 @@ describe("Forgejo 15 native integration", () => {
     "repo/view_list.tmpl",
     "user/dashboard/navbar.tmpl",
     "user/heatmap.tmpl",
+    "user/auth/signup.tmpl",
+    "user/auth/signup_inner.tmpl",
   ];
 
   const unsupportedSelectorFamilies = [
@@ -575,6 +577,36 @@ describe("Forgejo 15 native integration", () => {
     expect(signInTemplate).toContain('href="{{AppSubUrl}}/user/forgot_password"');
     expect(oauthTemplate).toContain("Continue with {{$provider.DisplayName}}");
     expect(oauthTemplate).not.toContain("sign_in_with_provider");
+  });
+
+  it("keeps registration form and account-linking contracts while sharing the auth presentation", () => {
+    const auth = path.join(ROOT_DIR, "templates", "user", "auth");
+    const page = fs.readFileSync(path.join(auth, "signup.tmpl"), "utf-8");
+    const form = fs.readFileSync(path.join(auth, "signup_inner.tmpl"), "utf-8");
+    expect(page).toContain('{{template "user/auth/signup_inner" .}}');
+    expect(form).toContain('action="{{.SignUpLink}}" method="post"');
+    for (const field of ["user_name", "email", "password", "retype"]) {
+      expect(form).toContain(`name="${field}"`);
+      expect(form).toContain(`value="{{.${field}}}"`);
+      expect(form).toContain(`for="${field}"`);
+    }
+    expect(form).toContain(".DisableRegistrationReason");
+    expect(form).toContain("{{if .DisableRegistration}}");
+    expect(form).toContain("{{if not .DisablePassword}}");
+    expect(form).toContain(".LinkAccountModeRegister");
+    expect(form).toContain('"auth.oauth_signup_title"');
+    expect(form).toContain('"auth.oauth_signup_submit"');
+    expect(form).toContain('{{template "custom/signup_top"}}');
+    expect(form).toContain('{{template "user/auth/captcha" .}}');
+    expect(form).toContain('{{template "user/auth/oauth_container" .}}');
+    expect(form).toContain('{{template "base/alert" .}}');
+    expect(form.match(/autocomplete="new-password" required/g)).toHaveLength(2);
+    expect(form).toContain('class="ui form{{if not .LinkAccountMode}} ignore-dirty{{end}}"');
+    expect(form).toContain('"auth.hint_login" (printf "%s/user/login" AppSubUrl)');
+    expect(form).toContain('class="signin-branding"');
+    expect(form).toContain('class="signin-logo"');
+    expect(form).toContain('class="signin-footer"');
+    expect(form).not.toContain("ui top attached header");
   });
 
   it("preserves Forgejo's native two-factor form contracts in the shared challenge layout", () => {
