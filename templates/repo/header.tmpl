@@ -1,4 +1,4 @@
-{{/* Repository content header adapted to Forgejo 15 template data. */}}
+{{/* Repository content header adapted to Forgejo template data. */}}
 <div class="repository-content-header">
 {{with .Repository}}
 	<div class="ui container">
@@ -19,7 +19,9 @@
 						<span class="ui basic label not-mobile">{{ctx.Locale.Tr "repo.desc.archived"}}</span>
 						<div class="repo-icon only-mobile" data-tooltip-content="{{ctx.Locale.Tr "repo.desc.archived"}}">{{svg "octicon-archive" 18}}</div>
 					{{end}}
-					{{if .IsPrivate}}
+					{{if $.PullMirror}}
+						{{template "repo/mirror_badge" $}}
+					{{else if .IsPrivate}}
 						<span class="ui basic label repository-visibility-label not-mobile">{{ctx.Locale.Tr "repo.desc.private"}}</span>
 						<div class="repo-icon only-mobile" data-tooltip-content="{{ctx.Locale.Tr "repo.desc.private"}}">{{svg "octicon-lock" 18}}</div>
 					{{else if .Owner.Visibility.IsPrivate}}
@@ -78,14 +80,6 @@
 				</div>
 			{{end}}
 		</div>
-		{{if $.PullMirror}}
-			{{$address := MirrorRemoteAddress $.Context $.PullMirror}}
-			<div class="fork-flag">
-				{{ctx.Locale.Tr "repo.mirror_from"}}
-				<a target="_blank" rel="noopener noreferrer" href="{{$address.Address}}">{{$address.Address}}</a>
-				{{if $.PullMirror.UpdatedUnix}}{{ctx.Locale.Tr "repo.mirror_sync"}} {{DateUtils.TimeSince $.PullMirror.UpdatedUnix}}{{end}}
-			</div>
-		{{end}}
 		{{if .IsFork}}<div class="fork-flag">{{ctx.Locale.Tr "repo.forked_from"}} <a href="{{.BaseRepo.Link}}">{{.BaseRepo.FullName}}</a></div>{{end}}
 		{{if .IsGenerated}}<div class="fork-flag">{{ctx.Locale.Tr "repo.generated_from"}} <a href="{{(.TemplateRepo ctx).Link}}">{{(.TemplateRepo ctx).FullName}}</a></div>{{end}}
 	</div>

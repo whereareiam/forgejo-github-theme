@@ -1,0 +1,70 @@
+.repository-mirror {
+  position: relative;
+  flex: none;
+
+  > summary.ui.label {
+    display: block;
+    margin: 0;
+    padding: 2px 7px;
+    border: 1px solid var(--color-light-border);
+    border-radius: 2em;
+    background: transparent;
+    color: var(--color-text-light-1);
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 18px;
+    white-space: nowrap;
+    list-style: none;
+    cursor: pointer;
+  }
+
+  > summary::-webkit-details-marker {
+    display: none;
+  }
+
+  > summary:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  .repository-mirror-info {
+    position: absolute;
+    z-index: 100;
+    top: 100%;
+    inset-inline-end: 0;
+    width: min(340px, calc(100vw - 32px));
+    padding: 12px;
+    border: 1px solid var(--color-light-border);
+    border-radius: var(--border-radius);
+    background: var(--color-box-body);
+    color: var(--color-text);
+    box-shadow: 0 8px 24px var(--color-shadow);
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.5;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    text-align: start;
+  }
+
+  .repository-mirror-info > div + div {
+    margin-top: 6px;
+  }
+}
+
+@media (max-width: 767px) {
+  .page-content.repository.file.list:has(.repo-grid-filelist-sidebar)
+    .repo-header
+    > .flex-item:has(.repository-mirror) {
+    display: flex;
+  }
+
+  .page-content.repository.file.list .repo-header > .flex-item:has(.repository-mirror) > :not(.flex-item-trailing) {
+    display: none;
+  }
+
+  .repository-mirror .repository-mirror-info {
+    inset-inline-start: 0;
+    inset-inline-end: auto;
+  }
+}

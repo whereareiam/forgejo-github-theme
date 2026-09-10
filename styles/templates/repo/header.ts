@@ -248,6 +248,8 @@ const repositoryHeader = css`
     > .flex-item-title
     > a:hover {
     background: transparent;
+    /* Forgejo's generic flex-item link hover forces the primary color. */
+    color: ${themeVars.color.text.self} !important;
     text-decoration: underline !important;
   }
 
