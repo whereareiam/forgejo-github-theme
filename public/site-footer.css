@@ -1,0 +1,97 @@
+.page-footer.github-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 48px 16px 40px;
+  background: var(--color-body);
+  border: 0;
+  color: var(--color-text-light-1);
+  font-size: 12px;
+  line-height: 18px;
+}
+
+.github-footer .footer-main,
+.github-footer .footer-brand,
+.github-footer .footer-links,
+.github-footer .footer-details {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.github-footer .footer-main {
+  gap: 16px;
+  max-width: 100%;
+}
+
+.github-footer .footer-brand {
+  flex-shrink: 0;
+  gap: 8px;
+}
+
+.github-footer .footer-links,
+.github-footer .footer-details {
+  flex-wrap: wrap;
+  gap: 0 16px;
+  min-width: 0;
+  text-align: center;
+}
+
+.github-footer .footer-details {
+  gap: 4px 16px;
+  overflow-wrap: anywhere;
+}
+
+.github-footer .footer-logo {
+  display: block;
+  flex-shrink: 0;
+}
+
+.github-footer .footer-logo::before {
+  content: "";
+  display: block;
+  width: 24px;
+  height: 24px;
+  background: currentColor;
+  mask: var(--footer-logo) center / contain no-repeat;
+}
+
+.github-footer a:not(.item),
+.github-footer .ui.dropdown {
+  color: inherit;
+  font-size: inherit;
+}
+
+.github-footer a:not(.item):hover,
+.github-footer .ui.dropdown:hover > .flex-text-inline {
+  color: var(--color-primary);
+  text-decoration: underline;
+}
+
+.github-footer .flex-text-inline {
+  gap: 4px;
+}
+
+@media (max-width: 1011px) {
+  .github-footer .footer-main {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .github-footer .footer-links {
+    order: -1;
+  }
+}
+
+/* Match the subdued idle footer in the reference without dimming touch controls. */
+@media (hover: hover) and (pointer: fine) {
+  .github-footer .footer-main {
+    opacity: 0.3;
+  }
+
+  .github-footer .footer-main:hover,
+  .github-footer .footer-main:focus-within {
+    opacity: 1;
+  }
+}
