@@ -1,0 +1,114 @@
+{{if .HasWorkflowsOrRuns}}
+<div class="actions-layout">
+	<aside class="actions-sidebar" aria-label="Actions workflows">
+<div class="actions-sidebar-heading"><h2>Actions</h2>{{if and .CanWriteCode .CanWriteActions}}<a class="ui small primary button" href="{{.RepoLink}}/_new/{{.Repository.DefaultBranch | PathEscapeSegments}}/.forgejo/workflows/">New workflow</a>{{end}}</div>
+		<nav class="ui fluid vertical menu actions-menu">
+			<a class="item{{if not $.CurWorkflow}} active{{end}}" href="?actor={{$.CurActor}}&status={{$.CurStatus}}">{{ctx.Locale.Tr "actions.runs.all_workflows"}}</a>
+            <div class="actions-workflow-divider" role="separator"></div>
+			{{range .workflows}}
+				<a class="item{{if eq .Entry.Name $.CurWorkflow}} active{{end}}" href="?workflow={{.Entry.Name}}&actor={{$.CurActor}}&status={{$.CurStatus}}">
+					<span class="content" data-tooltip-content="{{.Entry.Name}}">
+						{{.Entry.Name}}
+					</span>
+
+					{{if .ErrMsg}}
+						<span class="error" data-tooltip-content="{{.ErrMsg}}">
+							{{svg "octicon-alert" 16 "text red"}}
+						</span>
+					{{end}}
+
+					{{if $.ActionsConfig.IsWorkflowDisabled .Entry.Name}}
+						<div class="ui red label">{{ctx.Locale.Tr "disabled"}}</div>
+					{{end}}
+				</a>
+			{{end}}
+		</nav>
+	</aside>
+	<main class="actions-main">
+<div class="actions-heading"><div><h1>{{if .CurWorkflow}}{{.CurWorkflow}}{{else}}All workflows{{end}}</h1><p>{{if .CurWorkflow}}Workflow runs{{else}}Showing runs from all workflows{{end}}</p></div><div class="actions-search">{{svg "octicon-search" 16}}<input id="actions-run-filter" aria-label="Filter runs on this page" type="search" placeholder="Filter runs on this page" autocomplete="off"></div></div>
+		<div class="ui secondary filter menu actions-filters"><strong class="actions-run-count">{{.Page.Paginater.Total}} workflow {{if eq .Page.Paginater.Total 1}}run{{else}}runs{{end}}</strong>
+			<div id="reloading-indicator" class="htmx-indicator"></div>
+
+            <div id="workflow_dropdown" class="ui dropdown jump item actions-workflow-filter">
+              <span class="text">Workflow</span>{{svg "octicon-triangle-down" 14 "dropdown icon"}}
+              <div class="menu">
+                <div class="header">Filter by workflow</div>
+                <div class="ui left icon search input"><i class="icon">{{svg "octicon-search" 16}}</i><input type="text" placeholder="Find a workflow" aria-label="Find a workflow"></div>
+                <a class="item{{if not .CurWorkflow}} active{{end}}" href="?actor={{.CurActor}}&amp;status={{.CurStatus}}">{{svg "octicon-check" 16 "actions-filter-check"}}All workflows</a>
+                {{range .workflows}}<a class="item{{if eq .Entry.Name $.CurWorkflow}} active{{end}}" href="?workflow={{.Entry.Name}}&amp;actor={{$.CurActor}}&amp;status={{$.CurStatus}}">{{svg "octicon-check" 16 "actions-filter-check"}}{{.Entry.Name}}</a>{{end}}
+              </div>
+            </div>
+			<!-- Actor -->
+			<div id="actor_dropdown" class="ui{{if not .Actors}} disabled{{end}} dropdown jump item">
+				<span class="text">{{ctx.Locale.Tr "actions.runs.actor"}}</span>
+				{{svg "octicon-triangle-down" 14 "dropdown icon"}}
+				<div class="menu">
+                    <div class="header">Filter by actor</div>
+					<div class="ui left icon search input">
+						<i class="icon">{{svg "octicon-search"}}</i>
+						<input type="text" placeholder="{{ctx.Locale.Tr "actions.runs.actor"}}">
+					</div>
+					<a class="item{{if not $.CurActor}} active{{end}}" href="?workflow={{$.CurWorkflow}}&status={{$.CurStatus}}&actor=0">
+						{{ctx.Locale.Tr "actions.runs.actors_no_select"}}
+					</a>
+					{{range .Actors}}
+						<a class="item{{if eq .ID $.CurActor}} active{{end}}" href="?workflow={{$.CurWorkflow}}&actor={{.ID}}&status={{$.CurStatus}}">
+							{{ctx.AvatarUtils.Avatar . 20}} {{.GetDisplayName}}
+						</a>
+					{{end}}
+				</div>
+			</div>
+			<!-- Status -->
+			<div id="status_dropdown" class="ui dropdown jump item">
+				<span class="text">{{ctx.Locale.Tr "actions.runs.status"}}</span>
+				{{svg "octicon-triangle-down" 14 "dropdown icon"}}
+				<div class="menu">
+                    <div class="header">Filter by status</div>
+					<div class="ui left icon search input">
+						<i class="icon">{{svg "octicon-search"}}</i>
+						<input type="text" placeholder="{{ctx.Locale.Tr "actions.runs.status"}}">
+					</div>
+					<a class="item{{if not $.CurStatus}} active{{end}}" href="?workflow={{$.CurWorkflow}}&actor={{$.CurActor}}&status=0">
+						{{ctx.Locale.Tr "actions.runs.status_no_select"}}
+					</a>
+					{{range .StatusInfoList}}
+						<a class="item{{if eq .Status $.CurStatus}} active{{end}}" href="?workflow={{$.CurWorkflow}}&actor={{$.CurActor}}&status={{.Status}}">
+							{{.DisplayedStatus}}
+						</a>
+					{{end}}
+				</div>
+			</div>
+
+			{{if .AllowDisableOrEnableWorkflow}}
+				<details class="dropdown dir-rtl">
+					<summary class="border">
+						{{svg "octicon-kebab-horizontal"}}
+					</summary>
+					<div class="content">
+						<ul>
+							<li>
+								<a class="link-action" data-url="{{$.Link}}/{{if .CurWorkflowDisabled}}enable{{else}}disable{{end}}?workflow={{$.CurWorkflow}}&actor={{.CurActor}}&status={{$.CurStatus}}" href="#noscroll">
+									{{if .CurWorkflowDisabled}}
+										{{ctx.Locale.Tr "actions.workflow.enable"}}
+									{{else}}
+										{{ctx.Locale.Tr "actions.workflow.disable"}}
+									{{end}}
+								</a>
+							</li>
+						</ul>
+					</div>
+				</details>
+			{{end}}
+		</div>
+
+		{{if $.CurWorkflowDispatch}}
+			{{template "repo/actions/dispatch" .}}
+		{{end}}
+
+		{{template "repo/actions/runs_list" .}}
+<p class="actions-search-empty" hidden>No runs on this page match your filter.</p>
+	</main>
+</div>
+{{else}}
+	{{template "repo/actions/no_workflows" .}}
+{{end}}

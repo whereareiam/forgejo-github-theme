@@ -110,19 +110,25 @@ describe("构建产物基本验证", () => {
   it("无多余主题文件", () => {
     const actualFiles = fs.readdirSync(DIST_DIR).filter(f => f.endsWith(".css"));
     const expectedSet = new Set(EXPECTED_THEME_FILES);
-    const extra = actualFiles.filter(f => !expectedSet.has(f) && f !== "pull-commits.css");
+    const pageStyles = new Set(fs.readdirSync(path.join(ROOT_DIR, "public")).filter(f => f.endsWith(".css")));
+    const extra = actualFiles.filter(f => !expectedSet.has(f) && !pageStyles.has(f));
     expect(extra, `存在多余主题文件: ${extra.join(", ")}`).toEqual([]);
   });
 });
 
-it("ships the PR commit stylesheet with its template and valid CSS", async () => {
+it("ships page stylesheets unchanged with valid CSS and a template reference", async () => {
   const { transform } = await import("lightningcss");
-  const code = fs.readFileSync(path.join(DIST_DIR, "pull-commits.css"));
-  expect(code.equals(fs.readFileSync(path.join(ROOT_DIR, "public/pull-commits.css")))).toBe(true);
-  expect(() => transform({ code, filename: "pull-commits.css" })).not.toThrow();
-  expect(fs.readFileSync(path.join(ROOT_DIR, "templates/repo/pulls/commits.tmpl"), "utf-8")).toContain(
-    "/css/pull-commits.css"
-  );
+  const templates = fs
+    .readdirSync(path.join(ROOT_DIR, "templates"), { recursive: true })
+    .filter(file => String(file).endsWith(".tmpl"))
+    .map(file => fs.readFileSync(path.join(ROOT_DIR, "templates", String(file)), "utf-8"))
+    .join("\n");
+  for (const name of fs.readdirSync(path.join(ROOT_DIR, "public")).filter(name => name.endsWith(".css"))) {
+    const code = fs.readFileSync(path.join(DIST_DIR, name));
+    expect(code.equals(fs.readFileSync(path.join(ROOT_DIR, "public", name)))).toBe(true);
+    expect(() => transform({ code, filename: name })).not.toThrow();
+    expect(templates).toContain(`/css/${name}`);
+  }
 });
 
 describe("非 auto 主题 CSS 内容验证", () => {

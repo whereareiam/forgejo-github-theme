@@ -1,0 +1,44 @@
+{{template "base/head" .}}
+<div class="page-content repository actions github-actions-list">
+<link rel="stylesheet" href="{{AssetUrlPrefix}}/css/actions-list.css">
+
+	<div class="actions-list-shell">
+		{{template "base/alert" .}}
+
+		{{/* Refresh the list every interval (30s) unless the document isn't visible or a dropdown is open; refresh
+		if visibility changes as well. simulate-polling-interval is a custom event used for e2e tests to mimic
+		the polling interval and should be defined identically to the `every` clause for accurate testing. */}}
+		<div
+			hx-get="?workflow={{$.CurWorkflow}}&actor={{$.CurActor}}&status={{$.CurStatus}}&page={{$.Page.Paginater.Current}}&list_inner=true"
+			hx-swap="morph:innerHTML"
+			hx-trigger="every 30s [pollingOk()], visibilitychange[document.visibilityState === 'visible'] from:document, simulate-polling-interval[pollingOk()] from:document"
+			hx-indicator="#reloading-indicator">
+			{{template "repo/actions/list_inner" .}}
+		</div>
+	</div>
+</div>
+
+<script src="{{AssetUrlPrefix}}/js/actions-list.js" defer></script>
+<script type="text/javascript">
+
+function pollingOk() {
+	return document.visibilityState === 'visible' && noActiveDropdowns();
+}
+
+// Intent: If the "Actor" or "Status" dropdowns are currently open and being navigated, or the workflow dispatch
+// dropdown form is open, the htmx refresh would replace them with closed dropdowns.  Instead this prevents the list
+// refresh from occurring while those dropdowns are open.
+//
+// Can't inline this into the `hx-trigger` above because using a left-brace ('[') breaks htmx's trigger parsing.
+function noActiveDropdowns() {
+	if (document.querySelector('[aria-expanded=true]') !== null || document.querySelector('details[open]') !== null) {
+		return false;
+	}
+	const dropdownForm = document.querySelector('#branch-dropdown-form');
+	if (dropdownForm !== null && dropdownForm.checkVisibility())
+		return false;
+	return true;
+}
+</script>
+
+{{template "base/footer" .}}
