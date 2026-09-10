@@ -1,0 +1,39 @@
+{{/* Keep Forgejo's native footer settings, language menu, and custom links. */}}
+<link rel="stylesheet" href="{{AssetUrlPrefix}}/css/site-footer.css">
+<footer class="page-footer github-footer" aria-label="{{ctx.Locale.Tr "aria.footer"}}">
+	<div class="footer-main">
+		{{if ShowFooterPoweredBy}}
+			<div class="footer-brand">
+				<a class="footer-logo" style="--footer-logo: url('{{AssetUrlPrefix}}/img/logo.svg')" href="{{AppSubUrl}}/" aria-label="{{ctx.Locale.Tr "home"}}">
+				</a>
+				<a target="_blank" rel="noopener noreferrer" href="https://forgejo.org">{{ctx.Locale.Tr "powered_by" "Forgejo"}}</a>
+			</div>
+		{{end}}
+		<nav class="footer-links" aria-label="{{ctx.Locale.Tr "aria.footer.links"}}">
+			<div class="ui dropdown upward language">
+				<span class="flex-text-inline">{{svg "octicon-globe" 14}} {{ctx.Locale.LangName}}</span>
+				<div class="menu language-menu">
+					{{range .AllLangs}}
+						<a lang="{{.Lang}}" data-url="{{AppSubUrl}}/?lang={{.Lang}}" class="item {{if eq ctx.Locale.Lang .Lang}}active selected{{end}}">{{.Name}}</a>
+					{{end}}
+				</div>
+			</div>
+			<a href="{{AssetUrlPrefix}}/licenses.txt">{{ctx.Locale.Tr "licenses"}}</a>
+			{{if .EnableSwagger}}<a href="{{AppSubUrl}}/api/swagger">API</a>{{end}}
+			{{template "custom/extra_links_footer" .}}
+		</nav>
+		{{if or .ShowFooterVersion .PageIsAdmin (and .TemplateLoadTimes ShowFooterTemplateLoadTime)}}
+			<div class="footer-details" role="group" aria-label="{{ctx.Locale.Tr "aria.footer.software"}}">
+				{{if (or .ShowFooterVersion .PageIsAdmin)}}
+					<span>{{ctx.Locale.Tr "version"}}:
+						{{if .IsAdmin}}<a href="{{AppSubUrl}}/admin/config">{{AppVerNoMetadata}}</a>{{else}}{{AppVerNoMetadata}}{{end}}
+					</span>
+				{{end}}
+				{{if and .TemplateLoadTimes ShowFooterTemplateLoadTime}}
+					<span>{{ctx.Locale.Tr "page"}}: {{LoadTimes .PageStartTime}}</span>
+					<span>{{ctx.Locale.Tr "template"}}{{if .TemplateName}} {{.TemplateName}}{{end}}: {{call .TemplateLoadTimes}}</span>
+				{{end}}
+			</div>
+		{{end}}
+	</div>
+</footer>
