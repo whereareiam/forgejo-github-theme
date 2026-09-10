@@ -1,0 +1,50 @@
+<dialog id="navbar-drawer" class="navbar-drawer" aria-label="{{ctx.Locale.Tr "aria.navbar"}}">
+	<div class="navbar-drawer-header">
+		<a href="{{AppSubUrl}}/" aria-label="{{ctx.Locale.Tr "home"}}"><img src="{{AssetUrlPrefix}}/img/logo.svg" width="32" height="32" alt="{{ctx.Locale.Tr "logo"}}"></a>
+		<button type="button" class="navbar-drawer-close" aria-label="Close menu" autofocus>{{svg "octicon-x" 16}}</button>
+	</div>
+	<nav class="navbar-drawer-content" aria-label="{{ctx.Locale.Tr "aria.navbar"}}">
+		{{if not (and .IsSigned .HideNavbarLinks)}}
+			<div class="navbar-drawer-group navbar-drawer-links">
+				<a href="{{AppSubUrl}}/">{{svg "octicon-home" 16}}<span>{{ctx.Locale.Tr "home"}}</span></a>
+				{{if .IsSigned}}
+					{{if not .UnitIssuesGlobalDisabled}}<a href="{{AppSubUrl}}/issues">{{svg "octicon-issue-opened" 16}}<span>{{ctx.Locale.Tr "issues"}}</span></a>{{end}}
+					{{if not .UnitPullsGlobalDisabled}}<a href="{{AppSubUrl}}/pulls">{{svg "octicon-git-pull-request" 16}}<span>{{ctx.Locale.Tr "pull_requests"}}</span></a>{{end}}
+					{{if and (not (and .UnitIssuesGlobalDisabled .UnitPullsGlobalDisabled)) .ShowMilestonesDashboardPage}}<a href="{{AppSubUrl}}/milestones">{{svg "octicon-milestone" 16}}<span>{{ctx.Locale.Tr "milestones"}}</span></a>{{end}}
+					<a href="{{AppSubUrl}}/notifications">{{svg "octicon-inbox" 16}}<span>{{ctx.Locale.Tr "notifications"}}</span></a>
+				{{end}}
+			</div>
+			<div class="navbar-drawer-group navbar-drawer-links">
+				<a href="{{AppSubUrl}}/explore/{{if .IsLandingPageOrganizations}}organizations{{else}}repos{{end}}">{{svg "octicon-telescope" 16}}<span>{{ctx.Locale.Tr "explore"}}</span></a>
+				<a href="https://forgejo.org/docs/latest/" target="_blank" rel="noopener noreferrer">{{svg "octicon-question" 16}}<span>{{ctx.Locale.Tr "help"}}</span></a>
+			</div>
+		{{end}}
+		<div id="navbar-drawer-extra-links" class="navbar-drawer-group navbar-drawer-links" hidden></div>
+		{{if .IsSigned}}
+			{{if not .HideNavbarLinks}}
+				<div class="navbar-drawer-group">
+					<details class="navbar-drawer-create">
+						<summary>{{svg "octicon-plus" 16}}<span>{{ctx.Locale.Tr "create_new"}}</span>{{svg "octicon-chevron-down" 16 "navbar-drawer-chevron"}}</summary>
+						<div class="navbar-drawer-links">{{template "base/navbar_create_items" .}}</div>
+					</details>
+				</div>
+			{{end}}
+			<div class="navbar-drawer-group navbar-drawer-links">
+				<div class="navbar-drawer-account">{{ctx.AvatarUtils.Avatar .SignedUser 24}}<strong>{{.SignedUser.Name}}</strong></div>
+				{{if not .HideNavbarLinks}}
+					<a href="{{.SignedUser.HomeLink}}">{{svg "octicon-person" 16}}<span>{{ctx.Locale.Tr "your_profile"}}</span></a>
+					{{if not .DisableStars}}<a href="{{.SignedUser.HomeLink}}?tab=stars">{{svg "octicon-star" 16}}<span>{{ctx.Locale.Tr "your_starred"}}</span></a>{{end}}
+					<a href="{{AppSubUrl}}/notifications/subscriptions">{{svg "octicon-bell" 16}}<span>{{ctx.Locale.Tr "notification.subscriptions"}}</span></a>
+					<a href="{{AppSubUrl}}/user/settings">{{svg "octicon-tools" 16}}<span>{{ctx.Locale.Tr "your_settings"}}</span></a>
+					{{if .IsAdmin}}<a href="{{AppSubUrl}}/admin">{{svg "octicon-server" 16}}<span>{{ctx.Locale.Tr "admin_panel"}}</span></a>{{end}}
+				{{end}}
+				<a class="link-action" href data-url="{{AppSubUrl}}/user/logout">{{svg "octicon-sign-out" 16}}<span>{{ctx.Locale.Tr "sign_out"}}</span></a>
+			</div>
+		{{else}}
+			<div class="navbar-drawer-group navbar-drawer-links">
+				{{if .ShowRegistrationButton}}<a href="{{AppSubUrl}}/user/sign_up">{{svg "octicon-person" 16}}<span>{{ctx.Locale.Tr "register"}}</span></a>{{end}}
+				<a rel="nofollow" href="{{AppSubUrl}}/user/login{{if not .PageIsSignIn}}?redirect_to={{.CurrentURL}}{{end}}">{{svg "octicon-sign-in" 16}}<span>{{ctx.Locale.Tr "sign_in"}}</span></a>
+			</div>
+		{{end}}
+	</nav>
+</dialog>

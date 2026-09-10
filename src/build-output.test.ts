@@ -189,6 +189,8 @@ describe("Forgejo 15 native integration", () => {
   const requiredTemplates = [
     "base/head_navbar.tmpl",
     "base/head_navbar_icons.tmpl",
+    "base/navbar_drawer.tmpl",
+    "base/navbar_create_items.tmpl",
     "repo/commit_message_subject.tmpl",
     "repo/commit_page.tmpl",
     "repo/diff/box.tmpl",
@@ -285,6 +287,19 @@ describe("Forgejo 15 native integration", () => {
     expect(secondaryMenu).toContain(".overflow-menu-items {\n      gap: 8px;");
     expect(navbarTemplate).toContain("{{ctx.AvatarUtils.Avatar .Owner 16}}");
     expect(navbarTemplate).not.toContain('class="repository-navbar-owner-avatar"');
+  });
+
+  it("ships the mobile drawer assets and keeps its toggle independent of Forgejo's inline menu", () => {
+    const navbar = fs.readFileSync(path.join(ROOT_DIR, "templates", "base", "head_navbar.tmpl"), "utf-8");
+    expect(navbar).toContain('id="navbar-drawer-toggle" aria-controls="navbar-drawer" aria-haspopup="dialog"');
+    expect(navbar).not.toContain('id="navbar-expand-toggle"');
+    expect(navbar).toContain('href="{{AssetUrlPrefix}}/css/navbar-drawer.css"');
+    expect(navbar).toContain('src="{{AssetUrlPrefix}}/js/navbar-drawer.js"');
+    for (const asset of ["navbar-drawer.css", "assets/js/navbar-drawer.js"]) {
+      expect(fs.readFileSync(path.join(DIST_DIR, asset), "utf-8")).toBe(
+        fs.readFileSync(path.join(ROOT_DIR, "public", asset), "utf-8")
+      );
+    }
   });
 
   it("does not emit selector families from the newer Gitea markup", () => {
