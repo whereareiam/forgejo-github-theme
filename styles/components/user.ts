@@ -21,7 +21,7 @@ import { css, cssCombine, themeVars } from "@lutinglt/gitea-github-theme/core";
 
 // 用户点星仓库列表
 const stars = css`
-  .page-content.user.profile {
+  .page-content.user.profile:not(.github-profile) {
     .stars {
       > .flex-list {
         > .flex-item {

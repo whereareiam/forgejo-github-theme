@@ -1,0 +1,17 @@
+{{template "base/head" .}}
+{{if .ContextUser.IsOrganization}}
+	<div role="main" aria-label="{{.Title}}" class="page-content organization code">
+		{{template "org/header" .}}
+		<div class="ui container">
+			{{template "shared/search/code/search" .}}
+		</div>
+	</div>
+{{else}}
+	{{template "user/profile_layout_start" .}}
+	<section class="profile-code">
+	<h2 class="profile-subpage-title">{{ctx.Locale.Tr "user.code"}}</h2>
+	{{template "shared/search/code/search" .}}
+	</section>
+	{{template "user/profile_layout_end" .}}
+{{end}}
+{{template "base/footer" .}}

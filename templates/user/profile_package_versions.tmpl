@@ -1,0 +1,40 @@
+<section class="profile-packages">
+<h2 class="profile-subpage-title"><a href="{{.PackageDescriptor.PackageWebLink}}">{{.PackageDescriptor.Package.Name}}</a> / {{ctx.Locale.Tr "packages.versions"}}</h2>
+<form class="ui form ignore-dirty profile-list-search">
+	<div class="profile-search-controls">
+		{{template "shared/search/input" dict "Value" .Query "Placeholder" (ctx.Locale.Tr "search.package_kind")}}
+		<span class="profile-select-wrap"><select class="profile-select" name="sort" aria-label="{{ctx.Locale.Tr "repo.issues.filter_sort"}}">
+			<option value="version_asc"{{if eq .Sort "version_asc"}} selected="selected"{{end}}>{{ctx.Locale.Tr "filter.string.asc"}}</option>
+			<option value="version_desc"{{if eq .Sort "version_desc"}} selected="selected"{{end}}>{{ctx.Locale.Tr "filter.string.desc"}}</option>
+			<option value="created_asc"{{if eq .Sort "created_asc"}} selected="selected"{{end}}>{{ctx.Locale.Tr "repo.issues.filter_sort.oldest"}}</option>
+			<option value="created_desc"{{if or (eq .Sort "") (eq .Sort "created_desc")}} selected="selected"{{end}}>{{ctx.Locale.Tr "repo.issues.filter_sort.latest"}}</option>
+		</select></span>
+		{{if eq .PackageDescriptor.Package.Type "container"}}
+		<span class="profile-select-wrap"><select class="profile-select" name="tagged" aria-label="{{ctx.Locale.Tr "packages.filter.container.tagged"}}">
+			{{$isTagged := or (eq .Tagged "") (eq .Tagged "tagged")}}
+			<option value="tagged"{{if $isTagged}} selected="selected"{{end}}>{{ctx.Locale.Tr "packages.filter.container.tagged"}}</option>
+			<option value="untagged"{{if not $isTagged}} selected="selected"{{end}}>{{ctx.Locale.Tr "packages.filter.container.untagged"}}</option>
+		</select></span>
+		{{end}}
+		<button class="secondary button" type="submit">{{ctx.Locale.Tr "search.search"}}</button>
+	</div>
+</form>
+<div class="profile-package-list">
+	{{range .PackageDescriptors}}
+	<div class="profile-package-row">
+		<div class="flex-item">
+			<div class="flex-item-main">
+				<a class="flex-item-title" href="{{.VersionWebLink}}">{{.Version.LowerVersion}}</a>
+				<div class="flex-item-body">
+					{{ctx.Locale.Tr "packages.published_by" (DateUtils.TimeSince .Version.CreatedUnix) .Creator.HomeLink .Creator.GetDisplayName}}
+				</div>
+			</div>
+		</div>
+	</div>
+	{{else}}
+		{{template "user/profile_empty" dict "Icon" "octicon-package" "Title" (ctx.Locale.Tr "packages.filter.no_result")}}
+	{{end}}
+</div>
+{{template "base/paginate" .}}
+
+</section>

@@ -1,0 +1,8 @@
+<div role="main" aria-label="{{.Title}}" class="page-content user profile github-profile">
+	<div class="profile-container">
+		{{template "base/alert" .}}
+		<div class="profile-layout">
+			<aside class="profile-sidebar" aria-label="{{ctx.Locale.Tr "settings.profile"}}">
+				{{template "shared/user/profile_big_avatar" .}}
+			</aside>
+			<div class="profile-content">

@@ -1,0 +1,63 @@
+<overflow-menu aria-label="{{ctx.Locale.Tr "settings.profile"}}" class="ui secondary pointing tabular borderless menu">
+	<div class="overflow-menu-items">
+		{{if and .HasProfileReadme .ContextUser.IsIndividual}}
+		<a class="{{if eq .TabName "overview"}}active {{end}}item" href="{{.ContextUser.HomeLink}}?tab=overview"{{if eq .TabName "overview"}} aria-current="page"{{end}}>
+			{{svg "octicon-book"}} {{ctx.Locale.Tr "user.overview"}}
+		</a>
+		{{end}}
+		<a class="{{if eq .TabName "repositories"}}active {{end}} item" href="{{.ContextUser.HomeLink}}?tab=repositories"{{if eq .TabName "repositories"}} aria-current="page"{{end}}>
+			{{svg "octicon-repo"}} {{ctx.Locale.Tr "user.repositories"}}
+			{{if .RepoCount}}
+				<span class="profile-nav-count">{{.RepoCount}}</span>
+			{{end}}
+			<span hidden test-name="repository-count">{{.RepoCount}}</span>
+		</a>
+		{{if or .ContextUser.IsIndividual .CanReadProjects}}
+		<a href="{{.ContextUser.HomeLink}}/-/projects"{{if .PageIsViewProjects}} aria-current="page"{{end}} class="{{if .PageIsViewProjects}}active {{end}}item">
+			{{svg "octicon-project-symlink"}} {{ctx.Locale.Tr "user.projects"}}
+			{{if .ProjectCount}}
+				<span class="profile-nav-count">{{.ProjectCount}}</span>
+			{{end}}
+			<span hidden test-name="project-count">{{.ProjectCount}}</span>
+		</a>
+		{{end}}
+		{{if and .IsPackageEnabled (or .ContextUser.IsIndividual .CanReadPackages)}}
+			<a href="{{.ContextUser.HomeLink}}/-/packages"{{if .IsPackagesPage}} aria-current="page"{{end}} class="{{if .IsPackagesPage}}active {{end}}item">
+				{{svg "octicon-package"}} {{ctx.Locale.Tr "packages.title"}}
+				{{if .PackageCount}}
+					<span class="profile-nav-count">{{.PackageCount}}</span>
+				{{end}}
+				<span hidden test-name="package-count">{{.PackageCount}}</span>
+			</a>
+		{{end}}
+		{{if and .IsRepoIndexerEnabled (or .ContextUser.IsIndividual .CanReadCode)}}
+			<a href="{{.ContextUser.HomeLink}}/-/code"{{if .IsCodePage}} aria-current="page"{{end}} class="{{if .IsCodePage}}active {{end}}item">
+				{{svg "octicon-code"}} {{ctx.Locale.Tr "user.code"}}
+			</a>
+		{{end}}
+		{{if .ContextUser.IsIndividual}}
+			{{if or (eq .TabName "activity") .IsAdmin (eq .SignedUserID .ContextUser.ID) (not .ContextUser.KeepActivityPrivate)}}
+				<a class="{{if eq .TabName "activity"}}active {{end}}item" href="{{.ContextUser.HomeLink}}?tab=activity"{{if eq .TabName "activity"}} aria-current="page"{{end}}>
+					{{svg "octicon-rss"}} {{ctx.Locale.Tr "user.activity"}}
+				</a>
+			{{end}}
+			{{if and FederationEnabled (eq .SignedUserID .ContextUser.ID)}}
+			<a class="{{if eq .TabName "feed"}}active {{end}}item" href="{{.ContextUser.HomeLink}}?tab=feed"{{if eq .TabName "feed"}} aria-current="page"{{end}}>
+				{{svg "fediverse-small"}} {{ctx.Locale.Tr "user.activitypub_feed.feed"}}
+			</a>
+			{{end}}
+			{{if not .DisableStars}}
+			<a class="{{if eq .TabName "stars"}}active {{end}}item" href="{{.ContextUser.HomeLink}}?tab=stars"{{if eq .TabName "stars"}} aria-current="page"{{end}}>
+				{{svg "octicon-star"}} {{ctx.Locale.Tr "user.starred"}}
+				{{if .ContextUser.NumStars}}
+					<span class="profile-nav-count">{{.ContextUser.NumStars}}</span>
+				{{end}}
+			</a>
+			{{else}}
+			<a class="{{if eq .TabName "watching"}}active {{end}}item" href="{{.ContextUser.HomeLink}}?tab=watching"{{if eq .TabName "watching"}} aria-current="page"{{end}}>
+				{{svg "octicon-eye"}} {{ctx.Locale.Tr "user.watched"}}
+			</a>
+			{{end}}
+		{{end}}
+	</div>
+</overflow-menu>

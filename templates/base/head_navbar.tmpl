@@ -1,3 +1,9 @@
+{{$isUserProfile := and (not .Repository) .ContextUser .ContextUser.IsIndividual (or .PageIsUserProfile .PageIsViewProjects .IsPackagesPage .IsCodePage)}}
+{{if $isUserProfile}}
+<link rel="stylesheet" href="{{AssetUrlPrefix}}/css/user-profile.css">
+<link rel="stylesheet" href="{{AssetUrlPrefix}}/css/profile-subpages.css">
+<header class="profile-global-header">
+{{end}}
 <link rel="stylesheet" href="{{AssetUrlPrefix}}/css/navbar-drawer.css">
 {{/* Forgejo 15 navigation adapted to the theme's GitHub-style layout. */}}
 <nav id="navbar"{{if .Repository}} class="repository-navbar"{{end}} aria-label="{{ctx.Locale.Tr "aria.navbar"}}">
@@ -25,6 +31,8 @@
 				<a class="repository-navbar-name" href="{{$.RepoLink}}">{{.Name}}</a>
 			</div>
 			{{end}}
+		{{else if $isUserProfile}}
+			<a class="item profile-navbar-name not-mobile" href="{{.ContextUser.HomeLink}}">{{.ContextUser.Name}}</a>
 		{{else if and .IsSigned .HideNavbarLinks}}
 			{{/* No links */}}
 		{{else if .IsSigned}}
@@ -170,6 +178,12 @@
 		</div>
 	{{end}}
 </nav>
+{{if $isUserProfile}}
+	<div class="profile-navigation">
+		{{template "user/overview/header" .}}
+	</div>
+</header>
+{{end}}
 {{if .Repository}}
 <nav class="repository-tab-nav page-content repository" aria-label="{{ctx.Locale.Tr "repository"}}">
 	{{template "repo/global_header" .}}

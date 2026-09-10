@@ -1,0 +1,628 @@
+.profile-global-header {
+  background: var(--color-nav-bg);
+}
+
+.profile-global-header #navbar {
+  min-height: 52px;
+  padding: 16px 16px 4px;
+  border-bottom: 0;
+}
+
+.profile-global-header #navbar .navbar-left,
+.profile-global-header #navbar .navbar-right,
+.profile-global-header #navbar .navbar-right > .item {
+  min-height: 32px;
+}
+
+.profile-global-header #navbar .navbar-mobile-right {
+  margin-block: 0;
+}
+
+.profile-global-header #navbar #navbar-logo {
+  height: 32px;
+  padding-block: 0;
+}
+
+/* Profile templates own their layout; repository and organization lists keep theirs. */
+.page-content.github-profile {
+  padding-top: 0;
+}
+
+.profile-global-header .profile-navigation {
+  margin: 0;
+  background: var(--color-nav-bg);
+  border: 0;
+  box-shadow: inset 0 -1px 0 var(--color-secondary);
+}
+
+.profile-global-header .profile-navigation > .ui.menu {
+  width: 100%;
+  max-width: none;
+  min-height: 48px;
+  margin: 0;
+  border-bottom: 0 !important;
+  padding: 8px 16px 0;
+  border: 0;
+  background: transparent;
+}
+
+.profile-global-header .profile-navigation .overflow-menu-items {
+  gap: 8px;
+}
+
+.profile-global-header .profile-navigation .ui.secondary.pointing.menu .item {
+  /* The shared tab theme fixes its bottom margin with !important. */
+  margin: 0 0 8px !important;
+  gap: 8px;
+  padding: 6px 8px !important;
+  border: 0;
+  font-size: 14px;
+}
+
+.profile-global-header .profile-navigation .ui.secondary.pointing.menu .active.item span::after {
+  content: none;
+}
+
+.profile-global-header .profile-navigation .ui.secondary.pointing.menu .active.item::after {
+  content: "";
+  position: absolute;
+  display: block;
+  inset: auto 0 -8px;
+  height: 2px;
+  width: 100%;
+  margin: 0;
+  border: 0;
+  border-radius: var(--border-radius);
+  background: var(--github-underlineNav-borderColor-active);
+  transform: none;
+  visibility: visible;
+}
+
+.page-content.github-profile > .profile-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 24px 32px 0;
+}
+
+.github-profile .profile-layout {
+  display: grid;
+  grid-template-columns: 296px minmax(0, 1fr);
+  align-items: start;
+  gap: 24px;
+}
+
+.github-profile .profile-sidebar,
+.github-profile .profile-content {
+  min-width: 0;
+}
+
+.github-profile #profile-avatar-card {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  margin: 16px 0 0;
+  border: 0;
+  box-shadow: none;
+  background: transparent;
+}
+
+.github-profile #profile-avatar-card > .content {
+  padding: 0;
+  border: 0;
+}
+
+.github-profile #profile-avatar-card #profile-avatar {
+  padding: 0;
+  display: block;
+  width: 100%;
+}
+
+.github-profile #profile-avatar .image {
+  display: block;
+  width: 100%;
+}
+
+.github-profile #profile-avatar img.ui.avatar {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+  border: 1px solid var(--color-secondary);
+  border-radius: 50%;
+}
+
+.github-profile #profile-avatar-card .profile-avatar-name {
+  display: block;
+  margin: 0;
+  text-align: start;
+}
+
+.github-profile .profile-full-name {
+  display: block;
+  color: var(--color-text);
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 30px;
+}
+
+.github-profile #profile-avatar-card .username {
+  display: block;
+  color: var(--color-text-light-1);
+  font-size: 20px;
+  font-weight: 300;
+  line-height: 24px;
+}
+
+.github-profile .profile-pronouns {
+  font-size: 16px;
+}
+
+.github-profile .profile-bio {
+  overflow-wrap: anywhere;
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.github-profile .profile-bio > :last-child {
+  margin-bottom: 0;
+}
+
+.github-profile #profile-avatar-card .actions {
+  display: flex;
+  gap: 8px;
+  padding: 0;
+}
+
+.github-profile #profile-avatar-card .primary-action,
+.github-profile .profile-edit {
+  flex: 1;
+  min-width: 0;
+}
+
+.github-profile #profile-avatar-card .actions .button {
+  min-height: 32px;
+  padding: 5px 16px;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.github-profile #profile-avatar-card .actions summary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+}
+
+.github-profile .profile-followers {
+  font-size: 14px;
+  line-height: 21px;
+}
+
+.github-profile .profile-followers a {
+  color: var(--color-text-light-1);
+}
+
+.github-profile .profile-followers a:hover {
+  color: var(--color-primary);
+}
+
+.github-profile .profile-followers .svg {
+  width: 16px;
+  height: 16px;
+  vertical-align: text-bottom;
+}
+
+.github-profile #profile-avatar-card > .extra > ul {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 0;
+  margin: 0;
+}
+
+.github-profile #profile-avatar-card > .extra > ul > li {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 14px;
+  line-height: 21px;
+}
+
+.github-profile #profile-avatar-card > .extra a {
+  color: var(--color-text);
+}
+
+.github-profile #profile-avatar-card > .extra a:hover {
+  color: var(--color-primary);
+  text-decoration: underline;
+}
+
+.github-profile #profile-avatar-card > .extra > ul > li > .svg {
+  flex-shrink: 0;
+  color: var(--color-text-light-1);
+  align-self: start;
+  margin-top: 3px;
+}
+
+.github-profile #profile-avatar-card > .extra > ul > li:has(.user-orgs, .user-badges) {
+  display: block;
+  margin-top: 12px;
+  padding-top: 16px;
+  border-top: 1px solid var(--color-secondary);
+}
+
+.github-profile .profile-section-title {
+  margin: 0 0 8px;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
+}
+
+.github-profile #profile-avatar-card .user-orgs,
+.github-profile #profile-avatar-card .user-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+}
+
+.github-profile #profile-avatar-card .user-orgs li,
+.github-profile #profile-avatar-card .user-badges li {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.github-profile #profile-avatar-card .user-orgs img {
+  width: 32px;
+  height: 32px;
+}
+
+.github-profile .profile-readme {
+  padding: 24px;
+  border: 1px solid var(--color-secondary);
+  border-radius: var(--border-radius);
+  overflow-wrap: anywhere;
+}
+
+.github-profile #readme_profile {
+  padding: 0;
+  border: 0;
+  box-shadow: none;
+}
+
+.github-profile #readme_profile pre {
+  overflow-x: auto;
+}
+
+.github-profile .profile-content .profile-repositories {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.github-profile .profile-content .profile-repositories > .flex-item {
+  padding: 24px 0;
+  border: 0;
+  border-bottom: 1px solid var(--color-secondary);
+  border-radius: 0;
+}
+
+.github-profile .profile-repositories .flex-item-title {
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 20px;
+  line-height: 30px;
+}
+
+.github-profile .profile-repositories .flex-item-title .label {
+  padding: 0 6px;
+  border: 1px solid var(--color-secondary);
+  background: transparent;
+  border-radius: 2em;
+  color: var(--color-text-light-1);
+  font-size: 12px;
+  line-height: 18px;
+}
+
+.github-profile .profile-repositories .flex-item-body {
+  margin-top: 4px;
+  color: var(--color-text-light-1);
+  font-size: 14px;
+  line-height: 21px;
+}
+
+.github-profile .profile-repositories .repo-topics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 12px;
+}
+
+.github-profile .profile-repositories .flex-item-trailing {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 8px 16px;
+  margin-top: 16px;
+  color: var(--color-text-light-1);
+  font-size: 12px;
+  line-height: 18px;
+}
+
+.github-profile .profile-repositories .color-icon {
+  width: 12px;
+  height: 12px;
+  margin-right: 0 !important;
+}
+
+.github-profile .profile-content .user-cards > .list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.github-profile .profile-content .user-cards .card {
+  width: 100%;
+  padding: 24px 0;
+  border: 0;
+  border-bottom: 1px solid var(--color-secondary);
+  border-radius: 0;
+  box-shadow: none;
+  background: transparent;
+}
+
+.github-profile .profile-content .user-cards .avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+@media (min-width: 768px) and (max-width: 1011px) {
+  .page-content.github-profile > .profile-container {
+    padding-right: 24px;
+    padding-left: 24px;
+  }
+
+  .github-profile .profile-layout {
+    grid-template-columns: minmax(180px, 25%) minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 767px) {
+  .page-content.github-profile > .profile-container {
+    padding: 24px 16px 0;
+  }
+
+  .github-profile .profile-layout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+  }
+
+  .github-profile #profile-avatar-card {
+    display: grid;
+    grid-template-columns: 60px minmax(0, 1fr);
+    align-items: center;
+    gap: 16px;
+    margin-top: 16px;
+  }
+
+  .github-profile #profile-avatar-card > * {
+    grid-column: 1 / -1;
+    min-width: 0;
+  }
+
+  .github-profile #profile-avatar-card > #profile-avatar {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .github-profile #profile-avatar-card > .profile-avatar-name {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .github-profile .profile-readme {
+    padding: 16px;
+  }
+}
+
+#navbar .profile-navbar-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 600;
+}
+
+.github-profile .profile-repo-kind {
+  display: inline-flex;
+  align-items: center;
+}
+
+.github-profile .profile-repo-kind .svg {
+  width: 16px;
+  min-width: 16px;
+  height: 16px;
+}
+
+.github-profile .profile-readme-heading {
+  margin-bottom: 16px;
+  font-family: var(--fonts-monospace);
+  font-size: 12px;
+  line-height: 18px;
+}
+
+.github-profile .profile-readme-heading a {
+  color: var(--color-text);
+}
+
+.github-profile .profile-readme-heading a:hover {
+  color: var(--color-primary);
+  text-decoration: underline;
+}
+
+.profile-global-header .profile-navigation .ui.secondary.pointing.menu .item > .svg {
+  margin: 0;
+}
+
+/* Keep contribution cells readable instead of shrinking a full year to phone width. */
+.github-profile #user-heatmap .total-contributions {
+  position: static;
+  margin-bottom: 8px;
+  color: var(--color-text);
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.github-profile #user-heatmap > .vch__container {
+  overflow-x: auto;
+  padding: 16px;
+  border-radius: var(--border-radius);
+}
+
+.github-profile #user-heatmap .vch__wrapper {
+  min-width: 663px;
+}
+
+.github-profile .profile-repo-toolbar {
+  display: flex;
+  align-items: start;
+  gap: 8px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--color-secondary);
+}
+
+.github-profile #repo-search-form {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  margin: 0;
+}
+
+.github-profile #repo-search-form .profile-repo-query {
+  flex: 1;
+  min-width: 0;
+  width: 100%;
+  height: 32px;
+  margin: 0;
+  padding: 5px 12px;
+  border: 1px solid var(--color-input-border);
+  border-radius: var(--border-radius);
+  background: var(--color-body);
+  color: var(--color-text);
+  box-shadow: var(--github-shadow-inset);
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.github-profile #repo-search-form .profile-repo-query:focus {
+  border-color: var(--github-borderColor-accent-emphasis);
+  box-shadow: inset 0 0 0 1px var(--github-borderColor-accent-emphasis);
+  outline: none;
+}
+
+.github-profile #repo-search-form .profile-repo-filter {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 32px;
+  margin: 0;
+  padding: 5px 16px;
+  border: 1px solid var(--color-light-border);
+  border-radius: var(--border-radius);
+  background: var(--color-button);
+  color: var(--color-text);
+  box-shadow: none;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+}
+
+.github-profile #repo-search-form .profile-repo-filter:hover,
+.github-profile #repo-search-form .profile-repo-filter.active {
+  background: var(--color-hover);
+}
+
+.github-profile #repo-search-form .profile-repo-filter:focus-visible {
+  outline: 2px solid var(--github-borderColor-accent-emphasis);
+  outline-offset: 2px;
+}
+
+.github-profile .profile-filter-caret {
+  width: 0;
+  height: 0;
+  border: 4px solid transparent;
+  border-top-color: currentColor;
+  border-bottom: 0;
+}
+
+.github-profile .profile-repo-filter > .menu {
+  max-height: min(450px, 60vh);
+  overflow-y: auto;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.github-profile .profile-repo-toolbar > .profile-new-repo.button {
+  flex: none;
+  min-height: 32px;
+  margin: 0;
+  padding: 5px 16px;
+  box-shadow: none;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+}
+
+@media (max-width: 767px) {
+  .github-profile .profile-repo-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+  }
+
+  .github-profile .profile-new-repo {
+    order: -1;
+  }
+
+  .github-profile #repo-search-form {
+    flex-wrap: wrap;
+  }
+
+  .github-profile #repo-search-form .profile-repo-query {
+    flex-basis: 100%;
+  }
+}
+
+.profile-global-header .profile-nav-count {
+  flex: none;
+  min-width: 20px;
+  margin: 0;
+  padding: 0 6px;
+  border: 0;
+  border-radius: 2em;
+  background: var(--color-label-bg);
+  color: var(--color-label-text);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 18px;
+  text-align: center;
+}
+
+@media (max-width: 767px) {
+  .profile-global-header .profile-navigation .ui.secondary.pointing.menu .item > .svg {
+    display: none;
+  }
+}

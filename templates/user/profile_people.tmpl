@@ -1,0 +1,28 @@
+<section class="profile-people">
+	<h2 class="profile-subpage-title">{{.CardsTitle}}</h2>
+	<nav class="profile-subnav" aria-label="{{ctx.Locale.Tr "settings.profile"}}">
+		<a href="{{.ContextUser.HomeLink}}?tab=followers"{{if eq .TabName "followers"}} aria-current="page"{{end}}>{{svg "octicon-people" 16}}{{ctx.Locale.TrN .NumFollowers "user.followers_one" "user.followers_few" .NumFollowers}}</a>
+		<a href="{{.ContextUser.HomeLink}}?tab=following"{{if eq .TabName "following"}} aria-current="page"{{end}}>{{ctx.Locale.TrN .NumFollowing "user.following_one" "user.following_few" .NumFollowing}}</a>
+	</nav>
+	{{if .Cards}}
+	<ul class="profile-person-list">
+		{{range .Cards}}
+		<li class="profile-person">
+			<a href="{{.HomeLink}}" class="profile-person-avatar">{{ctx.AvatarUtils.Avatar . 50}}</a>
+			<div class="profile-person-content">
+				<h3><a href="{{.HomeLink}}">{{.DisplayName}}{{if .FullName}}<span class="profile-person-username">{{.Name}}</span>{{end}}</a></h3>
+				{{if .Description}}<div class="profile-person-bio markup">{{RenderMarkdownToHtml ctx .Description}}</div>{{end}}
+				<div class="profile-row-meta">
+					{{if .Website}}{{svg "octicon-link" 16}}<a href="{{.Website}}" target="_blank" rel="noopener noreferrer">{{.Website}}</a>
+					{{else if .Location}}{{svg "octicon-location" 16}}{{.Location}}
+					{{else}}{{svg "octicon-calendar" 16}}{{ctx.Locale.Tr "user.joined_on" (DateUtils.AbsoluteShort .CreatedUnix)}}{{end}}
+				</div>
+			</div>
+		</li>
+		{{end}}
+	</ul>
+	{{else}}
+		{{template "user/profile_empty" dict "Icon" "octicon-people" "Title" .CardsNoneMsg}}
+	{{end}}
+	{{template "base/paginate" .}}
+</section>
