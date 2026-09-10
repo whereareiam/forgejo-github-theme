@@ -1,0 +1,10 @@
+{{$address := MirrorRemoteAddress .Context .PullMirror}}
+<link rel="stylesheet" href="{{AssetUrlPrefix}}/css/repo-mirror.css">
+<details class="repository-mirror">
+	<summary class="ui basic label repository-visibility-label">{{if .Repository.IsPrivate}}{{ctx.Locale.Tr "repo.desc.private"}}{{else if .Repository.Owner.Visibility.IsPrivate}}{{ctx.Locale.Tr "repo.desc.internal"}}{{else}}{{ctx.Locale.Tr "settings.visibility.public"}}{{end}} mirror</summary>
+	<div class="repository-mirror-info">
+		<div>{{ctx.Locale.Tr "repo.mirror_from"}} <a target="_blank" rel="noopener noreferrer" href="{{$address.Address}}">{{$address.Address}}</a></div>
+		{{if .PullMirror.UpdatedUnix}}<div class="muted">{{ctx.Locale.Tr "repo.mirror_sync"}} {{DateUtils.TimeSince .PullMirror.UpdatedUnix}}</div>{{end}}
+	</div>
+</details>
+<script src="{{AssetUrlPrefix}}/js/repo-mirror.js" defer></script>

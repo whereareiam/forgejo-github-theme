@@ -6,3 +6,5 @@ package-lock.json
 .env
 .VSCodeCounter
 /dev/.generated/
+
+/screenshots/reviews/
