@@ -1,11 +1,42 @@
 {{/* Repository-root metadata sections available in Forgejo 15. */}}
+<link rel="stylesheet" href="{{AssetUrlPrefix}}/css/repo-latest-release.css">
 <aside class="repo-home-sidebar-bottom flex-relaxed-list">
 	{{if .NumReleases}}
 		<div class="divider"></div>
-		<div class="repo-home-sidebar-header">
+		<div class="repo-home-sidebar-header repo-release-heading">
 			<a class="muted" href="{{.RepoLink}}/releases">{{ctx.Locale.Tr "repo.releases"}}</a>
 			<span class="ui small label">{{CountFmt .NumReleases}}</span>
 		</div>
+		<a class="repo-latest-release" data-repo-latest-release data-api-url="{{AppSubUrl}}/api/v1/repos/{{.Repository.OwnerName}}/{{.Repository.Name}}/releases/latest" href="{{.RepoLink}}/releases">
+			<div class="repo-latest-release-heading">
+				{{svg "octicon-tag" 16}}
+				<span class="repo-latest-release-title" data-release-title>Loading latest release…</span>
+				<span class="repo-latest-release-badge" data-release-badge>Latest</span>
+			</div>
+			<span class="repo-latest-release-date" data-release-date></span>
+		</a>
+		<a class="repo-release-count" data-release-count="{{.NumReleases}}" href="{{.RepoLink}}/releases">+ {{CountFmt .NumReleases}} releases</a>
+		<script>
+			(() => {
+				const card = document.querySelector('[data-repo-latest-release]');
+				if (!card) return;
+				fetch(card.dataset.apiUrl, {headers: {Accept: 'application/json'}, credentials: 'same-origin'})
+					.then(response => response.ok ? response.json() : Promise.reject())
+					.then(release => {
+						card.querySelector('[data-release-title]').textContent = release.name || release.tag_name;
+						const count = Number(card.parentElement.querySelector('[data-release-count]')?.dataset.releaseCount || 0);
+						const countLink = card.parentElement.querySelector('[data-release-count]');
+						if (countLink) countLink.textContent = `+ ${Math.max(0, count - 1)} releases`;
+						card.querySelector('[data-release-date]').textContent = release.published_at
+							? (() => { const months = Math.max(1, Math.floor((Date.now() - Date.parse(release.published_at)) / 2592e6)); return months < 12 ? `${months} month${months === 1 ? '' : 's'} ago` : `${Math.floor(months / 12)} year${months < 24 ? '' : 's'} ago`; })() : '';
+					})
+					.catch(() => {
+						card.querySelector('[data-release-title]').textContent = 'View all releases';
+						card.querySelector('[data-release-date]').remove();
+						card.querySelector('[data-release-badge]').remove();
+					});
+			})();
+		</script>
 	{{end}}
 
 	{{if and (.Permission.CanRead $.UnitTypeCode) (not .IsEmptyRepo) .LanguageStats}}

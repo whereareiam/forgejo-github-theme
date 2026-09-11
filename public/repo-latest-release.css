@@ -1,0 +1,87 @@
+.page-content.repository.file.list .repo-latest-release {
+  display: block;
+  margin: 0;
+  padding: 7px 0 8px;
+  color: var(--color-text);
+}
+.page-content.repository.file.list .repo-latest-release:hover,
+.page-content.repository.file.list .repo-release-count:hover {
+  text-decoration: none;
+}
+.page-content.repository.file.list .repo-latest-release-heading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+.page-content.repository.file.list .repo-latest-release-heading > svg {
+  color: var(--color-green);
+  flex: 0 0 auto;
+}
+.page-content.repository.file.list .repo-latest-release-title {
+  overflow: hidden;
+  color: var(--color-text);
+  font-size: 14px;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.page-content.repository.file.list .repo-latest-release-badge {
+  border: 1px solid var(--color-green);
+  border-radius: 12px;
+  color: var(--color-green);
+  flex: 0 0 auto;
+  font-size: 12px;
+  line-height: 18px;
+  padding: 0 7px;
+}
+.page-content.repository.file.list .repo-latest-release-date {
+  display: block;
+  color: var(--color-text-light-1);
+  font-size: 12px;
+  margin-left: 24px;
+}
+.page-content.repository.file.list .repo-latest-release-date {
+  margin-top: 2px;
+}
+.page-content.repository.file.list .repo-release-count {
+  display: block;
+  color: var(--color-accent-fg);
+  font-size: 12px;
+  padding: 3px 0 10px;
+}
+.page-content.repository.file.list .repo-release-heading { margin-bottom: 0; }
+.page-content.repository.file.list .repo-latest-release { padding-top: 0; }
+.page-content.repository.file.list .repo-release-heading + .repo-latest-release { margin-top: -8px; }
+.page-content.repository.file.list .repo-release-count {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+.page-content.repository.file.list .repo-release-count:hover,
+.page-content.repository.file.list .repo-release-count:focus-visible {
+  background: transparent;
+  color: var(--color-primary);
+  text-decoration: none;
+}
+/* Match GitHub's inline release-count link: no block hit area or padding. */
+.page-content.repository.file.list .repo-release-count {
+  display: inline;
+  color: rgb(68 147 248);
+  line-height: 18px;
+  padding: 0;
+}
+.page-content.repository.file.list .repo-release-count:hover,
+.page-content.repository.file.list .repo-release-count:focus-visible {
+  color: rgb(68 147 248);
+  text-decoration: underline;
+}
+.page-content.repository.file.list .repo-release-count {
+  display: inline !important;
+}
+.page-content.repository.file.list .repo-release-count:hover,
+.page-content.repository.file.list .repo-release-count:focus-visible {
+  text-decoration: underline !important;
+}
+/* GitHub leaves a compact gap below the release-count link before the divider. */
+.page-content.repository.file.list .repo-release-count { margin-bottom: -8px; }
+.page-content.repository.file.list .repo-release-count { margin-bottom: 10px; }
