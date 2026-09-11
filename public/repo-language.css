@@ -1,0 +1,22 @@
+.page-content.repository.file.list .language-stats-details {
+  row-gap: 14px;
+}
+.page-content.repository.file.list .language-stats-details .item {
+  height: auto !important;
+  line-height: 18px;
+  padding: 0 !important;
+}
+.page-content.repository.file.list .repo-language-heading,
+.page-content.repository.file.list .repo-language-content {
+  margin-left: -5px;
+  margin-right: -5px;
+}
+.page-content.repository.file.list .repo-language-content .language-stats {
+  margin-top: -6px;
+}
+.page-content.repository.file.list .repo-language-heading,
+.page-content.repository.file.list .repo-language-content {
+  margin-left: -16px;
+  margin-right: -16px;
+}
+.page-content.repository.file.list .repo-language-heading { margin-top: -6px; }
