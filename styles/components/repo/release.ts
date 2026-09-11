@@ -69,6 +69,14 @@ const releaseList = css`
     flex-direction: column;
     gap: 32px;
     margin: 32px 0 16px;
+    &::before {
+      color: ${themeVars.color.text.self};
+      content: "Release list";
+      font-size: 20px;
+      font-weight: 600;
+      line-height: 1.5;
+      margin-bottom: -8px;
+    }
     > li {
       .meta {
         gap: 0.5rem;
@@ -92,13 +100,14 @@ const releaseList = css`
           padding: 3px 12px;
         }
       }
-      .release-title-wrap {
+        .release-title-wrap {
         background: ${themeVars.color.box.body.self};
         border: 1px solid ${themeVars.color.light.border};
         border-bottom: 0;
         border-radius: ${otherThemeVars.border.radius} ${otherThemeVars.border.radius} 0 0;
         margin-left: 1rem;
-        padding: 16px 16px 0;
+          padding: 16px 16px 0;
+          position: relative;
         h4 {
           font-size: 24px;
           line-height: 1.25;
