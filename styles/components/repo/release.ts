@@ -100,8 +100,17 @@ const releaseList = css`
         margin-left: 1rem;
         padding: 16px 16px 0;
         h4 {
-          font-size: 32px;
+          font-size: 24px;
+          line-height: 1.25;
           gap: 8px;
+          margin-bottom: 0;
+          a {
+            color: ${themeVars.github.fgColor.accent};
+            text-decoration: none;
+            &:hover {
+              text-decoration: underline;
+            }
+          }
         }
       }
       .detail {
