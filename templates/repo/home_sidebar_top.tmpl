@@ -4,7 +4,7 @@
 		<div class="repo-home-sidebar-header repo-about-heading">
 			<span>About</span>
 			{{if and .Permission.IsAdmin (not .Repository.IsArchived)}}
-				<button id="manage_topic" type="button" class="btn interact-fg repo-about-settings" aria-label="Edit repository metadata" data-tooltip-content="Edit repository metadata">
+				<button id="github_theme_repo_about_manage" type="button" class="btn interact-fg repo-about-settings" aria-label="Edit repository metadata" data-tooltip-content="Edit repository metadata">
 					{{svg "octicon-gear" 16}}
 				</button>
 			{{end}}
@@ -71,7 +71,7 @@
 	</div>
 
 	{{if and .Permission.IsAdmin (not .Repository.IsArchived)}}
-		<div class="repo-about-modal-overlay ui form tw-hidden" id="topic_edit" role="dialog" aria-modal="true" aria-labelledby="repo-about-modal-title">
+		<div class="repo-about-modal-overlay ui form tw-hidden" id="github_theme_repo_about_edit" role="dialog" aria-modal="true" aria-labelledby="repo-about-modal-title">
 			<form id="repo-about-form" class="repo-about-modal-card" action="{{.RepoLink}}/settings" method="post">
 				<input type="hidden" name="action" value="update">
 				<input type="hidden" name="repo_name" value="{{.Repository.Name}}">
@@ -112,8 +112,8 @@
 				</div>
 
 				<div class="repo-about-modal-footer">
-					<button type="button" class="ui basic button" id="cancel_topic_edit">{{ctx.Locale.Tr "cancel"}}</button>
-					<button type="button" class="ui primary button" id="save_topic" data-link="{{.RepoLink}}/topics">Save changes</button>
+					<button type="button" class="ui basic button" id="github_theme_repo_about_cancel">{{ctx.Locale.Tr "cancel"}}</button>
+					<button type="button" class="ui primary button" id="github_theme_repo_about_save" data-link="{{.RepoLink}}/topics">Save changes</button>
 				</div>
 			</form>
 		</div>
@@ -122,12 +122,12 @@
 			(() => {
 				const initRepoAboutModal = () => {
 					const view = document.getElementById('repo-topics');
-					const modal = document.getElementById('topic_edit');
+					const modal = document.getElementById('github_theme_repo_about_edit');
 					const form = document.getElementById('repo-about-form');
-					const manage = document.getElementById('manage_topic');
-					const cancel = document.getElementById('cancel_topic_edit');
+					const manage = document.getElementById('github_theme_repo_about_manage');
+					const cancel = document.getElementById('github_theme_repo_about_cancel');
 					const close = modal?.querySelector('.repo-about-modal-close');
-					const save = document.getElementById('save_topic');
+					const save = document.getElementById('github_theme_repo_about_save');
 					const error = modal?.querySelector('.repo-about-error');
 					const description = document.getElementById('repo-about-description');
 					if (!view || !modal || !form || !manage || !cancel || !close || !save || !error || !description) return;
@@ -143,10 +143,12 @@
 
 					manage.addEventListener('click', () => {
 						hideError();
+						modal.classList.remove('tw-hidden');
 						document.documentElement.classList.add('repo-about-modal-open');
 						requestAnimationFrame(() => description.focus());
 					});
 					cancel.addEventListener('click', () => {
+						modal.classList.add('tw-hidden');
 						document.documentElement.classList.remove('repo-about-modal-open');
 						hideError();
 					});
