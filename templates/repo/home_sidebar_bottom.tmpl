@@ -41,8 +41,8 @@
 
 	{{if and (.Permission.CanRead $.UnitTypeCode) (not .IsEmptyRepo) .LanguageStats}}
 		<div class="divider"></div>
-		<div class="repo-home-sidebar-header">{{ctx.Locale.Tr "settings.language"}}</div>
-		<div>
+		<div class="repo-home-sidebar-header repo-language-heading">Languages</div>
+		<div class="repo-language-content">
 			<div class="language-stats">
 				{{range .LanguageStats}}
 					<div class="bar" style="width: {{.Percentage}}%; background-color: {{.Color}}" data-tooltip-placement="top" data-tooltip-content="{{.Language}}"></div>

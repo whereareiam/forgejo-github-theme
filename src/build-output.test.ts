@@ -441,7 +441,7 @@ describe("Forgejo 15 native integration", () => {
     expect(viewListStyle).toContain("#repo-files-table .repo-file-cell.name > svg");
     expect(viewListStyle).toContain("color: ${themeVars.color.text.light.num1};");
     expect(viewListStyle).toContain("text-transform: capitalize;");
-    expect(repoHomeStyle).toContain("column-gap: 12px;");
+    expect(repoHomeStyle).toContain("column-gap: 16px;");
     expect(repoHomeStyle).toContain(".language-stats-details .item");
     expect(repoHomeStyle).toContain("padding: 0;");
     expect(repoSidebarStyle).toContain("margin-right: 0;");
