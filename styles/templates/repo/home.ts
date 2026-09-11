@@ -133,11 +133,12 @@ const repositoryHome = css`
   }
 
   .page-content.repository.file.list .language-stats {
+    background-color: ${themeVars.github.progressBar.track.bgColor};
     border-radius: 5px;
     display: flex;
-    gap: 2px;
-    height: 10px;
-    margin: 5px 0;
+    gap: 1px;
+    height: 8px;
+    margin: 0;
     overflow: hidden;
     padding: 0;
     white-space: nowrap;
@@ -145,17 +146,21 @@ const repositoryHome = css`
   }
 
   .page-content.repository.file.list .language-stats-details {
-    column-gap: 12px;
+    column-gap: 16px;
     display: flex;
     flex-wrap: wrap;
+    margin-top: 8px;
+    padding-bottom: 3px;
+    row-gap: 3px;
   }
 
   .page-content.repository.file.list .language-stats-details .item {
     align-items: center;
     display: flex;
     gap: 0;
-    height: 30px;
-    justify-content: center;
+    height: auto;
+    justify-content: flex-start;
+    line-height: 18px;
     padding: 0;
     text-decoration: none;
   }
@@ -163,6 +168,18 @@ const repositoryHome = css`
   .page-content.repository.file.list .language-stats-details .color-icon {
     border-radius: 50%;
     display: inline-block;
+    flex: 0 0 10px;
+    height: 10px;
+    margin-right: 6px;
+    width: 10px;
+  }
+
+  .page-content.repository.file.list .language-stats-details .tw-font-semibold {
+    margin-right: 4px;
+  }
+
+  .page-content.repository.file.list .repo-language-content {
+    margin-top: -4px;
   }
 
   @media (max-width: 767.98px) {
