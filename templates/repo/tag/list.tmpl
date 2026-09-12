@@ -1,0 +1,64 @@
+{{template "base/head" .}}
+<div role="main" aria-label="{{.Title}}" class="page-content repository tags github-tags">
+	{{template "repo/header" .}}
+	<div class="ui container">
+		{{template "base/alert" .}}
+		{{$canReadReleases := $.Permission.CanRead $.UnitTypeReleases}}
+		{{$canReadCode := $.Permission.CanRead $.UnitTypeCode}}
+		<div class="github-tags-toolbar">
+			<nav class="github-tags-switch" aria-label="Releases and Tags">
+				{{if $canReadReleases}}<a href="{{.RepoLink}}/releases">Releases</a>{{end}}
+				{{if $canReadCode}}<a class="active" aria-current="page" href="{{.RepoLink}}/tags">Tags</a>{{end}}
+			</nav>
+			{{if .ShowReleaseSearch}}
+				<form class="ignore-dirty github-tags-search" method="get">
+					<div class="ui fluid action input">
+						<input type="search" name="q" value="{{.Keyword}}" placeholder="Find a tag" aria-label="Find a tag">
+						<button class="ui icon button" type="submit" aria-label="Search">{{svg "octicon-search" 16}}</button>
+					</div>
+				</form>
+			{{end}}
+		</div>
+		<div class="github-tags-box">
+			<h2 class="github-tags-box-header">{{svg "octicon-tag" 16}}{{ctx.Locale.Tr "repo.release.tags"}}</h2>
+			<div class="github-tags-list">
+				{{range $idx, $release := .Releases}}
+					<div class="github-tag-row">
+						<div class="github-tag-heading">
+							{{if $canReadReleases}}
+								<a href="{{$.RepoLink}}/releases/tag/{{$release.TagName | PathEscapeSegments}}" rel="nofollow">{{$release.TagName}}</a>
+							{{else}}
+								<a href="{{$.RepoLink}}/src/tag/{{$release.TagName | PathEscapeSegments}}" rel="nofollow">{{$release.TagName}}</a>
+							{{end}}
+							{{template "repo/tag/verification_box" (dict "ctxData" $ "release" $release)}}
+						</div>
+						<div class="github-tag-actions">
+							{{if $canReadCode}}
+								{{if $release.CreatedUnix}}<span>{{svg "octicon-clock" 16}}{{DateUtils.TimeSince $release.CreatedUnix}}</span>{{end}}
+								<a class="tw-font-mono" href="{{$.RepoLink}}/src/commit/{{$release.Sha1}}" rel="nofollow">{{svg "octicon-git-commit" 16}}{{ShortSha $release.Sha1}}</a>
+								{{if not $.DisableDownloadSourceArchives}}
+									<a href="{{$.RepoLink}}/archive/{{$release.TagName | PathEscapeSegments}}.zip" rel="nofollow">{{svg "octicon-file-zip" 16}}zip</a>
+									<a href="{{$.RepoLink}}/archive/{{$release.TagName | PathEscapeSegments}}.tar.gz" rel="nofollow">{{svg "octicon-file-zip" 16}}tar.gz</a>
+								{{end}}
+								{{if and $canReadReleases $release.IsTag $.CanCreateRelease}}<a href="{{$.RepoLink}}/releases/new?tag={{$release.TagName}}">{{svg "octicon-tag" 16}}Release details</a>{{end}}
+								{{if and ($.Permission.CanWrite $.UnitTypeCode) $release.IsTag}}<a class="github-tag-delete delete-button" data-url="{{$.RepoLink}}/tags/delete" data-id="{{$release.ID}}" data-modal-id="delete-tag">{{svg "octicon-trash" 16}}{{ctx.Locale.Tr "repo.release.delete_tag"}}</a>{{end}}
+								{{if and $canReadReleases (not $release.IsTag)}}<a href="{{$.RepoLink}}/releases/tag/{{$release.TagName | PathEscapeSegments}}">{{svg "octicon-tag" 16}}{{ctx.Locale.Tr "repo.release.detail"}}</a>{{end}}
+							{{end}}
+						</div>
+					</div>
+				{{else}}
+					<div class="github-tags-empty">{{if .Keyword}}No tags found{{else}}There aren’t any tags here{{end}}</div>
+				{{end}}
+			</div>
+		</div>
+		{{template "base/paginate" .}}
+	</div>
+</div>
+{{if $.Permission.CanWrite $.UnitTypeCode}}
+	<div class="ui g-modal-confirm delete modal" id="delete-tag">
+		<div class="header">{{svg "octicon-trash"}}{{ctx.Locale.Tr "repo.release.delete_tag"}}</div>
+		<div class="content"><p>{{ctx.Locale.Tr "repo.release.deletion_tag_desc"}}</p></div>
+		{{template "base/modal_actions_confirm" .}}
+	</div>
+{{end}}
+{{template "base/footer" .}}

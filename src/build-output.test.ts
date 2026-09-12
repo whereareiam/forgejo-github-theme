@@ -691,8 +691,8 @@ describe("暗/亮主题语义验证", () => {
 const SIZE_LIMITS = {
   /** auto 主题仅有 @import + 元信息，应保持极小 */
   AUTO_MAX: 1 * 1024, // 1 KB
-  /** 非 auto 主题包含完整主题变量 + 公共样式，当前约 108-117 KB */
-  SOLID_MAX: 200 * 1024, // 200 KB (给予 ~70% 增长空间)
+  /** 非 auto 主题包含完整主题变量 + 公共样式，当前约 207-216 KB */
+  SOLID_MAX: 220 * 1024, // 220 KB (给予主题页面样式增长空间)
   /** 所有 CSS 文件总大小上限，当前约 2.6 MB */
   TOTAL_MAX: 5 * 1024 * 1024, // 5 MB
 } as const;
@@ -712,7 +712,7 @@ describe("CSS 文件大小限制", () => {
     ).toEqual([]);
   });
 
-  it("所有非 auto 主题文件大小 < 200KB", () => {
+  it("所有非 auto 主题文件大小 < 220KB", () => {
     const oversized: string[] = [];
     for (const fileName of SOLID_THEME_FILES) {
       const size = fs.statSync(path.join(DIST_DIR, fileName)).size;

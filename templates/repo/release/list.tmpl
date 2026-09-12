@@ -1,0 +1,175 @@
+{{template "base/head" .}}
+<div role="main" aria-label="{{.Title}}" class="page-content repository releases github-releases">
+	{{template "repo/header" .}}
+	<div class="ui container">
+		{{template "base/alert" .}}
+		<div class="github-release-toolbar">
+  <nav class="github-release-switch" aria-label="Releases and Tags">
+    <a aria-current="page" class="active" href="{{.RepoLink}}/releases">Releases</a>
+    {{if and ($.Permission.CanRead $.UnitTypeCode)}}<a href="{{.RepoLink}}/tags">Tags</a>{{end}}
+  </nav>
+  <div class="github-release-actions">
+    {{if and (not .PageIsTagList) .CanCreateRelease}}<a class="secondary button" href="{{$.RepoLink}}/releases/new">Draft a new release</a>{{end}}
+    {{if .ShowReleaseSearch}}<form class="ignore-dirty github-release-search" method="get"><div class="ui fluid action input"><input type="search" name="q" value="{{.Keyword}}" placeholder="Find a release" aria-label="Find a release"><button class="ui icon button" type="submit" aria-label="Search">{{svg "octicon-search" 16}}</button></div></form>{{end}}
+  </div>
+</div>
+{{if .Releases}}
+<div class="github-release-content">
+  <nav class="github-release-toc" aria-label="Release list">
+    <h2>Release list</h2>
+    <ul>
+      {{range $tocIdx, $tocInfo := .Releases}}
+        <li><a {{if eq $tocIdx 0}}aria-current="location"{{end}} href="#release-{{$tocInfo.Release.ID}}" title="{{$tocInfo.Release.Title}}">{{$tocInfo.Release.Title}}</a></li>
+      {{end}}
+    </ul>
+  </nav>
+  <details class="github-release-mobile-toc">
+    <summary>{{svg "octicon-list-unordered" 16}}<span>Jump to release</span>{{svg "octicon-triangle-down" 16}}</summary>
+    <ul>
+      {{range $tocInfo := .Releases}}
+        <li><a class="github-release-toc-link" href="#release-{{$tocInfo.Release.ID}}" title="{{$tocInfo.Release.Title}}">{{$tocInfo.Release.Title}}</a></li>
+      {{end}}
+    </ul>
+  </details>
+<ul id="release-list" class="github-release-list">
+			{{range $idx, $info := .Releases}}
+				{{$release := $info.Release}}
+				<li id="release-{{$release.ID}}">
+					<div class="release-title-wrap">
+						<h4>
+							<span class="github-release-name"><a href="{{$.RepoLink}}/releases/tag/{{$release.TagName | PathEscapeSegments}}">{{$release.Title}}</a>
+							</span>
+							{{if $release.IsDraft}}
+								<span class="ui label github-release-draft">{{ctx.Locale.Tr "repo.release.draft"}}</span>
+							{{else if $release.IsPrerelease}}
+								<span class="ui orange label">{{ctx.Locale.Tr "repo.release.prerelease"}}</span>
+							{{else if not $release.IsTag}}
+								<a class="github-release-latest" href="{{$.RepoLink}}/releases/latest" hidden><span class="ui green label">Latest</span></a>
+							{{end}}
+							{{template "repo/commit_statuses" dict "Status" $info.CommitStatus "Statuses" $info.CommitStatuses "AdditionalClasses" "tw-flex"}}
+						</h4>
+						<div class="github-release-controls">
+							{{if and $release.Sha1 ($.Permission.CanRead $.UnitTypeCode)}}{{template "repo/branch_dropdown" dict "root" $ "release" $release}}{{end}}
+							{{if and $.CanCreateRelease (not $release.IsTag)}}
+								<a class="muted" aria-label="{{ctx.Locale.Tr "repo.release.edit"}}: {{$release.Title}}" data-tooltip-content="{{ctx.Locale.Tr "repo.release.edit"}}" href="{{$.RepoLink}}/releases/edit/{{$release.TagName | PathEscapeSegments}}" rel="nofollow">
+									{{svg "octicon-pencil"}}
+								</a>
+								<button type="button" class="muted github-release-delete delete-button" data-tooltip-content="Delete" data-url="{{$.RepoLink}}/releases/delete" data-id="{{$release.ID}}" data-modal-id="delete-release-{{$idx}}" aria-label="Delete">
+									{{svg "octicon-trash"}}
+								</button>
+							{{end}}
+						</div>
+					</div>
+					<div class="detail">
+						<p class="text grey">
+							<span class="author">
+							{{if $release.OriginalAuthor}}
+								{{svg (MigrationIcon $release.Repo.GetOriginalURLHostname) 20 "tw-mr-1"}}{{$release.OriginalAuthor}}
+							{{else if $release.Publisher}}
+								{{ctx.AvatarUtils.Avatar $release.Publisher 20 "tw-mr-1"}}
+								{{template "shared/user/authorlink" $release.Publisher}}
+							{{else}}
+								<!-- Fake the Ghost user -->
+								{{template "shared/user/authorlink" (dict "ID" -1)}}
+							{{end}}
+							</span>
+							<span class="released">
+									{{if $release.IsDraft}}drafted this{{else}}{{ctx.Locale.Tr "repo.released_this"}}{{end}}
+							</span>
+							{{if $release.CreatedUnix}}
+								<span class="time">{{DateUtils.TimeSince $release.CreatedUnix}}</span>
+							{{end}}
+							{{if and $release.Sha1 ($.Permission.CanRead $.UnitTypeCode)}}
+								<a class="github-release-ref" href="{{$.RepoLink}}/src/tag/{{$release.TagName | PathEscapeSegments}}">{{svg "octicon-tag" 16}} {{$release.TagName}}</a>
+								<a class="github-release-ref tw-font-mono" href="{{$.RepoLink}}/src/commit/{{$release.Sha1}}">{{svg "octicon-git-commit" 16}} {{ShortSha $release.Sha1}}</a>
+							{{end}}
+						</p>
+						{{template "repo/tag/verification_line" (dict "ctxData" $ "release" $release)}}
+						{{if $release.RenderedNote}}
+							<div class="markup desc">
+								{{$release.RenderedNote}}
+							</div>
+						{{end}}
+						{{$hasReleaseAttachment := gt (len $release.Attachments) 0}}
+						{{$hasArchiveLinks := and (not $.DisableDownloadSourceArchives) (not $release.IsDraft) (not $release.HideArchiveLinks) ($.Permission.CanRead $.UnitTypeCode)}}
+						{{if or $hasArchiveLinks $hasReleaseAttachment}}
+							<div class="github-release-footer">
+							<details class="download" {{if eq $idx 0}}open{{end}}>
+								<summary>
+									Assets <span class="github-release-asset-count">{{if $hasArchiveLinks}}{{Eval (len $release.Attachments) "+" 2}}{{else}}{{len $release.Attachments}}{{end}}</span>
+								</summary>
+								<ul class="list">
+									{{range $release.Attachments}}
+										{{if .ExternalURL}}
+											<li>
+												<a class="tw-flex-1 flex-text-inline tw-font-bold" target="_blank" rel="nofollow" href="{{.DownloadURL}}">
+													{{svg "octicon-link-external" 16 "tw-mr-1"}}{{.Name}}
+												</a>
+											</li>
+										{{else}}
+											<li class="attachment">
+													<a class="tw-flex-1 flex-text-inline tw-font-bold" target="_blank" rel="nofollow" href="{{.DownloadURL}}" download>
+														{{svg "octicon-package" 16 "tw-mr-1"}}{{.Name}}
+													</a>
+													<div>
+														<span class="github-release-digest" data-digest-url="{{.DownloadURL}}">sha256… <button type="button" class="github-release-copy-digest" aria-label="Copy SHA-256 digest">{{svg "octicon-copy" 16}}</button></span>
+														<span class="text grey">{{ctx.Locale.PrettyNumber .DownloadCount}} {{svg "octicon-download" 16}} · {{.Size | ctx.Locale.TrSize}} · {{DateUtils.TimeSince .CreatedUnix}}</span>
+													</div>
+											</li>
+										{{end}}
+									{{end}}
+									{{if $hasArchiveLinks}}
+										<li>
+											<a class="archive-link tw-flex-1 flex-text-inline tw-font-bold" href="{{$.RepoLink}}/archive/{{$release.TagName | PathEscapeSegments}}.zip" rel="nofollow" type="application/zip">
+												{{svg "octicon-file-zip" 16 "tw-mr-1"}}{{ctx.Locale.Tr "repo.release.source_code"}} (zip)
+											</a>
+											<div class="tw-mr-2">
+												<span class="text grey">{{DateUtils.TimeSince $release.CreatedUnix}}</span>
+											</div>
+										</li>
+										<li >
+											<a class="archive-link tw-flex-1 flex-text-inline tw-font-bold" href="{{$.RepoLink}}/archive/{{$release.TagName | PathEscapeSegments}}.tar.gz" rel="nofollow" type="application/gzip">
+												{{svg "octicon-file-zip" 16 "tw-mr-1"}}{{ctx.Locale.Tr "repo.release.source_code"}} (tar.gz)
+											</a>
+											<div class="tw-mr-2">
+												<span class="text grey">{{DateUtils.TimeSince $release.CreatedUnix}}</span>
+											</div>
+										</li>
+
+									{{end}}
+								</ul>
+							</details>
+							</div>
+						{{end}}
+					</div>
+				</li>
+			{{end}}
+</ul>
+
+</div>
+{{else}}
+<div class="github-release-empty">
+	{{svg "octicon-tag" 32}}
+	<h2>{{if .Keyword}}No releases found{{else}}There aren’t any releases here{{end}}</h2>
+	<p>{{if .Keyword}}Try a different search.{{else}}Releases package software, release notes, and downloads for your project.{{end}}</p>
+	{{if .Keyword}}<a href="{{.RepoLink}}/releases">View all releases</a>{{end}}
+</div>
+{{end}}
+
+{{range $idx, $info := .Releases}}
+	{{$release := $info.Release}}
+	{{if and $.CanCreateRelease (not $release.IsTag)}}
+		<div class="ui g-modal-confirm delete modal" id="delete-release-{{$idx}}">
+			<div class="header">{{svg "octicon-trash"}} {{ctx.Locale.Tr "repo.release.deletion"}}</div>
+			<div class="content"><p>{{ctx.Locale.Tr "repo.release.deletion_desc"}}</p></div>
+			{{template "base/modal_actions_confirm" $}}
+		</div>
+	{{end}}
+{{end}}
+
+{{template "base/paginate" .}}
+	</div>
+</div>
+
+<script src="{{AssetUrlPrefix}}/js/repo-releases.js" defer></script>
+{{template "base/footer" .}}
