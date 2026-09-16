@@ -40,15 +40,13 @@
 	<section class="profile-stars">
 		<h2 class="profile-subpage-title">{{ctx.Locale.Tr "user.starred"}}</h2>
 		{{template "user/profile_repository_search" .}}
-		{{template "user/profile_repositories" .}}
-		{{template "base/paginate" .}}
+		{{template "shared/theme/repository_results" .}}
 	</section>
 {{else if eq .TabName "watching"}}
 	<section class="profile-stars">
 		<h2 class="profile-subpage-title">{{ctx.Locale.Tr "user.watched"}}</h2>
 		{{template "user/profile_repository_search" .}}
-		{{template "user/profile_repositories" .}}
-		{{template "base/paginate" .}}
+		{{template "shared/theme/repository_results" .}}
 	</section>
 {{else if eq .TabName "following"}}
 	{{template "user/profile_people" .}}
@@ -78,8 +76,7 @@
 	</section>
 {{else}}
 	{{template "user/profile_repository_search" .}}
-	{{template "user/profile_repositories" .}}
-	{{template "base/paginate" .}}
+	{{template "shared/theme/repository_results" .}}
 {{end}}
 {{template "user/profile_layout_end" .}}
 <div class="ui g-modal-confirm delete modal" id="block-user">

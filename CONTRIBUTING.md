@@ -202,6 +202,43 @@ nesting syntax. Do not use SCSS functions; for complex processing, use TypeScrip
 
 For complex logic, it is recommended to extract it into functions under the `src/functions` directory.
 
+### Reuse shared page controls
+
+Use `public/theme-components.css` for sidebars, search fields, and compact buttons, and `public/theme-dropdown.css` for
+dropdown variants. `templates/base/head_navbar.tmpl` loads the shared styles and controllers for all pages. Keep page
+layout rules in the page stylesheet and pass the page's existing routes, permissions, and form values into the shared
+controls.
+
+- **Sidebar:** add `theme-sidebar-layout` and a unique `data-theme-sidebar` storage key to the page, then use
+  `theme-sidebar`, `theme-sidebar-content`, and `theme-sidebar-main` for its children. Include
+  `shared/theme/sidebar_toggle` inside the sidebar and a button with `data-theme-sidebar-toggle` and
+  `data-theme-sidebar-expand` beside the page title. The controller preserves desktop collapse preferences and starts
+  collapsed on mobile. See `templates/repo/issue/sidebar.tmpl` and `templates/org/repository_nav.tmpl`.
+- **Search:** call `shared/theme/search` with `Value` and `Placeholder` inside the existing form. Keep hidden filter
+  inputs in that form. The shared search field should be a direct child of the form or have a parent that fills the
+  available width; an unconstrained wrapper can shrink it.
+- **Dropdowns:** call `shared/theme/dropdown` with `Kind` (`single`, `multiple`, or `actions`), `Label`, `Items` (the
+  content template name), and `Data` (the page context). `Title`, `Icon`, `IconOnly`, `UpdateLabel`, and `Quiet`
+  customize the header and trigger. Use `shared/theme/dropdown_option` for radio or checkbox rows; action rows are links
+  or buttons with `theme-dropdown-action`. Single-choice menus use checkmarks, multiple-choice menus use native
+  checkboxes, and action menus omit selection indicators. The controller handles Escape, outside clicks, and opening one
+  menu at a time. See `shared/theme/repo_filter`, `shared/theme/repo_sort`, and `org/action_menu_items`.
+- **Buttons:** add `theme-control` for standard 32px controls or `theme-control-small` for 28px controls. Keep native
+  `primary`, `secondary`, and permission checks on actions.
+
+For repository filtering, add `data-theme-repository-search` to the form and render `shared/theme/repository_results`
+after it. `repository-search.js` updates that result fragment through the same server-rendered GET route, preserves
+search and sort values, and cancels obsolete requests. Checkbox criteria combine, while opposing values of one criterion
+are exclusive. Clear filters is an action, not a selectable option. Keep `tab=overview` or `tab=repositories` in the
+organization form; query parameters alone do not determine the page layout. Use `org/repository_pagination` so
+pagination retains the same view even without the enhancement script. Errors leave the previous results visible and
+display a retry message; browser history restores the server-rendered controls and results.
+
+After changing a shared component, verify each consuming page at desktop and mobile widths. Check search submission,
+retained filters, sidebar focus and collapse behavior, and Escape/outside-click dismissal for select menus.
+
+### Use theme tokens
+
 All colors used in theme styles must use color variables. Import them via
 `import { themeVars } from "@lutinglt/gitea-github-theme/core"`.
 

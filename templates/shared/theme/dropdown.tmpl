@@ -1,0 +1,11 @@
+{{/* Kind: single (radio), multiple (checkbox), or actions (links/buttons). Items owns page-specific content. */}}
+<details class="theme-dropdown{{if .Quiet}} theme-dropdown-quiet{{end}}" data-theme-dropdown="{{.Kind}}">
+	<summary class="theme-control"{{if .IconOnly}} aria-label="{{.Label}}" data-tooltip-content="{{.Label}}"{{end}}>
+		{{if .Icon}}{{svg .Icon 16}}{{end}}
+		{{if not .IconOnly}}<span{{if .UpdateLabel}} data-theme-dropdown-label{{end}}>{{.Label}}</span>{{svg "octicon-triangle-down" 12}}{{end}}
+	</summary>
+	<div class="theme-dropdown-panel">
+		{{if .Title}}{{template "shared/theme/dropdown_header" dict "Title" .Title}}{{end}}
+		{{ExecuteTemplate .Data.Context .Items .Data}}
+	</div>
+</details>
