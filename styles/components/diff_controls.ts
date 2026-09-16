@@ -50,47 +50,8 @@ export default css`
     position: relative;
     flex-shrink: 0;
   }
-  .theme-icon-button {
-    appearance: none;
-    padding: 0;
-    margin: 0;
-    box-shadow: none;
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 32px;
-    height: 32px;
-    border: 1px solid transparent;
-    border-radius: ${otherThemeVars.border.radius};
-    background: transparent;
-    color: ${themeVars.color.text.light.num1};
-    cursor: pointer;
-    list-style: none;
-  }
   .theme-menu > summary::-webkit-details-marker {
     display: none;
-  }
-  .theme-icon-button:hover {
-    background: ${themeVars.github.control.transparent.bgColor.hover};
-  }
-  .theme-icon-button[aria-expanded="true"],
-  .theme-menu[open] > .theme-icon-button {
-    background: ${themeVars.github.control.transparent.bgColor.active};
-  }
-  .theme-icon-button-outlined {
-    border-color: ${themeVars.color.light.border};
-    background: ${themeVars.color.button};
-  }
-  .theme-icon-button > svg {
-    flex-shrink: 0;
-    width: 16px;
-    height: 16px;
-    margin: 0;
-  }
-  .theme-icon-button:focus-visible {
-    outline: 2px solid ${themeVars.github.fgColor.accent};
-    outline-offset: 2px;
   }
   .theme-menu-popover {
     position: fixed;

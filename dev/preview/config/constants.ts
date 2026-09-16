@@ -46,6 +46,7 @@ export const SOURCE_PATHS = [
   "theme.config.ts",
   "vite.config.ts",
   "src",
+  "components",
   "public",
   "styles",
   "templates",

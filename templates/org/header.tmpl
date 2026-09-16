@@ -1,0 +1,36 @@
+{{if or .PageIsViewRepositories .PageIsOrgSettings}}
+<div class="ui container org-identity tw-flex tw-gap-x-4">
+	{{ctx.AvatarUtils.Avatar .Org 100 "org-avatar"}}
+	<div id="org-info" class="tw-flex tw-flex-col">
+		<div class="org-header tw-flex">
+			<div class="org-title">
+				<h1>{{.Org.DisplayName}}</h1>
+				<span class="org-visibility">
+					{{if .Org.Visibility.IsLimited}}<span class="ui large horizontal label">{{ctx.Locale.Tr "org.settings.visibility.limited_shortname"}}</span>{{end}}
+					{{if .Org.Visibility.IsPrivate}}<span class="ui large horizontal label">{{ctx.Locale.Tr "org.settings.visibility.private_shortname"}}</span>{{end}}
+				</span>
+			</div>
+			<span class="button-sequence org-actions tw-ml-auto tw-whitespace-nowrap">
+				{{if .IsSigned}}
+					{{template "org/follow_unfollow" .}}
+				{{end}}
+				{{if .IsOrganizationMember}}
+					<a class="secondary button" href="{{.OrgLink}}/dashboard">{{ctx.Locale.Tr "org.open_dashboard"}}</a>
+				{{end}}
+				{{$moderationEntryNeeded := and .IsModerationEnabled .IsSigned (not .IsOrganizationOwner)}}
+				{{if or .EnableFeed $moderationEntryNeeded}}
+					{{template "components/common/dropdown/dropdown" dict "Kind" "actions" "Icon" "octicon-kebab-horizontal" "IconOnly" true "Label" (ctx.Locale.Tr "profile.actions.tooltip") "Items" "org/action_menu_items" "Data" .}}
+				{{end}}
+			</span>
+		</div>
+		{{if .RenderedDescription}}<div class="render-content markup">{{.RenderedDescription}}</div>{{end}}
+		<div class="text light meta tw-mt-1">
+			{{if .Org.Location}}<div class="flex-text-block">{{svg "octicon-location"}} <span>{{.Org.Location}}</span></div>{{end}}
+			{{if .Org.Website}}<div class="flex-text-block">{{svg "octicon-link"}} <a class="muted" target="_blank" rel="noopener noreferrer me" href="{{.Org.Website}}">{{.Org.Website}}</a></div>{{end}}
+			{{if .IsSigned}}
+				{{if .Org.Email}}<div class="flex-text-block">{{svg "octicon-mail"}} <a class="muted" href="mailto:{{.Org.Email}}">{{.Org.Email}}</a></div>{{end}}
+			{{end}}
+		</div>
+	</div>
+</div>
+{{end}}

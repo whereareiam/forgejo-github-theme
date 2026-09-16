@@ -22,7 +22,7 @@
     "lint": "bunx --bun eslint .",
     "fmt": "bunx --bun prettier --write .",
     "check": "tsc -b",
-    "bundle": "bun check && bunx --bun vite build",
+    "bundle": "bun check && bunx --bun vite build && bun scripts/assembleForgejo.ts",
     "dev": "bun bundle && bun sync:theme",
     "dev:forgejo": "bun dev/dev.ts start",
     "dev:forgejo:stop": "bun dev/dev.ts stop",

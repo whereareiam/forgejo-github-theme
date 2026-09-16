@@ -27,13 +27,13 @@ bun release
 template_stage=$(mktemp -d)
 trap 'rm -rf "$template_stage"' EXIT
 mkdir -p "$template_stage/public/assets/css" "$template_stage/public/assets/js"
-cp -R templates "$template_stage/templates"
-cp -R dist/assets/js/. "$template_stage/public/assets/js/"
-for stylesheet in dist/*.css; do
-  case "${stylesheet##*/}" in
-    theme-*) ;;
-    *) cp "$stylesheet" "$template_stage/public/assets/css/" ;;
-  esac
-done
+cp -R dist/forgejo/templates "$template_stage/templates"
+cp -R dist/forgejo/public/assets/js/. "$template_stage/public/assets/js/"
+while IFS= read -r stylesheet; do
+  relative=${stylesheet#dist/forgejo/public/assets/css/}
+  target="$template_stage/public/assets/css/$(dirname "$relative")"
+  mkdir -p "$target"
+  cp "$stylesheet" "$target/"
+done < <(find dist/forgejo/public/assets/css -type f -name "*.css" ! -name "theme-*")
 tar -zcf dist/theme-github-templates.tar.gz -C "$template_stage" templates public
 tar -zcf dist/theme-github-fonts.tar.gz -C dist assets/fonts

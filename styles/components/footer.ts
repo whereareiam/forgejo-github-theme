@@ -32,6 +32,7 @@ const footer = css`
       gap: 4px;
       a {
         color: ${themeVars.color.text.light.num1};
+        transition: color 150ms ease;
         &:hover {
           color: ${themeVars.color.primary.self};
         }
@@ -44,6 +45,7 @@ const footer = css`
       gap: 16px;
       > .ui.dropdown {
         font-size: 12px;
+        transition: color 150ms ease;
         &:hover {
           color: ${themeVars.color.primary.self};
         }
@@ -56,6 +58,7 @@ const footer = css`
         color: ${themeVars.color.text.light.num1};
         padding-left: 0;
         margin-left: 0;
+        transition: color 150ms ease;
         &:hover {
           color: ${themeVars.color.primary.self};
         }

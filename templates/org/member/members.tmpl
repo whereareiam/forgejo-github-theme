@@ -1,0 +1,109 @@
+{{template "base/head" .}}
+<div role="main" aria-label="{{.Title}}" class="page-content organization members">
+	{{template "org/header" .}}
+	<div class="ui container org-subpage-layout">
+		{{template "org/subpage_nav" .}}
+		<div class="org-subpage-content">
+		{{template "base/alert" .}}
+
+		<div class="org-page-toolbar">
+		{{if $.IsOrganizationOwner}}
+			<div class="text right">
+				<button class="primary button" id="add-org-member-button">
+				{{svg "octicon-plus"}}
+				{{if $.AddMembersByInvitations}}
+					{{ctx.Locale.Tr "members.invite_member"}}
+				{{else}}
+					{{ctx.Locale.Tr "members.add_member"}}
+				{{end}}
+				</button>
+			</div>
+		{{end}}
+		</div>
+		<div class="org-list-heading">{{svg "octicon-person" 16}} {{ctx.Locale.Tr "org.members"}} <span class="org-count">{{.NumMembers}}</span></div>
+		<div class="list org-member-list">
+			{{range .Members}}
+				<div class="org-member-row">
+				{{$isPublic := index $.MembersIsPublicMember .ID}}
+				<a href="{{.HomeLink}}">{{ctx.AvatarUtils.Avatar . 48}}</a>
+				<div>
+					<h3>
+						{{template "shared/user/name" .}}
+						{{if not $isPublic}}
+							<span class="ui label">{{ctx.Locale.Tr "org.members.private"}}</span>
+						{{end}}
+					</h3>
+					{{if not $.PublicOnly}}
+						<div>
+							{{ctx.Locale.Tr "org.members.member_role"}}
+							<strong>{{if index $.MembersIsUserOrgOwner .ID}}{{svg "octicon-shield-lock"}} {{ctx.Locale.Tr "org.members.owner"}}{{else}}{{ctx.Locale.Tr "org.members.member"}}{{end}}</strong>
+						</div>
+						{{if $.IsOrganizationOwner}}
+						<div>
+							{{ctx.Locale.Tr "admin.users.2fa"}}
+							<strong>
+								{{if index $.MembersTwoFaStatus .ID}}
+									<span class="text green">{{svg "octicon-check"}}</span>
+								{{else}}
+									{{svg "octicon-x"}}
+								{{end}}
+							</strong>
+						</div>
+						{{end}}
+					{{end}}
+				</div>
+				<div class="actions">
+					{{if or (eq $.SignedUserID .ID) $.IsOrganizationOwner}}
+						{{if $isPublic}}
+							<a class="small secondary button link-action" href data-url="{{$.OrgLink}}/members/action/private?uid={{.ID}}">
+								{{svg "octicon-eye-closed"}}
+								{{ctx.Locale.Tr "org.members.public_helper"}}
+							</a>
+						{{else}}
+							<a class="small secondary button link-action" href data-url="{{$.OrgLink}}/members/action/public?uid={{.ID}}">
+								{{svg "octicon-eye"}}
+								{{ctx.Locale.Tr "org.members.private_helper"}}
+							</a>
+						{{end}}
+					{{end}}
+					{{if eq $.SignedUserID .ID}}
+						<button class="small danger button delete-button" data-modal-id="leave-organization"
+							data-url="{{$.OrgLink}}/members/action/leave" data-datauid="{{.ID}}"
+							data-name="{{.DisplayName}}"
+							data-data-organization-name="{{$.Org.DisplayName}}">{{ctx.Locale.Tr "org.members.leave"}}</button>
+					{{else if $.IsOrganizationOwner}}
+						<button class="small danger button delete-button" data-modal-id="remove-organization-member"
+							data-url="{{$.OrgLink}}/members/action/remove" data-datauid="{{.ID}}"
+							data-name="{{.DisplayName}}"
+							data-data-organization-name="{{$.Org.DisplayName}}">{{ctx.Locale.Tr "org.members.remove"}}</button>
+					{{end}}
+				</div>
+				</div>
+			{{end}}
+		</div>
+
+		{{template "base/paginate" .}}
+		</div>
+	</div>
+</div>
+<div class="ui g-modal-confirm delete modal" id="leave-organization">
+	<div class="header">
+		{{ctx.Locale.Tr "org.members.leave"}}
+	</div>
+	<div class="content">
+		<p>{{ctx.Locale.Tr "org.members.leave.detail" (`<span class="dataOrganizationName"></span>`|TrustHTML)}}</p>
+	</div>
+	{{template "base/modal_actions_confirm" .}}
+</div>
+<div class="ui g-modal-confirm delete modal" id="remove-organization-member">
+	<div class="header">
+		{{ctx.Locale.Tr "org.members.remove"}}
+	</div>
+	<div class="content">
+		<p>{{ctx.Locale.Tr "org.members.remove.detail" (`<span class="name"></span>`|TrustHTML) (`<span class="dataOrganizationName"></span>`|TrustHTML)}}</p>
+	</div>
+	{{template "base/modal_actions_confirm" .}}
+</div>
+{{template "org/member/add_org_member" .}}
+
+{{template "base/footer" .}}

@@ -1,0 +1,10 @@
+<aside class="theme-sidebar"><div class="theme-sidebar-content"><nav aria-label="{{ctx.Locale.Tr "filter"}}">
+	<a href="{{.Org.HomeLink}}?tab=repositories" class="{{if not (or .IsArchived.ValueOrZeroValue .IsFork.ValueOrZeroValue .IsMirror.ValueOrZeroValue .IsTemplate.ValueOrZeroValue .IsPrivate.ValueOrZeroValue (not (.IsPrivate.ValueOrDefault true)) (and (not (.IsFork.ValueOrDefault true)) (not (.IsMirror.ValueOrDefault true))))}}active{{end}}">{{svg "octicon-home" 16}}{{ctx.Locale.Tr "all"}}</a>
+	<a href="{{.Org.HomeLink}}?tab=repositories&private=0" class="{{if not (.IsPrivate.ValueOrDefault true)}}active{{end}}">{{svg "octicon-repo" 16}}{{ctx.Locale.Tr "filter.public"}}</a>
+	{{if .IsSigned}}<a href="{{.Org.HomeLink}}?tab=repositories&private=1" class="{{if .IsPrivate.ValueOrZeroValue}}active{{end}}">{{svg "octicon-lock" 16}}{{ctx.Locale.Tr "filter.private"}}</a>{{end}}
+	<a href="{{.Org.HomeLink}}?tab=repositories&fork=0&mirror=0" class="{{if and (not (.IsFork.ValueOrDefault true)) (not (.IsMirror.ValueOrDefault true))}}active{{end}}">{{svg "octicon-link" 16}}{{ctx.Locale.Tr "sources"}}</a>
+	<a href="{{.Org.HomeLink}}?tab=repositories&fork=1" class="{{if .IsFork.ValueOrZeroValue}}active{{end}}">{{svg "octicon-repo-forked" 16}}{{ctx.Locale.Tr "filter.is_fork"}}</a>
+	<a href="{{.Org.HomeLink}}?tab=repositories&mirror=1" class="{{if .IsMirror.ValueOrZeroValue}}active{{end}}">{{svg "octicon-mirror" 16}}{{ctx.Locale.Tr "filter.is_mirror"}}</a>
+	<a href="{{.Org.HomeLink}}?tab=repositories&archived=1" class="{{if .IsArchived.ValueOrZeroValue}}active{{end}}">{{svg "octicon-archive" 16}}{{ctx.Locale.Tr "filter.is_archived"}}</a>
+	<a href="{{.Org.HomeLink}}?tab=repositories&template=1" class="{{if .IsTemplate.ValueOrZeroValue}}active{{end}}">{{svg "octicon-repo-template" 16}}{{ctx.Locale.Tr "filter.is_template"}}</a>
+</nav></div>{{template "components/common/sidebar/toggle" .}}</aside>

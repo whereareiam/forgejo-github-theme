@@ -302,67 +302,6 @@
   overflow-x: auto;
 }
 
-.github-profile .profile-content .profile-repositories {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-}
-
-.github-profile .profile-content .profile-repositories > .flex-item {
-  padding: 24px 0;
-  border: 0;
-  border-bottom: 1px solid var(--color-secondary);
-  border-radius: 0;
-}
-
-.github-profile .profile-repositories .flex-item-title {
-  flex-wrap: wrap;
-  gap: 8px;
-  font-size: 20px;
-  line-height: 30px;
-}
-
-.github-profile .profile-repositories .flex-item-title .label {
-  padding: 0 6px;
-  border: 1px solid var(--color-secondary);
-  background: transparent;
-  border-radius: 2em;
-  color: var(--color-text-light-1);
-  font-size: 12px;
-  line-height: 18px;
-}
-
-.github-profile .profile-repositories .flex-item-body {
-  margin-top: 4px;
-  color: var(--color-text-light-1);
-  font-size: 14px;
-  line-height: 21px;
-}
-
-.github-profile .profile-repositories .repo-topics {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-  margin-top: 12px;
-}
-
-.github-profile .profile-repositories .flex-item-trailing {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  gap: 8px 16px;
-  margin-top: 16px;
-  color: var(--color-text-light-1);
-  font-size: 12px;
-  line-height: 18px;
-}
-
-.github-profile .profile-repositories .color-icon {
-  width: 12px;
-  height: 12px;
-  margin-right: 0 !important;
-}
-
 .github-profile .profile-content .user-cards > .list {
   display: flex;
   flex-direction: column;
@@ -442,17 +381,6 @@
   font-weight: 600;
 }
 
-.github-profile .profile-repo-kind {
-  display: inline-flex;
-  align-items: center;
-}
-
-.github-profile .profile-repo-kind .svg {
-  width: 16px;
-  min-width: 16px;
-  height: 16px;
-}
-
 .github-profile .profile-readme-heading {
   margin-bottom: 16px;
   font-family: var(--fonts-monospace);
@@ -492,7 +420,7 @@
   min-width: 663px;
 }
 
-.github-profile .profile-repo-toolbar {
+:is(.github-profile, .github-org) .profile-repo-toolbar {
   display: flex;
   align-items: start;
   gap: 8px;
@@ -500,7 +428,7 @@
   border-bottom: 1px solid var(--color-secondary);
 }
 
-.github-profile #repo-search-form {
+:is(.github-profile, .github-org) #repo-search-form {
   display: flex;
   flex: 1;
   align-items: center;
@@ -509,7 +437,7 @@
   margin: 0;
 }
 
-.github-profile #repo-search-form .profile-repo-query {
+:is(.github-profile, .github-org) #repo-search-form .profile-repo-query {
   flex: 1;
   min-width: 0;
   width: 100%;
@@ -525,57 +453,13 @@
   line-height: 20px;
 }
 
-.github-profile #repo-search-form .profile-repo-query:focus {
+:is(.github-profile, .github-org) #repo-search-form .profile-repo-query:focus {
   border-color: var(--github-borderColor-accent-emphasis);
   box-shadow: inset 0 0 0 1px var(--github-borderColor-accent-emphasis);
   outline: none;
 }
 
-.github-profile #repo-search-form .profile-repo-filter {
-  display: flex;
-  flex: none;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  height: 32px;
-  margin: 0;
-  padding: 5px 16px;
-  border: 1px solid var(--color-light-border);
-  border-radius: var(--border-radius);
-  background: var(--color-button);
-  color: var(--color-text);
-  box-shadow: none;
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 20px;
-}
-
-.github-profile #repo-search-form .profile-repo-filter:hover,
-.github-profile #repo-search-form .profile-repo-filter.active {
-  background: var(--color-hover);
-}
-
-.github-profile #repo-search-form .profile-repo-filter:focus-visible {
-  outline: 2px solid var(--github-borderColor-accent-emphasis);
-  outline-offset: 2px;
-}
-
-.github-profile .profile-filter-caret {
-  width: 0;
-  height: 0;
-  border: 4px solid transparent;
-  border-top-color: currentColor;
-  border-bottom: 0;
-}
-
-.github-profile .profile-repo-filter > .menu {
-  max-height: min(450px, 60vh);
-  overflow-y: auto;
-  font-size: 14px;
-  font-weight: 400;
-}
-
-.github-profile .profile-repo-toolbar > .profile-new-repo.button {
+:is(.github-profile, .github-org) .profile-repo-toolbar > .profile-new-repo.button {
   flex: none;
   min-height: 32px;
   margin: 0;
@@ -587,21 +471,21 @@
 }
 
 @media (max-width: 767px) {
-  .github-profile .profile-repo-toolbar {
+  :is(.github-profile, .github-org) .profile-repo-toolbar {
     flex-direction: column;
     align-items: stretch;
     gap: 16px;
   }
 
-  .github-profile .profile-new-repo {
+  :is(.github-profile, .github-org) .profile-repo-toolbar > .profile-new-repo {
     order: -1;
   }
 
-  .github-profile #repo-search-form {
+  :is(.github-profile, .github-org) #repo-search-form {
     flex-wrap: wrap;
   }
 
-  .github-profile #repo-search-form .profile-repo-query {
+  :is(.github-profile, .github-org) #repo-search-form .profile-repo-query {
     flex-basis: 100%;
   }
 }
@@ -624,5 +508,20 @@
 @media (max-width: 767px) {
   .profile-global-header .profile-navigation .ui.secondary.pointing.menu .item > .svg {
     display: none;
+  }
+}
+
+/* On narrow profiles, both menus anchor to the form so neither can leave the viewport. */
+@media (max-width: 767px) {
+  .profile-repo-search {
+    position: relative;
+  }
+  .profile-repo-search > .theme-dropdown {
+    position: static;
+  }
+  .profile-repo-search .theme-dropdown-panel {
+    left: 0;
+    right: auto;
+    width: min(300px, 100%);
   }
 }

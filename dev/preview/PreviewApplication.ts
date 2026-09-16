@@ -63,8 +63,8 @@ export class PreviewApplication {
   }
 
   private async start(): Promise<void> {
-    this.autoLogin.prepare();
     this.builder.build();
+    this.autoLogin.prepare();
     this.reloader.prepare();
     this.compose.start();
     await this.readiness.wait();
@@ -80,8 +80,8 @@ export class PreviewApplication {
     await this.start();
     console.log("Watching theme sources. Press Ctrl+C to stop.");
     return this.watcher.watch(() => {
-      this.autoLogin.prepare();
       this.builder.build();
+      this.autoLogin.prepare();
       this.reloader.prepare();
       this.synchronizer.sync();
       this.reloader.publish();
