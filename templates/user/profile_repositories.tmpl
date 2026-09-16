@@ -46,7 +46,7 @@
 						<span class="profile-repo-kind">{{template "repo/icon" .}}</span>
 					{{end}}
 					{{if .PrimaryLanguage}}
-						<a class="flex-text-inline" href="?q={{$.Keyword}}&sort={{$.SortType}}&language={{.PrimaryLanguage.Language}}{{if $.TabName}}&tab={{$.TabName}}{{end}}">
+						<a class="flex-text-inline" href="?q={{$.Keyword}}&sort={{$.SortType}}&language={{.PrimaryLanguage.Language}}{{if $.Org}}&tab={{template "org/view_mode" $}}{{else if $.TabName}}&tab={{$.TabName}}{{end}}">
 							<i class="color-icon tw-mr-2" style="background-color: {{.PrimaryLanguage.Color}}"></i>
 							{{.PrimaryLanguage.Language}}
 						</a>

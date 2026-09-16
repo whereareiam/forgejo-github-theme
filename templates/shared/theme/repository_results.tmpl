@@ -1,0 +1,7 @@
+<div data-theme-repository-results>
+	<span class="tw-sr-only" role="status" data-theme-repository-status></span>
+	{{template "user/profile_repositories" .}}
+	<div data-theme-repository-pagination>
+		{{if .Org}}{{template "org/repository_pagination" .}}{{else}}{{template "base/paginate" .}}{{end}}
+	</div>
+</div>

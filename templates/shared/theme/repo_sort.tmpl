@@ -1,0 +1,5 @@
+{{$list := and .Org (eq (printf "%s" (ExecuteTemplate .Context "org/view_mode" .)) "repositories")}}
+{{$label := ctx.Locale.Tr "repo.issues.filter_sort"}}
+{{$icon := ""}}
+{{if $list}}{{$label = printf "%s" (ExecuteTemplate .Context "shared/theme/repo_sort_label" .)}}{{$icon = "octicon-sort-desc"}}{{end}}
+{{template "shared/theme/dropdown" dict "Kind" "single" "Label" $label "Icon" $icon "Title" "Select order" "UpdateLabel" $list "Quiet" $list "Items" "shared/theme/repo_sort_items" "Data" .}}

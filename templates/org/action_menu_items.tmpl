@@ -1,0 +1,7 @@
+{{if .EnableFeed}}
+	<a class="theme-dropdown-action" href="{{.Org.HomeLink}}.rss">{{svg "octicon-rss" 16}}{{ctx.Locale.Tr "rss_feed"}}</a>
+	<a class="theme-dropdown-action" href="{{.Org.HomeLink}}.atom">{{svg "octicon-rss" 16}}{{ctx.Locale.Tr "feed.atom.link"}}</a>
+{{end}}
+{{if and .IsModerationEnabled .IsSigned (not .IsOrganizationOwner)}}
+	<a class="theme-dropdown-action" href="{{AppSubUrl}}/report_abuse?type=org&id={{.Org.ID}}">{{svg "octicon-stop" 16}}{{ctx.Locale.Tr "moderation.report_abuse"}}</a>
+{{end}}

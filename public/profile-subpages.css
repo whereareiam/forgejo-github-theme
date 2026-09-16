@@ -1,5 +1,5 @@
-/* Shared profile subpage primitives; native organization/repository views stay independent. */
-.github-profile .profile-subpage-title {
+/* Shared profile and organization subpage primitives. */
+:is(.github-profile, .github-org) .profile-subpage-title {
   margin: 0 0 16px;
   color: var(--color-text);
   font-size: 20px;
@@ -7,7 +7,7 @@
   line-height: 28px;
 }
 
-.github-profile .profile-empty {
+:is(.github-profile, .github-org) .profile-empty {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -21,19 +21,19 @@
   overflow-wrap: anywhere;
 }
 
-.github-profile .profile-empty > .svg {
+:is(.github-profile, .github-org) .profile-empty > .svg {
   color: var(--color-text-light-1);
 }
 
-.github-profile .profile-empty h2,
-.github-profile .profile-empty h3 {
+:is(.github-profile, .github-org) .profile-empty h2,
+:is(.github-profile, .github-org) .profile-empty h3 {
   margin: 0;
   font-size: 20px;
   font-weight: 600;
   line-height: 28px;
 }
 
-.github-profile .profile-empty p {
+:is(.github-profile, .github-org) .profile-empty p {
   max-width: 520px;
   margin: 0;
   color: var(--color-text-light-1);
@@ -41,11 +41,11 @@
   line-height: 21px;
 }
 
-.github-profile .profile-repositories > .profile-empty {
+:is(.github-profile, .github-org) .profile-repositories > .profile-empty {
   margin-top: 24px;
 }
 
-.github-profile .profile-activity #visibility-hint {
+:is(.github-profile, .github-org) .profile-activity #visibility-hint {
   margin: 0 0 24px;
   padding: 0;
   border: 0;
@@ -56,22 +56,22 @@
   line-height: 20px;
 }
 
-.github-profile .profile-activity #user-heatmap {
+:is(.github-profile, .github-org) .profile-activity #user-heatmap {
   margin-bottom: 24px;
 }
 
-.github-profile .profile-activity #user-heatmap > .vch__container {
+:is(.github-profile, .github-org) .profile-activity #user-heatmap > .vch__container {
   border: 1px solid var(--color-secondary);
   box-shadow: none;
 }
 
-.github-profile #activity-feed.profile-activity-feed {
+:is(.github-profile, .github-org) #activity-feed.profile-activity-feed {
   border: 0;
   border-radius: 0;
   box-shadow: none;
 }
 
-.github-profile .profile-event {
+:is(.github-profile, .github-org) .profile-event {
   position: relative;
   display: grid;
   grid-template-columns: 32px minmax(0, 1fr);
@@ -79,7 +79,7 @@
   padding: 16px 0;
 }
 
-.github-profile .profile-event::before {
+:is(.github-profile, .github-org) .profile-event::before {
   content: "";
   position: absolute;
   top: 0;
@@ -89,11 +89,11 @@
   background: var(--color-secondary);
 }
 
-.github-profile .profile-event:last-of-type::before {
+:is(.github-profile, .github-org) .profile-event:last-of-type::before {
   bottom: calc(100% - 32px);
 }
 
-.github-profile .profile-event-marker {
+:is(.github-profile, .github-org) .profile-event-marker {
   z-index: 1;
   display: flex;
   align-items: center;
@@ -106,7 +106,7 @@
   color: var(--color-text-light-1);
 }
 
-.github-profile .profile-event-content {
+:is(.github-profile, .github-org) .profile-event-content {
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -117,68 +117,68 @@
   overflow-wrap: anywhere;
 }
 
-.github-profile .profile-event-heading {
+:is(.github-profile, .github-org) .profile-event-heading {
   display: flex;
   align-items: baseline;
   gap: 16px;
 }
 
-.github-profile .profile-event-summary {
+:is(.github-profile, .github-org) .profile-event-summary {
   flex: 1;
   min-width: 0;
 }
 
-.github-profile .profile-event-summary a[title] {
+:is(.github-profile, .github-org) .profile-event-summary a[title] {
   color: var(--color-text);
   font-weight: 600;
 }
 
-.github-profile .profile-event-time {
+:is(.github-profile, .github-org) .profile-event-time {
   flex: none;
   color: var(--color-text-light-1);
   font-size: 12px;
   white-space: nowrap;
 }
 
-.github-profile .profile-event-content > .tw-flex-col {
+:is(.github-profile, .github-org) .profile-event-content > .tw-flex-col {
   padding: 12px;
   border: 1px solid var(--color-secondary);
   border-radius: var(--border-radius);
 }
 
-.github-profile .profile-event-content .flex-text-block {
+:is(.github-profile, .github-org) .profile-event-content .flex-text-block {
   min-width: 0;
   font-size: 12px;
 }
 
-.github-profile .profile-event-content > .markup {
+:is(.github-profile, .github-org) .profile-event-content > .markup {
   padding: 12px 16px;
   border: 1px solid var(--color-secondary);
   border-radius: var(--border-radius);
 }
 
-.github-profile .profile-event-content > .markup > :last-child {
+:is(.github-profile, .github-org) .profile-event-content > .markup > :last-child {
   margin-bottom: 0;
 }
 
-.github-profile .profile-stars .profile-repo-owner {
+:is(.github-profile, .github-org) .profile-stars .profile-repo-owner {
   font-weight: 400;
 }
 
-.github-profile .profile-stars .profile-repo-separator {
+:is(.github-profile, .github-org) .profile-stars .profile-repo-separator {
   color: var(--color-primary);
   font-weight: 400;
 }
 
-.github-profile .profile-stars .profile-repositories .flex-item-title {
+:is(.github-profile, .github-org) .profile-stars .profile-repositories .flex-item-title {
   gap: 4px;
 }
 
-.github-profile .profile-stars .profile-repositories .flex-item-title > span:last-child {
+:is(.github-profile, .github-org) .profile-stars .profile-repositories .flex-item-title > span:last-child {
   margin-left: 4px;
 }
 
-.github-profile .profile-search-submit.button {
+:is(.github-profile, .github-org) .profile-search-submit.button {
   flex: none;
   min-height: 32px;
   margin: 0;
@@ -186,7 +186,7 @@
   line-height: 20px;
 }
 
-.github-profile .profile-subnav {
+:is(.github-profile, .github-org) .profile-subnav {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
@@ -194,7 +194,7 @@
   border-bottom: 1px solid var(--color-secondary);
 }
 
-.github-profile .profile-subnav a {
+:is(.github-profile, .github-org) .profile-subnav a {
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -205,23 +205,23 @@
   line-height: 20px;
 }
 
-.github-profile .profile-subnav a[aria-current="page"] {
+:is(.github-profile, .github-org) .profile-subnav a[aria-current="page"] {
   background: var(--color-active);
   font-weight: 600;
 }
 
-.github-profile .profile-subnav a:hover {
+:is(.github-profile, .github-org) .profile-subnav a:hover {
   background: var(--color-hover);
 }
 
-.github-profile .profile-person-list,
-.github-profile .profile-project-list {
+:is(.github-profile, .github-org) .profile-person-list,
+:is(.github-profile, .github-org) .profile-project-list {
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-.github-profile .profile-person {
+:is(.github-profile, .github-org) .profile-person {
   display: grid;
   grid-template-columns: 50px minmax(0, 1fr);
   gap: 16px;
@@ -229,49 +229,49 @@
   border-bottom: 1px solid var(--color-secondary);
 }
 
-.github-profile .profile-person-avatar img {
+:is(.github-profile, .github-org) .profile-person-avatar img {
   width: 50px;
   height: 50px;
   border-radius: 50%;
 }
 
-.github-profile .profile-person-content {
+:is(.github-profile, .github-org) .profile-person-content {
   min-width: 0;
   overflow-wrap: anywhere;
 }
 
-.github-profile .profile-person h3 {
+:is(.github-profile, .github-org) .profile-person h3 {
   margin: 0 0 4px;
   font-size: 16px;
   line-height: 24px;
 }
 
-.github-profile .profile-person h3 a {
+:is(.github-profile, .github-org) .profile-person h3 a {
   color: var(--color-text);
 }
 
-.github-profile .profile-person h3 a:hover {
+:is(.github-profile, .github-org) .profile-person h3 a:hover {
   color: var(--color-primary);
 }
 
-.github-profile .profile-person-username {
+:is(.github-profile, .github-org) .profile-person-username {
   margin-left: 8px;
   color: var(--color-text-light-1);
   font-size: 14px;
   font-weight: 400;
 }
 
-.github-profile .profile-person-bio {
+:is(.github-profile, .github-org) .profile-person-bio {
   margin: 0 0 8px;
   font-size: 14px;
   line-height: 21px;
 }
 
-.github-profile .profile-person-bio > :last-child {
+:is(.github-profile, .github-org) .profile-person-bio > :last-child {
   margin-bottom: 0;
 }
 
-.github-profile .profile-row-meta {
+:is(.github-profile, .github-org) .profile-row-meta {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -281,27 +281,27 @@
   line-height: 18px;
 }
 
-.github-profile .profile-row-meta a {
+:is(.github-profile, .github-org) .profile-row-meta a {
   color: inherit;
 }
 
-.github-profile .profile-people > .profile-empty {
+:is(.github-profile, .github-org) .profile-people > .profile-empty {
   margin-top: 24px;
 }
 
-.github-profile .profile-list-search {
+:is(.github-profile, .github-org) .profile-list-search {
   margin: 0 0 16px;
 }
 
-.github-profile .profile-search-controls {
+:is(.github-profile, .github-org) .profile-search-controls {
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
-.github-profile .profile-search-controls input[type="search"],
-.github-profile .profile-project-search input[type="search"],
-.github-profile .profile-code input[type="search"] {
+:is(.github-profile, .github-org) .profile-search-controls input[type="search"],
+:is(.github-profile, .github-org) .profile-project-search input[type="search"],
+:is(.github-profile, .github-org) .profile-code input[type="search"] {
   flex: 1;
   min-width: 0;
   width: 100%;
@@ -315,8 +315,8 @@
   line-height: 20px;
 }
 
-.github-profile .profile-search-controls > .button,
-.github-profile .profile-projects .button {
+:is(.github-profile, .github-org) .profile-search-controls > .button,
+:is(.github-profile, .github-org) .profile-projects .button {
   min-height: 32px;
   margin: 0;
   padding: 5px 16px;
@@ -324,18 +324,18 @@
   line-height: 20px;
 }
 
-.github-profile .profile-projects .button.primary {
+:is(.github-profile, .github-org) .profile-projects .button.primary {
   box-shadow: none;
 }
 
-.github-profile .profile-select-wrap {
+:is(.github-profile, .github-org) .profile-select-wrap {
   position: relative;
   display: inline-flex;
   flex: none;
   min-width: 0;
 }
 
-.github-profile .profile-select-wrap::after {
+:is(.github-profile, .github-org) .profile-select-wrap::after {
   content: "";
   position: absolute;
   top: 14px;
@@ -346,7 +346,7 @@
   pointer-events: none;
 }
 
-.github-profile .ui.form .profile-select {
+:is(.github-profile, .github-org) .ui.form .profile-select {
   appearance: none;
   transition-property: border-color, box-shadow, background-color, color;
   height: 32px;
@@ -364,47 +364,47 @@
   cursor: pointer;
 }
 
-.github-profile .ui.form .profile-select:focus-visible {
+:is(.github-profile, .github-org) .ui.form .profile-select:focus-visible {
   outline: 2px solid var(--github-borderColor-accent-emphasis);
   outline-offset: 2px;
 }
 
-.github-profile .profile-package-row {
+:is(.github-profile, .github-org) .profile-package-row {
   border: 1px solid var(--color-secondary);
   border-bottom: 0;
 }
 
-.github-profile .profile-package-row:first-child {
+:is(.github-profile, .github-org) .profile-package-row:first-child {
   border-radius: 6px 6px 0 0;
 }
 
-.github-profile .profile-package-row:last-of-type {
+:is(.github-profile, .github-org) .profile-package-row:last-of-type {
   border-bottom: 1px solid var(--color-secondary);
   border-radius: 0 0 6px 6px;
 }
 
-.github-profile .profile-package-row:only-of-type {
+:is(.github-profile, .github-org) .profile-package-row:only-of-type {
   border-radius: var(--border-radius);
 }
 
-.github-profile .profile-package-row > .flex-item {
+:is(.github-profile, .github-org) .profile-package-row > .flex-item {
   gap: 16px;
   padding: 16px;
 }
 
-.github-profile .profile-package-icon {
+:is(.github-profile, .github-org) .profile-package-icon {
   flex: none;
   color: var(--color-text-light-1);
 }
 
-.github-profile .profile-packages .flex-item-title {
+:is(.github-profile, .github-org) .profile-packages .flex-item-title {
   flex-wrap: wrap;
   gap: 8px;
   font-size: 16px;
   line-height: 24px;
 }
 
-.github-profile .profile-type-label {
+:is(.github-profile, .github-org) .profile-type-label {
   padding: 0 6px;
   border: 1px solid var(--color-secondary);
   border-radius: 2em;
@@ -414,7 +414,7 @@
   line-height: 18px;
 }
 
-.github-profile .profile-packages .flex-item-body {
+:is(.github-profile, .github-org) .profile-packages .flex-item-body {
   display: block;
   margin-top: 4px;
   color: var(--color-text-light-1);
@@ -422,16 +422,16 @@
   line-height: 18px;
 }
 
-.github-profile .profile-package-version {
+:is(.github-profile, .github-org) .profile-package-version {
   margin-right: 12px;
 }
 
-.github-profile .profile-package-breadcrumb {
+:is(.github-profile, .github-org) .profile-package-breadcrumb {
   margin: 0 0 16px;
   font-size: 14px;
 }
 
-.github-profile .profile-projects .list-header {
+:is(.github-profile, .github-org) .profile-projects .list-header {
   margin: 0;
   padding: 16px;
   gap: 16px;
@@ -440,13 +440,13 @@
   background: var(--color-nav-bg);
 }
 
-.github-profile .profile-project-list {
+:is(.github-profile, .github-org) .profile-project-list {
   border: 1px solid var(--color-secondary);
   border-top: 0;
   border-radius: 0 0 6px 6px;
 }
 
-.github-profile .profile-project {
+:is(.github-profile, .github-org) .profile-project {
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -454,11 +454,11 @@
   border-bottom: 1px solid var(--color-secondary);
 }
 
-.github-profile .profile-project:last-child {
+:is(.github-profile, .github-org) .profile-project:last-child {
   border-bottom: 0;
 }
 
-.github-profile .profile-project h3 {
+:is(.github-profile, .github-org) .profile-project h3 {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -467,23 +467,23 @@
   line-height: 24px;
 }
 
-.github-profile .profile-project h3 > .svg {
+:is(.github-profile, .github-org) .profile-project h3 > .svg {
   flex: none;
   color: var(--color-success);
 }
 
-.github-profile .profile-project .content {
+:is(.github-profile, .github-org) .profile-project .content {
   order: 1;
   color: var(--color-text-light-1);
   font-size: 14px;
   line-height: 21px;
 }
 
-.github-profile .profile-project .content > :last-child {
+:is(.github-profile, .github-org) .profile-project .content > :last-child {
   margin-bottom: 0;
 }
 
-.github-profile .profile-project .milestone-toolbar {
+:is(.github-profile, .github-org) .profile-project .milestone-toolbar {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
@@ -494,23 +494,23 @@
   line-height: 18px;
 }
 
-.github-profile .profile-project .milestone-toolbar .group {
+:is(.github-profile, .github-org) .profile-project .milestone-toolbar .group {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
 }
 
-.github-profile .profile-project-list > li > .profile-empty {
+:is(.github-profile, .github-org) .profile-project-list > li > .profile-empty {
   border: 0;
 }
 
-.github-profile .profile-federation #activity-feed {
+:is(.github-profile, .github-org) .profile-federation #activity-feed {
   border: 1px solid var(--color-secondary);
   border-radius: var(--border-radius);
   box-shadow: none;
 }
 
-.github-profile .profile-content .page.buttons {
+:is(.github-profile, .github-org) .profile-content .page.buttons {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -519,72 +519,72 @@
 }
 
 @media (max-width: 767px) {
-  .github-profile .profile-event {
+  :is(.github-profile, .github-org) .profile-event {
     gap: 12px;
   }
 
-  .github-profile .profile-event-heading {
+  :is(.github-profile, .github-org) .profile-event-heading {
     flex-direction: column;
     gap: 4px;
   }
 
-  .github-profile .profile-empty {
+  :is(.github-profile, .github-org) .profile-empty {
     min-height: 180px;
     padding: 32px 16px;
   }
 
-  .github-profile .profile-search-controls {
+  :is(.github-profile, .github-org) .profile-search-controls {
     flex-wrap: wrap;
   }
 
-  .github-profile .profile-search-controls input[type="search"] {
+  :is(.github-profile, .github-org) .profile-search-controls input[type="search"] {
     flex-basis: 100%;
   }
 
-  .github-profile .profile-select-wrap {
+  :is(.github-profile, .github-org) .profile-select-wrap {
     flex: 1;
   }
 
-  .github-profile .ui.form .profile-select {
+  :is(.github-profile, .github-org) .ui.form .profile-select {
     width: 100%;
   }
 
-  .github-profile .profile-projects .list-header {
+  :is(.github-profile, .github-org) .profile-projects .list-header {
     flex-wrap: wrap;
     padding: 12px;
   }
 
-  .github-profile .profile-projects .list-header-search {
+  :is(.github-profile, .github-org) .profile-projects .list-header-search {
     flex-basis: 100%;
   }
 }
 
-.github-profile .profile-search-controls input[type="search"]:focus,
-.github-profile .profile-project-search input[type="search"]:focus,
-.github-profile .profile-code input[type="search"]:focus {
+:is(.github-profile, .github-org) .profile-search-controls input[type="search"]:focus,
+:is(.github-profile, .github-org) .profile-project-search input[type="search"]:focus,
+:is(.github-profile, .github-org) .profile-code input[type="search"]:focus {
   border-color: var(--github-borderColor-accent-emphasis);
 }
 
-.github-profile .profile-packages .flex-item-title > a,
-.github-profile .profile-project .milestone-header h3 > a {
+:is(.github-profile, .github-org) .profile-packages .flex-item-title > a,
+:is(.github-profile, .github-org) .profile-project .milestone-header h3 > a {
   color: var(--color-primary);
 }
 
-.github-profile .profile-project .milestone-header h3 > .svg {
+:is(.github-profile, .github-org) .profile-project .milestone-header h3 > .svg {
   color: var(--color-green);
 }
 
-.github-profile .profile-project .milestone-toolbar a {
+:is(.github-profile, .github-org) .profile-project .milestone-toolbar a {
   font-size: 12px;
 }
 
-.github-profile .profile-projects .primary.button {
+:is(.github-profile, .github-org) .profile-projects .primary.button {
   height: 32px;
   min-height: 32px;
   box-shadow: none;
 }
 
-.github-profile .profile-project-state {
+:is(.github-profile, .github-org) .profile-project-state {
   display: inline-flex;
   min-width: 0;
   border: 1px solid var(--color-secondary);
@@ -592,7 +592,7 @@
   overflow: hidden;
 }
 
-.github-profile .profile-project-state a {
+:is(.github-profile, .github-org) .profile-project-state a {
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -603,28 +603,28 @@
   line-height: 20px;
 }
 
-.github-profile .profile-project-state a.active {
+:is(.github-profile, .github-org) .profile-project-state a.active {
   background: var(--color-active);
   color: var(--color-text);
   font-weight: 600;
 }
 
-.github-profile .profile-project-state a + a {
+:is(.github-profile, .github-org) .profile-project-state a + a {
   border-left: 1px solid var(--color-secondary);
 }
 
-.github-profile .profile-project.is-closed .milestone-header h3 > .svg {
+:is(.github-profile, .github-org) .profile-project.is-closed .milestone-header h3 > .svg {
   color: var(--color-text-light-1);
 }
 
-.github-profile .profile-subpage-title {
+:is(.github-profile, .github-org) .profile-subpage-title {
   overflow-wrap: anywhere;
 }
 
-.github-profile .profile-activity .vch__wrapper {
+:is(.github-profile, .github-org) .profile-activity .vch__wrapper {
   overflow: visible;
 }
 
-.github-profile .profile-person-bio > p:not(:last-child) {
+:is(.github-profile, .github-org) .profile-person-bio > p:not(:last-child) {
   margin-bottom: 4px;
 }

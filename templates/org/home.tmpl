@@ -1,0 +1,77 @@
+{{template "base/head" .}}
+{{/* Only the explicit repositories tab selects the full repository listing. */}}
+{{$repositories := eq (printf "%s" (ExecuteTemplate .Context "org/view_mode" .)) "repositories"}}
+<div role="main" aria-label="{{.Title}}" class="page-content organization profile github-org{{if $repositories}} org-repository-view theme-sidebar-layout{{end}}"{{if $repositories}} data-theme-sidebar="org_repositories_sidebar_collapsed"{{end}}>
+	{{if .Flash}}
+		<div class="ui container tw-mb-8">
+			{{template "base/alert" .}}
+		</div>
+	{{end}}
+	{{if not $repositories}}{{template "org/header" .}}{{end}}
+
+	{{if $repositories}}{{template "org/repository_nav" .}}{{end}}
+	<div class="ui container{{if $repositories}} theme-sidebar-main{{end}}">
+		<div class="org-overview-grid{{if or $repositories (not .ShowMemberAndTeamTab)}} org-full-width{{end}}">
+			<div class="org-repositories">
+				{{if and .ProfileReadme (not $repositories)}}
+					<div id="readme_profile" class="{{if not .IsProfileReadmePlain}}markup{{end}}">
+					{{if .IsProfileReadmePlain}}
+						<pre>{{.ProfileReadme}}</pre>
+					{{else}}
+						{{.ProfileReadme}}
+					{{end}}
+					</div>
+				{{end}}
+				{{if $repositories}}
+					{{template "org/repository_list" .}}
+				{{else}}
+					<h2 class="org-section-title">{{svg "octicon-repo" 16}} {{ctx.Locale.Tr "user.repositories"}}</h2>
+					{{template "user/profile_repository_search" .}}
+					{{template "shared/theme/repository_results" .}}
+				{{end}}
+			</div>
+
+			{{if and .ShowMemberAndTeamTab (not $repositories)}}
+			<aside class="org-overview-sidebar">
+				{{if .NumMembers}}
+					<h4 class="ui top attached header tw-flex">
+						<strong class="tw-flex-1">{{ctx.Locale.Tr "org.members"}}</strong>
+						<a class="org-sidebar-count tw-flex tw-items-center" href="{{.OrgLink}}/members"><span>{{.NumMembers}}</span> {{svg "octicon-chevron-right"}}</a>
+					</h4>
+					<div class="ui attached segment members">
+						{{$isMember := .IsOrganizationMember}}
+						{{range .Members}}
+							{{if or $isMember (call $.IsPublicMember .ID)}}
+								<a href="{{.HomeLink}}" title="{{.Name}}{{if .FullName}} ({{.FullName}}){{end}}">{{ctx.AvatarUtils.Avatar . 48}}</a>
+							{{end}}
+						{{end}}
+					</div>
+				{{end}}
+				{{if .IsOrganizationMember}}
+					<div class="ui top attached header tw-flex">
+						<strong class="tw-flex-1">{{ctx.Locale.Tr "org.teams"}}</strong>
+						<a class="org-sidebar-count tw-flex tw-items-center" href="{{.OrgLink}}/teams"><span>{{.Org.NumTeams}}</span> {{svg "octicon-chevron-right"}}</a>
+					</div>
+					<div class="ui attached table segment teams">
+						{{range .Teams}}
+							<div class="item">
+								<a href="{{$.OrgLink}}/teams/{{.LowerName | PathEscape}}"><strong class="team-name">{{.Name}}</strong></a>
+								<p class="org-team-meta">
+									{{.NumMembers}} {{ctx.Locale.Tr "org.lower_members"}} ·
+									{{.NumRepos}} {{ctx.Locale.Tr "org.lower_repositories"}}
+								</p>
+							</div>
+						{{end}}
+					</div>
+					{{if .IsOrganizationOwner}}
+						<div class="ui bottom attached segment">
+							<a class="secondary button theme-control theme-control-small" href="{{.OrgLink}}/teams/new">{{ctx.Locale.Tr "org.create_new_team"}}</a>
+						</div>
+					{{end}}
+				{{end}}
+			</aside>
+			{{end}}
+		</div>
+	</div>
+</div>
+{{template "base/footer" .}}

@@ -1,35 +1,7 @@
 (() => {
   const page = document.querySelector(".github-issues, .github-pull-list");
   if (!page) return;
-  const mobile = matchMedia("(max-width: 767.98px)");
   const isPullList = page.classList.contains("github-pull-list");
-  let collapsed = mobile.matches;
-  try {
-    if (!mobile.matches) collapsed = localStorage.getItem("issue_sidebar_collapsed") === "true";
-  } catch {
-    /* Optional preference. */
-  }
-  function update() {
-    if (!isPullList) page.classList.toggle("issue-navigation-collapsed", collapsed);
-    for (const button of page.querySelectorAll("[data-issue-sidebar-toggle]"))
-      button.setAttribute("aria-expanded", !collapsed);
-  }
-  for (const button of page.querySelectorAll("[data-issue-sidebar-toggle]"))
-    button.addEventListener("click", () => {
-      collapsed = !collapsed;
-      update();
-      if (!mobile.matches)
-        try {
-          localStorage.setItem("issue_sidebar_collapsed", collapsed);
-        } catch {
-          /* Optional preference. */
-        }
-    });
-  mobile.addEventListener("change", () => {
-    collapsed = mobile.matches;
-    update();
-  });
-  update();
   const form = page.querySelector(".issue-list-search");
   const input = form?.querySelector('input[name="q"]');
   if (!input) return;

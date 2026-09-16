@@ -1,0 +1,8 @@
+{{- $view := "overview" -}}
+{{- $query := StringUtils.Split .CurrentURL "?" -}}
+{{- if gt (len $query) 1 -}}
+	{{- range StringUtils.Split (index $query 1) "&" -}}
+		{{- if eq . "tab=repositories" -}}{{- $view = "repositories" -}}{{- end -}}
+	{{- end -}}
+{{- end -}}
+{{- $view -}}

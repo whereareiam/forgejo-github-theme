@@ -1,5 +1,5 @@
-<aside class="issue-navigation" aria-label="Issues sidebar navigation">
-    <div class="issue-navigation-content">
+<aside class="theme-sidebar" aria-label="Issues sidebar navigation">
+    <div class="theme-sidebar-content">
     <nav aria-label="Issue filters">
         <a class="{{if or (eq .ViewType "all") (not .ViewType)}}active{{end}}" href="{{.RepoLink}}/issues?type=all&amp;state=open">{{svg "octicon-issue-opened" 16}}Issues</a>
         {{if .IsSigned}}
@@ -17,5 +17,5 @@
         <a href="{{.RepoLink}}/labels">{{svg "octicon-tag" 16}}{{ctx.Locale.Tr "repo.labels"}}</a>
     </nav>
     </div>
-    <button type="button" class="issue-navigation-toggle" data-issue-sidebar-toggle aria-expanded="true">{{svg "octicon-sidebar-expand" 16}}Collapse sidebar</button>
+    {{template "shared/theme/sidebar_toggle" .}}
 </aside>
