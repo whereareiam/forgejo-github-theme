@@ -1,0 +1,3 @@
+{{$label := ctx.Locale.Tr "repo.issues.filter_sort"}}
+{{if .ShowSelectedLabel}}{{$label = printf "%s" (ExecuteTemplate .Data.Context "components/repository/sort/label" .Data)}}{{end}}
+{{template "components/common/dropdown/dropdown" dict "Kind" "single" "Label" $label "Icon" .Icon "Title" "Select order" "UpdateLabel" .ShowSelectedLabel "Quiet" .Quiet "Items" "components/repository/sort/items" "Data" .Data}}

@@ -42,7 +42,7 @@ if (server) {
     }
     if (gitea_path) {
       if (sync_tmpl) {
-        const cmd = `scp -r templates ${user}@${server}:${gitea_path}`;
+        const cmd = `scp -r dist/forgejo/templates ${user}@${server}:${gitea_path}`;
         console.log(`[${NAME}]:`, cmd);
         execSync(cmd, { stdio: "inherit" });
       } else {

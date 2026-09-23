@@ -1,0 +1,21 @@
+<div class="theme-list-heading">
+	<div class="theme-list-title"><button type="button" class="theme-icon-button" data-theme-sidebar-toggle data-theme-sidebar-expand aria-expanded="false" aria-label="Expand sidebar">{{svg "octicon-sidebar-expand" 16}}</button><h1>{{template "org/repository_title" .}}</h1></div>
+	<div class="org-repository-actions">{{template "org/repository_actions" .}}</div>
+</div>
+<form id="repo-search-form" class="ui form ignore-dirty org-repository-search" role="search" data-theme-repository-search>
+	<input type="hidden" name="tab" value="repositories">
+	{{if .Language}}<input type="hidden" name="language" value="{{.Language}}">{{end}}
+	{{if .TopicOnly}}<input type="hidden" name="topic" value="{{.TopicOnly}}">{{end}}
+	{{if .IsArchived.Has}}<input type="hidden" name="archived" value="{{.IsArchived.ValueOrZeroValue}}">{{end}}
+	{{if .IsFork.Has}}<input type="hidden" name="fork" value="{{.IsFork.ValueOrZeroValue}}">{{end}}
+	{{if .IsMirror.Has}}<input type="hidden" name="mirror" value="{{.IsMirror.ValueOrZeroValue}}">{{end}}
+	{{if .IsTemplate.Has}}<input type="hidden" name="template" value="{{.IsTemplate.ValueOrZeroValue}}">{{end}}
+	{{if .IsPrivate.Has}}<input type="hidden" name="private" value="{{.IsPrivate.ValueOrZeroValue}}">{{end}}
+	{{template "components/common/search/search" dict "Value" .Keyword "Placeholder" "Search repositories"}}
+	<div class="org-repository-list-header">
+		<strong data-theme-repository-count>{{.Total}} {{if eq .Total 1}}{{ctx.Locale.Tr "repository"}}{{else}}{{ctx.Locale.Tr "user.repositories"}}{{end}}</strong>
+		{{/* The sort control gets the same context without mutating template data. */}}
+		{{template "components/repository/sort/sort" dict "Data" . "ShowSelectedLabel" true "Quiet" true "Icon" "octicon-sort-desc"}}
+	</div>
+</form>
+{{template "components/repository/results/results" dict "Data" . "View" "repositories" "Pagination" "org/repository_pagination"}}

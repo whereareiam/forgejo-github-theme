@@ -1,0 +1,11 @@
+<button type="button" class="theme-dropdown-action" data-theme-clear-filters{{if not (or .IsArchived.Has .IsFork.Has .IsMirror.Has .IsTemplate.Has .IsPrivate.Has)}} disabled{{end}}>{{svg "octicon-x-circle" 16}}{{ctx.Locale.Tr "filter.clear"}}</button>
+{{template "components/common/dropdown/option" dict "Type" "checkbox" "Name" "archived" "Value" "1" "Checked" .IsArchived.ValueOrZeroValue "Label" (ctx.Locale.Tr "filter.is_archived")}}
+{{template "components/common/dropdown/option" dict "Type" "checkbox" "Name" "archived" "Value" "0" "Checked" (not (.IsArchived.ValueOrDefault true)) "Label" (ctx.Locale.Tr "filter.not_archived")}}
+{{template "components/common/dropdown/option" dict "Type" "checkbox" "Name" "fork" "Value" "1" "Checked" .IsFork.ValueOrZeroValue "Label" (ctx.Locale.Tr "filter.is_fork")}}
+{{template "components/common/dropdown/option" dict "Type" "checkbox" "Name" "fork" "Value" "0" "Checked" (not (.IsFork.ValueOrDefault true)) "Label" (ctx.Locale.Tr "filter.not_fork")}}
+{{template "components/common/dropdown/option" dict "Type" "checkbox" "Name" "mirror" "Value" "1" "Checked" .IsMirror.ValueOrZeroValue "Label" (ctx.Locale.Tr "filter.is_mirror")}}
+{{template "components/common/dropdown/option" dict "Type" "checkbox" "Name" "mirror" "Value" "0" "Checked" (not (.IsMirror.ValueOrDefault true)) "Label" (ctx.Locale.Tr "filter.not_mirror")}}
+{{template "components/common/dropdown/option" dict "Type" "checkbox" "Name" "template" "Value" "1" "Checked" .IsTemplate.ValueOrZeroValue "Label" (ctx.Locale.Tr "filter.is_template")}}
+{{template "components/common/dropdown/option" dict "Type" "checkbox" "Name" "template" "Value" "0" "Checked" (not (.IsTemplate.ValueOrDefault true)) "Label" (ctx.Locale.Tr "filter.not_template")}}
+{{template "components/common/dropdown/option" dict "Type" "checkbox" "Name" "private" "Value" "1" "Checked" .IsPrivate.ValueOrZeroValue "Label" (ctx.Locale.Tr "filter.private")}}
+{{template "components/common/dropdown/option" dict "Type" "checkbox" "Name" "private" "Value" "0" "Checked" (not (.IsPrivate.ValueOrDefault true)) "Label" (ctx.Locale.Tr "filter.public")}}

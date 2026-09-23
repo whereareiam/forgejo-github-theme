@@ -1,0 +1,174 @@
+/* Single-choice, multiple-choice, and action menus share a shell, not selection semantics. */
+.theme-dropdown {
+  position: relative;
+  flex: none;
+}
+
+.theme-dropdown > summary.theme-control {
+  list-style: none;
+  border: 1px solid var(--color-light-border);
+  box-shadow: none;
+}
+
+.theme-dropdown > summary::-webkit-details-marker {
+  display: none;
+}
+
+.theme-dropdown > summary.theme-control:hover {
+  background: var(--color-hover);
+}
+
+.theme-dropdown[open] > summary.theme-control {
+  background: var(--github-button-default-bgColor-active);
+}
+
+.theme-dropdown.theme-dropdown-quiet > summary.theme-control {
+  border-color: transparent;
+  background: transparent;
+}
+
+.theme-dropdown.theme-dropdown-quiet > summary.theme-control:hover,
+.theme-dropdown.theme-dropdown-quiet[open] > summary.theme-control {
+  background: var(--github-control-transparent-bgColor-hover);
+}
+
+.theme-dropdown-panel {
+  position: absolute;
+  z-index: 50;
+  inset: calc(100% + 8px) 0 auto auto;
+  width: 300px;
+  max-width: calc(100vw - 32px);
+  max-height: min(480px, 70vh);
+  overflow-y: auto;
+  border: 1px solid var(--color-light-border);
+  border-radius: var(--border-radius);
+  background: var(--color-menu);
+  color: var(--color-text);
+  /* The floating shadow includes an outline; using it here would draw a second border. */
+  box-shadow: none;
+  font-size: 12px;
+  line-height: 18px;
+}
+
+.theme-dropdown-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 32px;
+  padding: 4px 8px 4px 16px;
+  border-bottom: 1px solid color-mix(in srgb, var(--color-light-border) 70%, transparent);
+  font-weight: 600;
+}
+
+.theme-dropdown-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--border-radius);
+  background: transparent;
+  color: var(--color-text-light-1);
+  cursor: pointer;
+}
+
+.theme-dropdown-close:hover {
+  background: var(--github-control-transparent-bgColor-hover);
+  color: var(--color-text);
+}
+
+.ui.form .theme-dropdown-panel > .theme-dropdown-option,
+.theme-dropdown-panel > .theme-dropdown-action {
+  display: flex;
+  align-items: center;
+  position: relative;
+  gap: 8px;
+  width: 100%;
+  min-height: 33px;
+  margin: 0;
+  padding: 7px 16px;
+  border: 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--color-light-border) 70%, transparent);
+  border-radius: 0;
+  background: var(--color-menu);
+  color: var(--color-text);
+  font: 400 12px/18px var(--fonts-proportional);
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.ui.form .theme-dropdown-panel > .theme-dropdown-option:last-child,
+.theme-dropdown-panel > .theme-dropdown-action:last-child {
+  border-bottom: 0;
+}
+
+.ui.form .theme-dropdown-option:hover,
+.ui.form .theme-dropdown-option:focus-within,
+.theme-dropdown-panel > .theme-dropdown-action:not(:disabled):hover,
+.theme-dropdown-panel > .theme-dropdown-action:focus-visible {
+  background: var(--github-control-transparent-bgColor-hover);
+  color: var(--color-text);
+}
+
+.theme-dropdown-action:disabled {
+  color: var(--color-text-light-1);
+  cursor: default;
+}
+
+.theme-dropdown-option .theme-dropdown-check {
+  flex: none;
+  visibility: hidden;
+}
+
+.theme-dropdown-option:has(input:checked) .theme-dropdown-check {
+  visibility: visible;
+}
+
+.theme-dropdown-option input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+}
+
+/* GitHub's classic select menus use the browser checkbox, independent of form input styles. */
+.ui.form .theme-dropdown-panel input.theme-dropdown-checkbox {
+  appearance: auto;
+  display: inline-block;
+  flex: none;
+  width: 13px;
+  min-width: 13px;
+  height: 13px;
+  margin: 0 3px 0 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  accent-color: auto;
+}
+
+.ui.form .theme-dropdown-panel input.theme-dropdown-checkbox::before,
+.ui.form .theme-dropdown-panel input.theme-dropdown-checkbox::after {
+  content: none;
+}
+
+.theme-dropdown[data-theme-dropdown="actions"] > .theme-dropdown-panel {
+  width: 220px;
+  padding: 8px;
+  border: 0;
+  border-radius: 12px;
+  box-shadow: var(--github-shadow-floating-small);
+}
+
+.theme-dropdown[data-theme-dropdown="actions"] .theme-dropdown-action {
+  min-height: 32px;
+  padding: 6px 8px;
+  border: 0;
+  border-radius: var(--border-radius);
+  font-size: 14px;
+  line-height: 20px;
+}

@@ -1,0 +1,5 @@
+<label class="theme-dropdown-option">
+	<input{{if eq .Type "checkbox"}} class="theme-dropdown-checkbox"{{end}} type="{{.Type}}" name="{{.Name}}" value="{{.Value}}"{{if .Checked}} checked{{end}}>
+	{{if eq .Type "radio"}}{{svg "octicon-check" 16 "theme-dropdown-check"}}{{end}}
+	<span>{{.Label}}</span>
+</label>

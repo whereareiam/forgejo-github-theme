@@ -116,18 +116,35 @@ describe("构建产物基本验证", () => {
   });
 });
 
-it("ships page stylesheets unchanged with valid CSS and a template reference", async () => {
+it("ships component stylesheets unchanged with valid CSS and a template reference", async () => {
   const { transform } = await import("lightningcss");
   const templates = fs
     .readdirSync(path.join(ROOT_DIR, "templates"), { recursive: true })
     .filter(file => String(file).endsWith(".tmpl"))
     .map(file => fs.readFileSync(path.join(ROOT_DIR, "templates", String(file)), "utf-8"))
     .join("\n");
-  for (const name of fs.readdirSync(path.join(ROOT_DIR, "public")).filter(name => name.endsWith(".css"))) {
-    const code = fs.readFileSync(path.join(DIST_DIR, name));
-    expect(code.equals(fs.readFileSync(path.join(ROOT_DIR, "public", name)))).toBe(true);
-    expect(() => transform({ code, filename: name })).not.toThrow();
-    expect(templates).toContain(`/css/${name}`);
+  const sources = [
+    ...fs
+      .readdirSync(path.join(ROOT_DIR, "public"))
+      .filter(name => name.endsWith(".css"))
+      .map(name => [name, name]),
+    ...fs
+      .readdirSync(path.join(ROOT_DIR, "components"), { recursive: true })
+      .filter(file => String(file).endsWith(".css"))
+      .map(file => [`components/${String(file)}`, `components/${String(file)}`]),
+    ...["organization.css", "profile-subpages.css", "user-profile.css"].map(name => [name, `components/pages/${name}`]),
+  ];
+  const output = path.join(DIST_DIR, "forgejo", "public", "assets", "css");
+  for (const [source, asset] of sources) {
+    const code = fs.readFileSync(path.join(output, asset));
+    const original = source.startsWith("components/")
+      ? fs.readFileSync(path.join(ROOT_DIR, source))
+      : source.startsWith("organization") || source.startsWith("profile-") || source.startsWith("user-profile")
+        ? fs.readFileSync(path.join(ROOT_DIR, "styles/pages", source))
+        : fs.readFileSync(path.join(ROOT_DIR, "public", source));
+    expect(code.equals(original), `changed component asset: ${asset}`).toBe(true);
+    expect(() => transform({ code, filename: asset })).not.toThrow();
+    expect(templates).toContain(`/css/${asset}`);
   }
 });
 

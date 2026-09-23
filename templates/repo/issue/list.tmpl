@@ -1,7 +1,7 @@
 {{template "base/head" .}}
-<div role="main" aria-label="{{.Title}}" class="page-content repository issue-list{{if .PageIsIssueList}} github-issues{{else}} github-pull-list{{end}}">
+<div role="main" aria-label="{{.Title}}" class="page-content repository issue-list{{if .PageIsIssueList}} github-issues theme-sidebar-layout{{else}} github-pull-list{{end}}"{{if .PageIsIssueList}} data-theme-sidebar="issue_sidebar_collapsed"{{end}}>
 	{{if .PageIsIssueList}}{{template "repo/issue/sidebar" .}}{{end}}
-	<div class="ui container issue-list-main">
+	<div class="ui container issue-list-main theme-sidebar-main">
 	{{template "base/alert" .}}
 
 	{{if .PinnedIssues}}
@@ -30,7 +30,7 @@
                         {{end}}
                     </div>
                 </details>
-            {{else}}<div class="issue-list-title"><button type="button" class="theme-icon-button" data-issue-sidebar-toggle aria-expanded="false" aria-label="Expand sidebar">{{svg "octicon-sidebar-expand" 16}}</button><h1>{{if eq .ViewType "assigned"}}Assigned to me{{else if eq .ViewType "created_by"}}Created by me{{else if eq .ViewType "mentioned"}}Mentioned{{else}}All issues{{end}}</h1></div>{{end}}
+            {{else}}<div class="issue-list-title"><button type="button" class="theme-icon-button" data-theme-sidebar-toggle data-theme-sidebar-expand aria-expanded="false" aria-label="Expand sidebar">{{svg "octicon-sidebar-expand" 16}}</button><h1>{{if eq .ViewType "assigned"}}Assigned to me{{else if eq .ViewType "created_by"}}Created by me{{else if eq .ViewType "mentioned"}}Mentioned{{else}}All issues{{end}}</h1></div>{{end}}
 			{{if not .PageIsIssueList}}{{template "repo/issue/search" .}}<nav class="ui compact menu pull-list-pages" aria-label="Issue pages"><a class="item" href="{{.RepoLink}}/labels">{{svg "octicon-tag" 16}}{{ctx.Locale.Tr "repo.labels"}}</a><a class="item" href="{{.RepoLink}}/milestones">{{svg "octicon-milestone" 16}}{{ctx.Locale.Tr "repo.milestones"}}</a></nav>{{end}}
 			{{if not .Repository.IsArchived}}
 				{{if .PageIsIssueList}}

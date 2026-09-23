@@ -12,6 +12,17 @@ browser with zero runtime overhead.
 
 ---
 
+## Forgejo component assets
+
+Forgejo-specific UI components are colocated under `components/`. Each component directory keeps its template fragments,
+CSS, browser controller, and focused tests together. `components/common` contains controls that do not know about page
+routes; `components/repository` contains repository filtering, sorting, and result rendering. Page composition remains
+in `templates/org`, `templates/user`, and `templates/repo`, while page-only CSS lives under `styles/pages`.
+
+The bundle step assembles this source tree into `dist/forgejo/templates` and `dist/forgejo/public/assets`, which are the
+installable Forgejo paths. The local preview mounts that assembled tree, so the same output is exercised during
+development and packaging.
+
 ## Architecture Layers
 
 ```
