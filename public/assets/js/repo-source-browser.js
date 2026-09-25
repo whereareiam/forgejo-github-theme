@@ -101,29 +101,25 @@
   async function load() {
     try {
       const nodes = new Map();
-      let page = 1,
-        more = true;
-      while (more) {
-        const response = await fetch(`${tree.dataset.apiUrl}&page=${page}`);
-        if (!response.ok) throw new Error("Unable to load tree");
-        const data = await response.json();
-        for (const entry of data.tree || []) {
-          let parent = nodes;
-          const segments = entry.path.split("/");
-          segments.forEach((name, index) => {
-            const path = segments.slice(0, index + 1).join("/");
-            if (!parent.has(name))
-              parent.set(name, {
-                name,
-                path,
-                directory: index < segments.length - 1 || entry.type === "tree",
-                children: new Map(),
-              });
-            parent = parent.get(name).children;
-          });
-        }
-        more = data.truncated && data.tree?.length > 0;
-        page++;
+      // The web route tree-list (the one the file picker already uses) is
+      // session-authenticated and unpaged; /api/v1 refuses browser sessions
+      // on an instance with REQUIRE_SIGNIN_VIEW = true.
+      const response = await fetch(tree.dataset.apiUrl);
+      if (!response.ok) throw new Error("Unable to load tree");
+      for (const filePath of await response.json()) {
+        let parent = nodes;
+        const segments = filePath.split("/");
+        segments.forEach((name, index) => {
+          const path = segments.slice(0, index + 1).join("/");
+          if (!parent.has(name))
+            parent.set(name, {
+              name,
+              path,
+              directory: index < segments.length - 1,
+              children: new Map(),
+            });
+          parent = parent.get(name).children;
+        });
       }
       root.replaceChildren();
       render(nodes, root);
