@@ -101,26 +101,45 @@
   async function load() {
     try {
       const nodes = new Map();
-      // The web route tree-list (the one the file picker already uses) is
-      // session-authenticated and unpaged; /api/v1 refuses browser sessions
-      // on an instance with REQUIRE_SIGNIN_VIEW = true.
-      const response = await fetch(tree.dataset.apiUrl);
-      if (!response.ok) throw new Error("Unable to load tree");
-      for (const filePath of await response.json()) {
+      const addPath = (filePath, directory = false) => {
         let parent = nodes;
         const segments = filePath.split("/");
         segments.forEach((name, index) => {
           const path = segments.slice(0, index + 1).join("/");
+          const isDirectory = index < segments.length - 1 || (index === segments.length - 1 && directory);
           if (!parent.has(name))
             parent.set(name, {
               name,
               path,
-              directory: index < segments.length - 1,
+              directory: isDirectory,
               children: new Map(),
             });
+          else if (isDirectory) parent.get(name).directory = true;
           parent = parent.get(name).children;
         });
+      };
+      const loadApiTree = async () => {
+        let page = 1,
+          more = true;
+        while (more) {
+          const response = await fetch(`${tree.dataset.apiUrl}&page=${page}`);
+          if (!response.ok) throw new Error("API tree unavailable");
+          const data = await response.json();
+          for (const entry of data.tree || []) addPath(entry.path, entry.type === "tree");
+          more = data.truncated && data.tree?.length > 0;
+          page++;
+        }
+      };
+      let usedFallback = false;
+      try {
+        await loadApiTree();
+      } catch {
+        usedFallback = true;
+        const response = await fetch(tree.dataset.treeUrl);
+        if (!response.ok) throw new Error("Unable to load tree");
+        for (const filePath of await response.json()) addPath(filePath);
       }
+      if (usedFallback && tree.dataset.currentPath) addPath(tree.dataset.currentPath);
       root.replaceChildren();
       render(nodes, root);
       const selected = root.querySelector(".selected") || root.querySelector('[role="treeitem"]');
