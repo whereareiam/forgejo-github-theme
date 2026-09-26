@@ -80,6 +80,13 @@ export default defineThemeConfig({
       },
     },
     {
+      themeSeriesName: "gruvbox",
+      themes: {
+        dark: { theme: themes.gruvbox.dark },
+        light: { theme: themes.gruvbox.light },
+      },
+    },
+    {
       themeSeriesName: "catppuccin",
       themes: {
         dark: { themeName: "mocha", theme: themes.catppuccin.mocha },

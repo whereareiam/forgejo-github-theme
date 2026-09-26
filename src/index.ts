@@ -27,12 +27,15 @@ export {
   display2GitHubColor,
   github2ThemeColor,
   primer2GitHubColor,
+  primer2Chroma,
+  primer2CodeMirror,
 } from "./palette";
 export type { DisplayColor, GitHubColor, GiteaColor, ThemeColor } from "./palette";
 export { chromaVars, customThemeVars, otherThemeVars, syntaxVars, themeVars } from "./types";
 export type {
   Ansi,
   Chroma,
+  CodeMirror,
   Console,
   Diff,
   GitHub,
