@@ -56,6 +56,10 @@ const EXPECTED_THEME_FILES = [
   `${PREFIX}gitea-dark.css`,
   `${PREFIX}gitea-light.css`,
   `${PREFIX}gitea-auto.css`,
+  // gruvbox
+  `${PREFIX}gruvbox-dark.css`,
+  `${PREFIX}gruvbox-light.css`,
+  `${PREFIX}gruvbox-auto.css`,
   // catppuccin
   `${PREFIX}catppuccin-mocha.css`,
   `${PREFIX}catppuccin-latte.css`,
@@ -113,6 +117,65 @@ describe("构建产物基本验证", () => {
     const pageStyles = new Set(fs.readdirSync(path.join(ROOT_DIR, "public")).filter(f => f.endsWith(".css")));
     const extra = actualFiles.filter(f => !expectedSet.has(f) && !pageStyles.has(f));
     expect(extra, `存在多余主题文件: ${extra.join(", ")}`).toEqual([]);
+  });
+});
+
+describe("Gruvbox 语法高亮 CSS", () => {
+  for (const mode of ["light", "dark"]) {
+    it(`${mode} includes Chroma and CodeMirror rules`, () => {
+      const css = fs.readFileSync(path.join(DIST_DIR, `${PREFIX}gruvbox-${mode}.css`), "utf-8");
+
+      expect(css).toContain(".chroma .k{");
+      expect(css).toContain(".codemirror-container .tok-keyword{");
+    });
+  }
+
+  it("dark code blocks use a black overlay", () => {
+    const css = fs.readFileSync(path.join(DIST_DIR, `${PREFIX}gruvbox-dark.css`), "utf-8");
+
+    expect(css).toContain("--color-markup-code-block:#00000020");
+  });
+
+  it("light code blocks use the Gruvbox light surface", () => {
+    const css = fs.readFileSync(path.join(DIST_DIR, `${PREFIX}gruvbox-light.css`), "utf-8");
+
+    expect(css).toContain("--color-markup-code-block:#ebdbb2");
+  });
+
+  it("uses each mode's base background for the menu", () => {
+    const lightCss = fs.readFileSync(path.join(DIST_DIR, `${PREFIX}gruvbox-light.css`), "utf-8");
+    const darkCss = fs.readFileSync(path.join(DIST_DIR, `${PREFIX}gruvbox-dark.css`), "utf-8");
+
+    expect(lightCss).toContain("--color-menu:#fbf1c7");
+    expect(darkCss).toContain("--color-menu:#282828");
+  });
+
+  for (const [mode, background] of [
+    ["light", "#fbf1c7"],
+    ["dark", "#282828"],
+  ]) {
+    it(`${mode} color-light matches color-body`, () => {
+      const css = fs.readFileSync(path.join(DIST_DIR, `${PREFIX}gruvbox-${mode}.css`), "utf-8");
+
+      expect(css).toContain(`--color-light:${background}`);
+      expect(css).toContain(`--color-body:${background}`);
+    });
+  }
+
+  it("uses bg2 for the RSS tooltip background in both modes", () => {
+    const lightCss = fs.readFileSync(path.join(DIST_DIR, `${PREFIX}gruvbox-light.css`), "utf-8");
+    const darkCss = fs.readFileSync(path.join(DIST_DIR, `${PREFIX}gruvbox-dark.css`), "utf-8");
+
+    expect(lightCss).toContain("--color-tooltip-bg:#d5c4a1");
+    expect(darkCss).toContain("--color-tooltip-bg:#504945");
+  });
+
+  it("uses the requested shadow color in light mode only", () => {
+    const lightCss = fs.readFileSync(path.join(DIST_DIR, `${PREFIX}gruvbox-light.css`), "utf-8");
+    const darkCss = fs.readFileSync(path.join(DIST_DIR, `${PREFIX}gruvbox-dark.css`), "utf-8");
+
+    expect(lightCss).toContain("--color-shadow:#25292e0a");
+    expect(darkCss).toContain("--color-shadow:#1d202158");
   });
 });
 
@@ -693,8 +756,8 @@ const SIZE_LIMITS = {
   AUTO_MAX: 1 * 1024, // 1 KB
   /** 非 auto 主题包含完整主题变量 + 公共样式，当前约 207-216 KB */
   SOLID_MAX: 220 * 1024, // 220 KB (给予主题页面样式增长空间)
-  /** 所有 CSS 文件总大小上限，当前约 2.6 MB */
-  TOTAL_MAX: 5 * 1024 * 1024, // 5 MB
+  /** 所有 CSS 文件总大小上限，当前约 5.2 MB */
+  TOTAL_MAX: 6 * 1024 * 1024, // 6 MB
 } as const;
 
 describe("CSS 文件大小限制", () => {
@@ -726,7 +789,7 @@ describe("CSS 文件大小限制", () => {
     ).toEqual([]);
   });
 
-  it("所有 CSS 文件总大小 < 5MB", () => {
+  it("所有 CSS 文件总大小 < 6MB", () => {
     let totalSize = 0;
     for (const fileName of EXPECTED_THEME_FILES) {
       totalSize += fs.statSync(path.join(DIST_DIR, fileName)).size;
