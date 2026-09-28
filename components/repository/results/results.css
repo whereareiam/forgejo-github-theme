@@ -1,0 +1,185 @@
+.theme-repository-error {
+  padding: 12px 16px;
+  border: 1px solid var(--color-error-border);
+  border-radius: var(--border-radius);
+  background: var(--color-error-bg);
+  color: var(--color-error-text);
+}
+
+.github-profile .profile-content .profile-repositories {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.github-profile .profile-content .profile-repositories > .flex-item {
+  padding: 24px 0;
+  border: 0;
+  border-bottom: 1px solid var(--color-secondary);
+  border-radius: 0;
+}
+
+.github-profile .profile-repositories .flex-item-title {
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 20px;
+  line-height: 30px;
+}
+
+.github-profile .profile-repositories .flex-item-title .label {
+  padding: 0 6px;
+  border: 1px solid var(--color-secondary);
+  background: transparent;
+  border-radius: 2em;
+  color: var(--color-text-light-1);
+  font-size: 12px;
+  line-height: 18px;
+}
+
+.github-profile .profile-repositories .flex-item-body {
+  margin-top: 4px;
+  color: var(--color-text-light-1);
+  font-size: 14px;
+  line-height: 21px;
+}
+
+.github-profile .profile-repositories .repo-topics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 12px;
+}
+
+.github-profile .profile-repositories .flex-item-trailing {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 8px 16px;
+  margin-top: 16px;
+  color: var(--color-text-light-1);
+  font-size: 12px;
+  line-height: 18px;
+}
+
+.github-profile .profile-repositories .color-icon {
+  width: 12px;
+  height: 12px;
+  margin-right: 0 !important;
+}
+
+.github-profile .profile-repo-kind {
+  display: inline-flex;
+  align-items: center;
+}
+
+.github-profile .profile-repo-kind .svg {
+  width: 16px;
+  min-width: 16px;
+  height: 16px;
+}
+
+:is(.github-profile, .github-org) .profile-repositories > .profile-empty {
+  margin-top: 24px;
+}
+
+:is(.github-profile, .github-org) .profile-stars .profile-repositories .flex-item-title {
+  gap: 4px;
+}
+
+:is(.github-profile, .github-org) .profile-stars .profile-repositories .flex-item-title > span:last-child {
+  margin-left: 4px;
+}
+
+.github-org .profile-repositories {
+  gap: 0;
+  border: 1px solid var(--color-secondary);
+  border-radius: var(--border-radius);
+}
+
+.github-org .profile-repositories > .flex-item {
+  margin: 0;
+  padding: 16px;
+}
+
+.github-org .profile-repositories > .flex-item + .flex-item {
+  border-top: 1px solid var(--color-secondary);
+}
+
+.github-org .profile-repositories .flex-item-title {
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.github-org .profile-repositories .flex-item-title .label {
+  background: transparent;
+  border: 1px solid var(--color-secondary);
+  border-radius: 2em;
+  color: var(--color-text-light-1);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.github-org .profile-repositories .flex-item-body {
+  margin: 8px 0;
+  color: var(--color-text-light-1);
+}
+
+.github-org .profile-repositories .flex-item-trailing {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 16px;
+  margin-top: 8px;
+  color: var(--color-text-light-1);
+  font-size: 12px;
+}
+
+.github-org .profile-repositories .color-icon {
+  width: 12px;
+  height: 12px;
+}
+
+.org-repository-view .profile-repositories {
+  border-radius: 0 0 var(--border-radius) var(--border-radius);
+}
+
+.org-repository-view .profile-repositories > .flex-item {
+  padding: 8px 16px 12px;
+}
+
+.org-repository-view .profile-repositories .flex-item-title > a.name {
+  color: var(--color-text);
+}
+
+.org-repository-view .profile-repositories .flex-item-title > a.name:hover {
+  color: var(--color-primary);
+}
+
+.org-repository-view .profile-repositories .flex-item-trailing {
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.org-repository-view .profile-repositories .flex-item-trailing > * + *::before {
+  content: "·";
+  margin-right: 8px;
+  color: var(--color-text-light-1);
+}
+
+.org-repository-view .profile-repositories .flex-item-title > a.name {
+  /* Forgejo's text-primary utility fixes link color with !important. */
+  color: var(--color-text) !important;
+}
+
+.org-repository-view .profile-repositories .flex-item-title > a.name:hover {
+  color: var(--color-primary) !important;
+}
+
+.org-repository-view .profile-repositories > .flex-item:is(:hover, :focus-within) {
+  background: var(--color-box-header);
+}
+
+.org-repository-view .profile-repositories > .flex-item:last-child {
+  border-radius: 0 0 var(--border-radius) var(--border-radius);
+}

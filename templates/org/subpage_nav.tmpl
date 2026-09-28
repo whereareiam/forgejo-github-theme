@@ -1,0 +1,14 @@
+<nav class="org-side-nav" aria-label="{{.Title}}">
+	{{if .PageIsOrgMembers}}
+		<h1 class="org-page-title">{{ctx.Locale.Tr "org.members"}}</h1>
+		<a class="active" aria-current="page" href="{{.OrgLink}}/members">{{svg "octicon-person" 16}}{{ctx.Locale.Tr "org.members"}}</a>
+		{{if .IsOrganizationMember}}<a href="{{.OrgLink}}/teams">{{svg "octicon-people" 16}}{{ctx.Locale.Tr "org.teams"}}</a>{{end}}
+	{{else if .PageIsViewProjects}}
+		<h1 class="org-page-title">{{ctx.Locale.Tr "user.projects"}}</h1>
+		<a class="{{if not .IsShowClosed}}active{{end}}" href="{{.Org.HomeLink}}/-/projects?state=open">{{svg "octicon-project-symlink" 16}}{{ctx.Locale.Tr "repo.issues.open_title"}}</a>
+		<a class="{{if .IsShowClosed}}active{{end}}" href="{{.Org.HomeLink}}/-/projects?state=closed">{{svg "octicon-check" 16}}{{ctx.Locale.Tr "repo.issues.closed_title"}}</a>
+	{{else if .IsPackagesPage}}
+		<h1 class="org-page-title">{{ctx.Locale.Tr "packages.title"}}</h1>
+		<a class="{{if not .PackageType}}active{{end}}" href="{{.Org.HomeLink}}/-/packages">{{svg "octicon-package" 16}}{{ctx.Locale.Tr "all"}}</a>
+	{{end}}
+</nav>

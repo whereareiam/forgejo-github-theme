@@ -1,3 +1,5 @@
+{{/* Organization navigation is already rendered in the global header. */}}
+{{if not (and .Org (not .Repository))}}
 <overflow-menu aria-label="{{ctx.Locale.Tr "settings.profile"}}" class="ui secondary pointing tabular borderless menu">
 	<div class="overflow-menu-items">
 		{{if and .HasProfileReadme .ContextUser.IsIndividual}}
@@ -61,3 +63,4 @@
 		{{end}}
 	</div>
 </overflow-menu>
+{{end}}

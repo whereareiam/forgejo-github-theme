@@ -306,6 +306,13 @@ const repositoryHome = css`
       padding-left: 0;
     }
   }
+
+  @media (min-width: 768px) and (max-width: 984.98px) {
+    .page-content.repository.file.list .repo-button-row .repo-code-dropdown > .content {
+      left: 0;
+      right: auto;
+    }
+  }
 `;
 
 export default cssCombine(repositoryHome);

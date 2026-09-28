@@ -1,10 +1,12 @@
+{{$data := .Data}}{{$view := .View}}
+{{with .Data}}
 <div class="profile-repositories flex-list">
 	{{range .Repos}}
 		<div class="flex-item">
 			<div class="flex-item-main">
 				<div class="flex-item-header">
 					<div class="flex-item-title">
-						{{if and (or $.PageIsExplore $.PageIsProfileStarList (eq $.TabName "watching")) .Owner}}
+						{{if and (or $data.PageIsExplore $data.PageIsProfileStarList (eq $data.TabName "watching")) .Owner}}
 						<a class="text primary name profile-repo-owner" href="{{.Owner.HomeLink}}">{{.Owner.Name}}</a><span class="profile-repo-separator">/</span>
 						{{end}}
 						<a class="text primary name" href="{{.Link}}">{{.Name}}</a>
@@ -30,7 +32,7 @@
 						</span>
 					</div>
 				</div>
-				{{$description := .DescriptionHTML $.Context}}
+				{{$description := .DescriptionHTML $data.Context}}
 				{{if $description}}
 					<div class="flex-item-body">{{$description}}</div>
 				{{end}}
@@ -46,12 +48,12 @@
 						<span class="profile-repo-kind">{{template "repo/icon" .}}</span>
 					{{end}}
 					{{if .PrimaryLanguage}}
-						<a class="flex-text-inline" href="?q={{$.Keyword}}&sort={{$.SortType}}&language={{.PrimaryLanguage.Language}}{{if $.TabName}}&tab={{$.TabName}}{{end}}">
+						<a class="flex-text-inline" href="?q={{$data.Keyword}}&sort={{$data.SortType}}&language={{.PrimaryLanguage.Language}}{{if $view}}&tab={{$view}}{{end}}">
 							<i class="color-icon tw-mr-2" style="background-color: {{.PrimaryLanguage.Color}}"></i>
 							{{.PrimaryLanguage.Language}}
 						</a>
 					{{end}}
-					{{if not $.DisableStars}}
+					{{if not $data.DisableStars}}
 						<a class="flex-text-inline" href="{{.Link}}/stars"
 							aria-label="{{ctx.Locale.TrPluralString .NumStars "stars.n_stars" (printf "%d" .NumStars)}}"
 							{{if ge .NumStars 1000}}
@@ -62,7 +64,7 @@
 							{{CountFmt .NumStars}}
 						</a>
 					{{end}}
-					{{if not $.DisableForks}}
+					{{if not $data.DisableForks}}
 						<a class="flex-text-inline" href="{{.Link}}/forks"
 							aria-label="{{ctx.Locale.TrPluralString .NumForks "fork.n_forks" (printf "%d" .NumForks)}}"
 							{{if ge .NumForks 1000}}
@@ -83,3 +85,4 @@
 	{{template "user/profile_empty" dict "Icon" $emptyIcon "Title" (ctx.Locale.Tr "search.no_results")}}
 	{{end}}
 </div>
+{{end}}

@@ -33,7 +33,7 @@ export class PreviewConfig {
     this.previewPassword = environment[ENVIRONMENT.password] ?? PREVIEW.defaultPassword;
     this.previewEmail = environment[ENVIRONMENT.email] ?? PREVIEW.defaultEmail;
     this.autoLoginEnabled = environment[AUTO_LOGIN.environment] !== AUTO_LOGIN.disabledValue;
-    this.themeTemplatesDirectory = join(this.projectDirectory, "templates");
+    this.themeTemplatesDirectory = join(this.projectDirectory, "dist/forgejo/templates");
     this.generatedTemplatesDirectory = join(this.projectDirectory, "dev/.generated/templates");
     this.autoLoginTemplateFile = join(this.projectDirectory, AUTO_LOGIN.templateDirectory, AUTO_LOGIN.templateFile);
     this.fixturesDirectory = join(this.projectDirectory, FIXTURES.directory);

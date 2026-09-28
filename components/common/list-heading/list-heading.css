@@ -1,0 +1,25 @@
+.theme-list-heading,
+.theme-list-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.theme-list-heading {
+  justify-content: space-between;
+  margin-bottom: 8px;
+  min-height: 32px;
+}
+
+.theme-list-title h1 {
+  margin: 0;
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: 600;
+}
+
+@media (max-width: 767.98px) {
+  .theme-list-heading {
+    flex-wrap: wrap;
+  }
+}

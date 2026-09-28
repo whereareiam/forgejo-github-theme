@@ -1,9 +1,9 @@
 {{template "base/head" .}}
 {{if .ContextUser.IsOrganization}}
-	<div role="main" aria-label="{{.Title}}" class="page-content organization packages">
+	<div role="main" aria-label="{{.Title}}" class="page-content organization packages github-org">
 		{{template "org/header" .}}
 		<div class="ui container">
-			{{template "package/shared/versionlist" .}}
+			{{template "user/profile_package_versions" .}}
 		</div>
 	</div>
 {{else}}

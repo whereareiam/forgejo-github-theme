@@ -98,32 +98,24 @@
       }
     }
   }
-  async function load() {
+  function load() {
     try {
       const nodes = new Map();
-      let page = 1,
-        more = true;
-      while (more) {
-        const response = await fetch(`${tree.dataset.apiUrl}&page=${page}`);
-        if (!response.ok) throw new Error("Unable to load tree");
-        const data = await response.json();
-        for (const entry of data.tree || []) {
-          let parent = nodes;
-          const segments = entry.path.split("/");
-          segments.forEach((name, index) => {
-            const path = segments.slice(0, index + 1).join("/");
-            if (!parent.has(name))
-              parent.set(name, {
-                name,
-                path,
-                directory: index < segments.length - 1 || entry.type === "tree",
-                children: new Map(),
-              });
-            parent = parent.get(name).children;
-          });
-        }
-        more = data.truncated && data.tree?.length > 0;
-        page++;
+      const entries = document.getElementById("repo-source-tree-data").content.children;
+      for (const entry of entries) {
+        let parent = nodes;
+        const segments = entry.dataset.path.split("/");
+        segments.forEach((name, index) => {
+          const path = segments.slice(0, index + 1).join("/");
+          if (!parent.has(name))
+            parent.set(name, {
+              name,
+              path,
+              directory: index < segments.length - 1 || entry.dataset.directory === "true",
+              children: new Map(),
+            });
+          parent = parent.get(name).children;
+        });
       }
       root.replaceChildren();
       render(nodes, root);

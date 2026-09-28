@@ -1,0 +1,4 @@
+{{if .CanCreateOrgRepo}}
+	{{if not .DisableMigrations}}<a class="secondary button theme-control org-migrate" href="{{AppSubUrl}}/repo/migrate?org={{.Org.ID}}&mirror=1" aria-label="{{ctx.Locale.Tr "new_migrate.link"}}" data-tooltip-content="{{ctx.Locale.Tr "new_migrate.link"}}">{{svg "octicon-repo-push" 16}}</a>{{end}}
+	<a class="primary button theme-control profile-new-repo" href="{{AppSubUrl}}/repo/create?org={{.Org.ID}}">{{if not (eq (printf "%s" (ExecuteTemplate .Context "org/view_mode" .)) "repositories")}}{{svg "octicon-repo" 16}}{{end}}{{ctx.Locale.Tr "new_repo.link"}}</a>
+{{end}}

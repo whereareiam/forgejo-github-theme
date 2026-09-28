@@ -14,7 +14,7 @@ export class PreviewReloader {
 
   public prepare(): void {
     this.revision = randomUUID();
-    const dist = join(this.config.projectDirectory, "dist");
+    const dist = join(this.config.projectDirectory, "dist/forgejo/public/assets/css");
     for (const name of readdirSync(dist).filter(name => name.endsWith("-auto.css"))) {
       const file = join(dist, name);
       const css = readFileSync(file, "utf8").replace(
@@ -30,7 +30,7 @@ export class PreviewReloader {
 
   /** Publish only after Forgejo has restarted with the new templates. */
   public publish(): void {
-    const file = join(this.config.projectDirectory, "dist", "preview-revision.json");
+    const file = join(this.config.projectDirectory, "dist/forgejo/public/assets/css", "preview-revision.json");
     writeFileSync(`${file}.tmp`, JSON.stringify({ revision: this.revision }));
     renameSync(`${file}.tmp`, file);
   }

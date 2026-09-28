@@ -1,0 +1,61 @@
+<overflow-menu aria-label="{{.Org.DisplayName}}" class="ui secondary pointing tabular borderless menu">
+	<div class="overflow-menu-items">
+		{{/* Only the explicit repositories tab selects the full repository listing. */}}
+		{{$repositories := eq (printf "%s" (ExecuteTemplate .Context "org/view_mode" .)) "repositories"}}
+		<a class="{{if and .PageIsViewRepositories (not $repositories)}}active {{end}}item" href="{{.Org.HomeLink}}"{{if and .PageIsViewRepositories (not $repositories)}} aria-current="page"{{end}}>
+			{{svg "octicon-home"}} {{ctx.Locale.Tr "user.overview"}}
+		</a>
+		<a class="{{if and .PageIsViewRepositories $repositories}}active {{end}}item" href="{{$.Org.HomeLink}}?tab=repositories"{{if and .PageIsViewRepositories $repositories}} aria-current="page"{{end}}>
+			{{svg "octicon-repo"}} {{ctx.Locale.Tr "user.repositories"}}
+			{{if .RepoCount}}
+				<span class="profile-nav-count">{{.RepoCount}}</span>
+			{{end}}
+			<span hidden test-name="repository-count">{{.RepoCount}}</span>
+		</a>
+		{{if .CanReadProjects}}
+		<a class="{{if .PageIsViewProjects}}active {{end}}item" href="{{$.Org.HomeLink}}/-/projects"{{if .PageIsViewProjects}} aria-current="page"{{end}}>
+			{{svg "octicon-project-symlink"}} {{ctx.Locale.Tr "user.projects"}}
+			{{if .ProjectCount}}
+				<span class="profile-nav-count">{{.ProjectCount}}</span>
+			{{end}}
+			<span hidden test-name="project-count">{{.ProjectCount}}</span>
+		</a>
+		{{end}}
+		{{if and .IsPackageEnabled .CanReadPackages}}
+		<a class="{{if .IsPackagesPage}}active {{end}}item" href="{{$.Org.HomeLink}}/-/packages"{{if .IsPackagesPage}} aria-current="page"{{end}}>
+			{{svg "octicon-package"}} {{ctx.Locale.Tr "packages.title"}}
+			{{if .PackageCount}}
+				<span class="profile-nav-count">{{.PackageCount}}</span>
+			{{end}}
+			<span hidden test-name="package-count">{{.PackageCount}}</span>
+		</a>
+		{{end}}
+		{{if and .IsRepoIndexerEnabled .CanReadCode}}
+		<a class="{{if .IsCodePage}}active {{end}}item" href="{{$.Org.HomeLink}}/-/code"{{if .IsCodePage}} aria-current="page"{{end}}>
+			{{svg "octicon-code"}} {{ctx.Locale.Tr "org.code"}}
+		</a>
+		{{end}}
+		{{if .IsOrganizationMember}}
+		<a class="{{if $.PageIsOrgTeams}}active {{end}}item" href="{{$.OrgLink}}/teams"{{if .PageIsOrgTeams}} aria-current="page"{{end}}>
+			{{svg "octicon-people"}} {{ctx.Locale.Tr "org.teams"}}
+			{{if .NumTeams}}
+				<span class="profile-nav-count">{{.NumTeams}}</span>
+			{{end}}
+		</a>
+		{{end}}
+		<span hidden test-name="team-count">{{.NumTeams}}</span>
+		{{if .NumMembers}}
+		<a class="{{if $.PageIsOrgMembers}}active {{end}}item" href="{{$.OrgLink}}/members"{{if .PageIsOrgMembers}} aria-current="page"{{end}}>
+			{{svg "octicon-person"}} {{ctx.Locale.Tr "org.members"}}
+			<span class="profile-nav-count">{{.NumMembers}}</span>
+		</a>
+		{{end}}
+		<span hidden test-name="member-count">{{.NumMembers}}</span>
+
+		{{if .IsOrganizationOwner}}
+		<a id="settings-btn" class="{{if .PageIsOrgSettings}}active {{end}}item" href="{{.OrgLink}}/settings"{{if .PageIsOrgSettings}} aria-current="page"{{end}}>
+		{{svg "octicon-tools"}} {{ctx.Locale.Tr "repo.settings"}}
+		</a>
+		{{end}}
+	</div>
+</overflow-menu>

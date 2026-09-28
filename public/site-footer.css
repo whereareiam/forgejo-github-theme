@@ -3,9 +3,12 @@
   flex-direction: column;
   align-items: center;
   gap: 8px;
-  padding: 48px 16px 40px;
+  padding: 16px;
   background: var(--color-body);
-  border: 0;
+  border-top: 1px solid var(--color-light-border);
+  border-right: 0;
+  border-bottom: 0;
+  border-left: 0;
   color: var(--color-text-light-1);
   font-size: 12px;
   line-height: 18px;
@@ -22,6 +25,7 @@
 
 .github-footer .footer-main {
   gap: 16px;
+  transition: opacity 150ms ease;
   max-width: 100%;
 }
 
@@ -61,6 +65,7 @@
 .github-footer .ui.dropdown {
   color: inherit;
   font-size: inherit;
+  transition: color 150ms ease;
 }
 
 .github-footer a:not(.item):hover,

@@ -1,94 +1,7 @@
-import { css, otherThemeVars, themeVars } from "@lutinglt/gitea-github-theme/core";
+import { css, themeVars } from "@lutinglt/gitea-github-theme/core";
 
 export default css`
   .github-issues {
-    &.page-content.repository.issue-list {
-      display: grid;
-      grid-template-columns: 256px minmax(0, 1fr);
-      min-height: calc(100dvh - 100px);
-    }
-    &.page-content.repository.issue-list > .issue-navigation {
-      display: flex;
-      flex-direction: column;
-      position: sticky;
-      top: 0;
-      height: calc(100dvh - 100px);
-      padding: 8px;
-      margin-top: 0;
-      border-right: 1px solid ${themeVars.color.light.border};
-    }
-    & .issue-navigation-content {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      overflow-y: auto;
-      scrollbar-gutter: stable;
-      flex: 1;
-      min-height: 0;
-    }
-    & .issue-navigation-content > nav {
-      padding: 8px 0;
-    }
-    & .issue-navigation nav a {
-      margin: 0 8px;
-    }
-    & .issue-navigation nav a,
-    & .issue-navigation-toggle {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      min-height: 32px;
-      padding: 6px 8px;
-      border: 0;
-      background: transparent;
-      font: 14px/20px var(--fonts-proportional);
-      color: ${themeVars.color.text.self};
-      text-decoration: none;
-      border-radius: ${otherThemeVars.border.radius};
-      position: relative;
-    }
-    & .issue-navigation nav a:hover,
-    & .issue-navigation-toggle:hover {
-      background: ${themeVars.color.hover.self};
-      cursor: pointer;
-    }
-    & .issue-navigation nav a.active {
-      background: ${themeVars.github.control.transparent.bgColor.active};
-      font-weight: 600;
-    }
-    & .issue-navigation nav a.active::before {
-      content: "";
-      position: absolute;
-      left: -8px;
-      top: 4px;
-      width: 4px;
-      height: 24px;
-      background: ${themeVars.github.bgColor.accent.emphasis};
-      border-radius: ${otherThemeVars.border.radius};
-    }
-    & .issue-navigation nav a svg,
-    & .issue-navigation-toggle svg {
-      color: ${themeVars.color.text.light.num1};
-      flex-shrink: 0;
-    }
-    & .issue-navigation hr {
-      border: 0;
-      border-top: 1px solid color-mix(in srgb, ${themeVars.color.light.border} 70%, transparent);
-      height: 1px;
-      min-height: 1px;
-      padding: 0;
-      margin: 4px 0;
-    }
-    & .issue-navigation-toggle {
-      margin: 0 8px;
-      flex-shrink: 0;
-    }
-    &.page-content.repository.issue-list > .issue-list-main {
-      width: calc(100% - 48px) !important;
-      max-width: 1232px !important;
-      margin: 24px auto !important;
-      min-width: 0;
-    }
     & .list-header-issues {
       margin: 0 0 16px;
       min-height: 32px;
@@ -107,9 +20,6 @@ export default css`
       font-weight: 600;
       margin: 0;
     }
-    & .issue-list-title .theme-icon-button {
-      display: none;
-    }
     & .issue-list-new {
       min-height: 32px;
       height: 32px;
@@ -121,33 +31,6 @@ export default css`
       & {
         width: 100%;
         margin-bottom: 16px;
-      }
-      & .ui.action.input:not(.search) {
-        height: 32px;
-        border: 1px solid ${themeVars.color.light.border};
-        border-radius: ${otherThemeVars.border.radius};
-        background: ${themeVars.color.body};
-        overflow: hidden;
-      }
-      & .ui.action.input:not(.search):focus-within {
-        outline: 2px solid ${themeVars.github.fgColor.accent};
-        outline-offset: -1px;
-      }
-      & input[type="search"] {
-        background: transparent !important;
-        border: 0 !important;
-        box-shadow: none !important;
-        outline: none !important;
-        font-size: 14px;
-        padding: 5px 12px;
-      }
-      & button {
-        min-height: 30px;
-        height: 30px;
-        width: 32px;
-        padding: 0;
-        border: 0;
-        border-left: 1px solid ${themeVars.color.light.border};
       }
       & > .show-modal {
         display: none;
@@ -264,15 +147,6 @@ export default css`
         font-weight: 600;
       }
     }
-    &.issue-navigation-collapsed {
-      grid-template-columns: minmax(0, 1fr) !important;
-    }
-    &.issue-navigation-collapsed > .issue-navigation {
-      display: none;
-    }
-    &.issue-navigation-collapsed .issue-list-title .theme-icon-button {
-      display: flex;
-    }
     @media (max-width: 1011.98px) {
       & .issue-list-toolbar {
         flex-wrap: wrap;
@@ -329,20 +203,6 @@ export default css`
         margin-top: 4px;
       }
 
-      &.page-content.repository.issue-list {
-        display: block;
-      }
-      &:not(.issue-navigation-collapsed) .issue-list-main {
-        display: none;
-      }
-      &.page-content.repository.issue-list > .issue-navigation {
-        height: calc(100dvh - 100px);
-        border-right: 0;
-      }
-      &.page-content.repository.issue-list > .issue-list-main {
-        width: calc(100% - 32px) !important;
-        margin: 16px !important;
-      }
       & .issue-list-toolbar-right > .ui.menu {
         flex-wrap: wrap;
       }
