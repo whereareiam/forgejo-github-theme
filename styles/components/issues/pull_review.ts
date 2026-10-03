@@ -1,5 +1,39 @@
 import { css, otherThemeVars, themeVars } from "@lutinglt/gitea-github-theme/core";
 
+/** The 32px round status icon that starts a merge box section; the section sets its background. */
+const mergeSectionIcon = `
+  flex: 0 0 32px;
+  width: 32px;
+  height: 32px;
+  padding: 8px;
+  border-radius: 50%;
+  color: ${themeVars.github.fgColor.onEmphasis};
+`;
+
+/** "View command line instructions": Forgejo's disclosure summary shown as a small link. */
+const mergeInstructionsLink = `
+  padding: 0 !important;
+  list-style: none;
+  color: ${themeVars.github.fgColor.accent};
+  font-size: 12px;
+  line-height: 18px;
+  text-decoration: underline;
+  cursor: pointer;
+  &::before,
+  &::-webkit-details-marker {
+    display: none;
+  }
+`;
+
+/** Forgejo's buttons inside the merge box, at GitHub's 32px control height. */
+const mergeButton = `
+  min-height: 32px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  font-size: 14px;
+  line-height: 20px;
+`;
+
 export default css`
   .page-content.repository.view.issue.github-pull-review {
     & > .ui.container {
@@ -81,7 +115,7 @@ export default css`
       }
       & > .item.active {
         background: ${themeVars.color.body};
-        font-weight: 600;
+        font-weight: 400;
         border-color: ${themeVars.color.light.border};
         border-bottom-color: ${themeVars.color.body};
         border-radius: ${otherThemeVars.border.radius} ${otherThemeVars.border.radius} 0 0;
@@ -91,16 +125,6 @@ export default css`
       & > .item:not(.active):hover {
         background: ${themeVars.github.control.transparent.bgColor.hover};
         border-radius: ${otherThemeVars.border.radius};
-      }
-      & .ui.label {
-        font-weight: 500;
-        border: 0;
-        background: ${themeVars.color.hover.self};
-        border-radius: 20px;
-        padding: 0 6px;
-        font-size: 12px;
-        line-height: 18px;
-        margin: 0;
       }
     }
 
@@ -175,49 +199,93 @@ export default css`
         border: 1px solid ${themeVars.color.light.border};
         border-radius: ${otherThemeVars.border.radius};
       }
-      & .timeline-avatar {
-        display: none !important;
-      }
-      &.merge-ready {
-        & > .content {
-          border-color: ${themeVars.github.borderColor.success.emphasis};
+      /* The status badge beside the box: neutral unless the pull request can be merged. */
+      & > .timeline-avatar {
+        display: grid !important;
+        place-items: center;
+        width: 40px;
+        height: 40px;
+        border-radius: ${otherThemeVars.border.radius};
+        background: ${themeVars.github.bgColor.neutral.emphasis};
+        color: ${themeVars.github.fgColor.onEmphasis} !important;
+        & svg {
+          width: 24px;
+          height: 24px;
         }
-        & > .timeline-avatar {
-          display: grid !important;
-          place-items: center;
-          width: 40px;
-          height: 40px;
-          border-radius: ${otherThemeVars.border.radius};
-          background: ${themeVars.github.bgColor.success.emphasis};
-          color: ${themeVars.github.fgColor.onEmphasis};
-          & svg {
-            width: 24px;
-            height: 24px;
-          }
+      }
+      &.merge-ready > .timeline-avatar {
+        background: ${themeVars.github.bgColor.success.emphasis};
+      }
+      /* Without the merge status block, each native row becomes one of GitHub's bordered sections. */
+      & .merge-section:not(:has(.pull-merge-status)) {
+        padding: 0;
+        & > .item {
+          min-height: 64px;
+          padding: 16px;
+        }
+        & > .item + .divider + .item,
+        & > .item + .divider + details {
+          margin-top: 0;
+          border-top: 1px solid ${themeVars.color.light.border};
+        }
+        & > .item .flex-text-inline {
+          gap: 8px;
+          font-size: 16px;
+          font-weight: 600;
+          line-height: 24px;
+        }
+        & > .item .flex-text-inline > svg {
+          ${mergeSectionIcon}
+          background: ${themeVars.github.bgColor.neutral.emphasis};
+        }
+        & > details {
+          padding: 16px;
+          background: ${themeVars.color.box.header};
+          border-radius: 0 0 ${otherThemeVars.border.radius} ${otherThemeVars.border.radius};
         }
       }
       & .merge-section {
         padding: 16px;
         border: 0;
         & > .item {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 8px;
+          min-height: 32px;
           border: 0;
           padding: 0;
+        }
+        & > .item + .divider + .item,
+        & > .item + .divider + details {
+          margin-top: 8px;
         }
         & > .divider {
           display: none;
         }
+        & > .item .ui.button {
+          ${mergeButton}
+          height: 32px;
+          margin: 0;
+          padding-right: 12px;
+          padding-left: 12px;
+        }
+        & > .item .ui.dropdown.icon.button {
+          width: 32px;
+          padding: 0;
+          justify-content: center;
+        }
+        & > details > summary {
+          ${mergeInstructionsLink}
+        }
         & .pull-merge-status {
           display: flex;
           align-items: flex-start;
+          justify-content: flex-start;
           gap: 8px;
           & > svg {
-            flex: 0 0 32px;
-            width: 32px;
-            height: 32px;
-            padding: 8px;
-            border-radius: 50%;
+            ${mergeSectionIcon}
             background: ${themeVars.github.bgColor.success.emphasis};
-            color: ${themeVars.github.fgColor.onEmphasis};
           }
           & h3 {
             margin: 0;
@@ -255,30 +323,18 @@ export default css`
           flex-basis: 100%;
         }
         & summary {
-          padding: 0 !important;
-          list-style: none;
-          color: ${themeVars.github.fgColor.accent};
-          font-size: 12px;
-          line-height: 18px;
-          text-decoration: underline;
-          &::before {
-            display: none;
-          }
+          ${mergeInstructionsLink}
         }
         & .menu .item {
           border: 0;
         }
         & .ui.button {
-          min-height: 32px;
-          font-size: 14px;
-          line-height: 20px;
-          padding-top: 5px;
-          padding-bottom: 5px;
+          ${mergeButton}
         }
       }
     }
     @media (max-width: 767.98px) {
-      & .merge.box.merge-ready > .timeline-avatar {
+      & .merge.box > .timeline-avatar {
         display: none !important;
       }
 

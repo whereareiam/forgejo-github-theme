@@ -11,3 +11,10 @@
   line-height: 18px;
   text-align: center;
 }
+
+/* Inside a tab GitHub's counter is 18px tall and semibold. */
+.theme-counter-tab {
+  padding: 2px 6px;
+  font-weight: 600;
+  line-height: 12px;
+}
