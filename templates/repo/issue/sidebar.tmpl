@@ -1,18 +1,21 @@
-<aside class="theme-sidebar" aria-label="Issues sidebar navigation">
+{{/* The issue list and the pull request list share this sidebar; only the first entry and "Review requested" differ. */}}
+{{$list := "issues"}}{{if .PageIsPullList}}{{$list = "pulls"}}{{end}}
+<aside class="theme-sidebar" aria-label="{{if .PageIsPullList}}Pull requests{{else}}Issues{{end}} sidebar navigation">
     <div class="theme-sidebar-content">
-    <nav aria-label="Issue filters">
-        <a class="{{if or (eq .ViewType "all") (not .ViewType)}}active{{end}}" href="{{.RepoLink}}/issues?type=all&amp;state=open">{{svg "octicon-issue-opened" 16}}Issues</a>
+    <nav aria-label="{{if .PageIsPullList}}Pull request{{else}}Issue{{end}} filters">
+        <a class="{{if or (eq .ViewType "all") (not .ViewType)}}active{{end}}" href="{{.RepoLink}}/{{$list}}?type=all&amp;state=open">{{if .PageIsPullList}}{{svg "octicon-git-pull-request" 16}}Pull requests{{else}}{{svg "octicon-issue-opened" 16}}Issues{{end}}</a>
         {{if .IsSigned}}
-            <a class="{{if eq .ViewType "assigned"}}active{{end}}" href="{{.RepoLink}}/issues?type=assigned&amp;state=open">{{svg "octicon-people" 16}}Assigned to me</a>
-            <a class="{{if eq .ViewType "created_by"}}active{{end}}" href="{{.RepoLink}}/issues?type=created_by&amp;state=open">{{svg "octicon-person" 16}}Created by me</a>
-            <a class="{{if eq .ViewType "mentioned"}}active{{end}}" href="{{.RepoLink}}/issues?type=mentioned&amp;state=open">{{svg "octicon-mention" 16}}Mentioned</a>
+            <a class="{{if eq .ViewType "assigned"}}active{{end}}" href="{{.RepoLink}}/{{$list}}?type=assigned&amp;state=open">{{svg "octicon-people" 16}}Assigned to me</a>
+            <a class="{{if eq .ViewType "created_by"}}active{{end}}" href="{{.RepoLink}}/{{$list}}?type=created_by&amp;state=open">{{svg "octicon-person" 16}}Created by me</a>
+            <a class="{{if eq .ViewType "mentioned"}}active{{end}}" href="{{.RepoLink}}/{{$list}}?type=mentioned&amp;state=open">{{svg "octicon-mention" 16}}Mentioned</a>
+            {{if .PageIsPullList}}<a class="{{if eq .ViewType "review_requested"}}active{{end}}" href="{{.RepoLink}}/pulls?type=review_requested&amp;state=open">{{svg "octicon-code-review" 16}}Review requested</a>{{end}}
         {{end}}
-        <a href="{{.RepoLink}}/issues?sort=recentupdate&amp;state=all">{{svg "octicon-history" 16}}Recent activity</a>
+        <a href="{{.RepoLink}}/{{$list}}?sort=recentupdate&amp;state=all">{{svg "octicon-history" 16}}Recent activity</a>
     </nav>
     <hr>
     <nav aria-label="Pages">
         <a href="{{.RepoLink}}/milestones">{{svg "octicon-milestone" 16}}{{ctx.Locale.Tr "repo.milestones"}}</a>
-        <a href="{{.RepoLink}}/issues?state=all">{{svg "octicon-eye" 16}}All states</a>
+        <a href="{{.RepoLink}}/{{$list}}?state=all">{{svg "octicon-eye" 16}}All states</a>
         <a href="https://forgejo.org/docs/latest/user/issue-search/" target="_blank" rel="noopener noreferrer">{{svg "octicon-question" 16}}Search syntax</a>
         <a href="{{.RepoLink}}/labels">{{svg "octicon-tag" 16}}{{ctx.Locale.Tr "repo.labels"}}</a>
     </nav>
