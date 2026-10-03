@@ -53,9 +53,38 @@ for (const file of readdirSync(join(root, "public", "assets", "js"))) {
   cpSync(join(root, "public", "assets", "js", file), join(js, file));
 }
 cpSync(join(root, "dist", "assets", "fonts"), join(output, "public", "assets", "fonts"), { recursive: true });
-for (const file of readdirSync(join(root, "dist"))) {
-  if (file.endsWith(".css")) cpSync(join(root, "dist", file), join(css, file));
+const contentVersion = (...files: string[]): string => {
+  const hash = createHash("sha256");
+  for (const file of files) hash.update(readFileSync(file));
+  return hash.digest("hex").slice(0, 10);
+};
+
+// Forgejo lets browsers cache theme files for hours. The auto themes import their light and dark files by a
+// fixed path, so version each import with the content of the file it loads.
+const dist = join(root, "dist");
+const themeFiles = readdirSync(dist)
+  .filter(file => /^theme-.+\.css$/.test(file))
+  .sort();
+for (const file of themeFiles) {
+  const source = readFileSync(join(dist, file), "utf-8");
+  const stamped = source.replace(
+    /@import "\.\/(theme-[^"?]+\.css)(?:\?v=[0-9a-f]+)?"/g,
+    (_match, imported: string) => `@import "./${imported}?v=${contentVersion(join(dist, imported))}"`
+  );
+  if (stamped !== source) writeFileSync(join(dist, file), stamped);
 }
+for (const file of readdirSync(dist)) {
+  if (file.endsWith(".css")) cpSync(join(dist, file), join(css, file));
+}
+
+// Forgejo links the selected theme with its own release as the only version. The theme's head_style override
+// gets the version of all theme files appended, so an updated theme is fetched instead of served from cache.
+const headStyle = join(templates, "base", "head_style.tmpl");
+const themeVersion = contentVersion(...themeFiles.map(file => join(dist, file)));
+const themeLink = /(css\/theme-\{\{[^"]+\}\}\.css\?v=\{\{AssetVersion\}\})"/;
+const headStyleSource = readFileSync(headStyle, "utf-8");
+if (!themeLink.test(headStyleSource)) throw new Error(`No theme stylesheet link to version in ${headStyle}`);
+writeFileSync(headStyle, headStyleSource.replace(themeLink, `$1-${themeVersion}"`));
 
 // Forgejo serves custom assets with a long max-age and the templates link them by a fixed path, so a browser
 // keeps running the previous build's scripts against the new markup. Stamp each link with its content hash.
@@ -66,12 +95,11 @@ const stampAssetLinks = (directory: string): void => {
     if (entry.isDirectory()) stampAssetLinks(path);
     else if (entry.name.endsWith(".tmpl")) {
       const source = readFileSync(path, "utf-8");
-      const stamped = source.replace(/\{\{AssetUrlPrefix\}\}\/((?:css|js)\/[^"'?\s]+\.(?:css|js))/g, (link, asset) => {
-        const hash = createHash("sha256")
-          .update(readFileSync(join(assets, asset)))
-          .digest("hex");
-        return `${link}?v=${hash.slice(0, 10)}`;
-      });
+      // Links that already carry a version, such as Forgejo's own stylesheet, are left alone.
+      const stamped = source.replace(
+        /\{\{AssetUrlPrefix\}\}\/((?:css|js)\/[^"'?\s]+\.(?:css|js))(?!\?)/g,
+        (link, asset) => `${link}?v=${contentVersion(join(assets, asset))}`
+      );
       if (stamped !== source) writeFileSync(path, stamped);
     }
   }
