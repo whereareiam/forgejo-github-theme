@@ -47,5 +47,6 @@
     "vite.config.ts",
     "theme.config.ts",
     "eslint.config.ts"
-  ]
+  ],
+  "exclude": ["dev/fixtures"]
 }

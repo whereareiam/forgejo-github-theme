@@ -1,0 +1,20 @@
+name: CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: docker
+    steps:
+      - uses: actions/checkout@v4
+      - run: bun install --frozen-lockfile
+      - run: bun run build
+  test:
+    runs-on: docker
+    needs: build
+    steps:
+      - uses: actions/checkout@v4
+      - run: bun install --frozen-lockfile
+      - run: bun run test

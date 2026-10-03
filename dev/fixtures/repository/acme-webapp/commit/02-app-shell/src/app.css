@@ -1,0 +1,10 @@
+:root {
+  color-scheme: light;
+  font-family: system-ui, sans-serif;
+}
+
+main {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 24px;
+}

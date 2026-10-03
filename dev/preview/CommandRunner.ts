@@ -14,4 +14,29 @@ export class CommandRunner {
   public capture(command: string, args: readonly string[]): string {
     return execFileSync(command, [...args], { cwd: this.workingDirectory, encoding: "utf8" });
   }
+
+  /** Whether the command exits successfully; its output is discarded. */
+  public succeeds(command: string, args: readonly string[]): boolean {
+    try {
+      execFileSync(command, [...args], { cwd: this.workingDirectory, stdio: "ignore" });
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  /** Runs outside the project directory, for work on a temporary checkout. */
+  public captureIn(
+    directory: string,
+    command: string,
+    args: readonly string[],
+    environment: NodeJS.ProcessEnv = {}
+  ): string {
+    return execFileSync(command, [...args], {
+      cwd: directory,
+      encoding: "utf8",
+      env: { ...process.env, ...environment },
+      stdio: ["ignore", "pipe", "pipe"],
+    });
+  }
 }

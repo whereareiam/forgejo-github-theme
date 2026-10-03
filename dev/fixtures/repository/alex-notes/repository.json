@@ -1,0 +1,23 @@
+{
+  "owner": "alex",
+  "name": "notes",
+  "description": "Personal notes, kept small to show empty states.",
+  "website": "",
+  "topics": [],
+  "createdDaysAgo": 45,
+  "stars": [],
+  "labels": [],
+  "milestones": [],
+  "issues": [],
+  "pulls": [],
+  "releases": [],
+  "packages": [
+    {
+      "type": "generic",
+      "name": "notes-export",
+      "version": "0.1.0",
+      "file": "notes.txt",
+      "content": "Fixture package notes-export 0.1.0.\n"
+    }
+  ]
+}

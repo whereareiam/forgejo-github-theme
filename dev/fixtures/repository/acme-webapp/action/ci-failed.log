@@ -1,0 +1,39 @@
+::job build
+::step Set up job
+docker(version:v9.1.0) received task of job build, triggered by event: pull_request
+Start image=node:20-bookworm
+::step actions/checkout@v4
+Syncing repository: acme/webapp
+Checking out the ref refs/heads/feature/dark-mode
+::step bun install --frozen-lockfile
+bun install v1.4.0
+Checked 12 installs across 14 packages (no changes)
+::step bun run build
+vite v8.3.2 building for production...
+dist/index.html   0.42 kB
+dist/assets/index.js   1.31 kB
+built in 398ms
+::step Complete job
+Cleaning up container for job build
+Job succeeded
+::job test
+::step Set up job
+docker(version:v9.1.0) received task of job test, triggered by event: pull_request
+Start image=node:20-bookworm
+::step actions/checkout@v4
+Syncing repository: acme/webapp
+Checking out the ref refs/heads/feature/dark-mode
+::step bun install --frozen-lockfile
+bun install v1.4.0
+Checked 12 installs across 14 packages (no changes)
+::step bun run test
+RUN  v4.1.10 /workspace/acme/webapp
+src/api/client.test.ts (1 test) 3ms
+src/theme/toggle.test.ts (0 test)
+Error: No test suite found in file src/theme/toggle.test.ts
+Test Files  1 failed | 1 passed (2)
+Tests  1 passed (1)
+error: script "test" exited with code 1
+::step Complete job
+Cleaning up container for job test
+Job failed

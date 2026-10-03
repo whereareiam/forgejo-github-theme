@@ -1,0 +1,115 @@
+{
+  "defaultBranch": "main",
+  "commits": [
+    {
+      "id": "01-initial",
+      "branch": "main",
+      "author": "alex",
+      "daysAgo": 120,
+      "time": "09:14",
+      "message": "Initial commit"
+    },
+    {
+      "id": "02-app-shell",
+      "branch": "main",
+      "author": "alex",
+      "daysAgo": 118,
+      "time": "14:02",
+      "message": "Add the application shell"
+    },
+    {
+      "id": "03-add-ci",
+      "branch": "main",
+      "author": "alex",
+      "daysAgo": 110,
+      "time": "11:30",
+      "message": "ci: build and test on every push"
+    },
+    {
+      "id": "04-api-client",
+      "branch": "main",
+      "author": "sam",
+      "daysAgo": 95,
+      "time": "16:45",
+      "message": "feat(api): add a typed API client"
+    },
+    {
+      "id": "05-settings-page",
+      "branch": "main",
+      "author": "alex",
+      "daysAgo": 60,
+      "time": "10:20",
+      "message": "feat(settings): add the settings page\n\nLoads the current settings through the API client and documents the\nconfiguration variables."
+    },
+    {
+      "id": "06-fix-retry",
+      "branch": "main",
+      "author": "sam",
+      "daysAgo": 30,
+      "time": "13:05",
+      "message": "fix(api): retry failed requests"
+    },
+    {
+      "id": "10-login-redirect",
+      "branch": "fix/login-redirect",
+      "author": "sam",
+      "daysAgo": 25,
+      "time": "09:40",
+      "message": "fix(auth): only follow local login redirects"
+    },
+    {
+      "id": "07-release-notes",
+      "branch": "main",
+      "author": "alex",
+      "daysAgo": 12,
+      "time": "15:10",
+      "message": "docs: add the changelog and release workflow"
+    },
+    {
+      "id": "11-remove-legacy",
+      "branch": "chore/remove-legacy",
+      "author": "alex",
+      "daysAgo": 8,
+      "time": "11:00",
+      "message": "docs: announce removal of legacy endpoints"
+    },
+    {
+      "id": "08-dark-mode-toggle",
+      "branch": "feature/dark-mode",
+      "author": "sam",
+      "daysAgo": 4,
+      "time": "10:15",
+      "message": "feat(theme): add a dark mode toggle"
+    },
+    {
+      "id": "09-dark-mode-docs",
+      "branch": "feature/dark-mode",
+      "author": "sam",
+      "daysAgo": 3,
+      "time": "17:30",
+      "message": "docs: describe theming"
+    },
+    {
+      "id": "13-contributing",
+      "branch": "docs/contributing",
+      "author": "sam",
+      "daysAgo": 2,
+      "time": "12:00",
+      "message": "docs: add contributing notes"
+    },
+    {
+      "id": "12-prepare-v2",
+      "branch": "main",
+      "author": "alex",
+      "daysAgo": 2,
+      "time": "09:00",
+      "message": "chore: prepare 2.0.0-rc.1"
+    }
+  ],
+  "tags": [
+    { "name": "v1.0.0", "commit": "03-add-ci" },
+    { "name": "v1.1.0", "commit": "05-settings-page" },
+    { "name": "v1.2.0", "commit": "07-release-notes" },
+    { "name": "v2.0.0-rc.1", "commit": "12-prepare-v2" }
+  ]
+}

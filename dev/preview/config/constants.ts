@@ -17,9 +17,9 @@ export const PREVIEW = {
   host: "127.0.0.1",
   port: 3000,
   healthPath: "/api/healthz",
-  defaultUser: "whereareiam",
+  defaultUser: "alex",
   defaultPassword: "preview",
-  defaultEmail: "whereareiam@fixtures.local",
+  defaultEmail: "alex@fixtures.local",
   defaultTheme: "github-auto",
   pollIntervalMs: 1_000,
   maxHealthAttempts: 60,
@@ -66,6 +66,7 @@ export const PREVIEW_COMMANDS = {
   sync: "sync",
   watch: "watch",
   seedFixtures: "seed",
+  reset: "reset",
 } as const;
 
 export const ADMIN_CREATE_ARGS = ["admin", "user", "create"] as const;
@@ -75,4 +76,6 @@ export const FIXTURES = {
   databaseFile: "/var/lib/gitea/data/gitea.db",
   actionLogDirectory: "/var/lib/gitea/actions_log",
   localDatabaseFile: "dev/.generated/fixture-gitea.db",
+  /** For fixture users other than the preview user; Forgejo's API requires at least eight characters. */
+  userPassword: "preview-fixture",
 } as const;

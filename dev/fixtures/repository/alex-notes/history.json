@@ -1,0 +1,22 @@
+{
+  "defaultBranch": "main",
+  "commits": [
+    {
+      "id": "01-initial",
+      "branch": "main",
+      "author": "alex",
+      "daysAgo": 45,
+      "time": "20:10",
+      "message": "Initial commit"
+    },
+    {
+      "id": "02-ideas",
+      "branch": "main",
+      "author": "alex",
+      "daysAgo": 6,
+      "time": "21:35",
+      "message": "Add a list of ideas"
+    }
+  ],
+  "tags": []
+}
