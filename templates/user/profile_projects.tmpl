@@ -23,7 +23,7 @@
 	<form class="list-header-search ui form ignore-dirty profile-project-search">
 		<input type="hidden" name="state" value="{{$.State}}">
 		<input type="hidden" name="sort" value="{{.SortType}}">
-		{{template "shared/search/input" dict "Value" .Keyword "Placeholder" (ctx.Locale.Tr "search.project_kind")}}
+		{{template "components/common/search/search" dict "Kind" "plain" "Value" .Keyword "Placeholder" (ctx.Locale.Tr "search.project_kind")}}
 	</form>
 	<!-- Sort -->
 	<div class="ui secondary menu tw-mt-0">

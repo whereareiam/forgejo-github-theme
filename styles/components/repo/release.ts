@@ -509,30 +509,6 @@ const releaseRefinements = css`
       width: 248px;
       flex: 0 0 248px;
     }
-    .github-release-search .ui.input {
-      position: relative;
-      width: 100%;
-    }
-    .github-release-search .ui.input input {
-      width: 100%;
-      min-width: 0;
-      height: 32px;
-      padding: 5px 12px 5px 32px;
-      border-radius: 6px !important;
-      border-right: 1px solid var(--color-light-border) !important;
-      background: transparent;
-    }
-    .github-release-search .ui.input button {
-      position: absolute;
-      left: 0;
-      top: 0;
-      width: 32px;
-      height: 32px;
-      padding: 0;
-      border: 0;
-      background: transparent;
-      color: var(--color-text-light-1);
-    }
     .github-release-toc {
       align-self: start;
       position: sticky;
@@ -872,30 +848,6 @@ const githubTagPage = css`
   }
   .github-tags-search {
     width: 248px;
-  }
-  .github-tags-search .ui.input {
-    position: relative;
-    width: 100%;
-  }
-  .github-tags-search .ui.input input {
-    width: 100%;
-    min-width: 0;
-    background: transparent;
-    height: 32px;
-    padding: 5px 12px 5px 32px;
-    border-radius: 6px !important;
-    border-right: 1px solid var(--color-light-border) !important;
-  }
-  .github-tags-search .ui.input button {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 32px;
-    height: 32px;
-    padding: 0;
-    background: transparent;
-    border: 0;
-    color: var(--color-text-light-1);
   }
   .github-tags-box {
     border: 1px solid var(--color-light-border);

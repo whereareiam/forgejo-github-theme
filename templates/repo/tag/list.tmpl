@@ -12,10 +12,7 @@
 			</nav>
 			{{if .ShowReleaseSearch}}
 				<form class="ignore-dirty github-tags-search" method="get">
-					<div class="ui fluid action input">
-						<input type="search" name="q" value="{{.Keyword}}" placeholder="Find a tag" aria-label="Find a tag">
-						<button class="ui icon button" type="submit" aria-label="Search">{{svg "octicon-search" 16}}</button>
-					</div>
+					{{template "components/common/search/search" dict "Kind" "icon" "Value" .Keyword "Placeholder" "Find a tag"}}
 				</form>
 			{{end}}
 		</div>

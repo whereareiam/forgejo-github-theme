@@ -10,7 +10,7 @@
   </nav>
   <div class="github-release-actions">
     {{if and (not .PageIsTagList) .CanCreateRelease}}<a class="secondary button" href="{{$.RepoLink}}/releases/new">Draft a new release</a>{{end}}
-    {{if .ShowReleaseSearch}}<form class="ignore-dirty github-release-search" method="get"><div class="ui fluid action input"><input type="search" name="q" value="{{.Keyword}}" placeholder="Find a release" aria-label="Find a release"><button class="ui icon button" type="submit" aria-label="Search">{{svg "octicon-search" 16}}</button></div></form>{{end}}
+    {{if .ShowReleaseSearch}}<form class="ignore-dirty github-release-search" method="get">{{template "components/common/search/search" dict "Kind" "icon" "Value" .Keyword "Placeholder" "Find a release"}}</form>{{end}}
   </div>
 </div>
 {{if .Releases}}

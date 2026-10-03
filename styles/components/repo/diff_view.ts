@@ -73,7 +73,7 @@ export default css`
     align-items: center;
     min-width: 0;
   }
-  .diff-code-search > .diff-search-field {
+  .diff-code-search > .theme-search-field {
     flex: 0 1 300px;
     width: 300px;
     height: 34px;
@@ -277,7 +277,7 @@ export default css`
     outline-offset: -1px;
   }
   @media (max-width: 767.98px) {
-    .diff-code-search > .diff-search-field {
+    .diff-code-search > .theme-search-field {
       width: min(264px, calc(100vw - 112px));
     }
     .repository #diff-file-boxes .diff-change-summary,

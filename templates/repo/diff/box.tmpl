@@ -47,7 +47,7 @@
 				<div class="diff-file-tree-panel not-mobile">
 					<div class="diff-file-tree-scroll">
 						<div class="diff-file-tree-controls">
-                            <label class="diff-search-field">{{svg "octicon-search" 16}}<input id="diff-tree-filter" type="search" placeholder="Filter files…" aria-label="Filter files" autocomplete="off"></label>
+                            {{template "components/common/search/search" dict "Kind" "icon" "Local" true "ID" "diff-tree-filter" "Placeholder" "Filter files…" "Label" "Filter files"}}
                             <details class="theme-menu diff-tree-options">
                                 <summary class="theme-icon-button theme-icon-button-outlined" aria-label="Filter options">{{svg "octicon-filter" 16}}</summary>
                                 <div class="theme-menu-popover"></div>
@@ -85,7 +85,7 @@
 							</script>
 						{{end}}
                         <div class="diff-code-search">
-                            <label class="diff-search-field">{{svg "octicon-search" 16}}<input type="search" id="diff-code-search" placeholder="Search within code" aria-label="Search within code" autocomplete="off"></label>
+                            {{template "components/common/search/search" dict "Kind" "icon" "Local" true "ID" "diff-code-search" "Placeholder" "Search within code"}}
                             <div class="diff-search-navigation" hidden><span id="diff-search-count" role="status"></span><button class="btn interact-bg" type="button" data-search-direction="-1" aria-label="Previous match">{{svg "octicon-chevron-up" 16}}</button><button class="btn interact-bg" type="button" data-search-direction="1" aria-label="Next match">{{svg "octicon-chevron-down" 16}}</button></div>
                         </div>
 					</div>

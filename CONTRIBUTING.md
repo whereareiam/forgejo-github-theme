@@ -214,9 +214,14 @@ controls.
   `shared/theme/sidebar_toggle` inside the sidebar and a button with `data-theme-sidebar-toggle` and
   `data-theme-sidebar-expand` beside the page title. The controller preserves desktop collapse preferences and starts
   collapsed on mobile. See `templates/repo/issue/sidebar.tmpl` and `templates/org/repository_nav.tmpl`.
-- **Search:** call `components/common/search/search` with `Value` and `Placeholder` inside the existing form. Keep
-  hidden filter inputs in that form. The common search field should be a direct child of the form or have a parent that
-  fills the available width; an unconstrained wrapper can shrink it.
+- **Search:** call `components/common/search/search` with `Value` and `Placeholder` inside the existing form; do not
+  write a search input in a page template. `Kind` selects the variant: `submit` (default, trailing search button),
+  `icon` (leading search icon, as on releases and Actions), or `plain`. `Name` defaults to `q`, `Label` overrides the
+  accessible name, and `Class` adds a page layout hook to the field. For a client-side filter that is never submitted,
+  pass `Local` with an `ID` for its controller. Keep hidden filter inputs in the form and size the field from the page
+  stylesheet through its `Class` or parent; an unconstrained wrapper can shrink it. A control built by a script uses the
+  `theme-search-field` class directly. Forgejo's native query/mode/submit group (`shared/search/combo_multi`) opts in
+  with `theme-search-control` on its form.
 - **Dropdowns:** call `components/common/dropdown/dropdown` with `Kind` (`single`, `multiple`, or `actions`), `Label`,
   `Items` (the content template name), and `Data` (the page context). `Title`, `Icon`, `IconOnly`, `UpdateLabel`, and
   `Quiet` customize the header and trigger. Use `components/common/dropdown/option` for radio or checkbox rows; action
