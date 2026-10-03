@@ -143,7 +143,8 @@ const prMerge = css`
       border-radius: ${otherThemeVars.border.radius};
       /* 操作评论边框 */
       + .content > .ui.segment {
-        border-width: 1.5px;
+        border-width: 1px;
+        border-color: ${themeVars.color.light.border};
       }
       svg {
         width: 24px;
@@ -154,27 +155,15 @@ const prMerge = css`
       }
       &.green {
         background-color: ${themeVars.github.bgColor.success.emphasis};
-        + .content > .ui.segment {
-          border-color: ${themeVars.github.bgColor.success.emphasis};
-        }
       }
       &.purple {
         background-color: ${themeVars.github.bgColor.done.emphasis};
-        + .content > .ui.segment {
-          border-color: ${themeVars.github.bgColor.done.emphasis};
-        }
       }
       &.yellow {
         background-color: ${themeVars.github.bgColor.attention.emphasis};
-        + .content > .ui.segment {
-          border-color: ${themeVars.github.bgColor.attention.emphasis};
-        }
       }
       &.red {
         background-color: ${themeVars.github.bgColor.danger.emphasis};
-        + .content > .ui.segment {
-          border-color: ${themeVars.github.bgColor.danger.emphasis};
-        }
       }
     }
     > .content {

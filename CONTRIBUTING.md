@@ -235,7 +235,8 @@ permissions, and form values into the shared controls.
   `theme-control-small` for 28px controls. Use `theme-icon-button` only for icon-only controls. Keep native `primary`,
   `secondary`, and permission checks on actions, and leave page stylesheets to layout such as `flex` and `order`.
 - **Counter:** add `theme-counter` to a count pill next to a tab, heading, or filter, including ones a script creates.
-  Keep only layout (`margin`, `flex`) under the page's own class.
+  Add `theme-counter-tab` inside a tab, where GitHub's counter is 18px tall and semibold. Keep only layout (`margin`,
+  `flex`) under the page's own class.
 - **Segmented switch:** use `<nav class="theme-switch">` with links and `active` on the current one, as on the releases
   and tags pages.
 - **Empty state:** use `theme-empty` for a bordered "nothing here" box holding an icon, an `h2` or `h3`, and an optional

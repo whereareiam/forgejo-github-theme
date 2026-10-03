@@ -399,6 +399,21 @@ export default css`
       font-weight: 600;
       margin: 0 0 8px;
     }
+    /* GitHub lines the avatar up with the "Add a comment" heading, not with the editor below it. */
+    & .comment.form > .timeline-avatar {
+      top: 0 !important;
+    }
+    /* The timeline's line runs its full height; end it at the last item instead of in the gap above the form. */
+    & .timeline-item.comment.form::before {
+      content: "";
+      display: block !important;
+      position: absolute;
+      top: -44px;
+      left: 0;
+      width: 100%;
+      height: 44px;
+      background: ${themeVars.color.body};
+    }
     & .comment.form {
       z-index: 1;
       margin-top: 32px;
@@ -477,23 +492,40 @@ export default css`
             margin: 0 auto -1px 0;
             min-height: 38px;
           }
+          /* Forgejo overlaps neighbouring switch items with negative margins and paints the first one. */
           & .switch .item {
             height: 38px;
             min-height: 38px;
-            padding: 8px 16px;
+            margin: 0 !important;
+            padding: 8px 16px !important;
             border: 1px solid transparent;
             border-radius: 0;
-            background: transparent;
+            background: transparent !important;
             box-shadow: none;
+            outline: 0;
+            color: ${themeVars.color.text.light.num1};
             font-size: 14px;
             line-height: 21px;
             font-weight: 400;
+          }
+          & .switch .item:not(.active):hover {
+            color: ${themeVars.color.text.self};
           }
           & .switch .item.active {
             border-right-color: ${themeVars.color.light.border};
             border-left-color: ${themeVars.color.light.border};
             border-bottom-color: ${themeVars.color.body};
-            background: ${themeVars.color.body};
+            background: ${themeVars.color.body} !important;
+            color: ${themeVars.color.text.self};
+          }
+          /* The editor's own border already draws the first tab's left edge. */
+          & .switch .item.active:first-child {
+            border-left-color: transparent;
+            border-top-left-radius: ${otherThemeVars.border.radius};
+          }
+          & .switch .item:focus-visible {
+            outline: 2px solid ${themeVars.github.fgColor.accent};
+            outline-offset: -2px;
           }
           & .switch .item.active::before,
           & .switch .item.active::after {
@@ -639,6 +671,44 @@ export default css`
       }
       & .comment .comment-body {
         padding: 12px;
+      }
+    }
+    /* Forgejo forces .text.grey to --color-text-light, which this theme maps to the default text colour. */
+    & .comment-header-left > .text.grey,
+    & .comment-list .timeline-item > .text.grey.muted-links {
+      color: ${themeVars.color.text.light.num1} !important;
+      & b,
+      & b a {
+        color: ${themeVars.color.text.self};
+      }
+    }
+    & .comment .markup p {
+      line-height: inherit;
+    }
+    /* Commits listed in the timeline: a plain, muted seven-character hash. */
+    & .comment-list .timeline-item.commits-list .shabox .sha.label {
+      min-height: 0;
+      height: auto;
+      margin: 0;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: ${themeVars.color.text.light.num1};
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 18px;
+      &:hover {
+        background: transparent;
+        box-shadow: none;
+        color: ${themeVars.color.primary.self};
+      }
+      & .shortsha {
+        display: inline-block;
+        max-width: 7ch;
+        padding: 0;
+        overflow: hidden;
+        white-space: nowrap;
+        vertical-align: bottom;
       }
     }
   }

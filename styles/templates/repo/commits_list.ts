@@ -52,6 +52,9 @@ const commitsList = css`
           font-weight: 500;
           white-space: pre-wrap;
           display: inline-flex; /* 避免 pre-wrap 导致多余的空白 */
+          a {
+            font-weight: inherit;
+          }
         }
         .ellipsis-button {
           padding: unset;
