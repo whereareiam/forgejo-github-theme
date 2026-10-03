@@ -1,4 +1,5 @@
-import { cpSync, mkdirSync, readdirSync, rmSync } from "node:fs";
+import { createHash } from "node:crypto";
+import { cpSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
 const root = process.cwd();
@@ -55,3 +56,24 @@ cpSync(join(root, "dist", "assets", "fonts"), join(output, "public", "assets", "
 for (const file of readdirSync(join(root, "dist"))) {
   if (file.endsWith(".css")) cpSync(join(root, "dist", file), join(css, file));
 }
+
+// Forgejo serves custom assets with a long max-age and the templates link them by a fixed path, so a browser
+// keeps running the previous build's scripts against the new markup. Stamp each link with its content hash.
+const assets = join(output, "public", "assets");
+const stampAssetLinks = (directory: string): void => {
+  for (const entry of readdirSync(directory, { withFileTypes: true })) {
+    const path = join(directory, entry.name);
+    if (entry.isDirectory()) stampAssetLinks(path);
+    else if (entry.name.endsWith(".tmpl")) {
+      const source = readFileSync(path, "utf-8");
+      const stamped = source.replace(/\{\{AssetUrlPrefix\}\}\/((?:css|js)\/[^"'?\s]+\.(?:css|js))/g, (link, asset) => {
+        const hash = createHash("sha256")
+          .update(readFileSync(join(assets, asset)))
+          .digest("hex");
+        return `${link}?v=${hash.slice(0, 10)}`;
+      });
+      if (stamped !== source) writeFileSync(path, stamped);
+    }
+  }
+};
+stampAssetLinks(templates);
