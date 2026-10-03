@@ -168,6 +168,38 @@ it("stamps every template asset link with the hash of the shipped file", async (
   }
 });
 
+it("versions the theme stylesheet link and the auto themes' imports", async () => {
+  const { createHash } = await import("node:crypto");
+  const version = (...files: string[]) => {
+    const hash = createHash("sha256");
+    for (const file of files) hash.update(fs.readFileSync(file));
+    return hash.digest("hex").slice(0, 10);
+  };
+  const themeFiles = fs
+    .readdirSync(DIST_DIR)
+    .filter(name => /^theme-.+\.css$/.test(name))
+    .sort()
+    .map(name => path.join(DIST_DIR, name));
+
+  const headStyle = fs.readFileSync(path.join(DIST_DIR, "forgejo", "templates", "base", "head_style.tmpl"), "utf-8");
+  expect(headStyle).toContain('href="{{AssetUrlPrefix}}/css/index.css?v={{AssetVersion}}"');
+  expect(headStyle).toContain(
+    `href="{{AssetUrlPrefix}}/css/theme-{{ThemeName .SignedUser | PathEscape}}.css?v={{AssetVersion}}-${version(...themeFiles)}"`
+  );
+
+  const autoThemes = themeFiles.filter(file => file.endsWith("-auto.css"));
+  expect(autoThemes.length).toBeGreaterThan(0);
+  for (const file of autoThemes) {
+    const imports = [...fs.readFileSync(file, "utf-8").matchAll(/@import "\.\/([^"?]+)(\?v=[0-9a-f]+)?"/g)];
+    expect(imports.length, path.basename(file)).toBeGreaterThan(0);
+    for (const [, imported, query] of imports)
+      expect(query, `${path.basename(file)} imports ${imported}`).toBe(`?v=${version(path.join(DIST_DIR, imported))}`);
+    expect(fs.readFileSync(path.join(DIST_DIR, "forgejo", "public", "assets", "css", path.basename(file)))).toEqual(
+      fs.readFileSync(file)
+    );
+  }
+});
+
 describe("非 auto 主题 CSS 内容验证", () => {
   for (const fileName of SOLID_THEME_FILES) {
     describe(fileName, () => {
