@@ -4,7 +4,7 @@
 {{if .HasPackages}}
 <form class="ui form ignore-dirty profile-list-search">
 	<div class="profile-search-controls">
-		{{template "shared/search/input" dict "Value" .Query "Placeholder" (ctx.Locale.Tr "search.package_kind")}}
+		{{template "components/common/search/search" dict "Kind" "plain" "Value" .Query "Placeholder" (ctx.Locale.Tr "search.package_kind")}}
 		<span class="profile-select-wrap"><select class="profile-select" name="type" aria-label="{{ctx.Locale.Tr "packages.filter.type"}}">
 			<option value="">{{ctx.Locale.Tr "packages.filter.type"}}</option>
 			<option value="all">{{ctx.Locale.Tr "packages.filter.type.all"}}</option>

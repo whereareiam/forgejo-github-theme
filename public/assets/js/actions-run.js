@@ -45,13 +45,15 @@
     const tools = right.querySelector(".job-info-header-right");
     if (tools && !tools.querySelector(".actions-log-search")) {
       const search = make("div", "actions-log-search");
+      const field = make("div", "theme-search-field");
       const input = make("input", "");
       input.type = "search";
       input.placeholder = "Search loaded logs";
       input.setAttribute("aria-label", "Search loaded logs");
       const result = make("span", "");
       result.setAttribute("aria-live", "polite");
-      search.append(input, result);
+      field.append(input);
+      search.append(field, result);
       tools.prepend(search);
     }
     filterLogs();
@@ -124,7 +126,7 @@
       line.hidden = !!query && !line.textContent.toLowerCase().includes(query);
       if (!line.hidden) matches++;
     }
-    const result = input.nextElementSibling;
+    const result = input.closest(".actions-log-search").querySelector("[aria-live]");
     const text = query ? `${matches} ${matches === 1 ? "match" : "matches"}` : "";
     if (result.textContent !== text) result.textContent = text;
   }

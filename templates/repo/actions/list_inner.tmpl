@@ -25,7 +25,7 @@
 		</nav>
 	</aside>
 	<main class="actions-main">
-<div class="actions-heading"><div><h1>{{if .CurWorkflow}}{{.CurWorkflow}}{{else}}All workflows{{end}}</h1><p>{{if .CurWorkflow}}Workflow runs{{else}}Showing runs from all workflows{{end}}</p></div><div class="actions-search">{{svg "octicon-search" 16}}<input id="actions-run-filter" aria-label="Filter runs on this page" type="search" placeholder="Filter runs on this page" autocomplete="off"></div></div>
+<div class="actions-heading"><div><h1>{{if .CurWorkflow}}{{.CurWorkflow}}{{else}}All workflows{{end}}</h1><p>{{if .CurWorkflow}}Workflow runs{{else}}Showing runs from all workflows{{end}}</p></div>{{template "components/common/search/search" dict "Kind" "icon" "Local" true "ID" "actions-run-filter" "Class" "actions-search" "Placeholder" "Filter runs on this page"}}</div>
 		<div class="ui secondary filter menu actions-filters"><strong class="actions-run-count">{{.Page.Paginater.Total}} workflow {{if eq .Page.Paginater.Total 1}}run{{else}}runs{{end}}</strong>
 			<div id="reloading-indicator" class="htmx-indicator"></div>
 

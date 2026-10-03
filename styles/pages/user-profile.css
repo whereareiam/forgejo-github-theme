@@ -439,24 +439,6 @@
 
 :is(.github-profile, .github-org) #repo-search-form .profile-repo-query {
   flex: 1;
-  min-width: 0;
-  width: 100%;
-  height: 32px;
-  margin: 0;
-  padding: 5px 12px;
-  border: 1px solid var(--color-input-border);
-  border-radius: var(--border-radius);
-  background: var(--color-body);
-  color: var(--color-text);
-  box-shadow: var(--github-shadow-inset);
-  font-size: 14px;
-  line-height: 20px;
-}
-
-:is(.github-profile, .github-org) #repo-search-form .profile-repo-query:focus {
-  border-color: var(--github-borderColor-accent-emphasis);
-  box-shadow: inset 0 0 0 1px var(--github-borderColor-accent-emphasis);
-  outline: none;
 }
 
 :is(.github-profile, .github-org) .profile-repo-toolbar > .profile-new-repo.button {

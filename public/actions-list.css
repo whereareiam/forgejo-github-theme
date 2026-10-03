@@ -117,30 +117,8 @@
     margin: 0;
   }
   .actions-search {
-    display: flex;
-    align-items: center;
-    gap: 8px;
     width: 300px;
     flex-shrink: 0;
-    height: 32px;
-    padding: 0 8px;
-    border: 1px solid var(--color-light-border);
-    border-radius: var(--border-radius);
-    color: var(--color-text-light-1);
-  }
-  .actions-search:focus-within {
-    outline: 2px solid var(--color-primary);
-    outline-offset: -1px;
-  }
-  .actions-search input {
-    background: transparent;
-    padding: 0;
-    border: 0;
-    box-shadow: none;
-    outline: none;
-    width: 100%;
-    min-width: 0;
-    font: 14px/21px var(--fonts-proportional);
   }
   .actions-filters.ui.menu {
     display: flex;

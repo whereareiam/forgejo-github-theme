@@ -287,8 +287,10 @@
   gap: 8px;
 }
 
-:is(.github-profile, .github-org) .profile-search-controls input[type="search"],
-:is(.github-profile, .github-org) .profile-project-search input[type="search"],
+:is(.github-profile, .github-org) .profile-search-controls > .theme-search-field {
+  flex: 1;
+}
+
 :is(.github-profile, .github-org) .profile-code input[type="search"] {
   flex: 1;
   min-width: 0;
@@ -525,7 +527,7 @@
     flex-wrap: wrap;
   }
 
-  :is(.github-profile, .github-org) .profile-search-controls input[type="search"] {
+  :is(.github-profile, .github-org) .profile-search-controls > .theme-search-field {
     flex-basis: 100%;
   }
 
@@ -547,8 +549,6 @@
   }
 }
 
-:is(.github-profile, .github-org) .profile-search-controls input[type="search"]:focus,
-:is(.github-profile, .github-org) .profile-project-search input[type="search"]:focus,
 :is(.github-profile, .github-org) .profile-code input[type="search"]:focus {
   border-color: var(--github-borderColor-accent-emphasis);
 }
