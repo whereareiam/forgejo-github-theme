@@ -51,8 +51,8 @@ Install the resulting files using your Forgejo data directory (commonly `data/gi
 1. Extract `theme-github-base.tar.gz`, then place the contained `*.css` files in `<forgejo-data>/public/assets/css`
    (create the directory if necessary). This archive contains the standard light, dark, auto, and soft-dark themes.
 2. Optionally extract `theme-github-accessibility.tar.gz` for colorblind and high-contrast themes, or
-   `theme-github-extras.tar.gz` for Pink, Gitea-compatible, and Catppuccin themes. Place their CSS files in the same
-   `<forgejo-data>/public/assets/css` directory.
+   `theme-github-extras.tar.gz` for Pink, Gitea-compatible, Gruvbox, and Catppuccin themes. Place their CSS files in the
+   same `<forgejo-data>/public/assets/css` directory.
 3. Extract `theme-github-fonts.tar.gz` into `<forgejo-data>/public`. This supplies the Mona Sans variable font; its SIL
    Open Font License is included beside the font.
 4. Extract the optional `theme-github-templates.tar.gz` archive into `<forgejo-data>`. It includes the templates and
@@ -187,6 +187,14 @@ THEMES = github-gitea-auto, github-gitea-light, github-gitea-dark
 <h4>theme-github-gitea-dark.css</h4>
 <img src="https://raw.githubusercontent.com/lutinglt/gitea-github-theme/assets/screenshots/gitea/gitea-dark.png"/>
 </details>
+
+### Gruvbox Themes
+
+```ini
+THEMES = github-gruvbox-auto, github-gruvbox-light, github-gruvbox-dark
+```
+
+The auto theme follows the system color-scheme preference and selects the matching Gruvbox light or dark palette.
 
 ### Catppuccin Themes
 

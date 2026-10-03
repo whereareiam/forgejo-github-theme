@@ -25,6 +25,7 @@ import {
 } from "./catppuccin";
 import { giteaDarkColor, giteaDarkTheme } from "./giteaDark";
 import { giteaLightColor, giteaLightTheme } from "./giteaLight";
+import { gruvboxDarkTheme, gruvboxLightTheme } from "./gruvbox";
 import {
   githubColorblindDarkTheme,
   githubColorblindLightTheme,
@@ -85,6 +86,10 @@ export default {
   gitea: {
     dark: giteaDarkTheme,
     light: giteaLightTheme,
+  },
+  gruvbox: {
+    dark: gruvboxDarkTheme,
+    light: gruvboxLightTheme,
   },
   catppuccin: {
     latte: catppuccinLatteTheme,

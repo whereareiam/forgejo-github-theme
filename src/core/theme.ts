@@ -22,7 +22,7 @@ import pkg from "../../package.json";
 import type { GiteaColor, GitHubColor, ThemeColor } from "../palette";
 import { gitea2ThemeVars, github2ThemeColor, primer2Chroma, primer2CodeMirror, theme2ThemeVars } from "../palette";
 import selectors from "../selectors";
-import { otherThemeVars, syntaxVars, themeVars, type Syntax } from "../types";
+import { otherThemeVars, syntaxVars, themeVars, type Chroma, type CodeMirror, type Syntax } from "../types";
 import { createChroma } from "./chroma";
 import { createCodeMirror } from "./codemirror";
 import type { MapLeafNodes } from "./types";
@@ -39,7 +39,13 @@ function getThemeVersion(): string {
 export type ThemeVars = { isDarkTheme: boolean } & MapLeafNodes<typeof themeVars, string>;
 export type ThemeColors =
   | { colorType: "github"; themeColor: GitHubColor }
-  | { colorType: "gitea"; themeColor: GiteaColor; syntaxColor: Syntax }
+  | {
+      colorType: "gitea";
+      themeColor: GiteaColor;
+      syntaxColor: Syntax;
+      chromaColor?: Chroma;
+      codeMirrorColor?: CodeMirror;
+    }
   | { colorType: "theme"; themeColor: ThemeColor; syntaxColor: Syntax };
 export type Theme = {
   isDarkTheme: boolean;
@@ -134,5 +140,7 @@ export function createTheme(theme: Theme): void {
     createCodeMirror(primer2CodeMirror(theme.themeColor));
   } else {
     createGlobalTheme(selectors.root, syntaxVars, theme.syntaxColor);
+    if (theme.colorType === "gitea" && theme.chromaColor) createChroma(theme.chromaColor);
+    if (theme.colorType === "gitea" && theme.codeMirrorColor) createCodeMirror(theme.codeMirrorColor);
   }
 }

@@ -4,8 +4,8 @@
 
 Gitea GitHub Theme is a build-time CSS generation framework that produces static `.css` theme files for the
 [Gitea](https://github.com/go-gitea/gitea) self-hosted code platform. The project takes design tokens and color
-definitions as input, transforms them through a layered pipeline, and outputs 30+ minified CSS files covering 7 theme
-series (default, colorblind, tritanopia, pink, gitea, catppuccin, high-contrast).
+definitions as input, transforms them through a layered pipeline, and outputs 30+ minified CSS files covering 8 theme
+series (default, colorblind, tritanopia, pink, gitea, gruvbox, catppuccin, high-contrast).
 
 **Core principle:** Full type safety and CSS-in-JS developer experience at build time, pure static CSS delivered to the
 browser with zero runtime overhead.
