@@ -1,0 +1,214 @@
+{
+  "owner": "acme",
+  "name": "webapp",
+  "description": "A small web application with enough history to exercise every repository page.",
+  "website": "https://webapp.acme.example",
+  "topics": ["typescript", "web", "fixture"],
+  "createdDaysAgo": 120,
+  "stars": ["alex", "sam"],
+  "labels": [
+    { "name": "bug", "color": "d73a4a", "description": "Something is not working" },
+    { "name": "enhancement", "color": "a2eeef", "description": "New feature or request" },
+    { "name": "documentation", "color": "0075ca", "description": "Improvements to documentation" },
+    { "name": "good first issue", "color": "7057ff", "description": "Good for newcomers" }
+  ],
+  "milestones": [
+    { "title": "2.0", "description": "Theming and the removal of legacy endpoints.", "state": "open", "dueInDays": 30 },
+    { "title": "1.2", "description": "Reliability fixes.", "state": "closed", "dueInDays": -11 }
+  ],
+  "issues": [
+    {
+      "title": "Requests fail permanently after one network error",
+      "body": "A single dropped connection makes the settings page show an error until it is reloaded.\n\n### Steps\n\n1. Open the settings page.\n2. Disconnect the network for a moment.\n\n### Expected\n\nThe request is retried.",
+      "author": "sam",
+      "labels": ["bug"],
+      "milestone": "1.2",
+      "assignees": ["sam"],
+      "state": "closed",
+      "daysAgo": 34,
+      "comments": [
+        {
+          "author": "alex",
+          "daysAgo": 33,
+          "body": "Reproduced. Three attempts with no delay should be enough for now."
+        },
+        { "author": "sam", "daysAgo": 30, "body": "Fixed on `main`." }
+      ]
+    },
+    {
+      "title": "Add a dark mode",
+      "body": "The application only has a light color scheme. It should follow a toggle and remember the choice.",
+      "author": "alex",
+      "labels": ["enhancement"],
+      "milestone": "2.0",
+      "assignees": ["sam"],
+      "state": "open",
+      "daysAgo": 21,
+      "comments": [{ "author": "sam", "daysAgo": 4, "body": "A first version is up as a pull request." }]
+    },
+    {
+      "title": "Login redirect accepts external URLs",
+      "body": "`?next=https://example.com` is followed after sign-in. Only local paths should be accepted.",
+      "author": "sam",
+      "labels": ["bug"],
+      "milestone": "1.2",
+      "assignees": [],
+      "state": "closed",
+      "daysAgo": 26,
+      "comments": []
+    },
+    {
+      "title": "Document the configuration variables",
+      "body": "The README does not say which environment variables exist.",
+      "author": "sam",
+      "labels": ["documentation", "good first issue"],
+      "milestone": null,
+      "assignees": [],
+      "state": "open",
+      "daysAgo": 15,
+      "comments": []
+    },
+    {
+      "title": "Remove the legacy `/v0` endpoints",
+      "body": "They have been deprecated since 1.0 and should go away with 2.0.\n\n- [x] Announce the removal\n- [ ] Delete the handlers\n- [ ] Update the documentation",
+      "author": "alex",
+      "labels": ["enhancement"],
+      "milestone": "2.0",
+      "assignees": ["alex"],
+      "state": "open",
+      "daysAgo": 9,
+      "comments": [
+        { "author": "sam", "daysAgo": 8, "body": "Is anyone still calling them?" },
+        { "author": "alex", "daysAgo": 8, "body": "Not according to the access logs of the last month." }
+      ]
+    },
+    {
+      "title": "Settings page flickers while loading",
+      "body": "The page renders empty fields for a moment before the settings arrive.",
+      "author": "sam",
+      "labels": [],
+      "milestone": null,
+      "assignees": [],
+      "state": "open",
+      "daysAgo": 1,
+      "comments": []
+    }
+  ],
+  "pulls": [
+    {
+      "title": "Only follow local login redirects",
+      "body": "Rejects any `next` target that does not start with `/`.",
+      "author": "sam",
+      "head": "fix/login-redirect",
+      "labels": ["bug"],
+      "milestone": "1.2",
+      "state": "merged",
+      "daysAgo": 25,
+      "comments": [{ "author": "alex", "daysAgo": 24, "body": "Looks good, thanks." }]
+    },
+    {
+      "title": "Announce removal of legacy endpoints",
+      "body": "Adds a short notice to the documentation.",
+      "author": "alex",
+      "head": "chore/remove-legacy",
+      "labels": ["documentation"],
+      "milestone": null,
+      "state": "closed",
+      "daysAgo": 8,
+      "comments": [{ "author": "alex", "daysAgo": 7, "body": "Closing: this belongs in the changelog instead." }]
+    },
+    {
+      "title": "Add a dark mode toggle",
+      "body": "Adds `toggleColorScheme` and the matching styles.\n\nStill missing: remembering the choice between visits.",
+      "author": "sam",
+      "head": "feature/dark-mode",
+      "labels": ["enhancement"],
+      "milestone": "2.0",
+      "state": "open",
+      "daysAgo": 4,
+      "comments": [
+        { "author": "alex", "daysAgo": 3, "body": "Could the toggle also respect the system preference on first load?" }
+      ]
+    },
+    {
+      "title": "WIP: Add contributing notes",
+      "body": "Draft of the contributing guide.",
+      "author": "sam",
+      "head": "docs/contributing",
+      "labels": ["documentation"],
+      "milestone": null,
+      "state": "open",
+      "daysAgo": 2,
+      "comments": []
+    }
+  ],
+  "releases": [
+    {
+      "tag": "v1.0.0",
+      "name": "1.0.0",
+      "body": "First release.",
+      "draft": false,
+      "prerelease": false,
+      "daysAgo": 108,
+      "assets": []
+    },
+    {
+      "tag": "v1.1.0",
+      "name": "1.1.0",
+      "body": "## Features\n\n- Add a typed API client.\n- Add the settings page.",
+      "draft": false,
+      "prerelease": false,
+      "daysAgo": 58,
+      "assets": []
+    },
+    {
+      "tag": "v1.2.0",
+      "name": "1.2.0",
+      "body": "## Fixes\n\n- Retry failed API requests up to three times.\n- Only follow local login redirects.\n\n## Documentation\n\n- Add the changelog.\n\n**Full changelog**: `v1.1.0...v1.2.0`",
+      "draft": false,
+      "prerelease": false,
+      "daysAgo": 11,
+      "assets": [
+        { "name": "webapp-1.2.0.tar.gz", "content": "Fixture release asset for webapp 1.2.0.\n" },
+        {
+          "name": "checksums.txt",
+          "content": "0000000000000000000000000000000000000000000000000000000000000000  webapp-1.2.0.tar.gz\n"
+        }
+      ]
+    },
+    {
+      "tag": "v2.0.0-rc.1",
+      "name": "2.0.0 release candidate 1",
+      "body": "Preview of 2.0. Not recommended for production use.",
+      "draft": false,
+      "prerelease": true,
+      "daysAgo": 2,
+      "assets": []
+    },
+    {
+      "tag": "v2.0.0",
+      "name": "2.0.0",
+      "body": "Release notes in progress.",
+      "draft": true,
+      "prerelease": false,
+      "daysAgo": 1,
+      "assets": []
+    }
+  ],
+  "packages": [
+    {
+      "type": "generic",
+      "name": "webapp-cli",
+      "version": "1.1.0",
+      "file": "webapp-cli.txt",
+      "content": "Fixture package webapp-cli 1.1.0.\n"
+    },
+    {
+      "type": "generic",
+      "name": "webapp-cli",
+      "version": "1.2.0",
+      "file": "webapp-cli.txt",
+      "content": "Fixture package webapp-cli 1.2.0.\n"
+    }
+  ]
+}

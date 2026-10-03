@@ -269,17 +269,25 @@ bun dev:forgejo:watch
 ```
 
 Open [http://localhost:3000](http://localhost:3000). The preview skips Forgejo's first-run setup, selects `github-auto`
-by default, and signs in automatically as `whereareiam`, including when a public page is opened first. Set
-`FORGEJO_PREVIEW_AUTO_LOGIN=false` to keep the normal sign-in page; the default credentials are `whereareiam` / `preview`.
-The watcher rebuilds the theme and restarts Forgejo
-after source changes so CSS and template updates are visible. The local Forgejo data is kept in the Docker volume
-`forgejo-dev-data`.
+by default, and signs in automatically as `alex`, including when a public page is opened first. Set
+`FORGEJO_PREVIEW_AUTO_LOGIN=false` to keep the normal sign-in page; the default credentials are `alex` / `preview`. The
+watcher rebuilds the theme and restarts Forgejo after source changes so CSS and template updates are visible.
 
-The checked-in fixture snapshot under `dev/fixtures` restores `whereareiam/identica-docs` and the `arcadeya/devops`
-organization repository. It includes the recorded `identica-docs` Actions history as display-only data; no runner is
-configured and no workflow executes during seeding. It also restores the repositories' original creation times and
-their recorded public activity, including pushes, tags, and releases, so the profile activity timeline is useful for
-visual checks.
+The first start fills the preview from the fixtures under `dev/fixtures`: the users `alex` and `sam`, the organization
+`acme`, and two repositories. `acme/webapp` has branches, tags, issues, pull requests in every state, releases including
+a draft and a prerelease, packages, and finished workflow runs with logs. `alex/notes` is nearly empty, for checking
+empty states. All of it is invented, and dates are written relative to the day of seeding, so the activity feed and
+contribution heatmap always look recent. No runner is configured and no workflow executes.
+
+The data is kept in the Docker volume `forgejo-dev-data`, and a repository that already exists is not seeded again.
+After changing a fixture, start from an empty volume:
+
+```bash
+bun dev:forgejo:reset
+bun dev:forgejo
+```
+
+See [`dev/fixtures/README.md`](dev/fixtures/README.md) for the fixture format.
 
 Override the local login before starting when needed:
 

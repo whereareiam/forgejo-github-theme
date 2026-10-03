@@ -1,0 +1,13 @@
+name: Release
+on:
+  push:
+    tags: ["v*"]
+
+jobs:
+  publish:
+    runs-on: docker
+    steps:
+      - uses: actions/checkout@v4
+      - run: bun install --frozen-lockfile
+      - run: bun run build
+      - run: tar -czf webapp.tar.gz dist

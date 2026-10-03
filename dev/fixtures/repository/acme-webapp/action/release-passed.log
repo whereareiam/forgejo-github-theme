@@ -1,0 +1,19 @@
+::job publish
+::step Set up job
+docker(version:v9.1.0) received task of job publish, triggered by event: push
+Start image=node:20-bookworm
+::step actions/checkout@v4
+Syncing repository: acme/webapp
+Checking out the ref refs/tags/v1.2.0
+::step bun install --frozen-lockfile
+bun install v1.4.0
+Checked 12 installs across 14 packages (no changes)
+::step bun run build
+vite v8.3.2 building for production...
+dist/index.html   0.42 kB
+dist/assets/index.js   1.18 kB
+built in 405ms
+::step tar -czf webapp.tar.gz dist
+::step Complete job
+Cleaning up container for job publish
+Job succeeded

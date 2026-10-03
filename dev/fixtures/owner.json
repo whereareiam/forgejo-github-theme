@@ -1,0 +1,16 @@
+{
+  "users": [
+    { "login": "alex", "fullName": "Alex Rivera", "email": "alex@fixtures.local", "joinedDaysAgo": 400 },
+    { "login": "sam", "fullName": "Sam Chen", "email": "sam@fixtures.local", "joinedDaysAgo": 210 }
+  ],
+  "organizations": [
+    {
+      "name": "acme",
+      "fullName": "Acme",
+      "description": "Tools for people who ship web applications.",
+      "website": "https://acme.example",
+      "location": "Remote",
+      "teams": [{ "name": "maintainers", "permission": "write", "members": ["sam"] }]
+    }
+  ]
+}

@@ -19,6 +19,11 @@ export class ForgejoCompose {
     this.run(["down"]);
   }
 
+  /** Stops the preview and deletes its data volume, so the next start seeds the fixtures again. */
+  public reset(): void {
+    this.run(["down", "--volumes"]);
+  }
+
   public stopService(): void {
     this.run(["stop", this.config.composeService]);
   }
@@ -43,6 +48,11 @@ export class ForgejoCompose {
     this.runner.run(COMMANDS.docker, ["cp", source, `${this.containerName()}:${destination}`]);
   }
 
+  /** Copies a file that may not exist; returns whether it did. */
+  public copyFromContainerIfPresent(source: string, destination: string): boolean {
+    return this.runner.succeeds(COMMANDS.docker, ["cp", `${this.containerName()}:${source}`, destination]);
+  }
+
   public startService(): void {
     this.run(["start", this.config.composeService]);
   }
@@ -62,6 +72,7 @@ export class ForgejoCompose {
       "--entrypoint",
       "chown",
       COMPOSE.image,
+      "-R",
       "1000:1000",
       path,
     ]);

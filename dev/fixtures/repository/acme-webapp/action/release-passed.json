@@ -1,0 +1,25 @@
+{
+  "name": "Release",
+  "workflow": "release.yml",
+  "title": "v1.2.0",
+  "event": "push",
+  "ref": "refs/tags/v1.2.0",
+  "commit": "07-release-notes",
+  "actor": "alex",
+  "daysAgo": 11,
+  "time": "15:20",
+  "jobs": [
+    {
+      "id": "publish",
+      "status": "success",
+      "steps": [
+        { "name": "Set up job", "status": "success", "seconds": 2 },
+        { "name": "actions/checkout@v4", "status": "success", "seconds": 3 },
+        { "name": "bun install --frozen-lockfile", "status": "success", "seconds": 6 },
+        { "name": "bun run build", "status": "success", "seconds": 9 },
+        { "name": "tar -czf webapp.tar.gz dist", "status": "success", "seconds": 1 },
+        { "name": "Complete job", "status": "success", "seconds": 1 }
+      ]
+    }
+  ]
+}

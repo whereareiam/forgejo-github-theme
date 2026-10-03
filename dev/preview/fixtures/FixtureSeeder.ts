@@ -1,133 +1,62 @@
-import { COMMANDS } from "../config/constants.ts";
+import { PreviewConfig } from "../config/PreviewConfig.ts";
 import { CommandRunner } from "../CommandRunner.ts";
 import { ForgejoCompose } from "../forgejo/ForgejoCompose.ts";
-import { PreviewConfig } from "../config/PreviewConfig.ts";
-import { FixtureActionImporter } from "./FixtureActionImporter.ts";
-import type { FixtureRepositoryMapping } from "./FixtureActionImporter.ts";
+import { FixtureDatabaseImporter } from "./database/FixtureDatabaseImporter.ts";
 import { FixtureArchive } from "./FixtureArchive.ts";
-import type { FixtureHome, FixtureRelease } from "./FixtureArchive.ts";
-import { FIXTURE_DEFINITIONS, FixtureDefinition } from "./FixtureDefinition.ts";
+import { FixtureClock } from "./FixtureClock.ts";
+import { FixtureOwnerSeeder } from "./FixtureOwnerSeeder.ts";
 import { ForgejoApi } from "./ForgejoApi.ts";
+import type { FixtureOwners } from "./model/FixtureOwners.ts";
+import { FixtureHistoryBuilder } from "./repository/FixtureHistoryBuilder.ts";
+import { FixtureRepositorySeeder } from "./repository/FixtureRepositorySeeder.ts";
+import { SeededRepository } from "./repository/SeededRepository.ts";
 
-interface ForgejoUser {
+interface Identified {
   readonly id: number;
 }
 
-interface ForgejoRepository {
-  readonly id: number;
-}
-
+/** Fills a fresh preview from `dev/fixtures`: owners, then each repository, then the database-only parts. */
 export class FixtureSeeder {
-  private readonly config: PreviewConfig;
-  private readonly runner: CommandRunner;
   private readonly archive: FixtureArchive;
   private readonly api: ForgejoApi;
-  private readonly actionImporter: FixtureActionImporter;
+  private readonly ownerSeeder: FixtureOwnerSeeder;
+  private readonly repositorySeeder: FixtureRepositorySeeder;
+  private readonly databaseImporter: FixtureDatabaseImporter;
 
   public constructor(config: PreviewConfig, runner: CommandRunner, compose: ForgejoCompose) {
-    this.config = config;
-    this.runner = runner;
+    const clock = new FixtureClock();
     this.archive = new FixtureArchive(config.fixturesDirectory);
     this.api = new ForgejoApi(config);
-    this.actionImporter = new FixtureActionImporter(config, compose);
+    this.ownerSeeder = new FixtureOwnerSeeder(this.api);
+    this.repositorySeeder = new FixtureRepositorySeeder(config, this.api, new FixtureHistoryBuilder(runner, clock));
+    this.databaseImporter = new FixtureDatabaseImporter(config, compose, clock);
   }
 
-  public async seed(): Promise<void> {
-    const home = this.archive.readHome();
-    const repositories = [] as FixtureRepositoryMapping[];
-    for (const definition of FIXTURE_DEFINITIONS) repositories.push(await this.seedRepository(definition, home));
-    this.archive.assertLogs();
-    await this.importActions(home, repositories);
-  }
+  /** Returns whether anything was seeded; repositories that already exist are left untouched. */
+  public async seed(): Promise<boolean> {
+    const owners = this.archive.owners();
+    await this.ownerSeeder.seed(owners);
 
-  private async seedRepository(definition: FixtureDefinition, home: FixtureHome): Promise<FixtureRepositoryMapping> {
-    this.archive.assertRepository(definition);
-    await this.ensureOwner(definition);
-    const repository = await this.ensureRepository(definition);
-    this.pushMirror(definition);
-    await this.seedReleases(definition);
-    console.log(`Seeded fixture ${definition.identifier}.`);
-    return { sourceId: this.sourceRepositoryId(definition, home), localId: repository.id };
-  }
-
-  private async ensureOwner(definition: FixtureDefinition): Promise<void> {
-    if (definition.ownerType === "organization") {
-      if (await this.api.getJson(`/orgs/${definition.owner}`)) return;
-      await this.api.postJson("/orgs", { username: definition.owner, full_name: definition.displayName });
-      return;
+    const seeded: SeededRepository[] = [];
+    for (const fixture of this.archive.repositories()) {
+      const repository = await this.repositorySeeder.seed(fixture, owners);
+      if (repository) seeded.push(repository);
+      console.log(`${repository ? "Seeded" : "Kept existing"} fixture ${fixture.name}.`);
     }
+    if (seeded.length === 0) return false;
+    for (const repository of seeded) await this.repositorySeeder.settle(repository);
 
-    if (definition.owner === this.config.previewUser) return;
-    throw new Error(`Fixture user ${definition.owner} must be the configured preview user.`);
+    this.databaseImporter.import(owners, seeded, await this.userIds(owners));
+    return true;
   }
 
-  private async ensureRepository(definition: FixtureDefinition): Promise<ForgejoRepository> {
-    const existing = await this.api.getJson<ForgejoRepository>(`/repos/${definition.identifier}`);
-    if (existing) return existing;
-
-    const path =
-      definition.ownerType === "organization"
-        ? `/orgs/${definition.owner}/repos`
-        : `/admin/users/${definition.owner}/repos`;
-    const created = await this.api.postJson<ForgejoRepository>(path, {
-      name: definition.repository,
-      description: `Local ${definition.identifier} fixture`,
-      private: false,
-      auto_init: false,
-    });
-    if (!created) {
-      const repository = await this.api.getJson<ForgejoRepository>(`/repos/${definition.identifier}`);
-      if (repository) return repository;
-      throw new Error(`Unable to create local fixture repository ${definition.identifier}.`);
+  private async userIds(owners: FixtureOwners): Promise<Map<string, number>> {
+    const identifiers = new Map<string, number>();
+    for (const user of owners.users) {
+      const found = await this.api.find<Identified>(`/users/${user.login}`);
+      if (!found) throw new Error(`Fixture user ${user.login} was not created.`);
+      identifiers.set(user.login, found.id);
     }
-    return created;
-  }
-
-  private pushMirror(definition: FixtureDefinition): void {
-    this.runner.run(COMMANDS.git, [
-      "-C",
-      this.archive.repositoryDirectory(definition),
-      "push",
-      "--mirror",
-      `${this.config.previewGitUrl}/${definition.identifier}.git`,
-    ]);
-  }
-
-  private async seedReleases(definition: FixtureDefinition): Promise<void> {
-    for (const release of this.archive.readSnapshot(definition).releases) await this.seedRelease(definition, release);
-  }
-
-  private async seedRelease(definition: FixtureDefinition, release: FixtureRelease): Promise<void> {
-    const path = `/repos/${definition.identifier}/releases/tags/${encodeURIComponent(release.tag_name)}`;
-    if (await this.api.getJson(path)) return;
-    await this.api.postJson(`/repos/${definition.identifier}/releases`, {
-      tag_name: release.tag_name,
-      target_commitish: release.target_commitish,
-      name: release.name,
-      body: release.body,
-      draft: release.draft,
-      prerelease: release.prerelease,
-    });
-  }
-
-  private async importActions(home: FixtureHome, repositories: readonly FixtureRepositoryMapping[]): Promise<void> {
-    const definition = FIXTURE_DEFINITIONS[0];
-    const repository = await this.api.getJson<ForgejoRepository>(`/repos/${definition.identifier}`);
-    const owner = await this.api.getJson<ForgejoUser>(`/users/${definition.owner}`);
-    if (!repository || !owner) throw new Error(`Unable to resolve local fixture IDs for ${definition.identifier}.`);
-    this.actionImporter.import(
-      this.archive.readSnapshot(definition).actions,
-      home,
-      repositories,
-      repository.id,
-      owner.id,
-      this.archive.logDirectory()
-    );
-  }
-
-  private sourceRepositoryId(definition: FixtureDefinition, home: FixtureHome): number {
-    const repository = home.repositories.find(candidate => candidate.name === definition.repository);
-    if (!repository) throw new Error(`Missing source repository activity for fixture ${definition.identifier}.`);
-    return repository.id;
+    return identifiers;
   }
 }

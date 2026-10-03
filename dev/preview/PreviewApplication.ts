@@ -57,6 +57,9 @@ export class PreviewApplication {
       case PREVIEW_COMMANDS.seedFixtures:
         await this.seed();
         return;
+      case PREVIEW_COMMANDS.reset:
+        this.compose.reset();
+        return;
       default:
         throw new Error(`Unknown preview command: ${command}`);
     }
@@ -70,7 +73,7 @@ export class PreviewApplication {
     await this.readiness.wait();
     this.reloader.publish();
     this.admin.ensure();
-    await this.fixtureSeeder.seed();
+    await this.seedFixtures();
     console.log(
       `Forgejo development preview: ${this.config.previewUrl} (login: ${this.config.previewUser} / ${this.config.previewPassword})`
     );
@@ -92,6 +95,11 @@ export class PreviewApplication {
   private async seed(): Promise<void> {
     await this.readiness.wait();
     this.admin.ensure();
-    await this.fixtureSeeder.seed();
+    await this.seedFixtures();
+  }
+
+  /** Seeding restarts Forgejo to edit its database, so wait until it answers again. */
+  private async seedFixtures(): Promise<void> {
+    if (await this.fixtureSeeder.seed()) await this.readiness.wait();
   }
 }

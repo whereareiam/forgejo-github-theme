@@ -1,0 +1,35 @@
+{
+  "name": "CI",
+  "workflow": "ci.yml",
+  "title": "docs: describe theming",
+  "event": "pull_request",
+  "ref": "refs/heads/feature/dark-mode",
+  "commit": "09-dark-mode-docs",
+  "actor": "sam",
+  "daysAgo": 3,
+  "time": "17:31",
+  "jobs": [
+    {
+      "id": "build",
+      "status": "success",
+      "steps": [
+        { "name": "Set up job", "status": "success", "seconds": 2 },
+        { "name": "actions/checkout@v4", "status": "success", "seconds": 3 },
+        { "name": "bun install --frozen-lockfile", "status": "success", "seconds": 6 },
+        { "name": "bun run build", "status": "success", "seconds": 8 },
+        { "name": "Complete job", "status": "success", "seconds": 1 }
+      ]
+    },
+    {
+      "id": "test",
+      "status": "failure",
+      "steps": [
+        { "name": "Set up job", "status": "success", "seconds": 2 },
+        { "name": "actions/checkout@v4", "status": "success", "seconds": 3 },
+        { "name": "bun install --frozen-lockfile", "status": "success", "seconds": 5 },
+        { "name": "bun run test", "status": "failure", "seconds": 4 },
+        { "name": "Complete job", "status": "success", "seconds": 1 }
+      ]
+    }
+  ]
+}
