@@ -1,0 +1,13 @@
+.theme-counter {
+  display: inline-block;
+  min-width: 20px;
+  padding: 0 6px;
+  border: 1px solid transparent;
+  border-radius: 2em;
+  background: var(--color-label-bg);
+  color: var(--color-label-text);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 18px;
+  text-align: center;
+}

@@ -204,9 +204,9 @@ For complex logic, it is recommended to extract it into functions under the `src
 
 ### Reuse shared page controls
 
-Use `components/common/*/*.css` for sidebars, search fields, selects, and compact buttons, and
-`components/common/dropdown/*` for dropdown variants. `templates/base/head_navbar.tmpl` loads the shared styles and
-controllers for all pages. Keep page layout rules in the page stylesheet and pass the page's existing routes,
+Use `components/common/*/*.css` for sidebars, search fields, selects, counters, switches, empty states, and compact
+buttons, and `components/common/dropdown/*` for dropdown variants. `templates/base/head_navbar.tmpl` loads the shared
+styles and controllers for all pages. Keep page layout rules in the page stylesheet and pass the page's existing routes,
 permissions, and form values into the shared controls.
 
 - **Sidebar:** add `theme-sidebar-layout` and a unique `data-theme-sidebar` storage key to the page, then use
@@ -234,6 +234,15 @@ permissions, and form values into the shared controls.
   a page stylesheet, with `theme-control-wide` for the 16px padding GitHub uses on profile pages or
   `theme-control-small` for 28px controls. Use `theme-icon-button` only for icon-only controls. Keep native `primary`,
   `secondary`, and permission checks on actions, and leave page stylesheets to layout such as `flex` and `order`.
+- **Counter:** add `theme-counter` to a count pill next to a tab, heading, or filter, including ones a script creates.
+  Keep only layout (`margin`, `flex`) under the page's own class.
+- **Segmented switch:** use `<nav class="theme-switch">` with links and `active` on the current one, as on the releases
+  and tags pages.
+- **Empty state:** use `theme-empty` for a bordered "nothing here" box holding an icon, an `h2` or `h3`, and an optional
+  paragraph. `templates/user/profile_empty.tmpl` renders one from `Icon`, `Title`, and `Description`. Short inline
+  messages inside a list or menu stay plain text.
+- **Label:** use Forgejo's native `ui basic label` for outline labels such as visibility or package type; do not build a
+  page-specific pill.
 - **Select:** wrap a native `<select class="theme-select">` in `<span class="theme-select-wrap">`. The options stay in
   the page template. See `templates/user/profile_packages.tmpl`.
 

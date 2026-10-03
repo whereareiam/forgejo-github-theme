@@ -81,13 +81,6 @@ export default css`
       & .list-header-author {
         order: -1;
       }
-      & .issue-state-count {
-        border-radius: 20px;
-        padding: 0 6px;
-        background: ${themeVars.color.hover.self};
-        font-size: 12px;
-        line-height: 18px;
-      }
       &-right > .ui.menu {
         gap: 4px;
       }

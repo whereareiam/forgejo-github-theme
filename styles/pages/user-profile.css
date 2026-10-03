@@ -473,17 +473,7 @@
 
 .profile-global-header .profile-nav-count {
   flex: none;
-  min-width: 20px;
   margin: 0;
-  padding: 0 6px;
-  border: 0;
-  border-radius: 2em;
-  background: var(--color-label-bg);
-  color: var(--color-label-text);
-  font-size: 12px;
-  font-weight: 500;
-  line-height: 18px;
-  text-align: center;
 }
 
 @media (max-width: 767px) {

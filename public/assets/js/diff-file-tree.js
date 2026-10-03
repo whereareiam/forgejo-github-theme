@@ -71,7 +71,7 @@
         checkbox.value = ext;
         checkbox.checked = !excludedExtensions.has(ext);
         const badge = document.createElement("span");
-        badge.className = "diff-filter-count";
+        badge.className = "theme-counter diff-filter-count";
         badge.textContent = count;
         label.append(checkbox, document.createTextNode(ext), badge);
         options.append(label);

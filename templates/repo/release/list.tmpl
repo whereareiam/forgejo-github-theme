@@ -4,7 +4,7 @@
 	<div class="ui container">
 		{{template "base/alert" .}}
 		<div class="github-release-toolbar">
-  <nav class="github-release-switch" aria-label="Releases and Tags">
+  <nav class="theme-switch" aria-label="Releases and Tags">
     <a aria-current="page" class="active" href="{{.RepoLink}}/releases">Releases</a>
     {{if and ($.Permission.CanRead $.UnitTypeCode)}}<a href="{{.RepoLink}}/tags">Tags</a>{{end}}
   </nav>
@@ -96,7 +96,7 @@
 							<div class="github-release-footer">
 							<details class="download" {{if eq $idx 0}}open{{end}}>
 								<summary>
-									Assets <span class="github-release-asset-count">{{if $hasArchiveLinks}}{{Eval (len $release.Attachments) "+" 2}}{{else}}{{len $release.Attachments}}{{end}}</span>
+									Assets <span class="theme-counter github-release-asset-count">{{if $hasArchiveLinks}}{{Eval (len $release.Attachments) "+" 2}}{{else}}{{len $release.Attachments}}{{end}}</span>
 								</summary>
 								<ul class="list">
 									{{range $release.Attachments}}
@@ -148,7 +148,7 @@
 
 </div>
 {{else}}
-<div class="github-release-empty">
+<div class="theme-empty github-release-empty">
 	{{svg "octicon-tag" 32}}
 	<h2>{{if .Keyword}}No releases found{{else}}There aren’t any releases here{{end}}</h2>
 	<p>{{if .Keyword}}Try a different search.{{else}}Releases package software, release notes, and downloads for your project.{{end}}</p>

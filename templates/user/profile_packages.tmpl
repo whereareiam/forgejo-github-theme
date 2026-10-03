@@ -24,7 +24,7 @@
 			<div class="flex-item-main">
 				<div class="flex-item-title">
 					<a href="{{.VersionWebLink}}">{{.Package.Name}}</a>
-					<span class="profile-type-label">{{.Package.Type.Name}}</span>
+					<span class="ui basic label">{{.Package.Type.Name}}</span>
 				</div>
 				<div class="flex-item-body">
 					<span class="profile-package-version">{{.Version.LowerVersion}}</span>
@@ -44,7 +44,7 @@
 	</div>
 	{{else}}
 		{{if not .HasPackages}}
-			<div class="profile-empty">
+			<div class="theme-empty profile-empty">
 				{{svg "octicon-package" 48}}
 				<h2>{{ctx.Locale.Tr "packages.empty"}}</h2>
 				{{if and .Repository .CanWritePackages}}
