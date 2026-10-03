@@ -148,6 +148,26 @@ it("ships component stylesheets unchanged with valid CSS and a template referenc
   }
 });
 
+it("stamps every template asset link with the hash of the shipped file", async () => {
+  const { createHash } = await import("node:crypto");
+  const output = path.join(DIST_DIR, "forgejo");
+  const links = fs
+    .readdirSync(path.join(output, "templates"), { recursive: true })
+    .filter(file => String(file).endsWith(".tmpl"))
+    .flatMap(file => [
+      ...fs
+        .readFileSync(path.join(output, "templates", String(file)), "utf-8")
+        .matchAll(/\{\{AssetUrlPrefix\}\}\/((?:css|js)\/[^"?]+)(\?v=[0-9a-f]+)?"/g),
+    ]);
+  expect(links.length).toBeGreaterThan(0);
+  for (const [, asset, version] of links) {
+    const file = path.join(output, "public", "assets", asset);
+    expect(fs.existsSync(file), `template links a missing asset: ${asset}`).toBe(true);
+    const hash = createHash("sha256").update(fs.readFileSync(file)).digest("hex");
+    expect(version, `unversioned asset link: ${asset}`).toBe(`?v=${hash.slice(0, 10)}`);
+  }
+});
+
 describe("非 auto 主题 CSS 内容验证", () => {
   for (const fileName of SOLID_THEME_FILES) {
     describe(fileName, () => {

@@ -2,9 +2,6 @@
 {{$isUserProfile := and (not .Repository) .ContextUser .ContextUser.IsIndividual (or .PageIsUserProfile .PageIsViewProjects .IsPackagesPage .IsCodePage)}}
 {{$isOrganization := and (not .Repository) .Org}}
 {{if or $isUserProfile $isOrganization}}
-<link rel="stylesheet" href="{{AssetUrlPrefix}}/css/user-profile.css">
-<link rel="stylesheet" href="{{AssetUrlPrefix}}/css/profile-subpages.css">
-{{if $isOrganization}}<link rel="stylesheet" href="{{AssetUrlPrefix}}/css/organization.css">{{end}}
 <header class="profile-global-header{{if $isOrganization}} organization-global-header{{end}}">
 {{end}}
 <link rel="stylesheet" href="{{AssetUrlPrefix}}/css/navbar-drawer.css">
