@@ -123,10 +123,6 @@ export default css`
   }
   .diff-filter-count {
     margin-left: auto;
-    border-radius: 20px;
-    background: ${themeVars.color.hover.self};
-    padding: 0 6px;
-    font-size: 12px;
   }
   .diff-tree-options .theme-menu-popover {
     min-width: 192px;

@@ -108,8 +108,6 @@ body:has(.organization-global-header) .page-content:is(.organization, .packages)
   padding: 5px 8px;
 }
 
-.github-org .profile-empty,
-.organization .org-empty,
 .organization .org-package-list > .empty {
   display: flex;
   flex-direction: column;
@@ -123,21 +121,8 @@ body:has(.organization-global-header) .page-content:is(.organization, .packages)
   text-align: center;
 }
 
-.github-org .profile-empty {
-  border: 0;
-}
-
-.github-org .profile-empty h2,
-.organization .org-empty h2 {
+.github-org .profile-empty > .svg {
   margin: 0;
-  font-size: 20px;
-}
-
-.organization .org-empty p,
-.github-org .profile-empty > .svg,
-.organization .org-empty > .svg {
-  margin: 0;
-  color: var(--color-text-light-1);
 }
 
 .github-org .org-overview-sidebar > .ui.header {

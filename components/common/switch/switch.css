@@ -1,0 +1,32 @@
+.theme-switch {
+  display: flex;
+}
+
+.theme-switch > a {
+  padding: 5px 16px;
+  border: 1px solid var(--color-light-border);
+  color: var(--color-text);
+  font-weight: 500;
+  line-height: 20px;
+  text-decoration: none;
+}
+
+.theme-switch > a:first-child {
+  border-radius: var(--border-radius) 0 0 var(--border-radius);
+}
+
+.theme-switch > a:last-child {
+  margin-left: -1px;
+  border-radius: 0 var(--border-radius) var(--border-radius) 0;
+}
+
+.theme-switch > a:only-child {
+  margin-left: 0;
+  border-radius: var(--border-radius);
+}
+
+.theme-switch > a.active {
+  border-color: var(--github-bgColor-accent-emphasis);
+  background: var(--github-bgColor-accent-emphasis);
+  color: var(--github-button-primary-fgColor-rest);
+}

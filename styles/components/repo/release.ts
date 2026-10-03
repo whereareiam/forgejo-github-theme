@@ -191,32 +191,6 @@ const githubReleasePage = css`
     margin: 0 0 32px;
     padding: 24px 0;
   }
-  .github-release-switch {
-    display: flex;
-    gap: 0;
-  }
-  .github-release-switch a {
-    border: 1px solid ${themeVars.color.light.border};
-    color: ${themeVars.color.text.self};
-    padding: 7px 16px;
-    text-decoration: none;
-  }
-  .github-release-switch a:first-child {
-    border-radius: 6px 0 0 6px;
-  }
-  .github-release-switch a:last-child {
-    border-radius: 0 6px 6px 0;
-    margin-left: -1px;
-  }
-  .github-release-switch a:only-child {
-    border-radius: 6px;
-    margin-left: 0;
-  }
-  .github-release-switch a.active {
-    background: ${themeVars.github.bgColor.accent.emphasis};
-    border-color: ${themeVars.github.bgColor.accent.emphasis};
-    color: ${themeVars.github.button.primary.fgColor.rest};
-  }
   .github-release-actions {
     align-items: center;
     display: flex;
@@ -500,11 +474,6 @@ const releaseRefinements = css`
     .github-release-toolbar {
       margin-bottom: 48px;
     }
-    .github-release-switch a {
-      padding: 5px 16px;
-      font-weight: 500;
-      line-height: 20px;
-    }
     .github-release-search {
       width: 248px;
       flex: 0 0 248px;
@@ -644,12 +613,6 @@ const releaseRefinements = css`
         margin-top: 0;
       }
       .github-release-asset-count {
-        display: inline-block;
-        border-radius: 24px;
-        background: var(--color-hover);
-        font-size: 12px;
-        line-height: 20px;
-        padding: 0 6px;
         vertical-align: middle;
         margin-left: 4px;
       }
@@ -690,10 +653,7 @@ const releaseRefinements = css`
       }
     }
     .github-release-empty {
-      text-align: center;
       padding: 64px 24px;
-      border: 1px solid var(--color-light-border);
-      border-radius: 6px;
     }
     @media (max-width: 767.98px) {
       > .ui.container {
@@ -819,32 +779,6 @@ const githubTagPage = css`
     justify-content: space-between;
     margin-bottom: 16px;
     padding: 24px 0;
-  }
-  .github-tags-switch {
-    display: flex;
-  }
-  .github-tags-switch a {
-    border: 1px solid var(--color-light-border);
-    color: var(--color-text);
-    line-height: 20px;
-    padding: 5px 16px;
-    text-decoration: none;
-  }
-  .github-tags-switch a:first-child {
-    border-radius: 6px 0 0 6px;
-  }
-  .github-tags-switch a:last-child {
-    border-radius: 0 6px 6px 0;
-    margin-left: -1px;
-  }
-  .github-tags-switch a:only-child {
-    border-radius: 6px;
-    margin-left: 0;
-  }
-  .github-tags-switch a.active {
-    background: var(--github-bgColor-accent-emphasis);
-    border-color: var(--github-bgColor-accent-emphasis);
-    color: var(--github-button-primary-fgColor-rest);
   }
   .github-tags-search {
     width: 248px;

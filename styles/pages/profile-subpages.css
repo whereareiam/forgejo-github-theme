@@ -7,40 +7,6 @@
   line-height: 28px;
 }
 
-:is(.github-profile, .github-org) .profile-empty {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  min-height: 220px;
-  padding: 40px 24px;
-  border: 1px solid var(--color-secondary);
-  border-radius: var(--border-radius);
-  text-align: center;
-  overflow-wrap: anywhere;
-}
-
-:is(.github-profile, .github-org) .profile-empty > .svg {
-  color: var(--color-text-light-1);
-}
-
-:is(.github-profile, .github-org) .profile-empty h2,
-:is(.github-profile, .github-org) .profile-empty h3 {
-  margin: 0;
-  font-size: 20px;
-  font-weight: 600;
-  line-height: 28px;
-}
-
-:is(.github-profile, .github-org) .profile-empty p {
-  max-width: 520px;
-  margin: 0;
-  color: var(--color-text-light-1);
-  font-size: 14px;
-  line-height: 21px;
-}
-
 :is(.github-profile, .github-org) .profile-activity #visibility-hint {
   margin: 0 0 24px;
   padding: 0;
@@ -348,16 +314,6 @@
   line-height: 24px;
 }
 
-:is(.github-profile, .github-org) .profile-type-label {
-  padding: 0 6px;
-  border: 1px solid var(--color-secondary);
-  border-radius: 2em;
-  color: var(--color-text-light-1);
-  font-size: 12px;
-  font-weight: 400;
-  line-height: 18px;
-}
-
 :is(.github-profile, .github-org) .profile-packages .flex-item-body {
   display: block;
   margin-top: 4px;
@@ -470,11 +426,6 @@
   :is(.github-profile, .github-org) .profile-event-heading {
     flex-direction: column;
     gap: 4px;
-  }
-
-  :is(.github-profile, .github-org) .profile-empty {
-    min-height: 180px;
-    padding: 32px 16px;
   }
 
   :is(.github-profile, .github-org) .profile-search-controls {

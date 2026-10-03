@@ -6,7 +6,7 @@
 		{{$canReadReleases := $.Permission.CanRead $.UnitTypeReleases}}
 		{{$canReadCode := $.Permission.CanRead $.UnitTypeCode}}
 		<div class="github-tags-toolbar">
-			<nav class="github-tags-switch" aria-label="Releases and Tags">
+			<nav class="theme-switch" aria-label="Releases and Tags">
 				{{if $canReadReleases}}<a href="{{.RepoLink}}/releases">Releases</a>{{end}}
 				{{if $canReadCode}}<a class="active" aria-current="page" href="{{.RepoLink}}/tags">Tags</a>{{end}}
 			</nav>

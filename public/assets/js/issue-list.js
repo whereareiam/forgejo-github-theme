@@ -69,7 +69,7 @@
       if (!match) continue;
       text.textContent = match[2];
       const badge = document.createElement("span");
-      badge.className = "issue-state-count";
+      badge.className = "theme-counter issue-state-count";
       badge.textContent = match[1].trim();
       anchor.append(badge);
     }
