@@ -1,0 +1,41 @@
+.theme-select-wrap {
+  position: relative;
+  display: inline-flex;
+  flex: none;
+  min-width: 0;
+}
+
+.theme-select-wrap::after {
+  content: "";
+  position: absolute;
+  top: 14px;
+  right: 12px;
+  border: 4px solid transparent;
+  border-top-color: var(--color-text);
+  border-bottom: 0;
+  pointer-events: none;
+}
+
+/* :is() keeps one specificity for selects inside and outside Forgejo's .ui.form. */
+:is(.ui.form, body) .theme-select-wrap > .theme-select {
+  appearance: none;
+  transition-property: border-color, box-shadow, background-color, color;
+  height: 32px;
+  max-width: 100%;
+  margin: 0;
+  padding: 5px 32px 5px 16px;
+  border: 1px solid var(--color-secondary);
+  border-radius: var(--border-radius);
+  background: var(--color-button);
+  color: var(--color-text);
+  box-shadow: none;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  cursor: pointer;
+}
+
+:is(.ui.form, body) .theme-select-wrap > .theme-select:focus-visible {
+  outline: 2px solid var(--github-borderColor-accent-emphasis);
+  outline-offset: 2px;
+}

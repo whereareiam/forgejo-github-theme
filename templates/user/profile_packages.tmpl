@@ -5,14 +5,14 @@
 <form class="ui form ignore-dirty profile-list-search">
 	<div class="profile-search-controls">
 		{{template "components/common/search/search" dict "Kind" "plain" "Value" .Query "Placeholder" (ctx.Locale.Tr "search.package_kind")}}
-		<span class="profile-select-wrap"><select class="profile-select" name="type" aria-label="{{ctx.Locale.Tr "packages.filter.type"}}">
+		<span class="theme-select-wrap"><select class="theme-select" name="type" aria-label="{{ctx.Locale.Tr "packages.filter.type"}}">
 			<option value="">{{ctx.Locale.Tr "packages.filter.type"}}</option>
 			<option value="all">{{ctx.Locale.Tr "packages.filter.type.all"}}</option>
 			{{range $type := .AvailableTypes}}
 			<option{{if eq $.PackageType $type}} selected="selected"{{end}} value="{{$type}}">{{$type.Name}}</option>
 			{{end}}
 		</select></span>
-		<button class="secondary button" type="submit">{{ctx.Locale.Tr "search.search"}}</button>
+		<button class="secondary button theme-control theme-control-wide" type="submit">{{ctx.Locale.Tr "search.search"}}</button>
 	</div>
 </form>
 {{end}}

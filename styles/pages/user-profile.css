@@ -443,13 +443,12 @@
 
 :is(.github-profile, .github-org) .profile-repo-toolbar > .profile-new-repo.button {
   flex: none;
-  min-height: 32px;
-  margin: 0;
-  padding: 5px 16px;
   box-shadow: none;
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 20px;
+}
+
+/* The organization overview keeps GitHub's wider padding; its repository list uses the standard control. */
+.github-org .profile-repo-toolbar > .profile-new-repo.button {
+  padding: 5px 16px;
 }
 
 @media (max-width: 767px) {

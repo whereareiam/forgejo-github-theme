@@ -5,12 +5,12 @@
 		{{if .Org}}<input type="hidden" name="tab" value="overview">{{else if .TabName}}<input type="hidden" name="tab" value="{{.TabName}}">{{end}}
 		{{$placeholder := ctx.Locale.Tr "search.repo_kind"}}{{if .Org}}{{$placeholder = "Find a repository…"}}{{end}}
 		{{template "components/common/search/search" dict "Kind" "plain" "Class" "profile-repo-query" "Value" .Keyword "Placeholder" $placeholder "Label" (ctx.Locale.Tr "search.repo_kind")}}
-		{{if .PageIsProfileStarList}}<button type="submit" class="secondary button profile-search-submit">{{ctx.Locale.Tr "search.search"}}</button>{{end}}
+		{{if .PageIsProfileStarList}}<button type="submit" class="secondary button theme-control theme-control-wide profile-search-submit">{{ctx.Locale.Tr "search.search"}}</button>{{end}}
 		{{template "components/repository/filter/filter" .}}
 		{{template "components/repository/sort/sort" dict "Data" .}}
 	</form>
 	{{if and .IsSigned (eq .SignedUserID .ContextUser.ID) (eq .TabName "repositories")}}
-		<a class="primary button profile-new-repo" href="{{AppSubUrl}}/repo/create">{{svg "octicon-repo" 16}}{{ctx.Locale.Tr "new_repo.link"}}</a>
+		<a class="primary button theme-control theme-control-wide profile-new-repo" href="{{AppSubUrl}}/repo/create">{{svg "octicon-repo" 16}}{{ctx.Locale.Tr "new_repo.link"}}</a>
 	{{end}}
 	{{if .Org}}{{template "org/repository_actions" .}}{{end}}
 </div>

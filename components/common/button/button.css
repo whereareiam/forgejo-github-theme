@@ -17,6 +17,10 @@
   cursor: pointer;
 }
 
+.button.theme-control-wide {
+  padding: 5px 16px;
+}
+
 .button.theme-control-small {
   height: 28px;
   min-height: 28px;

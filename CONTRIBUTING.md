@@ -204,10 +204,10 @@ For complex logic, it is recommended to extract it into functions under the `src
 
 ### Reuse shared page controls
 
-Use `components/common/*/*.css` for sidebars, search fields, and compact buttons, and `components/common/dropdown/*` for
-dropdown variants. `templates/base/head_navbar.tmpl` loads the shared styles and controllers for all pages. Keep page
-layout rules in the page stylesheet and pass the page's existing routes, permissions, and form values into the shared
-controls.
+Use `components/common/*/*.css` for sidebars, search fields, selects, and compact buttons, and
+`components/common/dropdown/*` for dropdown variants. `templates/base/head_navbar.tmpl` loads the shared styles and
+controllers for all pages. Keep page layout rules in the page stylesheet and pass the page's existing routes,
+permissions, and form values into the shared controls.
 
 - **Sidebar:** add `theme-sidebar-layout` and a unique `data-theme-sidebar` storage key to the page, then use
   `theme-sidebar`, `theme-sidebar-content`, and `theme-sidebar-main` for its children. Include
@@ -229,8 +229,13 @@ controls.
   native checkboxes, and action menus omit selection indicators. The controller handles Escape, outside clicks, and
   opening one menu at a time. See `components/repository/filter/filter`, `components/repository/sort/sort`, and
   `org/action_menu_items`.
-- **Buttons:** add `theme-control` for standard 32px controls or `theme-control-small` for 28px controls. Keep native
-  `primary`, `secondary`, and permission checks on actions.
+- **Buttons:** keep Forgejo's native `ui button` classes on buttons Forgejo already renders; the theme styles those
+  globally. For a button the theme adds, use `button theme-control` (32px, 12px inline padding) instead of sizing it in
+  a page stylesheet, with `theme-control-wide` for the 16px padding GitHub uses on profile pages or
+  `theme-control-small` for 28px controls. Use `theme-icon-button` only for icon-only controls. Keep native `primary`,
+  `secondary`, and permission checks on actions, and leave page stylesheets to layout such as `flex` and `order`.
+- **Select:** wrap a native `<select class="theme-select">` in `<span class="theme-select-wrap">`. The options stay in
+  the page template. See `templates/user/profile_packages.tmpl`.
 
 For repository filtering, add `data-theme-repository-search` to the form and render
 `components/repository/results/results` after it. `repository-search.js` updates that result fragment through the same
