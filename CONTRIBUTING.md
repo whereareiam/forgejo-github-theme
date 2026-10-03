@@ -239,8 +239,9 @@ permissions, and form values into the shared controls.
 - **Segmented switch:** use `<nav class="theme-switch">` with links and `active` on the current one, as on the releases
   and tags pages.
 - **Empty state:** use `theme-empty` for a bordered "nothing here" box holding an icon, an `h2` or `h3`, and an optional
-  paragraph. `templates/user/profile_empty.tmpl` renders one from `Icon`, `Title`, and `Description`. Short inline
-  messages inside a list or menu stay plain text.
+  paragraph. `templates/user/profile_empty.tmpl` renders one from `Icon`, `Title`, and `Description`. Add
+  `theme-empty-compact` for the smaller, borderless block GitHub shows inside a list. Short inline messages inside a
+  list or menu stay plain text.
 - **Label:** use Forgejo's native `ui basic label` for outline labels such as visibility or package type; do not build a
   page-specific pill.
 - **Select:** wrap a native `<select class="theme-select">` in `<span class="theme-select-wrap">`. The options stay in

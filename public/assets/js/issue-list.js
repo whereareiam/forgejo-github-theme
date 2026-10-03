@@ -46,14 +46,9 @@
   const issues = page.querySelector("#issue-list");
   if (issues) new MutationObserver(decorateRows).observe(issues, { childList: true, subtree: true });
   const empty = page.querySelector("#issue-list > .tw-text-center");
-  if (isPullList && empty && !input.value.trim()) {
-    const state = new URL(location.href).searchParams.get("state") || "open";
-    empty.querySelector("h3").textContent =
-      state === "open"
-        ? "There aren’t any open pull requests."
-        : state === "closed"
-          ? "There aren’t any closed pull requests."
-          : "There aren’t any pull requests.";
+  if (empty) {
+    empty.classList.add("theme-empty", "theme-empty-compact");
+    if (isPullList) empty.querySelector("h3").textContent = "No pull requests matched your search";
     const icon = page.querySelector('[data-test-name="open-issue-count"] svg')?.cloneNode(true);
     if (icon) {
       icon.setAttribute("width", "24");
@@ -62,7 +57,7 @@
     }
   }
   const filters = page.querySelector("#issue-filters");
-  if (filters && !isPullList) {
+  if (filters) {
     for (const anchor of filters.querySelectorAll(".switch > a")) {
       const text = [...anchor.childNodes].find(node => node.nodeType === Node.TEXT_NODE && node.textContent.trim());
       const match = text?.textContent.trim().match(/^([\d.,\s]+)\s+(.+)$/);

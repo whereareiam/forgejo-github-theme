@@ -1,7 +1,8 @@
 import { css, themeVars } from "@lutinglt/gitea-github-theme/core";
 
+// The issue list and the pull request list share one layout.
 export default css`
-  .github-issues {
+  :is(.github-issues, .github-pull-list) {
     & .list-header-issues {
       margin: 0 0 16px;
       min-height: 32px;
@@ -130,14 +131,6 @@ export default css`
       }
       & .issue-title:hover {
         color: ${themeVars.github.fgColor.accent};
-      }
-      & > .tw-text-center {
-        padding: 64px 24px;
-      }
-      & > .tw-text-center h3 {
-        font-size: 24px;
-        line-height: 32px;
-        font-weight: 600;
       }
     }
     @media (max-width: 1011.98px) {
