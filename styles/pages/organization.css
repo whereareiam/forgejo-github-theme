@@ -72,17 +72,9 @@ body:has(.organization-global-header) .page-content:is(.organization, .packages)
   line-height: 21px;
 }
 
-/* The visibility badge is GitHub's outlined label, not a filled pill. */
+/* The visibility badge is the shared outlined label; it only loses Forgejo's margin here. */
 .page-content.organization .org-title .org-visibility .ui.label {
   margin: 0;
-  padding: 0 7px;
-  border: 1px solid var(--color-secondary);
-  border-radius: 2em;
-  background: transparent;
-  color: var(--color-text-light-1);
-  font-size: 12px;
-  font-weight: 500;
-  line-height: 18px;
 }
 
 .org-overview-grid {

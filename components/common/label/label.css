@@ -1,0 +1,38 @@
+/*
+ * Label: GitHub's pill-shaped outline label. Add theme-label to a Forgejo ".ui label".
+ *
+ * By default the outline takes the label's own text colour, so Forgejo's coloured labels (green,
+ * orange) keep their meaning. Modifiers:
+ *   theme-label-muted  grey text and border, for neutral facts such as visibility
+ *   theme-label-solid  filled grey with white text, for a draft
+ *   theme-label-large  24px tall, for use beside a large title
+ *
+ * The declarations are !important because the theme's general label rules are loaded later and
+ * are more specific.
+ */
+.ui.ui.ui.label.theme-label {
+  display: inline-block !important;
+  padding: 0 7px !important;
+  border: 1px solid currentcolor !important;
+  border-radius: 2em !important;
+  background: transparent !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  line-height: 18px !important;
+  vertical-align: middle !important;
+}
+
+.ui.ui.ui.label.theme-label-muted {
+  border-color: var(--color-secondary) !important;
+  color: var(--color-text-light-1) !important;
+}
+
+.ui.ui.ui.label.theme-label-solid {
+  border-color: var(--github-bgColor-neutral-emphasis) !important;
+  background: var(--github-bgColor-neutral-emphasis) !important;
+  color: var(--github-fgColor-onEmphasis) !important;
+}
+
+.ui.ui.ui.label.theme-label-large {
+  padding: 2px 8px !important;
+}
