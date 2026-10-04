@@ -36,7 +36,6 @@ export const AUTO_LOGIN = {
 
 export const CONTAINER_PATHS = {
   css: "/var/lib/gitea/custom/public/assets/css",
-  fonts: "/var/lib/gitea/custom/public/assets/fonts",
   templates: "/var/lib/gitea/custom/templates",
   themeDist: "/workspace/theme-dist",
   themeTemplates: "/workspace/theme-templates",

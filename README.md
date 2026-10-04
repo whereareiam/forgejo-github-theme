@@ -53,14 +53,12 @@ Install the resulting files using your Forgejo data directory (commonly `data/gi
 2. Optionally extract `theme-github-accessibility.tar.gz` for colorblind and high-contrast themes, or
    `theme-github-extras.tar.gz` for Pink, Gitea-compatible, and Catppuccin themes. Place their CSS files in the same
    `<forgejo-data>/public/assets/css` directory.
-3. Extract `theme-github-fonts.tar.gz` into `<forgejo-data>/public`. This supplies the Mona Sans variable font; its SIL
-   Open Font License is included beside the font.
-4. Extract the optional `theme-github-templates.tar.gz` archive into `<forgejo-data>`. It includes the templates and
+3. Extract the optional `theme-github-templates.tar.gz` archive into `<forgejo-data>`. It includes the templates and
    their required JavaScript and page-specific CSS assets under `public/assets`.
-5. Modify `<forgejo-data>/conf/app.ini` and append the CSS filename without the `theme-` prefix to `THEMES` under the
+4. Modify `<forgejo-data>/conf/app.ini` and append the CSS filename without the `theme-` prefix to `THEMES` under the
    `[ui]` section.
-6. Restart Forgejo.
-7. Select the theme in the Forgejo settings.
+5. Restart Forgejo.
+6. Select the theme in the Forgejo settings.
 
 Example: If the theme filename is `theme-github-dark.css`, add `github-dark` to the end of `THEMES`
 
@@ -257,7 +255,7 @@ bun bundle
 ```
 
 After compilation, CSS files are generated in `dist`. Install them as described above. The full release packaging step,
-including templates and fonts, is available through the repository's CI workflow.
+including templates, is available through the repository's CI workflow.
 
 ### Local Forgejo Preview
 

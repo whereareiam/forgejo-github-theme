@@ -52,7 +52,6 @@ for (const file of readdirSync(join(root, "public"))) {
 for (const file of readdirSync(join(root, "public", "assets", "js"))) {
   cpSync(join(root, "public", "assets", "js", file), join(js, file));
 }
-cpSync(join(root, "dist", "assets", "fonts"), join(output, "public", "assets", "fonts"), { recursive: true });
 const contentVersion = (...files: string[]): string => {
   const hash = createHash("sha256");
   for (const file of files) hash.update(readFileSync(file));

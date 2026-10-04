@@ -60,14 +60,7 @@ const codeEditor = css`
     }
     .cm-scroller,
     .ͼ1 .cm-scroller {
-      font-family:
-        ui-monospace,
-        SFMono-Regular,
-        SF Mono,
-        Menlo,
-        Consolas,
-        Liberation Mono,
-        monospace;
+      font-family: var(--fonts-monospace);
     }
   }
 `;

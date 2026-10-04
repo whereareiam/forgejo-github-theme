@@ -80,7 +80,7 @@ const prBranch = css`
     color: ${themeVars.github.fgColor.accent};
     background-color: ${themeVars.github.bgColor.accent.muted};
     border-radius: ${otherThemeVars.border.radius};
-    font-family: var(--fontStack-monospace, ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, monospace);
+    font-family: var(--fonts-monospace);
     font-size: 12px;
     padding: 0 5px;
     line-height: 18px;

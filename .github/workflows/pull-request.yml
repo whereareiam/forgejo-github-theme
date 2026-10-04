@@ -106,13 +106,6 @@ jobs:
           name: templates
           path: dist/forgejo/templates
 
-      - name: Upload font assets
-        if: steps.build.outcome == 'success'
-        uses: actions/upload-artifact@v7
-        with:
-          name: fonts
-          path: dist/forgejo/public/assets/fonts
-
       - name: Upload JavaScript assets
         if: steps.build.outcome == 'success'
         uses: actions/upload-artifact@v7

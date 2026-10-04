@@ -320,19 +320,13 @@ describe("Forgejo 15 native integration", () => {
     }
   });
 
-  it("ships GitHub's proportional font and applies its Primer stack", () => {
+  it("uses GitHub's font lists and serves no font files, as GitHub's repository pages do", () => {
     const css = fs.readFileSync(path.join(DIST_DIR, `${PREFIX}light.css`), "utf-8");
-    const sourceFont = path.join(ROOT_DIR, "public", "assets", "fonts", "MonaSansVF-v2.0.27.woff2");
-    const builtFont = path.join(DIST_DIR, "assets", "fonts", "MonaSansVF-v2.0.27.woff2");
-    const fontLicense = path.join(DIST_DIR, "assets", "fonts", "MonaSans-OFL.txt");
 
-    expect(css).toContain("font-family:Mona Sans VF");
-    expect(css).toContain("url(../fonts/MonaSansVF-v2.0.27.woff2)");
     expect(css).toContain('--fonts-proportional:"Mona Sans VF", -apple-system, BlinkMacSystemFont');
-    expect(fs.existsSync(sourceFont)).toBe(true);
-    expect(fs.existsSync(builtFont)).toBe(true);
-    expect(fs.existsSync(fontLicense)).toBe(true);
-    expect(fs.statSync(builtFont).size).toBeGreaterThan(100_000);
+    expect(css).toContain('--fonts-monospace:"Monaspace Neon", ui-monospace, SFMono-Regular');
+    expect(css).not.toContain("@font-face");
+    expect(fs.existsSync(path.join(DIST_DIR, "assets", "fonts"))).toBe(false);
   });
 
   it("matches GitHub's measured repository navigation geometry", () => {
