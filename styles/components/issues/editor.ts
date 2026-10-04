@@ -12,8 +12,11 @@ const hosts = `:is(
   .comment-code-cloud
 )`;
 
+/** Pages that keep Forgejo's drop area for attachments and only take the editor. */
+const editorOnlyHosts = `.page-content.repository.new.release`;
+
 export default css`
-  ${hosts} .combo-markdown-editor {
+  :is(${hosts}, ${editorOnlyHosts}) .combo-markdown-editor {
     border: 1px solid ${themeVars.color.light.border};
     border-radius: ${otherThemeVars.border.radius};
     background: ${themeVars.color.body};
