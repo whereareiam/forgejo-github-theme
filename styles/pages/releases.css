@@ -343,17 +343,6 @@ body:has(.page-content.repository.github-releases) .repository-content-header {
     .release-title-wrap h4 a[data-tippy="commit-statuses"] {
       margin-left: 0;
     }
-    .release-title-wrap h4 .ui.label {
-      display: inline-block;
-      vertical-align: middle;
-      background: transparent;
-      border: 1px solid currentColor;
-      border-radius: 24px;
-      font-size: 12px;
-      font-weight: 500;
-      line-height: 18px;
-      padding: 2px 8px;
-    }
     .github-release-latest {
       display: inline;
       margin-left: 8px;
@@ -604,12 +593,6 @@ body:has(.page-content.repository.github-releases) .repository-content-header {
   }
   .github-release-list .markup ul ul ul {
     list-style-type: square;
-  }
-  /* Draft is a solid grey label, like a draft pull request's. */
-  .release-title-wrap .github-release-draft.ui.ui.label {
-    border-color: var(--github-bgColor-neutral-emphasis) !important;
-    background: var(--github-bgColor-neutral-emphasis) !important;
-    color: var(--github-fgColor-onEmphasis) !important;
   }
   /* Asset rows */
   .detail .download .list > li {

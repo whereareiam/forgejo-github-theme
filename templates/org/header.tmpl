@@ -6,8 +6,8 @@
 			<div class="org-title">
 				<h1>{{.Org.DisplayName}}</h1>
 				<span class="org-visibility">
-					{{if .Org.Visibility.IsLimited}}<span class="ui large horizontal label">{{ctx.Locale.Tr "org.settings.visibility.limited_shortname"}}</span>{{end}}
-					{{if .Org.Visibility.IsPrivate}}<span class="ui large horizontal label">{{ctx.Locale.Tr "org.settings.visibility.private_shortname"}}</span>{{end}}
+					{{if .Org.Visibility.IsLimited}}<span class="ui large horizontal label theme-label theme-label-muted">{{ctx.Locale.Tr "org.settings.visibility.limited_shortname"}}</span>{{end}}
+					{{if .Org.Visibility.IsPrivate}}<span class="ui large horizontal label theme-label theme-label-muted">{{ctx.Locale.Tr "org.settings.visibility.private_shortname"}}</span>{{end}}
 				</span>
 			</div>
 			<span class="button-sequence org-actions tw-ml-auto tw-whitespace-nowrap">
