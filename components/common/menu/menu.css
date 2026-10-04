@@ -1,0 +1,79 @@
+/*
+ * Action menu: GitHub's menu of plain 32px rows with no divider lines, applied to menus Forgejo
+ * renders itself and that cannot take a class. To style another menu, add it to these lists.
+ *
+ * Two kinds: an action menu (each row does something) and a single-choice menu (the current
+ * choice carries a check mark and every row is indented to make room for it).
+ */
+
+/* Action menus */
+.page-content.repository.view.issue.github-pull-review .merge.box .pull-merge-actions .ui.dropdown .menu,
+/* Single-choice menus */
+.github-pull-review .merge-section .update-button .ui.ui.ui.dropdown > .menu {
+  padding: 8px;
+}
+
+.page-content.repository.view.issue.github-pull-review .merge.box .pull-merge-actions .ui.dropdown .menu > .item,
+.github-pull-review .merge-section .update-button .ui.ui.ui.dropdown > .menu > .item {
+  min-height: 32px;
+  margin: 0 !important;
+  border: 0 !important;
+  border-radius: var(--border-radius);
+  font-weight: 400;
+  line-height: 20px;
+}
+
+/* Action menu rows: the merge method menu */
+.page-content.repository.view.issue.github-pull-review .merge.box .pull-merge-actions .ui.dropdown .menu {
+  min-width: 280px;
+}
+
+.page-content.repository.view.issue.github-pull-review .merge.box .pull-merge-actions .ui.dropdown .menu > .item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px !important;
+}
+
+.page-content.repository.view.issue.github-pull-review .merge.box .pull-merge-actions .ui.dropdown .menu .action-text {
+  flex: 1;
+  padding: 0;
+}
+
+.page-content.repository.view.issue.github-pull-review
+  .merge.box
+  .pull-merge-actions
+  .ui.dropdown
+  .menu
+  .auto-merge-small {
+  color: var(--color-text-light-1);
+}
+
+/* Single-choice rows: the "Update branch" menu. It opens 4px below its button, at the group's width. */
+.github-pull-review .merge-section .update-button .ui.ui.ui.dropdown > .menu {
+  top: calc(100% + 4px) !important;
+  width: max-content;
+  margin-top: 0 !important;
+}
+
+.github-pull-review .merge-section .update-button .ui.ui.ui.dropdown > .menu > .item {
+  position: relative;
+  padding: 6px 8px 6px 32px !important;
+  background: transparent !important;
+}
+
+.github-pull-review .merge-section .update-button .ui.ui.ui.dropdown > .menu > .item:hover {
+  background: var(--github-control-transparent-bgColor-hover) !important;
+}
+
+.github-pull-review .merge-section .update-button .ui.ui.ui.dropdown > .menu > .item.active::before {
+  content: "";
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  width: 16px;
+  height: 16px;
+  background: currentcolor;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z'/%3E%3C/svg%3E")
+    center / 16px no-repeat;
+}
