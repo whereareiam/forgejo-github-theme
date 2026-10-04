@@ -18,10 +18,12 @@
  */
 
 import { cssCombine } from "@lutinglt/gitea-github-theme/core";
+import editor from "./editor";
 import issue from "./issue";
 import issueComment from "./issue_comment";
 import issueConversation from "./issue_conversation";
 import issueList from "./issue_list";
+import issueNew from "./issue_new";
 import issueOverview from "./issue_overview";
 import issueSidebar from "./issue_sidebar";
 import issueTimeline from "./issue_timeline";
@@ -34,6 +36,8 @@ export default cssCombine(
   issueList,
   issueOverview,
   issueConversation,
+  editor,
+  issueNew,
   pullReview,
   pullFilesReview,
   issueSidebar,

@@ -54,7 +54,8 @@ const svg = css`
   }
   /* 关闭工单按钮设置为紫色 */
   .tw-text-red .octicon-issue-closed,
-  .tw-text-red.octicon-issue-closed {
+  .tw-text-red.octicon-issue-closed,
+  .text.red.octicon-issue-closed {
     color: ${themeVars.github.fgColor.done} !important;
   }
   /* 关闭 PR 按钮设置为红色 */
