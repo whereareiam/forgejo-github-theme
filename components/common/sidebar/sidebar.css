@@ -132,3 +132,15 @@
     margin: 16px !important;
   }
 }
+
+/* A count at the right edge of an entry, with the label truncating before it. */
+.theme-sidebar nav a > .theme-counter {
+  margin-left: auto;
+}
+
+.theme-sidebar nav a > span:not(.theme-counter) {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

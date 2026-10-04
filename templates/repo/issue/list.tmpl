@@ -14,8 +14,8 @@
 		</div>
 	{{end}}
 
-		<div class="list-header list-header-issues">
-			<div class="issue-list-title"><button type="button" class="theme-icon-button" data-theme-sidebar-toggle data-theme-sidebar-expand aria-expanded="false" aria-label="Expand sidebar">{{svg "octicon-sidebar-expand" 16}}</button><h1>{{if eq .ViewType "assigned"}}Assigned to me{{else if eq .ViewType "created_by"}}Created by me{{else if eq .ViewType "mentioned"}}Mentioned{{else if eq .ViewType "review_requested"}}Review requested{{else if .PageIsIssueList}}All issues{{else}}All pull requests{{end}}</h1></div>
+		<div class="list-header list-header-issues theme-list-heading">
+			<div class="theme-list-title"><button type="button" class="theme-icon-button" data-theme-sidebar-toggle data-theme-sidebar-expand aria-expanded="false" aria-label="Expand sidebar">{{svg "octicon-sidebar-expand" 16}}</button><h1>{{if eq .ViewType "assigned"}}Assigned to me{{else if eq .ViewType "created_by"}}Created by me{{else if eq .ViewType "mentioned"}}Mentioned{{else if eq .ViewType "review_requested"}}Review requested{{else if .PageIsIssueList}}All issues{{else}}All pull requests{{end}}</h1></div>
 			{{if not .Repository.IsArchived}}
 				{{if .PageIsIssueList}}
 					<a class="primary button issue-list-new" href="{{.RepoLink}}/issues/new{{if .NewIssueChooseTemplate}}/choose{{end}}">{{ctx.Locale.Tr "repo.issues.new"}}</a>
