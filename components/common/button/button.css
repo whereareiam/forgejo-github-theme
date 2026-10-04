@@ -77,3 +77,22 @@
   outline: 2px solid var(--github-fgColor-accent);
   outline-offset: 2px;
 }
+
+/*
+ * Native controls: Forgejo's own buttons that cannot take the theme-control class get the same
+ * 32px control size here. To size another native button, add it to the list.
+ */
+:is(
+  .review-box-panel form > .ui.ui.ui.button,
+  .comment-code-cloud .field.footer .ui.ui.ui.button,
+  .comment-code-cloud :is(.button-row, .button-sequence):has(.comment-form-reply) .ui.ui.ui.button,
+  .page-content.repository.new.issue.github-issue-new .issue-content-left .text.right .ui.ui.ui.button,
+  .page-content.repository.new.release .ui.form .ui.ui.ui.button:not(.mini)
+) {
+  height: 32px;
+  min-height: 32px;
+  padding: 5px 12px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+}

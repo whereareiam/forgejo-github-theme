@@ -58,14 +58,6 @@ export default css`
     & .combo-markdown-editor textarea {
       min-height: 300px !important;
     }
-    & .issue-content-left .text.right .ui.ui.ui.button {
-      height: 32px;
-      min-height: 32px;
-      padding: 5px 12px;
-      font-size: 14px;
-      font-weight: 500;
-      line-height: 20px;
-    }
     /* Sidebar: muted bold headings with the gear at the right edge, as on an issue page. */
     & .issue-content-right.ui.segment {
       padding: 0;

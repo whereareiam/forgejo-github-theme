@@ -1,16 +1,5 @@
 import { css, otherThemeVars, themeVars } from "@lutinglt/gitea-github-theme/core";
 
-/** Buttons that close a review form, at GitHub's 32px control height. */
-const reviewButton = `
-  height: 32px;
-  min-height: 32px;
-  margin: 0;
-  padding: 5px 12px;
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 20px;
-`;
-
 export default css`
   /* "Finish review" opens Forgejo's form in a popup; GitHub shows it as a 640px dialog. */
   .tippy-box[data-theme="menu"]:has(.review-box-panel) {
@@ -98,7 +87,7 @@ export default css`
       border-color: ${themeVars.color.light.border};
     }
     & form > .ui.ui.ui.button {
-      ${reviewButton}
+      /* Sized by the native control list in the button component. */
       margin: 16px 0;
     }
     & form > .ui.ui.ui.button:last-of-type {
@@ -137,7 +126,7 @@ export default css`
         gap: 8px;
       }
       & .ui.ui.ui.button {
-        ${reviewButton}
+        margin: 0;
       }
     }
     /* The row under a posted conversation, in the diff and on the Conversation tab: Previous / Next, Resolve, Reply */
@@ -145,7 +134,7 @@ export default css`
       gap: 8px;
       margin-top: 8px;
       & .ui.ui.ui.button {
-        ${reviewButton}
+        margin: 0;
         display: inline-flex;
         align-items: center;
         gap: 8px;

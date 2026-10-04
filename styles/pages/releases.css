@@ -720,14 +720,6 @@ body:has(.page-content.repository.new.release) .repository-content-header {
     padding: 0;
     border: 0;
   }
-  .ui.form .ui.ui.ui.button:not(.mini) {
-    height: 32px;
-    min-height: 32px;
-    padding: 5px 12px;
-    font-size: 14px;
-    font-weight: 500;
-    line-height: 20px;
-  }
   .ui.form .ui.ui.ui.mini.button {
     height: 28px;
     min-height: 28px;
