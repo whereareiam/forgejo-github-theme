@@ -1,11 +1,11 @@
 import { css, otherThemeVars, themeVars } from "@lutinglt/gitea-github-theme/core";
 import { primaryButtonHoverStyle, primaryButtonStyle } from "@lutinglt/gitea-github-theme/styles/common";
 
-/** The 32px round status icon that starts a merge box section; the section sets its background. */
+/** The round status icon that starts a merge box section; the section sets its background. */
 const mergeSectionIcon = `
-  flex: 0 0 32px;
-  width: 32px;
-  height: 32px;
+  flex: 0 0 var(--merge-section-icon);
+  width: var(--merge-section-icon);
+  height: var(--merge-section-icon);
   padding: 8px;
   border-radius: 50%;
   color: ${themeVars.github.fgColor.onEmphasis};
@@ -285,6 +285,11 @@ export default css`
       border-right-color: color-mix(in srgb, ${themeVars.color.body}, ${themeVars.github.bgColor.accent.emphasis} 10%);
     }
     & .merge.box {
+      /* One section row's measurements, also used by rows styled outside this file. */
+      --merge-section-height: 64px;
+      --merge-section-padding: 16px;
+      --merge-section-icon: 32px;
+      --merge-section-divider: color-mix(in srgb, ${themeVars.color.light.border} 70%, transparent);
       z-index: 2;
       margin-left: 0;
       & > .content {
@@ -339,15 +344,15 @@ export default css`
           display: none;
         }
         & > :is(.item, details, .pull-merge-actions):not(:first-child) {
-          border-top: 1px solid color-mix(in srgb, ${themeVars.color.light.border} 70%, transparent);
+          border-top: 1px solid var(--merge-section-divider);
         }
         & > .item {
           display: flex;
           align-items: center;
           gap: 8px;
-          min-height: 64px;
+          min-height: var(--merge-section-height);
           margin: 0;
-          padding: 16px;
+          padding: var(--merge-section-padding);
           border-right: 0;
           border-bottom: 0;
           border-left: 0;
