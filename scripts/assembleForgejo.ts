@@ -43,7 +43,13 @@ for (const directory of ["common", "repository"]) {
   }
 }
 
-for (const file of ["dashboard-lists.css", "organization.css", "profile-subpages.css", "user-profile.css"]) {
+for (const file of [
+  "dashboard-lists.css",
+  "organization.css",
+  "profile-subpages.css",
+  "pull-request.css",
+  "user-profile.css",
+]) {
   cpSync(join(root, "styles", "pages", file), join(css, "components", "pages", file));
 }
 for (const file of readdirSync(join(root, "public"))) {
