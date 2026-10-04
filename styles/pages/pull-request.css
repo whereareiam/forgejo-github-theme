@@ -54,3 +54,43 @@
 .github-pull-review .pull-merge-actions .tw-flex > form {
   margin: 0 !important;
 }
+
+/*
+ * The "Update branch" menu: GitHub's single-choice menu. It opens 4px below the button instead of
+ * overlapping it, rows have no divider lines, and the current choice is marked with a check
+ * instead of a filled row.
+ */
+.github-pull-review .merge-section .update-button .ui.ui.ui.dropdown > .menu {
+  top: calc(100% + 4px) !important;
+  margin-top: 0 !important;
+  width: max-content;
+  padding: 8px;
+}
+
+.github-pull-review .merge-section .update-button .ui.ui.ui.dropdown > .menu > .item {
+  position: relative;
+  min-height: 32px;
+  margin: 0 !important;
+  padding: 6px 8px 6px 32px !important;
+  border: 0 !important;
+  border-radius: var(--border-radius);
+  background: transparent !important;
+  font-weight: 400;
+  line-height: 20px;
+}
+
+.github-pull-review .merge-section .update-button .ui.ui.ui.dropdown > .menu > .item:hover {
+  background: var(--github-control-transparent-bgColor-hover) !important;
+}
+
+.github-pull-review .merge-section .update-button .ui.ui.ui.dropdown > .menu > .item.active::before {
+  content: "";
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  width: 16px;
+  height: 16px;
+  background: currentcolor;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z'/%3E%3C/svg%3E")
+    center / 16px no-repeat;
+}
