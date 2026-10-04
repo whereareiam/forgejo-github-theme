@@ -1,0 +1,125 @@
+<div role="main" aria-label="{{.Title}}" class="page-content user notification theme-sidebar-layout github-notifications" id="notification_div" data-sequence-number="{{.SequenceNumber}}" data-theme-sidebar="notification_sidebar_collapsed">
+	{{$notificationUnreadCount := call .NotificationUnreadCount}}
+	<aside class="theme-sidebar" aria-label="{{.Title}}">
+		<div class="theme-sidebar-content">
+			<nav aria-label="{{.Title}}">
+				<a class="{{if eq .Status 1}}active{{end}}" href="{{AppSubUrl}}/notifications?q=unread">{{svg "octicon-inbox" 16}}<span>{{ctx.Locale.Tr "notification.unread"}}</span><span class="theme-counter notifications-unread-count{{if not $notificationUnreadCount}} tw-hidden{{end}}">{{$notificationUnreadCount}}</span></a>
+				<a class="{{if eq .Status 2}}active{{end}}" href="{{AppSubUrl}}/notifications?q=read">{{svg "octicon-check" 16}}<span>{{ctx.Locale.Tr "notification.read"}}</span></a>
+			</nav>
+			<hr>
+			<nav>
+				<a href="{{AppSubUrl}}/notifications/subscriptions">{{svg "octicon-eye" 16}}<span>{{ctx.Locale.Tr "notification.subscriptions"}}</span></a>
+			</nav>
+		</div>
+		{{template "components/common/sidebar/toggle" .}}
+	</aside>
+	<div class="ui container theme-sidebar-main">
+		<div class="github-notifications-header">
+			<div class="github-notifications-title">
+				<button type="button" class="theme-icon-button" data-theme-sidebar-toggle data-theme-sidebar-expand aria-expanded="false" aria-label="Expand sidebar">{{svg "octicon-sidebar-expand" 16}}</button>
+				<h1>{{if eq .Status 2}}{{ctx.Locale.Tr "notification.read"}}{{else}}{{ctx.Locale.Tr "notification.unread"}}{{end}}</h1>
+			</div>
+			{{if eq .Status 1}}
+				<form class="{{if not $notificationUnreadCount}}tw-hidden{{end}}" action="{{AppSubUrl}}/notifications/purge" method="post">
+					<button class="ui secondary button theme-control">{{svg "octicon-checklist" 16}}{{ctx.Locale.Tr "notification.mark_all_as_read"}}</button>
+				</form>
+			{{end}}
+		</div>
+		<div class="tw-p-0">
+			<div id="notification_table">
+				{{if not .Notifications}}
+					<div class="tw-flex tw-items-center tw-flex-col tw-p-4">
+						{{svg "octicon-inbox" 56 "tw-mb-4"}}
+						{{if eq .Status 1}}
+							{{ctx.Locale.Tr "notification.no_unread"}}
+						{{else}}
+							{{ctx.Locale.Tr "notification.no_read"}}
+						{{end}}
+					</div>
+				{{else}}
+					{{range $notification := .Notifications}}
+						<div class="notifications-item tw-flex tw-items-center tw-flex-wrap tw-gap-2 tw-p-2" id="notification_{{.ID}}" data-status="{{.Status}}">
+							<div class="notifications-icon tw-ml-2 tw-mr-1 tw-self-start tw-mt-1">
+								{{if .Issue}}
+									{{template "shared/issueicon" .Issue}}
+								{{else}}
+									{{svg "octicon-repo" 16 "text grey"}}
+								{{end}}
+							</div>
+							<a class="notifications-link tw-flex tw-flex-1 tw-flex-col silenced" href="{{.Link ctx}}">
+								<div class="notifications-top-row tw-text-13 tw-break-anywhere">
+									{{.Repository.FullName}} {{if .Issue}}<span class="text light-3">#{{.Issue.Index}}</span>{{end}}
+									{{if eq .Status 3}}
+										{{svg "octicon-pin" 13 "text blue tw-mt-0.5 tw-ml-1"}}
+									{{end}}
+								</div>
+								<div class="notifications-bottom-row tw-text-16 tw-py-0.5">
+									<span class="issue-title tw-break-anywhere">
+										{{if .Issue}}
+											{{RenderRefIssueTitle $.Context .Issue.Title}}
+										{{else}}
+											{{.Repository.FullName}}
+										{{end}}
+									</span>
+								</div>
+							</a>
+							<div class="notifications-updated tw-items-center tw-mr-2">
+								{{if .Issue}}
+									{{DateUtils.TimeSince .Issue.UpdatedUnix}}
+								{{else}}
+									{{DateUtils.TimeSince .UpdatedUnix}}
+								{{end}}
+							</div>
+							<div class="notifications-buttons tw-items-center tw-justify-end tw-gap-1 tw-px-1">
+								{{if ne .Status 3}}
+									<form action="{{AppSubUrl}}/notifications/status" method="post">
+										<input type="hidden" name="notification_id" value="{{.ID}}">
+										<input type="hidden" name="status" value="pinned">
+										<button class="btn interact-bg tw-p-2" title="{{ctx.Locale.Tr "notification.pin"}}"
+											data-url="{{AppSubUrl}}/notifications/status"
+											data-status="pinned"
+											data-page="{{$.Page.Paginater.Current}}"
+											data-notification-id="{{.ID}}"
+											data-q="{{$.Keyword}}">
+											{{svg "octicon-pin"}}
+										</button>
+									</form>
+								{{end}}
+								{{if or (eq .Status 1) (eq .Status 3)}}
+									<form action="{{AppSubUrl}}/notifications/status" method="post">
+										<input type="hidden" name="notification_id" value="{{.ID}}">
+										<input type="hidden" name="status" value="read">
+										<input type="hidden" name="page" value="{{$.Page.Paginater.Current}}">
+										<button class="btn interact-bg tw-p-2" title="{{ctx.Locale.Tr "notification.mark_as_read"}}"
+											data-url="{{AppSubUrl}}/notifications/status"
+											data-status="read"
+											data-page="{{$.Page.Paginater.Current}}"
+											data-notification-id="{{.ID}}"
+											data-q="{{$.Keyword}}">
+											{{svg "octicon-check"}}
+										</button>
+									</form>
+								{{else if eq .Status 2}}
+									<form action="{{AppSubUrl}}/notifications/status" method="post">
+										<input type="hidden" name="notification_id" value="{{.ID}}">
+										<input type="hidden" name="status" value="unread">
+										<input type="hidden" name="page" value="{{$.Page.Paginater.Current}}">
+										<button class="btn interact-bg tw-p-2" title="{{ctx.Locale.Tr "notification.mark_as_unread"}}"
+											data-url="{{AppSubUrl}}/notifications/status"
+											data-status="unread"
+											data-page="{{$.Page.Paginater.Current}}"
+											data-notification-id="{{.ID}}"
+											data-q="{{$.Keyword}}">
+											{{svg "octicon-bell"}}
+										</button>
+									</form>
+								{{end}}
+							</div>
+						</div>
+					{{end}}
+				{{end}}
+			</div>
+		</div>
+		{{template "base/paginate" .}}
+	</div>
+</div>

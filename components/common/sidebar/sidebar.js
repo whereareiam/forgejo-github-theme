@@ -1,6 +1,6 @@
 (() => {
   const mobile = matchMedia("(max-width: 767.98px)");
-  for (const page of document.querySelectorAll("[data-theme-sidebar]")) {
+  const init = page => {
     let collapsed = mobile.matches;
     try {
       if (!mobile.matches) collapsed = localStorage.getItem(page.dataset.themeSidebar) === "true";
@@ -31,5 +31,13 @@
       update();
     });
     update();
-  }
+  };
+  for (const page of document.querySelectorAll("[data-theme-sidebar]")) init(page);
+  // Forgejo replaces the whole notifications page element after an action; set the new one up too.
+  if (typeof MutationObserver === "undefined" || !document.body) return;
+  new MutationObserver(records => {
+    for (const record of records)
+      for (const node of record.addedNodes)
+        if (node instanceof Element && node.matches("[data-theme-sidebar]")) init(node);
+  }).observe(document.body, { childList: true, subtree: true });
 })();

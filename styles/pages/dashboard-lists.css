@@ -1,0 +1,144 @@
+/* The dashboard's own lists: issues, pull requests, milestones and notifications. */
+
+/* The context switcher sits at the top of the sidebar instead of in a bar across the page. */
+.dashboard-list-context .secondary-nav {
+  padding: 0;
+  border: 0 !important;
+  background: transparent;
+}
+
+.dashboard-list-context .ui.secondary.menu {
+  flex-direction: column;
+  align-items: stretch;
+  min-height: 0;
+  margin: 0;
+  padding: 0 8px;
+}
+
+.dashboard-list-context .ui.secondary.menu > .item {
+  margin: 0;
+  padding: 6px 8px;
+}
+
+/* Counts sit at the right edge of a sidebar entry, as in GitHub's sidebars. */
+:is(.dashboard-issue-list, .github-notifications) .theme-sidebar nav a > .theme-counter {
+  margin-left: auto;
+}
+
+:is(.dashboard-issue-list, .github-notifications) .theme-sidebar nav a > span:not(.theme-counter) {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Milestones: the cards form one bordered list under the Open/Closed bar. */
+.github-milestones .milestone-list {
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--color-light-border);
+  border-top: 0;
+  border-radius: 0 0 var(--border-radius) var(--border-radius);
+  list-style: none;
+}
+
+.github-milestones .milestone-list > .milestone-card {
+  margin: 0;
+  padding: 12px 16px;
+  border: 0;
+  border-radius: 0;
+}
+
+.github-milestones .milestone-list > .milestone-card + .milestone-card {
+  border-top: 1px solid var(--color-light-border);
+}
+
+/* Notifications */
+.github-notifications-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: 32px;
+  margin: 0 0 16px;
+}
+
+.github-notifications-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.github-notifications-title h1 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 28px;
+}
+
+.github-notifications #notification_table {
+  overflow: hidden;
+  border: 1px solid var(--color-light-border);
+  border-radius: var(--border-radius);
+}
+
+.github-notifications .notifications-item {
+  min-height: 55px;
+  padding: 8px 16px !important;
+  background: var(--color-box-header);
+}
+
+.github-notifications .notifications-item + .notifications-item {
+  border-top: 1px solid var(--color-light-border);
+}
+
+/* Read notifications recede: no tint and a muted title. */
+.github-notifications .notifications-item[data-status="2"] {
+  background: transparent;
+}
+
+.github-notifications .notifications-item[data-status="2"] .issue-title {
+  color: var(--color-text-light-1);
+}
+
+.github-notifications .notifications-item:hover {
+  background: var(--color-hover);
+}
+
+.github-notifications .notifications-top-row {
+  color: var(--color-text-light-1);
+  font-size: 12px;
+  line-height: 18px;
+}
+
+.github-notifications .notifications-bottom-row {
+  padding: 0;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.github-notifications .notifications-updated {
+  color: var(--color-text-light-1);
+  font-size: 12px;
+}
+
+.github-notifications .notifications-buttons .btn {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border-radius: var(--border-radius);
+  color: var(--color-text-light-1);
+}
+
+.dashboard-list-context .ui.secondary.menu > .item {
+  align-self: flex-start;
+}
+
+/* Forgejo's milestone page gives the list header its own box; the shared heading has none. */
+.github-milestones .list-header.list-header-issues {
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+}
