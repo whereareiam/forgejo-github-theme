@@ -23,8 +23,8 @@
 	</aside>
 	<div class="ui container issue-list-main theme-sidebar-main">
 		{{template "base/alert" .}}
-		<div class="list-header list-header-issues">
-			<div class="issue-list-title">
+		<div class="list-header list-header-issues theme-list-heading">
+			<div class="theme-list-title">
 				<button type="button" class="theme-icon-button" data-theme-sidebar-toggle data-theme-sidebar-expand aria-expanded="false" aria-label="Expand sidebar">{{svg "octicon-sidebar-expand" 16}}</button>
 				<h1>{{if eq .ViewType "assigned"}}{{ctx.Locale.Tr "repo.issues.filter_type.assigned_to_you"}}{{else if eq .ViewType "created_by"}}{{ctx.Locale.Tr "repo.issues.filter_type.created_by_you"}}{{else if eq .ViewType "mentioned"}}{{ctx.Locale.Tr "repo.issues.filter_type.mentioning_you"}}{{else if eq .ViewType "review_requested"}}{{ctx.Locale.Tr "repo.issues.filter_type.review_requested"}}{{else if eq .ViewType "reviewed_by"}}{{ctx.Locale.Tr "repo.issues.filter_type.reviewed_by_you"}}{{else}}{{ctx.Locale.Tr "home.issues.in_your_repos"}}{{end}}</h1>
 			</div>

@@ -3,23 +3,9 @@ import { css, themeVars } from "@lutinglt/gitea-github-theme/core";
 // The issue list and the pull request list share one layout.
 export default css`
   :is(.github-issues, .github-pull-list) {
+    /* The heading itself is the shared theme-list-heading component. */
     & .list-header-issues {
       margin: 0 0 16px;
-      min-height: 32px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    & .issue-list-title {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    & .issue-list-title h1 {
-      font-size: 20px;
-      line-height: 28px;
-      font-weight: 600;
-      margin: 0;
     }
     & .issue-list-new {
       min-height: 32px;

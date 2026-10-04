@@ -20,18 +20,6 @@
   padding: 6px 8px;
 }
 
-/* Counts sit at the right edge of a sidebar entry, as in GitHub's sidebars. */
-:is(.dashboard-issue-list, .github-notifications) .theme-sidebar nav a > .theme-counter {
-  margin-left: auto;
-}
-
-:is(.dashboard-issue-list, .github-notifications) .theme-sidebar nav a > span:not(.theme-counter) {
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
 /* Milestones: the cards form one bordered list under the Open/Closed bar. */
 .github-milestones .milestone-list {
   margin: 0;
@@ -54,26 +42,8 @@
 }
 
 /* Notifications */
-.github-notifications-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  min-height: 32px;
-  margin: 0 0 16px;
-}
-
-.github-notifications-title {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.github-notifications-title h1 {
-  margin: 0;
-  font-size: 20px;
-  font-weight: 600;
-  line-height: 28px;
+.github-notifications .theme-list-heading {
+  margin-bottom: 16px;
 }
 
 .github-notifications #notification_table {

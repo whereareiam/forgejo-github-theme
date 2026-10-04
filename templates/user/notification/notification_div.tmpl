@@ -14,8 +14,8 @@
 		{{template "components/common/sidebar/toggle" .}}
 	</aside>
 	<div class="ui container theme-sidebar-main">
-		<div class="github-notifications-header">
-			<div class="github-notifications-title">
+		<div class="theme-list-heading">
+			<div class="theme-list-title">
 				<button type="button" class="theme-icon-button" data-theme-sidebar-toggle data-theme-sidebar-expand aria-expanded="false" aria-label="Expand sidebar">{{svg "octicon-sidebar-expand" 16}}</button>
 				<h1>{{if eq .Status 2}}{{ctx.Locale.Tr "notification.read"}}{{else}}{{ctx.Locale.Tr "notification.unread"}}{{end}}</h1>
 			</div>
