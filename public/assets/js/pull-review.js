@@ -27,6 +27,15 @@
     actions.append(form);
     if (instructions) actions.append(instructions);
     section.append(actions);
+    // Forgejo colours the collapsed button red whenever checks are unmet, even when the action
+    // only schedules the merge. A label longer than the plain merge action is a scheduled merge.
+    const plain = (state?.mergeStyles ?? []).map(style => style.textDoMerge?.trim());
+    const sync = () => {
+      const label = form.querySelector(".merge-button .button-text")?.textContent.replace(/\s+/g, " ").trim();
+      actions.classList.toggle("merge-scheduled", Boolean(label) && !plain.includes(label));
+    };
+    sync();
+    new MutationObserver(sync).observe(form, { childList: true, subtree: true, characterData: true });
   };
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", decorate, { once: true });
   else decorate();
