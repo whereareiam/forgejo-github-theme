@@ -48,6 +48,7 @@ for (const file of [
   "organization.css",
   "profile-subpages.css",
   "pull-request.css",
+  "releases.css",
   "user-profile.css",
 ]) {
   cpSync(join(root, "styles", "pages", file), join(css, "components", "pages", file));
