@@ -76,6 +76,19 @@ export default css`
       align-items: center;
       gap: 4px;
       font-size: 14px;
+      font-weight: 600;
+    }
+    /* A closed pull request is red on GitHub (purple is for merged, and for closed issues). */
+    & .issue-title-meta .ui.label.issue-state-label.red {
+      background-color: ${themeVars.github.bgColor.danger.emphasis} !important;
+      border-color: ${themeVars.github.bgColor.danger.emphasis} !important;
+      box-shadow: none;
+    }
+    /* A draft is a solid grey label. */
+    & .issue-title-meta .ui.label.issue-state-label.grey {
+      color: ${themeVars.github.fgColor.onEmphasis} !important;
+      background-color: ${themeVars.github.bgColor.neutral.emphasis} !important;
+      border-color: ${themeVars.github.bgColor.neutral.emphasis} !important;
     }
     & .pull-desc {
       font-size: 14px;
@@ -220,9 +233,12 @@ export default css`
       &.merge-ready > .content {
         border-color: ${themeVars.github.bgColor.success.emphasis};
       }
-      /* A blocked pull request: the box border follows the red status badge. */
-      &:has(> .timeline-avatar.red) > .content {
-        border-color: ${themeVars.github.bgColor.danger.emphasis};
+      /* GitHub keeps the badge and border neutral for blocked, conflicting, draft and closed pull requests. */
+      & > .timeline-avatar:is(.red, .grey, .yellow) {
+        background: ${themeVars.github.bgColor.neutral.emphasis} !important;
+      }
+      &:has(> .timeline-avatar.purple) > .content {
+        border-color: ${themeVars.github.bgColor.done.emphasis};
       }
       /* While the merge form is open GitHub shows the form alone, in a neutral box. */
       & > .content:has(.pull-merge-actions form .field) {

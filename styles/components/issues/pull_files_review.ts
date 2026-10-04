@@ -31,6 +31,25 @@ export default css`
     font-weight: 500;
     line-height: 18px;
   }
+  /* GitHub's review button is a small 28px control. */
+  #review-box .ui.ui.ui.button.js-btn-review {
+    height: 28px;
+    min-height: 28px;
+  }
+  /* "Viewed" is a small bordered button on GitHub. */
+  .diff-file-header .viewed-file-form {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    height: 28px;
+    padding: 0 8px;
+    border: 1px solid ${themeVars.color.light.border};
+    border-radius: ${otherThemeVars.border.radius};
+    background: ${themeVars.color.button};
+    color: ${themeVars.color.text.self};
+    font-size: 12px;
+    font-weight: 500;
+  }
   .review-box-panel {
     display: block;
     & > .ui.segment {
