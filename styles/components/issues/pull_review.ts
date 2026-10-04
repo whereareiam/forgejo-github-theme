@@ -475,30 +475,6 @@ export default css`
           padding: 0;
           justify-content: center;
         }
-        /* The merge method menu: plain 32px rows as in GitHub's action menus. */
-        & .ui.dropdown .menu {
-          min-width: 280px;
-          padding: 8px;
-          & > .item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            min-height: 32px;
-            margin: 0 !important;
-            padding: 6px 8px !important;
-            border: 0 !important;
-            border-radius: ${otherThemeVars.border.radius};
-            font-weight: 400;
-            line-height: 20px;
-          }
-          & .action-text {
-            flex: 1;
-            padding: 0;
-          }
-          & .auto-merge-small {
-            color: ${themeVars.color.text.light.num1};
-          }
-        }
         /* The expanded form takes the whole row: title, message, then the buttons. */
         & > #pull-request-merge-form:has(form .field) {
           flex: 0 0 100%;
