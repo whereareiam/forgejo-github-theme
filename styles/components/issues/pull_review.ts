@@ -90,6 +90,10 @@ export default css`
       border-color: ${themeVars.github.bgColor.danger.emphasis} !important;
       box-shadow: none;
     }
+    /* The "closed this pull request" entry in the timeline is red too. */
+    & .timeline-item.event .badge.tw-bg-red {
+      background-color: ${themeVars.github.bgColor.danger.emphasis} !important;
+    }
     /* A draft is a solid grey label. */
     & .issue-title-meta .ui.label.issue-state-label.grey {
       color: ${themeVars.github.fgColor.onEmphasis} !important;
@@ -170,6 +174,75 @@ export default css`
     &.github-conversation .issue-content-left > .ui.timeline {
       margin-left: 40px;
       padding-left: 16px;
+    }
+    /*
+     * Timeline connectors. Our own rule, not GitHub's continuous line: a connector is drawn only
+     * between two neighbouring entries. Nothing runs past the last entry, alongside a box, or
+     * out of a review group, whose boxes are indented away from the rail.
+     */
+    &.github-conversation .issue-content-left > .ui.timeline {
+      --rail: color-mix(in srgb, ${themeVars.color.light.border} 70%, transparent);
+      --rail-line: linear-gradient(var(--rail), var(--rail));
+      &::before {
+        display: none;
+      }
+      /* Events and commit rows sit left of their own box, so their halves are pseudo-elements. */
+      & > .timeline-item:is(.event, .commits-list)::before,
+      & > .timeline-item:is(.event, .commits-list)::after,
+      & > .timeline-item-group > .timeline-item.event:first-child::before {
+        content: "";
+        position: absolute;
+        left: -2px;
+        width: 2px;
+        background: var(--rail);
+      }
+      /* Upper half: from the entry above down to this badge. */
+      & > .timeline-item.event::before,
+      & > .timeline-item-group > .timeline-item.event:first-child::before {
+        top: 0;
+        height: 12px;
+      }
+      & > .timeline-item.commits-list::before {
+        top: 0;
+        bottom: 27px;
+      }
+      /* Lower half: only when another entry follows. */
+      & > .timeline-item:is(.event, .commits-list)::after {
+        display: none;
+        bottom: 0;
+      }
+      & > .timeline-item:is(.event, .commits-list):has(~ :is(.timeline-item:not(.form), .timeline-item-group))::after {
+        display: block;
+      }
+      & > .timeline-item.event::after {
+        top: 46px;
+      }
+      & > .timeline-item.commits-list::after {
+        height: 27px;
+      }
+      /* Comment and merge boxes cover the rail; they only draw stubs in the gaps above and below. */
+      & > .timeline-item.comment:not(.form) {
+        --rail-up: var(--rail-line) 14px 0 / 2px 12px no-repeat;
+        --rail-down: var(--rail-line) 14px 100% / 0 0 no-repeat;
+        background: var(--rail-up), var(--rail-down);
+      }
+      & > .timeline-item.comment:not(.form):has(~ :is(.timeline-item:not(.form), .timeline-item-group)) {
+        --rail-down: var(--rail-line) 14px 100% / 2px 12px no-repeat;
+      }
+      & > .timeline-item.comment.first {
+        --rail-up: var(--rail-line) 14px 0 / 0 0 no-repeat;
+      }
+      /* Nothing leaves a review group. */
+      & > .timeline-item-group + .timeline-item.comment,
+      & > .timeline-item-group + div:empty + .timeline-item.comment {
+        --rail-up: var(--rail-line) 14px 0 / 0 0 no-repeat;
+      }
+      & > .timeline-item-group + .timeline-item:is(.event, .commits-list)::before,
+      & > .timeline-item-group + div:empty + .timeline-item:is(.event, .commits-list)::before,
+      & > .timeline-item-group + .timeline-item-group > .timeline-item.event:first-child::before,
+      & > .timeline-item-group + div:empty + .timeline-item-group > .timeline-item.event:first-child::before {
+        display: none;
+      }
     }
     &.github-conversation .timeline-item.comment > .timeline-avatar {
       display: block;
