@@ -114,6 +114,7 @@ export default css`
       & .ui.dropdown > :is(a, span).text:hover {
         color: ${themeVars.github.fgColor.accent};
         background: transparent;
+        text-decoration: none;
       }
       & .ui.dropdown > :is(a, span).text:hover strong {
         color: inherit;
@@ -599,6 +600,30 @@ export default css`
       & .ui.dropdown.select-reaction > .menu {
         left: 0 !important;
         right: auto !important;
+      }
+      /* GitHub's picker: two rows of four 32px buttons, filled column by column. */
+      & .ui.dropdown.select-reaction > .menu.reactions-menu.visible {
+        display: grid !important;
+        grid-template-rows: repeat(2, 40px);
+        grid-auto-flow: column;
+        grid-auto-columns: 36px;
+        width: max-content;
+        min-width: 0;
+        padding: 0 2px;
+        border-radius: ${otherThemeVars.border.radius};
+        & > .item.reaction {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          float: none;
+          width: 32px;
+          height: 32px;
+          margin: 4px 2px !important;
+          padding: 4px !important;
+          border-radius: ${otherThemeVars.border.radius};
+          font-size: 14px;
+          line-height: 1;
+        }
       }
       & .select-reaction > .add-reaction {
         display: flex;

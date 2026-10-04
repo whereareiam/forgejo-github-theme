@@ -1,4 +1,5 @@
 import { css, otherThemeVars, themeVars } from "@lutinglt/gitea-github-theme/core";
+import { primaryButtonHoverStyle, primaryButtonStyle } from "@lutinglt/gitea-github-theme/styles/common";
 
 /** The 32px round status icon that starts a merge box section; the section sets its background. */
 const mergeSectionIcon = `
@@ -216,6 +217,25 @@ export default css`
       &.merge-ready > .timeline-avatar {
         background: ${themeVars.github.bgColor.success.emphasis};
       }
+      &.merge-ready > .content {
+        border-color: ${themeVars.github.bgColor.success.emphasis};
+      }
+      /* A blocked pull request: the box border follows the red status badge. */
+      &:has(> .timeline-avatar.red) > .content {
+        border-color: ${themeVars.github.bgColor.danger.emphasis};
+      }
+      /* While the merge form is open GitHub shows the form alone, in a neutral box. */
+      & > .content:has(.pull-merge-actions form .field) {
+        border-color: ${themeVars.color.light.border};
+        & > :not(.merge-section),
+        & > .merge-section > :not(.pull-merge-actions) {
+          display: none !important;
+        }
+        & .pull-merge-actions {
+          border-top: 0 !important;
+          border-radius: ${otherThemeVars.border.radius};
+        }
+      }
       /* Every state uses one layout: each row is a bordered section, as in GitHub's merge box. */
       & .merge-section {
         padding: 0;
@@ -224,7 +244,7 @@ export default css`
           display: none;
         }
         & > :is(.item, details, .pull-merge-actions):not(:first-child) {
-          border-top: 1px solid ${themeVars.color.light.border};
+          border-top: 1px solid color-mix(in srgb, ${themeVars.color.light.border} 70%, transparent);
         }
         & > .item {
           display: flex;
@@ -344,6 +364,17 @@ export default css`
             border-color: ${themeVars.github.button.danger.borderColor.hover};
           }
         }
+        /* Scheduling a merge for when checks pass is not an override: Forgejo marks the group
+           red, but its own confirm button is primary, so the group is shown primary too. */
+        &.merge-scheduled .ui.red.buttons .ui.button {
+          ${primaryButtonStyle}
+          &:hover {
+            ${primaryButtonHoverStyle}
+          }
+          & svg {
+            color: inherit;
+          }
+        }
         & .ui.buttons .ui.dropdown.icon.button {
           width: 32px;
           padding: 0;
@@ -386,16 +417,18 @@ export default css`
             flex: 0 0 100%;
             margin: 0;
           }
+          & > .field > :is(input, textarea) {
+            font-family: var(--fonts-monospace);
+            line-height: 20px;
+          }
           & > .field > input {
             height: 32px;
             padding: 5px 12px;
-            line-height: 20px;
           }
           & > .field > textarea {
             display: block;
             min-height: 100px;
-            padding: 8px 12px;
-            line-height: 20px;
+            padding: 12px;
             resize: vertical;
           }
           & > .ui.checkbox {
