@@ -25,6 +25,7 @@ import issueList from "./issue_list";
 import issueOverview from "./issue_overview";
 import issueSidebar from "./issue_sidebar";
 import issueTimeline from "./issue_timeline";
+import pullFilesReview from "./pull_files_review";
 import pullReview from "./pull_review";
 
 export default cssCombine(
@@ -34,6 +35,7 @@ export default cssCombine(
   issueOverview,
   issueConversation,
   pullReview,
+  pullFilesReview,
   issueSidebar,
   issueTimeline
 );

@@ -43,6 +43,10 @@ const baseButton = css`
     /* 按钮组, PR 里的压缩合并按钮 */
     &.buttons .button {
       ${primaryButtonStyle}
+      /* Forgejo paints a focused primary button with its blue accent; keep it green after a click. */
+      &:focus {
+        ${primaryButtonStyle}
+      }
       &:hover {
         ${primaryButtonHoverStyle}
       }
@@ -66,6 +70,9 @@ const baseButton = css`
   .button.primary:not(.ui) {
     ${primaryButtonStyle}
     border: 1px solid ${themeVars.github.button.primary.borderColor.rest};
+    &:focus {
+      ${primaryButtonStyle}
+    }
     &:is(:hover, :focus-visible) {
       ${primaryButtonHoverStyle}
     }
