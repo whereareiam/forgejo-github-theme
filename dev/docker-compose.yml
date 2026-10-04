@@ -8,8 +8,8 @@ services:
       [
         "sh",
         "-ec",
-        "mkdir -p /var/lib/gitea/custom/public/assets/css /var/lib/gitea/custom/public/assets/fonts
-        /var/lib/gitea/custom/public/assets/js /var/lib/gitea/custom/templates && chown -R 1000:1000 /var/lib/gitea",
+        "mkdir -p /var/lib/gitea/custom/public/assets/css /var/lib/gitea/custom/public/assets/js
+        /var/lib/gitea/custom/templates && chown -R 1000:1000 /var/lib/gitea",
       ]
     volumes:
       - forgejo-dev-data:/var/lib/gitea
@@ -35,7 +35,6 @@ services:
     volumes:
       - forgejo-dev-data:/var/lib/gitea
       - ../dist/forgejo/public/assets/css:/var/lib/gitea/custom/public/assets/css:ro
-      - ../dist/forgejo/public/assets/fonts:/var/lib/gitea/custom/public/assets/fonts:ro
       - ../dist/forgejo/public/assets/js:/var/lib/gitea/custom/public/assets/js:ro
       - ./.generated/templates:/var/lib/gitea/custom/templates:ro
 

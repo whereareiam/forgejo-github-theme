@@ -20,19 +20,19 @@
 import { css, cssCombine, themeVars } from "@lutinglt/gitea-github-theme/core";
 
 const body = css`
-  @font-face {
-    font-display: swap;
-    font-family: "Mona Sans VF";
-    font-style: normal;
-    font-weight: 200 900;
-    src: url("../fonts/MonaSansVF-v2.0.27.woff2") format("woff2");
-  }
-
+  /*
+   * GitHub's own font lists. Like GitHub's repository pages, the theme serves no font files: the
+   * first family in each list only takes effect where it is installed, otherwise the system fonts
+   * apply, the same ones the visitor sees on GitHub.
+   */
   :root {
     --color-selection-bg: ${themeVars.color.primary.light.num1};
     --color-selection-fg: ${themeVars.color.white};
     --fonts-proportional:
       "Mona Sans VF", -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif;
+    --fonts-monospace:
+      "Monaspace Neon", ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace,
+      var(--fonts-emoji);
     --fonts-emoji: "Apple Color Emoji", "Segoe UI Emoji";
   }
 
