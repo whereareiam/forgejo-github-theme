@@ -17,9 +17,11 @@ body:has(.organization-global-header) .page-content:is(.organization, .packages)
 .page-content.organization .ui.container.org-identity {
   align-items: flex-start;
   gap: 24px;
-  min-height: 140px;
-  margin-bottom: 32px;
-  padding-bottom: 32px;
+  /* Forgejo's tw-gap-x-4 utility would otherwise narrow the gap beside the avatar. */
+  column-gap: 24px !important;
+  min-height: 141px;
+  margin-bottom: 16px;
+  padding-bottom: 24px;
   border-bottom: 1px solid var(--color-secondary);
 }
 
@@ -28,7 +30,7 @@ body:has(.organization-global-header) .page-content:is(.organization, .packages)
   width: 100px;
   height: 100px;
   margin: 0;
-  border: 1px solid var(--color-secondary);
+  border: 0;
   border-radius: var(--border-radius);
 }
 
@@ -54,9 +56,33 @@ body:has(.organization-global-header) .page-content:is(.organization, .packages)
 .page-content.organization .ui.container.org-identity #org-info > .meta {
   flex-direction: row;
   flex-wrap: wrap;
-  gap: 8px 16px;
+  gap: 4px 16px;
   margin: 0;
+  font-size: 12px;
+  line-height: 18px;
+}
+
+.page-content.organization .ui.container.org-identity #org-info > .meta svg {
+  margin-top: 1px;
+}
+
+.page-content.organization .ui.container.org-identity #org-info > .render-content,
+.page-content.organization .ui.container.org-identity #org-info > .render-content p {
   font-size: 14px;
+  line-height: 21px;
+}
+
+/* The visibility badge is GitHub's outlined label, not a filled pill. */
+.page-content.organization .org-title .org-visibility .ui.label {
+  margin: 0;
+  padding: 0 7px;
+  border: 1px solid var(--color-secondary);
+  border-radius: 2em;
+  background: transparent;
+  color: var(--color-text-light-1);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 18px;
 }
 
 .org-overview-grid {
@@ -97,10 +123,6 @@ body:has(.organization-global-header) .page-content:is(.organization, .packages)
   border: 1px solid var(--color-secondary);
   border-radius: var(--border-radius);
   overflow: auto;
-}
-
-.github-org .profile-repo-toolbar {
-  border: 0;
 }
 
 .github-org .profile-repo-toolbar .org-migrate {
