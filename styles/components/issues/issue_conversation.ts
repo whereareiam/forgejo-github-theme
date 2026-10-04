@@ -412,6 +412,11 @@ export default css`
           top: -16px;
         }
       }
+      /* The last entry's line stops at its badge instead of trailing below it. */
+      & .comment-list .timeline-item.event:not(:has(~ .timeline-item:not(.form)))::before {
+        bottom: auto;
+        height: 24px;
+      }
     }
     & .comment-editor-heading {
       font-size: 16px;
@@ -422,17 +427,6 @@ export default css`
     /* GitHub lines the avatar up with the "Add a comment" heading, not with the editor below it. */
     & .comment.form > .timeline-avatar {
       top: 0 !important;
-    }
-    /* The timeline's line runs its full height; end it at the last item instead of in the gap above the form. */
-    & .timeline-item.comment.form::before {
-      content: "";
-      display: block !important;
-      position: absolute;
-      top: -44px;
-      left: 0;
-      width: 100%;
-      height: 44px;
-      background: ${themeVars.color.body};
     }
     & .comment.form {
       z-index: 1;
