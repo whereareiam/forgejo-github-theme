@@ -596,7 +596,7 @@ const releaseRefinements = css`
         text-decoration: none;
       }
       .detail .markup.desc {
-        margin-top: 32px;
+        margin-top: 16px;
       }
       .detail .markup.desc :is(h3, h4, h5, h6) {
         border-bottom: 0;
@@ -636,7 +636,7 @@ const releaseRefinements = css`
       .github-release-digest {
         align-items: center;
         display: inline-flex;
-        font-family: var(--font-family-monospace);
+        font-family: var(--fonts-monospace);
         font-size: 12px;
         gap: 4px;
         margin-right: 16px;
@@ -763,6 +763,159 @@ const releaseRefinements = css`
 `;
 
 const githubTagPage = css`
+  /* Details measured against GitHub's releases pages. */
+  .page-content.repository.github-releases {
+    /* The meta line closes with a divider; the notes start 16px below it. */
+    .github-release-list .detail p.text.grey {
+      min-height: 55px;
+      margin-bottom: 0;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--color-light-border);
+    }
+    #release-list.github-release-list > li .detail .markup.desc > :first-child {
+      margin-top: 0 !important;
+    }
+    /* The notes sit inside a list item, so the browser would give their bullets the nested style. */
+    .github-release-list .markup ul {
+      list-style-type: disc;
+    }
+    .github-release-list .markup ul ul {
+      list-style-type: circle;
+    }
+    .github-release-list .markup ul ul ul {
+      list-style-type: square;
+    }
+    /* Draft is a solid grey label, like a draft pull request's. */
+    .release-title-wrap .github-release-draft.ui.ui.label {
+      border-color: var(--github-bgColor-neutral-emphasis) !important;
+      background: var(--github-bgColor-neutral-emphasis) !important;
+      color: var(--github-fgColor-onEmphasis) !important;
+    }
+    /* Asset rows */
+    .detail .download .list > li {
+      min-height: 45px;
+      padding: 8px 16px !important;
+      align-items: center;
+    }
+    .detail .download .list > li > a {
+      font-size: 14px;
+      font-weight: 600 !important;
+    }
+    .detail .download .list > li .text.grey {
+      font-size: 14px;
+    }
+    .github-release-digest {
+      color: var(--color-text-light-1);
+      font-weight: 400;
+    }
+  }
+  /* A single release: a breadcrumb instead of the Releases/Tags bar, and no release list. */
+  .github-release-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 24px 0 32px;
+    font-size: 14px;
+    line-height: 21px;
+  }
+  .github-release-breadcrumb-separator {
+    color: var(--color-text-light-1);
+  }
+  .page-content.repository.github-releases.github-release-single {
+    .github-release-toolbar,
+    .github-release-toc,
+    .github-release-mobile-toc {
+      display: none;
+    }
+    .github-release-content {
+      display: block;
+    }
+  }
+  /* New and edit release: GitHub's form page, on Forgejo's own template. */
+  body:has(.page-content.repository.new.release) .repository-content-header {
+    display: none;
+  }
+  .page-content.repository.new.release {
+    > .ui.container {
+      box-sizing: border-box;
+      width: calc(100% - 32px) !important;
+      max-width: 1216px !important;
+      margin: 24px auto !important;
+      padding: 0;
+    }
+    .ui.dividing.header {
+      margin: 0 0 24px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--color-light-border);
+      font-size: 20px;
+      font-weight: 600;
+      line-height: 30px;
+      .sub.header {
+        margin: 0;
+        color: var(--color-text-light-1);
+        font-size: 12px;
+        font-weight: 400;
+        line-height: 18px;
+      }
+    }
+    .ui.form {
+      max-width: 896px;
+    }
+    .ui.form .field {
+      margin-bottom: 16px;
+    }
+    #tag-name,
+    #release-title {
+      height: 32px;
+      padding: 5px 12px;
+      font-size: 14px;
+      line-height: 20px;
+    }
+    #tag-target-selector .ui.selection.dropdown {
+      min-height: 32px;
+      padding: 5px 12px;
+      font-size: 14px;
+      line-height: 20px;
+    }
+    .help {
+      color: var(--color-text-light-1);
+      font-size: 12px;
+      line-height: 18px;
+    }
+    .combo-markdown-editor textarea {
+      min-height: 200px !important;
+    }
+    /* GitHub keeps a dashed area for binaries on this page. */
+    .ui.dropzone {
+      min-height: 46px;
+      border: 1px dashed var(--color-light-border);
+      border-radius: var(--border-radius);
+      background: var(--color-box-header);
+    }
+    fieldset {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin: 0;
+      padding: 0;
+      border: 0;
+    }
+    .ui.form .ui.ui.ui.button:not(.mini) {
+      height: 32px;
+      min-height: 32px;
+      padding: 5px 12px;
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 20px;
+    }
+    .ui.form .ui.ui.ui.mini.button {
+      height: 28px;
+      min-height: 28px;
+      padding: 3px 12px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+  }
   body:has(.page-content.repository.github-tags) .repository-content-header {
     display: none;
   }
@@ -875,7 +1028,10 @@ const githubTagPage = css`
       flex-direction: column;
       gap: 12px;
     }
-    .github-tags-search { align-self: center; width: 248px; }
+    .github-tags-search {
+      align-self: center;
+      width: 248px;
+    }
     .github-tag-actions {
       gap: 8px 16px;
     }

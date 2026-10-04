@@ -1,8 +1,16 @@
 {{template "base/head" .}}
-<div role="main" aria-label="{{.Title}}" class="page-content repository releases github-releases">
+{{$single := StringUtils.Contains .Link "/releases/tag/"}}
+<div role="main" aria-label="{{.Title}}" class="page-content repository releases github-releases{{if $single}} github-release-single{{end}}">
 	{{template "repo/header" .}}
 	<div class="ui container">
 		{{template "base/alert" .}}
+		{{if and $single .Releases}}
+			<nav class="github-release-breadcrumb" aria-label="Breadcrumb">
+				<a href="{{.RepoLink}}/releases">{{ctx.Locale.Tr "repo.releases"}}</a>
+				<span class="github-release-breadcrumb-separator">/</span>
+				<span aria-current="page">{{(index .Releases 0).Release.Title}}</span>
+			</nav>
+		{{end}}
 		<div class="github-release-toolbar">
   <nav class="theme-switch" aria-label="Releases and Tags">
     <a aria-current="page" class="active" href="{{.RepoLink}}/releases">Releases</a>
