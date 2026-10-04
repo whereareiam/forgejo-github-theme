@@ -5,8 +5,11 @@
   const form = page.querySelector(".issue-list-search");
   const input = form?.querySelector('input[name="q"]');
   if (!input) return;
-  input.setAttribute("aria-label", isPullList ? "Search pull requests" : "Search Issues");
-  input.placeholder = isPullList ? "Search all pull requests" : "Search Issues";
+  // The dashboard's milestone list reuses this layout and keeps its own translated placeholder.
+  if (!page.classList.contains("github-milestones")) {
+    input.setAttribute("aria-label", isPullList ? "Search pull requests" : "Search Issues");
+    input.placeholder = isPullList ? "Search all pull requests" : "Search Issues";
+  }
   const toolbar = page.querySelector("#issue-filters");
   const filterRow = toolbar?.querySelector(".issue-list-toolbar-right");
   if (filterRow) {

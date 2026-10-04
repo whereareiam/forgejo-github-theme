@@ -1,0 +1,150 @@
+{{template "base/head" .}}
+{{/* The dashboard's milestone list uses the issue list's layout and classes so it shares its styles. */}}
+<div role="main" aria-label="{{.Title}}" class="page-content dashboard issues repository milestones issue-list dashboard-issue-list theme-sidebar-layout github-issues github-milestones" data-theme-sidebar="dashboard_milestone_sidebar_collapsed">
+	<aside class="theme-sidebar" aria-label="{{.Title}}">
+		<div class="theme-sidebar-content">
+			<div class="dashboard-list-context">{{template "user/dashboard/navbar" .}}</div>
+			<nav aria-label="{{ctx.Locale.Tr "home.issues.in_your_repos"}}">
+				<a class="{{if not .RepoIDs}}active{{end}}" href="?sort={{$.SortType}}&state={{$.State}}&q={{$.Keyword}}">{{svg "octicon-milestone" 16}}<span>{{ctx.Locale.Tr "home.issues.in_your_repos"}}</span><span class="theme-counter">{{.Total}}</span></a>
+					{{range .Repos}}
+						{{with $Repo := .}}
+							<a class="{{range $.RepoIDs}}{{if eq . $Repo.ID}}active{{end}}{{end}}" href="?repos=[
+								{{- with $include := true -}}
+										{{- range $.RepoIDs -}}
+											{{- if eq . $Repo.ID -}}
+												{{$include = false}}
+											{{- else -}}
+												{{.}}%2C
+											{{- end -}}
+										{{- end -}}
+										{{- if eq $include true -}}
+											{{$Repo.ID}}%2C
+										{{- end -}}
+									{{- end -}}
+								]&sort={{$.SortType}}&state={{$.State}}&q={{$.Keyword}}" title="{{.FullName}}">
+								{{svg "octicon-repo" 16}}<span class="gt-ellipsis">{{$Repo.FullName}}</span><span class="theme-counter">{{index $.Counts $Repo.ID}}</span>
+							</a>
+						{{end}}
+					{{end}}
+			</nav>
+		</div>
+		{{template "components/common/sidebar/toggle" .}}
+	</aside>
+	<div class="ui container issue-list-main theme-sidebar-main">
+		{{template "base/alert" .}}
+		<div class="list-header list-header-issues">
+			<div class="issue-list-title">
+				<button type="button" class="theme-icon-button" data-theme-sidebar-toggle data-theme-sidebar-expand aria-expanded="false" aria-label="Expand sidebar">{{svg "octicon-sidebar-expand" 16}}</button>
+				<h1>{{ctx.Locale.Tr "repo.milestones"}}</h1>
+			</div>
+		</div>
+		<form class="list-header-search ui form ignore-dirty issue-list-search">
+			<input type="hidden" name="type" value="{{$.ViewType}}">
+			<input type="hidden" name="repos" value="[{{range $.RepoIDs}}{{.}},{{end}}]">
+			<input type="hidden" name="sort" value="{{$.SortType}}">
+			<input type="hidden" name="state" value="{{$.State}}">
+			{{template "components/common/search/search" dict "Value" .Keyword "Placeholder" (ctx.Locale.Tr "search.milestone_kind")}}
+		</form>
+		<div id="issue-filters" class="issue-list-toolbar">
+			<div class="issue-list-toolbar-left">
+				<div class="switch">
+					<a class="{{if not .IsShowClosed}}active {{end}}item" href="?repos=[{{range $.RepoIDs}}{{.}}%2C{{end}}]&sort={{$.SortType}}&state=open&q={{$.Keyword}}" data-test-name="open-issue-count">
+						{{svg "octicon-milestone" 16}}
+						{{ctx.Locale.PrettyNumber .MilestoneStats.OpenCount}}&nbsp;{{ctx.Locale.Tr "repo.issues.open_title"}}
+					</a>
+					<a class="{{if .IsShowClosed}}active {{end}}item" href="?repos=[{{range $.RepoIDs}}{{.}}%2C{{end}}]&sort={{$.SortType}}&state=closed&q={{$.Keyword}}" data-test-name="closed-issue-count">
+						{{svg "octicon-check" 16}}
+						{{ctx.Locale.PrettyNumber .MilestoneStats.ClosedCount}}&nbsp;{{ctx.Locale.Tr "repo.issues.closed_title"}}
+					</a>
+				</div>
+			</div>
+			<div class="issue-list-toolbar-right">
+				<div class="ui secondary filter menu">
+					<div class="list-header-sort ui dropdown type jump item">
+						<span class="text tw-whitespace-nowrap">{{ctx.Locale.Tr "repo.issues.filter_sort"}}</span>
+						{{svg "octicon-triangle-down" 14 "dropdown icon"}}
+						<div class="menu">
+							<a class="{{if or (eq .SortType "closestduedate") (not .SortType)}}active {{end}}item" href="?repos=[{{range $.RepoIDs}}{{.}}%2C{{end}}]&sort=closestduedate&state={{$.State}}&q={{$.Keyword}}">{{ctx.Locale.Tr "repo.milestones.filter_sort.earliest_due_data"}}</a>
+							<a class="{{if eq .SortType "furthestduedate"}}active {{end}}item" href="?repos=[{{range $.RepoIDs}}{{.}}%2C{{end}}]&sort=furthestduedate&state={{$.State}}&q={{$.Keyword}}">{{ctx.Locale.Tr "repo.milestones.filter_sort.latest_due_date"}}</a>
+							<a class="{{if eq .SortType "leastcomplete"}}active {{end}}item" href="?repos=[{{range $.RepoIDs}}{{.}}%2C{{end}}]&sort=leastcomplete&state={{$.State}}&q={{$.Keyword}}">{{ctx.Locale.Tr "repo.milestones.filter_sort.least_complete"}}</a>
+							<a class="{{if eq .SortType "mostcomplete"}}active {{end}}item" href="?repos=[{{range $.RepoIDs}}{{.}}%2C{{end}}]&sort=mostcomplete&state={{$.State}}&q={{$.Keyword}}">{{ctx.Locale.Tr "repo.milestones.filter_sort.most_complete"}}</a>
+							<a class="{{if eq .SortType "mostissues"}}active {{end}}item" href="?repos=[{{range $.RepoIDs}}{{.}}%2C{{end}}]&sort=mostissues&state={{$.State}}&q={{$.Keyword}}">{{ctx.Locale.Tr "repo.milestones.filter_sort.most_issues"}}</a>
+							<a class="{{if eq .SortType "leastissues"}}active {{end}}item" href="?repos=[{{range $.RepoIDs}}{{.}}%2C{{end}}]&sort=leastissues&state={{$.State}}&q={{$.Keyword}}">{{ctx.Locale.Tr "repo.milestones.filter_sort.least_issues"}}</a>
+							<a class="{{if eq .SortType "name"}}active {{end}}item" href="?repos=[{{range $.RepoIDs}}{{.}}%2C{{end}}]&sort=name&state={{$.State}}&q={{$.Keyword}}">{{ctx.Locale.Tr "repo.milestones.filter_sort.name"}}</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="milestone-list">
+			{{range .Milestones}}
+				<li class="milestone-card">
+					<div class="milestone-header">
+				<h3>
+					<span class="ui large label">
+						{{.Repo.FullName}}
+					</span>
+					{{svg "octicon-milestone" 16}}
+					<a class="muted" href="{{.Repo.Link}}/milestone/{{.ID}}">{{.Name}}</a>
+				</h3>
+				<div class="tw-flex tw-items-center">
+					<span class="tw-mr-2">{{.Completeness}}%</span>
+					<progress value="{{.Completeness}}" max="100"></progress>
+				</div>
+					</div>
+					<div class="milestone-toolbar">
+				<div class="group">
+					<div class="flex-text-block">
+						{{svg "octicon-issue-opened" 14}}
+						{{ctx.Locale.PrettyNumber .NumOpenIssues}}&nbsp;{{ctx.Locale.Tr "repo.issues.open_title"}}
+					</div>
+					<div class="flex-text-block">
+						{{svg "octicon-check" 14}}
+						{{ctx.Locale.PrettyNumber .NumClosedIssues}}&nbsp;{{ctx.Locale.Tr "repo.issues.closed_title"}}
+					</div>
+					{{if .TotalTrackedTime}}
+						<div class="flex-text-block">
+							{{svg "octicon-clock"}}
+							{{.TotalTrackedTime|Sec2Time}}
+						</div>
+					{{end}}
+					{{if .UpdatedUnix}}
+						<div class="flex-text-block">
+							{{svg "octicon-clock"}}
+							{{ctx.Locale.Tr "repo.milestones.update_ago" (DateUtils.TimeSince .UpdatedUnix)}}
+						</div>
+					{{end}}
+					<div class="flex-text-block">
+						{{if .IsClosed}}
+							{{$closedDate:= DateUtils.TimeSince .ClosedDateUnix}}
+							{{svg "octicon-clock" 14}}
+							{{ctx.Locale.Tr "repo.milestones.closed" $closedDate}}
+						{{else}}
+							{{if .DeadlineString}}
+						<span class="flex-text-inline {{if .IsOverdue}}text red{{end}}">
+							{{svg "octicon-calendar" 14}}
+							{{DateUtils.AbsoluteShort (.DeadlineString|DateUtils.ParseLegacy)}}
+						</span>
+							{{else}}
+						{{svg "octicon-calendar" 14}}
+						{{ctx.Locale.Tr "repo.milestones.no_due_date"}}
+							{{end}}
+						{{end}}
+					</div>
+				</div>
+					</div>
+					{{if .Content}}
+				<div class="markup content">
+					{{.RenderedContent}}
+				</div>
+					{{end}}
+				</li>
+			{{end}}
+
+			{{template "base/paginate" .}}
+		</div>
+		</div>
+	</div>
+</div>
+<script src="{{AssetUrlPrefix}}/js/issue-list.js" defer></script>
+{{template "base/footer" .}}

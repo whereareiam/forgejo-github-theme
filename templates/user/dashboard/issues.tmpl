@@ -1,0 +1,94 @@
+{{template "base/head" .}}
+{{/*
+	The dashboard's issue and pull request lists use the repository list's layout and classes
+	("repository issue-list") so they share its styles; nothing repository-specific is rendered.
+*/}}
+{{$keyword := StringUtils.RemoveAll $.Keyword "is:open" "-is:open" "is:closed" "-is:closed" "is:all"}}
+<div role="main" aria-label="{{.Title}}" class="page-content repository issue-list dashboard-issue-list theme-sidebar-layout{{if .PageIsPulls}} github-pull-list{{else}} github-issues{{end}}" data-theme-sidebar="{{if .PageIsPulls}}dashboard_pull_sidebar_collapsed{{else}}dashboard_issue_sidebar_collapsed{{end}}">
+	<aside class="theme-sidebar" aria-label="{{.Title}}">
+		<div class="theme-sidebar-content">
+			<div class="dashboard-list-context">{{template "user/dashboard/navbar" .}}</div>
+			<nav aria-label="{{ctx.Locale.Tr "repo.issues.filter_type"}}">
+				<a class="{{if eq .ViewType "your_repositories"}}active{{end}}" href="?type=your_repositories&sort={{$.SortType}}&project={{$.ProjectID}}&state={{.State}}&q={{$.Keyword}}">{{svg "octicon-repo" 16}}<span>{{ctx.Locale.Tr "home.issues.in_your_repos"}}</span><span class="theme-counter">{{CountFmt .IssueStats.YourRepositoriesCount}}</span></a>
+				<a class="{{if eq .ViewType "assigned"}}active{{end}}" href="?type=assigned&sort={{$.SortType}}&project={{$.ProjectID}}&state={{.State}}&q={{$.Keyword}}">{{svg "octicon-people" 16}}<span>{{ctx.Locale.Tr "repo.issues.filter_type.assigned_to_you"}}</span><span class="theme-counter">{{CountFmt .IssueStats.AssignCount}}</span></a>
+				<a class="{{if eq .ViewType "created_by"}}active{{end}}" href="?type=created_by&sort={{$.SortType}}&project={{$.ProjectID}}&state={{.State}}&q={{$.Keyword}}">{{svg "octicon-person" 16}}<span>{{ctx.Locale.Tr "repo.issues.filter_type.created_by_you"}}</span><span class="theme-counter">{{CountFmt .IssueStats.CreateCount}}</span></a>
+				<a class="{{if eq .ViewType "mentioned"}}active{{end}}" href="?type=mentioned&sort={{$.SortType}}&project={{$.ProjectID}}&state={{.State}}&q={{$.Keyword}}">{{svg "octicon-mention" 16}}<span>{{ctx.Locale.Tr "repo.issues.filter_type.mentioning_you"}}</span><span class="theme-counter">{{CountFmt .IssueStats.MentionCount}}</span></a>
+				{{if .PageIsPulls}}
+					<a class="{{if eq .ViewType "review_requested"}}active{{end}}" href="?type=review_requested&sort={{$.SortType}}&project={{$.ProjectID}}&state={{.State}}&q={{$.Keyword}}">{{svg "octicon-code-review" 16}}<span>{{ctx.Locale.Tr "repo.issues.filter_type.review_requested"}}</span><span class="theme-counter">{{CountFmt .IssueStats.ReviewRequestedCount}}</span></a>
+					<a class="{{if eq .ViewType "reviewed_by"}}active{{end}}" href="?type=reviewed_by&sort={{$.SortType}}&project={{$.ProjectID}}&state={{.State}}&q={{$.Keyword}}">{{svg "octicon-check-circle" 16}}<span>{{ctx.Locale.Tr "repo.issues.filter_type.reviewed_by_you"}}</span><span class="theme-counter">{{CountFmt .IssueStats.ReviewedCount}}</span></a>
+				{{end}}
+			</nav>
+		</div>
+		{{template "components/common/sidebar/toggle" .}}
+	</aside>
+	<div class="ui container issue-list-main theme-sidebar-main">
+		{{template "base/alert" .}}
+		<div class="list-header list-header-issues">
+			<div class="issue-list-title">
+				<button type="button" class="theme-icon-button" data-theme-sidebar-toggle data-theme-sidebar-expand aria-expanded="false" aria-label="Expand sidebar">{{svg "octicon-sidebar-expand" 16}}</button>
+				<h1>{{if eq .ViewType "assigned"}}{{ctx.Locale.Tr "repo.issues.filter_type.assigned_to_you"}}{{else if eq .ViewType "created_by"}}{{ctx.Locale.Tr "repo.issues.filter_type.created_by_you"}}{{else if eq .ViewType "mentioned"}}{{ctx.Locale.Tr "repo.issues.filter_type.mentioning_you"}}{{else if eq .ViewType "review_requested"}}{{ctx.Locale.Tr "repo.issues.filter_type.review_requested"}}{{else if eq .ViewType "reviewed_by"}}{{ctx.Locale.Tr "repo.issues.filter_type.reviewed_by_you"}}{{else}}{{ctx.Locale.Tr "home.issues.in_your_repos"}}{{end}}</h1>
+			</div>
+		</div>
+		<form class="list-header-search ui form ignore-dirty issue-list-search">
+			<input type="hidden" name="type" value="{{$.ViewType}}">
+			<input type="hidden" name="sort" value="{{$.SortType}}">
+			<input type="hidden" name="project" value={{$.ProjectID}}>
+			<input type="hidden" name="state" value="{{$.State}}">
+			{{if .PageIsPulls}}
+				{{template "components/common/search/search" dict "Value" .Keyword "Placeholder" (ctx.Locale.Tr "search.pull_kind") "Tooltip" (ctx.Locale.Tr "explore.go_to")}}
+			{{else}}
+				{{template "components/common/search/search" dict "Value" .Keyword "Placeholder" (ctx.Locale.Tr "search.issue_kind") "Tooltip" (ctx.Locale.Tr "explore.go_to")}}
+			{{end}}
+			{{template "shared/search/issue/syntax"}}
+		</form>
+		<div id="issue-filters" class="issue-list-toolbar">
+			<div class="issue-list-toolbar-left">
+				<div class="switch">
+					<a class="{{if not .IsShowClosed}}active {{end}}item" href="?type={{$.ViewType}}&sort={{$.SortType}}&project={{$.ProjectID}}&state=open&labels={{.SelectLabels}}&q={{$keyword}}" data-test-name="open-issue-count">
+						{{if .PageIsPulls}}{{svg "octicon-git-pull-request" 16}}{{else}}{{svg "octicon-issue-opened" 16}}{{end}}
+						{{ctx.Locale.PrettyNumber .IssueStats.OpenCount}}&nbsp;{{ctx.Locale.Tr "repo.issues.open_title"}}
+					</a>
+					<a class="{{if .IsShowClosed}}active {{end}}item" href="?type={{$.ViewType}}&sort={{$.SortType}}&project={{$.ProjectID}}&state=closed&labels={{.SelectLabels}}&q={{$keyword}}" data-test-name="closed-issue-count">
+						{{svg "octicon-issue-closed" 16}}
+						{{ctx.Locale.PrettyNumber .IssueStats.ClosedCount}}&nbsp;{{ctx.Locale.Tr "repo.issues.closed_title"}}
+					</a>
+				</div>
+			</div>
+			<div class="issue-list-toolbar-right">
+				<div class="ui secondary filter menu">
+					{{if .PageIsOrgIssues}}
+						{{template "shared/label_filter" .}}
+					{{end}}
+					<div class="list-header ui dropdown type jump item" data-test-tag="filter-project">
+						<span class="text tw-whitespace-nowrap">{{ctx.Locale.Tr "repo.issues.filter_project"}}</span>
+						{{svg "octicon-triangle-down" 14 "dropdown icon"}}
+						<div class="ui menu">
+							<a class="item" rel="nofollow" href="?type={{$.ViewType}}&sort={{$.SortType}}&state={{$.State}}&q={{$.Keyword}}">{{ctx.Locale.Tr "repo.issues.filter_project_all"}}</a>
+							<a class="item" rel="nofollow" href="?type={{$.ViewType}}&sort={{$.SortType}}&project=-1&state={{$.State}}&q={{$.Keyword}}">{{ctx.Locale.Tr "repo.issues.filter_project_none"}}</a>
+							<div class="divider"></div>
+							{{range $project := $.Projects}}
+								<a class="{{if eq $.ProjectID $project.ID}}active {{end}}item" rel="nofollow" href="?type={{$.ViewType}}&sort={{$.SortType}}&project={{$project.ID}}&state={{$.State}}&q={{$.Keyword}}">{{svg $project.IconName 16 "tw-mr-2 tw-shrink-0"}}{{$project.Title}}</a>
+							{{end}}
+						</div>
+					</div>
+					<div class="list-header-sort ui dropdown type jump item">
+						<span class="text tw-whitespace-nowrap">{{ctx.Locale.Tr "repo.issues.filter_sort"}}</span>
+						{{svg "octicon-triangle-down" 14 "dropdown icon"}}
+						<div class="menu">
+							{{$sortKeyword := StringUtils.RemoveAllPrefix $.Keyword "sort:"}}
+							{{$o := .}}
+							{{range $opt := StringUtils.Make "recentupdate" "leastupdate" "latest" "oldest" "mostcomment" "leastcomment" "nearduedate" "farduedate"}}
+								{{$text := ctx.Locale.Tr (printf "repo.issues.filter_sort.%s" $opt)}}
+								<a class="{{if or (eq $o.SortType $opt) (and (eq $opt "latest") (not $o.SortType))}}active {{end}}item" href="?type={{$.ViewType}}&sort={{$opt}}&project={{$.ProjectID}}&state={{$.State}}&labels={{$o.SelectLabels}}&q={{$sortKeyword}}">{{$text}}</a>
+							{{end}}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		{{template "shared/issuelist" dict "." . "listType" "dashboard"}}
+	</div>
+</div>
+<script src="{{AssetUrlPrefix}}/js/issue-list.js" defer></script>
+<script src="{{AssetUrlPrefix}}/js/repository-labels.js" defer></script>
+{{template "base/footer" .}}
