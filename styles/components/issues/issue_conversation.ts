@@ -134,6 +134,24 @@ export default css`
         gap: 4px;
         padding: 0;
       }
+      /* A reviewer's row: the name, then small muted actions and the review state. */
+      & .assignees .item .sidebar-item-link {
+        font-weight: 600;
+      }
+      & .assignees .item :is(.show-modal, .re-request-review) {
+        display: grid;
+        place-items: center;
+        width: 16px;
+        height: 16px;
+        color: ${themeVars.color.text.light.num1};
+        &:hover {
+          color: ${themeVars.github.fgColor.accent};
+        }
+      }
+      & .assignees .item svg {
+        width: 16px;
+        height: 16px;
+      }
       & .watching .ui.button {
         height: 28px;
         padding: 3px 8px;

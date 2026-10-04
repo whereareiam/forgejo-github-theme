@@ -93,6 +93,11 @@ const transition = css`
     &.dropdown {
       z-index: 1;
     }
+    /* A transformed button becomes the positioning parent of its own menu, so the menu
+       opened under the button and jumped once the press transition ended. */
+    &.dropdown:active {
+      transform: none;
+    }
     .button:active {
       transform: none;
     }

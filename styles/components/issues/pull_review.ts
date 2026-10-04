@@ -54,8 +54,14 @@ export default css`
       margin-left: auto;
       margin-right: auto;
     }
+    /* The same header box on every tab, so switching tabs does not move the page. */
     & .issue-title-header {
       margin-bottom: 16px;
+      padding: 0;
+    }
+    & .issue-title {
+      align-items: flex-start;
+      gap: 16px;
     }
     & .issue-title h1 {
       font-size: 32px;
