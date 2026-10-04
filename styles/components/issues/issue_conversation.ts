@@ -1,5 +1,4 @@
 import { css, otherThemeVars, themeVars } from "@lutinglt/gitea-github-theme/core";
-import { attachmentDropzone, markdownEditor } from "./editor";
 
 export default css`
   .page-content.repository.view.issue.github-conversation {
@@ -39,6 +38,7 @@ export default css`
       align-items: center;
       gap: 4px;
       font-size: 14px;
+      font-weight: 600;
       line-height: 20px;
       border-radius: 20px !important;
     }
@@ -470,12 +470,6 @@ export default css`
         & #status-button svg {
           color: ${themeVars.github.borderColor.done.emphasis};
         }
-      }
-      & .combo-markdown-editor {
-        ${markdownEditor}
-      }
-      & .dropzone {
-        ${attachmentDropzone}
       }
     }
 

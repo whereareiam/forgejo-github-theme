@@ -104,7 +104,7 @@ export default css`
       & .flex-item-title {
         font-size: 16px;
         line-height: 24px;
-        font-weight: 600;
+        font-weight: 500;
       }
       & .flex-item-main > .labels-list {
         display: flex;

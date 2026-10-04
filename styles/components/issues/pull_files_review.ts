@@ -1,5 +1,4 @@
 import { css, otherThemeVars, themeVars } from "@lutinglt/gitea-github-theme/core";
-import { attachmentDropzone, markdownEditor } from "./editor";
 
 /** Buttons that close a review form, at GitHub's 32px control height. */
 const reviewButton = `
@@ -106,41 +105,23 @@ export default css`
       margin-right: 16px;
     }
     & .combo-markdown-editor {
-      ${markdownEditor}
       /* Forgejo fixes this editor at 730px; it fills the dialog instead. */
       width: auto;
       max-width: none;
       /* The dialog is narrower than the toolbar's buttons at their usual spacing. */
       & markdown-toolbar {
-        gap: 0;
-        padding-right: 4px;
+        gap: 0 !important;
+        padding-right: 4px !important;
       }
       & .markdown-toolbar-group {
-        gap: 0;
-      }
-    }
-    & .ui.dropzone {
-      ${attachmentDropzone}
-      border: 0 !important;
-      & .dz-button {
-        color: ${themeVars.color.text.light.num1} !important;
+        gap: 0 !important;
       }
     }
   }
   /* The comment form opened on a diff line */
   .comment-code-cloud {
-    & .combo-markdown-editor {
-      ${markdownEditor}
-    }
     & .field:has(> .dropzone) {
       margin: 4px 0 0;
-    }
-    & .ui.dropzone {
-      ${attachmentDropzone}
-      border: 0 !important;
-      & .dz-button {
-        color: ${themeVars.color.text.light.num1} !important;
-      }
     }
     & .field.footer {
       display: flex;

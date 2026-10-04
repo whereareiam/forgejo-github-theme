@@ -1,0 +1,8 @@
+{{template "base/head" .}}
+<div role="main" aria-label="{{.Title}}" class="page-content repository new issue github-issue-new">
+	<div class="ui container">
+		<h1 class="issue-new-heading">{{ctx.Locale.Tr "repo.issues.new"}}</h1>
+		{{template "repo/issue/new_form" .}}
+	</div>
+</div>
+{{template "base/footer" .}}
