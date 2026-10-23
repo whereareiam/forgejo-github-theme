@@ -1,0 +1,39 @@
+{
+  "owner": "acme",
+  "name": "design-system",
+  "description": "Acme's React components; its open pull request changes 360 files, to preview large diffs.",
+  "website": "",
+  "topics": ["react", "design-system"],
+  "createdDaysAgo": 60,
+  "stars": [],
+  "labels": [
+    {
+      "name": "refactor",
+      "color": "5319e7",
+      "description": "Changes code without changing behaviour"
+    }
+  ],
+  "milestones": [],
+  "issues": [],
+  "pulls": [
+    {
+      "title": "Rename design tokens across components",
+      "body": "Moves every component from the old `--color-` and `--size-` variables to the `--ds-` tokens, and adds a token module with a test per component.\n\n300 components change and 60 files are new, so the diff spans several pages.",
+      "author": "sam",
+      "head": "refactor/token-names",
+      "labels": ["refactor"],
+      "milestone": null,
+      "state": "open",
+      "daysAgo": 1,
+      "comments": [
+        {
+          "author": "alex",
+          "daysAgo": 1,
+          "body": "Big one; I'll go through it by component group."
+        }
+      ]
+    }
+  ],
+  "releases": [],
+  "packages": []
+}

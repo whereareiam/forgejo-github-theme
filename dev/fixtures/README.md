@@ -35,8 +35,9 @@ A time later than the moment of seeding is clamped to it.
 ## Add a repository
 
 Create a folder under `repository/` with `repository.json` and `history.json`. Use an empty list for anything the
-repository should not have; `alex-notes` is the smallest example. The owner must be a user or organization in
-`owner.json`.
+repository should not have; `alex-notes` is the smallest example. `acme-design-system` is the large one: its open pull
+request changes 360 files over several diff pages, for checking large diffs and how fast they load. The owner must be a
+user or organization in `owner.json`.
 
 ## History
 

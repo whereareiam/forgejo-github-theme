@@ -1,0 +1,59 @@
+{
+  "defaultBranch": "main",
+  "commits": [
+    {
+      "id": "01-initial",
+      "branch": "main",
+      "author": "alex",
+      "daysAgo": 60,
+      "time": "10:00",
+      "message": "Initial commit"
+    },
+    {
+      "id": "02-release-3-4",
+      "branch": "main",
+      "author": "alex",
+      "daysAgo": 20,
+      "time": "15:20",
+      "message": "chore: release 3.4.0"
+    },
+    {
+      "id": "03-token-modules",
+      "branch": "refactor/token-names",
+      "author": "sam",
+      "daysAgo": 5,
+      "time": "09:40",
+      "message": "feat(tokens): a token module per component"
+    },
+    {
+      "id": "04-rename-actions-to-dialog",
+      "branch": "refactor/token-names",
+      "author": "sam",
+      "daysAgo": 4,
+      "time": "11:05",
+      "message": "refactor: --ds- tokens in actions to dialog"
+    },
+    {
+      "id": "05-rename-dropdown-to-radio",
+      "branch": "refactor/token-names",
+      "author": "sam",
+      "daysAgo": 3,
+      "time": "14:30",
+      "message": "refactor: --ds- tokens in dropdown to radio"
+    },
+    {
+      "id": "06-rename-select-to-tooltip",
+      "branch": "refactor/token-names",
+      "author": "sam",
+      "daysAgo": 1,
+      "time": "16:45",
+      "message": "refactor: --ds- tokens in select to tooltip"
+    }
+  ],
+  "tags": [
+    {
+      "name": "v3.4.0",
+      "commit": "02-release-3-4"
+    }
+  ]
+}

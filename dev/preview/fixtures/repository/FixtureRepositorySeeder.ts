@@ -67,6 +67,18 @@ export class FixtureRepositorySeeder {
   }
 
   /**
+   * Forgejo records pushed branches in a background queue, so after a large push a pull request's branch can be
+   * missing for a moment and creating the pull request answers 404. Wait until the branch is there.
+   */
+  private async waitForBranch(path: string, branch: string): Promise<void> {
+    for (let attempt = 0; attempt < this.config.maxHealthAttempts; attempt++) {
+      if (await this.api.find(`${path}/branches/${encodeURIComponent(branch)}`)) return;
+      await new Promise(resolve => setTimeout(resolve, this.config.pollIntervalMs));
+    }
+    throw new Error(`Branch ${branch} did not appear in ${path} after the push.`);
+  }
+
+  /**
    * Forgejo handles pushes and merges in a background queue. Wait until a repository's activity stops growing,
    * or that work would run after the database step and stamp everything with the current time again.
    */
@@ -150,6 +162,7 @@ export class FixtureRepositorySeeder {
     milestones: ReadonlyMap<string, number>,
     seeded: SeededRepository
   ): Promise<void> {
+    await this.waitForBranch(path, pull.head);
     const created = await this.api.post<Numbered>(
       `${path}/pulls`,
       {
