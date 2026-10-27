@@ -21,8 +21,7 @@ import { cssCombine } from "@lutinglt/gitea-github-theme/core";
 import checkboxLabel from "./checkbox_label";
 import label from "./label";
 import repoLabel from "./repo_label";
-import repositoryIssueLabel from "./repository_issue_label";
 import shaLabel from "./sha_label";
 import taskStatusLabel from "./task_status_label";
 
-export default cssCombine(label, repoLabel, shaLabel, taskStatusLabel, checkboxLabel, repositoryIssueLabel);
+export default cssCombine(label, repoLabel, shaLabel, taskStatusLabel, checkboxLabel);

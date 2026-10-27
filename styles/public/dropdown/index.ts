@@ -21,6 +21,7 @@ import { cssCombine } from "@lutinglt/gitea-github-theme/core";
 import branchDropdown from "./branch_dropdown";
 import dropdown from "./dropdown";
 import emojiDropdown from "./emoji_dropdown";
+import labelDropdown from "./label_dropdown";
 import selectionDropdown from "./selection_dropdown";
 
-export default cssCombine(branchDropdown, dropdown, emojiDropdown, selectionDropdown);
+export default cssCombine(branchDropdown, dropdown, emojiDropdown, labelDropdown, selectionDropdown);

@@ -1,0 +1,26 @@
+{{- /* Forgejo's label menu in the issue sidebar, with every label as components/repository/label/option. The menu's
+classes and data attributes are what Forgejo's menu script binds to. */ -}}
+<div class="ui {{if or (not .HasIssuesOrPullsWritePermission) .Repository.IsArchived}}disabled{{end}} floating jump select-label dropdown">
+	<span class="text muted flex-text-block">
+		<strong>{{ctx.Locale.Tr "repo.issues.new.labels"}}</strong>
+		{{if and .HasIssuesOrPullsWritePermission (not .Repository.IsArchived)}}
+			{{svg "octicon-gear" 16 "tw-ml-1"}}
+		{{end}}
+	</span>
+	<div class="filter menu ugc-labels" {{if .Issue}}data-action="update" data-issue-id="{{$.Issue.ID}}" data-update-url="{{$.RepoLink}}/issues/labels"{{else}}data-id="#label_ids"{{end}}>
+		{{if or .Labels .OrgLabels}}
+			<div class="ui icon search input">
+				<i class="icon">{{svg "octicon-search" 16}}</i>
+				<input class="tw-w-auto" type="text" placeholder="{{ctx.Locale.Tr "issues.search.filter.labels"}}">
+			</div>
+		{{end}}
+		<a class="no-select item" href="#">{{ctx.Locale.Tr "repo.issues.new.clear_labels"}}</a>
+		{{if or .Labels .OrgLabels}}
+			{{template "components/repository/label/options" .Labels}}
+			<div class="divider"></div>
+			{{template "components/repository/label/options" .OrgLabels}}
+		{{else}}
+			<div class="disabled item">{{ctx.Locale.Tr "repo.issues.new.no_items"}}</div>
+		{{end}}
+	</div>
+</div>

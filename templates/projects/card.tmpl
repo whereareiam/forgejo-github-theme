@@ -30,7 +30,7 @@
 		{{if .Labels}}
 			<div class="labels-list">
 				{{range .Labels}}
-					<a target="_blank" href="{{$.Issue.Repo.Link}}/issues?labels={{.ID}}">{{RenderLabel ctx .}}</a>
+					<a target="_blank" href="{{$.Issue.Repo.Link}}/issues?labels={{.ID}}">{{template "components/repository/label/label" .}}</a>
 				{{end}}
 			</div>
 		{{end}}

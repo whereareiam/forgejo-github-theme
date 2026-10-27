@@ -1,0 +1,12 @@
+{{- /* One label in the issue sidebar's label menu: the check, the label, and its description, laid out by the theme's
+label menu style (styles/public/dropdown/label_dropdown), which places the children by Forgejo's own class names.
+Forgejo's menu script toggles the item: it reads data-id, data-scope and data-id-selector, and shows the check by
+removing tw-invisible from .octicon-check. A scoped label is exclusive, so its check is a dot. Forgejo hides archived
+labels when the menu has an .archived-label-hint. */ -}}
+{{- $scope := .ExclusiveScope -}}
+<a class="{{if .IsChecked}}checked {{end}}item" href="#" data-id="{{.ID}}"{{if .IsArchived}} data-is-archived{{end}} data-id-selector="#label_{{.ID}}" data-scope="{{$scope}}">
+	<span class="octicon-check{{if not .IsChecked}} tw-invisible{{end}}">{{if $scope}}{{svg "octicon-dot-fill" 16}}{{else}}{{svg "octicon-check" 16}}{{end}}</span>
+	{{template "components/repository/label/label" .}}
+	{{if .IsArchived}}<p class="archived-label-hint">{{template "repo/issue/labels/label_archived" .}}</p>{{end}}
+	{{if .Description}}<small class="desc">{{.Description | RenderEmoji ctx}}</small>{{end}}
+</a>

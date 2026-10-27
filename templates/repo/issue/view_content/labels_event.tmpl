@@ -1,16 +1,18 @@
-{{- /* "added the … label" with theme labels. Forgejo's RenderLabels writes label colours inline with !important, which
-no stylesheet can override, so the labels are assembled here for the translation. Keep their markup in step with
-components/repository/label/label. */ -}}
+{{- /* "added the … label" with theme labels. The translation takes the labels as one HTML string, which a template
+call cannot produce, so the markup of components/repository/label/label is assembled here. Keep the two in step. */ -}}
 {{$kind := "issues"}}{{if .IsPull}}{{$kind = "pulls"}}{{end}}
 {{$added := ""}}{{$removed := ""}}
 {{range $key, $labels := dict "added" .Added "removed" .Removed}}
 	{{$list := HTMLFormat `<span class="labels-list">`}}
 	{{range $labels}}
-		{{$label := RenderLabel ctx .}}
-		{{if not .ExclusiveScope}}
-			{{$archived := ""}}{{$description := .Description}}
-			{{if .IsArchived}}{{$archived = " archived-label"}}{{$description = print "(" (ctx.Locale.Tr "archived") ") " .Description}}{{end}}
-			{{$label = HTMLFormat `<div class="ui label repository-label%s" style="--repository-label-color: %s; --repository-label-foreground: %s" data-tooltip-content="%s" aria-description="%s">%s</div>` $archived .Color (ContrastColor .Color) $description $description (RenderEmoji ctx .Name)}}
+		{{$archived := ""}}{{$description := .Description}}
+		{{if .IsArchived}}{{$archived = " archived-label"}}{{$description = print "(" (ctx.Locale.Tr "archived") ") " .Description}}{{end}}
+		{{$scope := .ExclusiveScope}}
+		{{$label := ""}}
+		{{if $scope}}
+			{{$label = HTMLFormat `<span class="repository-label-scoped%s" style="--repository-label-color: %s; --repository-label-foreground: %s" data-tooltip-content="%s" aria-description="%s"><span class="repository-label repository-label-scope">%s</span><span class="repository-label repository-label-item">%s</span></span>` $archived .Color (ContrastColor .Color) $description $description (RenderEmoji ctx $scope) (RenderEmoji ctx (slice .Name (len (print $scope "/"))))}}
+		{{else}}
+			{{$label = HTMLFormat `<span class="repository-label%s" style="--repository-label-color: %s; --repository-label-foreground: %s" data-tooltip-content="%s" aria-description="%s">%s</span>` $archived .Color (ContrastColor .Color) $description $description (RenderEmoji ctx .Name)}}
 		{{end}}
 		{{$list = HTMLFormat `%s<a href="%s/%s?labels=%d" rel="nofollow">%s</a> ` $list $.RepoLink $kind .ID $label}}
 	{{end}}

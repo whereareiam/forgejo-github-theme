@@ -7,6 +7,7 @@
 .theme-label-name {
   display: flex;
   flex: 0 0 25%;
+  flex-wrap: wrap;
   align-items: center;
   gap: 8px;
   min-width: 0;
