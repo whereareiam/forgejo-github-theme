@@ -101,20 +101,6 @@ const issueSidebar = css`
             }
           }
         }
-        /* Forgejo 15 的标签描述和归档提示是菜单项的直接子元素 */
-        .ui.dropdown.select-label > .menu > .item {
-          .desc {
-            color: ${themeVars.color.text.light.num1};
-            font-size: 12px;
-            overflow-wrap: anywhere;
-            white-space: normal;
-          }
-          .archived-label-hint {
-            color: ${themeVars.color.text.light.num1};
-            font-size: 12px;
-            margin: 4px 0 0 23px;
-          }
-        }
         /* 修复菜单下拉打开时, 无法聚焦输入框 */
         > .ui.dropdown .menu input,
         > #milestone-section > .ui.dropdown .menu input {

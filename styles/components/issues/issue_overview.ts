@@ -96,12 +96,6 @@ export default css`
         display: flex;
         margin: 8px 0 0 0 !important;
       }
-      & .flex-item-main > .labels-list .ui.label {
-        font-size: 12px;
-        line-height: 16px;
-        padding: 0 6px;
-        border-radius: 20px;
-      }
       & .issue-meta {
         font-size: 12px;
         line-height: 18px;

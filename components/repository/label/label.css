@@ -1,0 +1,62 @@
+/*
+ * Repository label: GitHub's issue label pill, drawn by components/repository/label/label.
+ *
+ * The template passes the label's colour as --repository-label-color and Forgejo's contrast text colour as
+ * --repository-label-foreground. Light mode fills the pill with the colour. Dark mode tints it and lightens the text of
+ * dark labels by how far their perceived lightness falls below 60%; the luma variant carries that lightness in its
+ * alpha channel so one relative colour can use it as a number.
+ *
+ * A scoped label ("Kind/Bug") is one pill of two parts: the scope in a darker shade of the colour, and in dark mode a
+ * stronger tint, then the item.
+ */
+.repository-label {
+  --repository-label-luma: rgb(
+    from var(--repository-label-color) r g b / calc((r * 0.2126 + g * 0.7152 + b * 0.0722) / 255)
+  );
+  --repository-label-dark-text: hsl(from var(--repository-label-luma) h s calc(l + max(0, (0.6 - alpha) * 100)) / 1);
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+  padding: 0 7px;
+  border: 1px solid
+    light-dark(
+      hsl(from var(--repository-label-luma) h s calc(l - 25) / clamp(0, (alpha - 0.96) * 100, 1)),
+      hsl(from var(--repository-label-dark-text) h s l / 0.3)
+    );
+  border-radius: 2em;
+  background-color: light-dark(
+    var(--repository-label-color),
+    rgb(from var(--repository-label-color) r g b / var(--repository-label-tint, 0.18))
+  );
+  color: light-dark(var(--repository-label-foreground), var(--repository-label-dark-text));
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 18px;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+.repository-label-scoped {
+  --repository-label-scope-color: rgb(from var(--repository-label-color) calc(r * 0.85) calc(g * 0.85) calc(b * 0.85));
+  display: inline-flex;
+  max-width: 100%;
+  vertical-align: middle;
+}
+
+.repository-label-scoped > .repository-label-scope {
+  --repository-label-color: var(--repository-label-scope-color);
+  --repository-label-tint: 0.32;
+  border-right-width: 0;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.repository-label-scoped > .repository-label-item {
+  border-left-width: 0;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.repository-label-scoped > .repository-label {
+  min-width: 0;
+}

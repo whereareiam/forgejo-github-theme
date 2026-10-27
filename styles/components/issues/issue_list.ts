@@ -249,12 +249,6 @@ const repositoryRows = css`
     & #issue-list .labels-list > a {
       display: inline-flex;
     }
-    & #issue-list .labels-list .ui.label {
-      margin: 0;
-      padding: 0 6px;
-      font-size: 12px;
-      line-height: 18px;
-    }
     @media (max-width: 767.98px) {
       & #issue-list > .flex-item {
         padding: 12px;

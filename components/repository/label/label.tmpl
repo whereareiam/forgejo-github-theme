@@ -1,10 +1,12 @@
-{{- /* An issue label whose colour reaches the theme as a variable, so its stylesheet can adapt it to light and dark
-mode. Forgejo's RenderLabel writes the colours inline with !important, which no stylesheet can override. Scoped
-labels keep Forgejo's two-part rendering. */ -}}
-{{if .ExclusiveScope -}}
-	{{RenderLabel ctx .}}
+{{- /* An issue label as GitHub's pill; a scoped label ("Kind/Bug") is one pill of two parts. The colour reaches
+label.css as a variable, so the stylesheet can adapt it to light and dark mode: Forgejo's RenderLabel writes the colours
+inline with !important, which no stylesheet can override. view_content/labels_event builds the same markup as a string
+for its translation; keep the two in step. */ -}}
+{{- $description := .Description -}}
+{{- if .IsArchived}}{{$description = print "(" (ctx.Locale.Tr "archived") ") " .Description}}{{end -}}
+{{- $scope := .ExclusiveScope -}}
+{{- if $scope -}}
+	<span class="repository-label-scoped{{if .IsArchived}} archived-label{{end}}" style="--repository-label-color: {{.Color}}; --repository-label-foreground: {{ContrastColor .Color}}" data-tooltip-content="{{$description}}" aria-description="{{$description}}"><span class="repository-label repository-label-scope">{{RenderEmoji ctx $scope}}</span><span class="repository-label repository-label-item">{{RenderEmoji ctx (slice .Name (len (print $scope "/")))}}</span></span>
 {{- else -}}
-	{{- $description := .Description -}}
-	{{- if .IsArchived}}{{$description = print "(" (ctx.Locale.Tr "archived") ") " .Description}}{{end -}}
-	<div class="ui label repository-label{{if .IsArchived}} archived-label{{end}}" style="--repository-label-color: {{.Color}}; --repository-label-foreground: {{ContrastColor .Color}}" data-tooltip-content="{{$description}}" aria-description="{{$description}}">{{RenderEmoji ctx .Name}}</div>
-{{- end}}
+	<span class="repository-label{{if .IsArchived}} archived-label{{end}}" style="--repository-label-color: {{.Color}}; --repository-label-foreground: {{ContrastColor .Color}}" data-tooltip-content="{{$description}}" aria-description="{{$description}}">{{RenderEmoji ctx .Name}}</span>
+{{- end -}}

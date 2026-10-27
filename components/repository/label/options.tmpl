@@ -1,0 +1,10 @@
+{{- /* A list of labels as components/repository/label/option, with a divider wherever the scope changes. */ -}}
+{{$previousExclusiveScope := "_no_scope"}}
+{{range .}}
+	{{$exclusiveScope := .ExclusiveScope}}
+	{{if and (ne $previousExclusiveScope "_no_scope") (ne $previousExclusiveScope $exclusiveScope)}}
+		<div class="divider"></div>
+	{{end}}
+	{{$previousExclusiveScope = $exclusiveScope}}
+	{{template "components/repository/label/option" .}}
+{{end}}
