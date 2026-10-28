@@ -28,8 +28,9 @@ export class ForgejoCompose {
     this.run(["stop", this.config.composeService]);
   }
 
-  public restart(): void {
-    this.run(["restart", this.config.composeService]);
+  /** Unlike a restart, this also applies changed mounts in the Compose file; the data volume stays. */
+  public recreate(): void {
+    this.run(["up", "-d", "--force-recreate", "--no-deps", this.config.composeService]);
   }
 
   public execute(args: readonly string[]): void {

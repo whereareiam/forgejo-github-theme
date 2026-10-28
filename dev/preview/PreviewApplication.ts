@@ -30,7 +30,7 @@ export class PreviewApplication {
     this.reloader = new PreviewReloader(config);
     this.compose = new ForgejoCompose(config, runner);
     this.readiness = new ForgejoReadiness(config);
-    this.synchronizer = new ThemeSynchronizer(this.compose);
+    this.synchronizer = new ThemeSynchronizer(config, this.compose);
     this.admin = new PreviewAdmin(config, this.compose);
     this.autoLogin = new AutoLoginTemplate(config);
     this.watcher = new SourceWatcher(config);
@@ -46,8 +46,7 @@ export class PreviewApplication {
         this.compose.stop();
         return;
       case PREVIEW_COMMANDS.sync:
-        this.autoLogin.prepare();
-        this.reloader.prepare();
+        this.prepare();
         this.synchronizer.sync();
         this.reloader.publish();
         return;
@@ -67,8 +66,7 @@ export class PreviewApplication {
 
   private async start(): Promise<void> {
     this.builder.build();
-    this.autoLogin.prepare();
-    this.reloader.prepare();
+    this.prepare();
     this.compose.start();
     await this.readiness.wait();
     this.reloader.publish();
@@ -79,13 +77,19 @@ export class PreviewApplication {
     );
   }
 
+  /** Copies the build into dev/.generated and adds the preview's sign-in and reload hooks there. */
+  private prepare(): void {
+    this.autoLogin.prepare();
+    this.synchronizer.stage();
+    this.reloader.prepare();
+  }
+
   private async watch(): Promise<never> {
     await this.start();
     console.log("Watching theme sources. Press Ctrl+C to stop.");
     return this.watcher.watch(() => {
       this.builder.build();
-      this.autoLogin.prepare();
-      this.reloader.prepare();
+      this.prepare();
       this.synchronizer.sync();
       this.reloader.publish();
       console.log("Theme preview updated; open preview pages reload automatically.");

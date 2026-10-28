@@ -34,8 +34,8 @@ services:
         condition: service_completed_successfully
     volumes:
       - forgejo-dev-data:/var/lib/gitea
-      - ../dist/forgejo/public/assets/css:/var/lib/gitea/custom/public/assets/css:ro
-      - ../dist/forgejo/public/assets/js:/var/lib/gitea/custom/public/assets/js:ro
+      - ./.generated/public/assets/css:/var/lib/gitea/custom/public/assets/css:ro
+      - ./.generated/public/assets/js:/var/lib/gitea/custom/public/assets/js:ro
       - ./.generated/templates:/var/lib/gitea/custom/templates:ro
 
 volumes:

@@ -27,6 +27,20 @@ bun dev:forgejo
 Seeding stops with a message naming the fixture when something does not line up, for example a pull request from a
 branch that `history.json` never creates. `bun vitest` runs the same checks without Docker.
 
+## Sign in as another user
+
+The preview signs in as `alex` / `preview` by itself. Every other user in `owner.json`, such as `sam`, has the password
+`preview-fixture` (`FIXTURES.userPassword` in `dev/preview/config/constants.ts`). To sign in as `sam`, turn the
+automatic sign-in off:
+
+```bash
+FORGEJO_PREVIEW_AUTO_LOGIN=false bun dev:forgejo:sync
+```
+
+Then sign out from the avatar menu and sign in as `sam` / `preview-fixture`. Start the watcher with the same variable to
+keep it off while editing. A later sync without it turns the automatic sign-in back on, which only acts while nobody is
+signed in, so `sam` stays signed in until signing out.
+
 ## Times
 
 Every time is written as `daysAgo`, optionally with a `time` of day in UTC, and is resolved when the preview is seeded.
