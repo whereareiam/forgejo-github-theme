@@ -221,8 +221,12 @@ it("colours the plain stylesheets with variables every theme defines", () => {
         expect(output, `${theme} defines ${variable} (${file})`).toContain(`${variable}:`);
     }
   }
-  const releases = fs.readFileSync(path.join(ROOT_DIR, "styles/pages/releases.css"), "utf-8");
-  expect(releases).not.toMatch(/#[\da-f]{3,8}\b|rgba?\(/i);
+  // Only declaration values carry colours; an id selector such as #add-external-link reads like one.
+  const releases = fs
+    .readFileSync(path.join(ROOT_DIR, "styles/pages/releases.css"), "utf-8")
+    .replace(/\/\*[\s\S]*?\*\//g, "");
+  const values = [...releases.matchAll(/:\s*([^;{}]+);/g)].map(([, value]) => value);
+  expect(values.filter(value => /#[\da-f]{3,8}\b|rgba?\(/i.test(value))).toEqual([]);
 });
 
 it("resets Fomantic's will-change on dropdown menus and modals", () => {
