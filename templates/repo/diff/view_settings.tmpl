@@ -6,7 +6,14 @@
 		<a href="?style=split&amp;whitespace={{.WhitespaceBehavior}}&amp;show-outdated={{.ShowOutdatedComments}}"><input type="radio" tabindex="-1" {{if .IsSplitStyle}}checked{{end}}>Split</a>
 		{{if .PageIsPullFiles}}<hr><label><input type="checkbox" id="diff-minimize-comments">Minimize comments</label>{{end}}
 		<hr>
-		<a href="?style={{if .IsSplitStyle}}split{{else}}unified{{end}}&amp;whitespace={{if eq .WhitespaceBehavior "ignore-all"}}show-all{{else}}ignore-all{{end}}&amp;show-outdated={{.ShowOutdatedComments}}"><input type="checkbox" tabindex="-1" {{if eq .WhitespaceBehavior "ignore-all"}}checked{{end}}>Hide whitespace</a>
+		{{/* GitHub has one "Hide whitespace" toggle; Forgejo's four whitespace modes stay a choice. */}}
+		{{$style := "unified"}}{{if .IsSplitStyle}}{{$style = "split"}}{{end}}
+		<span class="theme-menu-title">{{ctx.Locale.Tr "repo.diff.whitespace_button"}}</span>
+		<a href="?style={{$style}}&amp;whitespace=show-all&amp;show-outdated={{.ShowOutdatedComments}}"><input type="radio" tabindex="-1" {{if eq .WhitespaceBehavior "show-all"}}checked{{end}}>{{ctx.Locale.Tr "repo.diff.whitespace_show_everything"}}</a>
+		<a href="?style={{$style}}&amp;whitespace=ignore-all&amp;show-outdated={{.ShowOutdatedComments}}"><input type="radio" tabindex="-1" {{if eq .WhitespaceBehavior "ignore-all"}}checked{{end}}>{{ctx.Locale.Tr "repo.diff.whitespace_ignore_all_whitespace"}}</a>
+		<a href="?style={{$style}}&amp;whitespace=ignore-change&amp;show-outdated={{.ShowOutdatedComments}}"><input type="radio" tabindex="-1" {{if eq .WhitespaceBehavior "ignore-change"}}checked{{end}}>{{ctx.Locale.Tr "repo.diff.whitespace_ignore_amount_changes"}}</a>
+		<a href="?style={{$style}}&amp;whitespace=ignore-eol&amp;show-outdated={{.ShowOutdatedComments}}"><input type="radio" tabindex="-1" {{if eq .WhitespaceBehavior "ignore-eol"}}checked{{end}}>{{ctx.Locale.Tr "repo.diff.whitespace_ignore_at_eol"}}</a>
+		<hr>
 		<label><input type="checkbox" id="diff-compact-lines" checked>Compact line height</label>
 		<hr>
 		<button type="button" id="expand-files-btn">{{ctx.Locale.Tr "repo.pulls.expand_files"}}</button>

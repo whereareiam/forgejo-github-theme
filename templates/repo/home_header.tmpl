@@ -58,6 +58,12 @@
 						</form>
 					{{end}}
 					{{/* GitHub has no feed button here; the feed stays linked from the page head. */}}
+					{{if $.Funding}}
+					{{/* GitHub's Sponsor button, first in the row; it opens Forgejo's funding dialog below. */}}
+					<button type="button" command="show-modal" commandfor="funding-modal" class="button theme-control theme-control-small repo-header-control repo-header-donation" aria-label="{{ctx.Locale.Tr "funding.action.title" $.FundingTarget}}">
+						{{svg "octicon-heart" 16}}<span class="text not-mobile">{{ctx.Locale.Tr "funding.action.button"}}</span>
+					</button>
+					{{end}}
 					{{template "repo/watch_unwatch" $}}
 					{{if not $.DisableForks}}
 					{{template "repo/header_fork" $}}
@@ -81,3 +87,6 @@
 	</div>
 {{end}}
 </div>
+{{if .Funding}}
+	{{template "shared/funding" .}}
+{{end}}

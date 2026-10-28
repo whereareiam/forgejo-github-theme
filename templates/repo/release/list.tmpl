@@ -90,6 +90,9 @@
 								<a class="github-release-ref" href="{{$.RepoLink}}/src/tag/{{$release.TagName | PathEscapeSegments}}">{{svg "octicon-tag" 16}} {{$release.TagName}}</a>
 								<a class="github-release-ref tw-font-mono" href="{{$.RepoLink}}/src/commit/{{$release.Sha1}}">{{svg "octicon-git-commit" 16}} {{ShortSha $release.Sha1}}</a>
 							{{end}}
+							{{if and (not $release.IsDraft) ($.Permission.CanRead $.UnitTypeCode)}}
+								<a class="github-release-ref github-release-ahead" href="{{$.RepoLink}}/compare/{{$release.TagName | PathEscapeSegments}}...{{$release.TargetBehind | PathEscapeSegments}}" data-tooltip-content="{{ctx.Locale.Tr "repo.release.ahead.commits" $release.NumCommitsBehind}} {{ctx.Locale.Tr "repo.release.ahead.target" $release.TargetBehind}}">{{svg "octicon-diff" 16}} {{ctx.Locale.Tr "repo.release.ahead.commits" $release.NumCommitsBehind}}</a>
+							{{end}}
 						</p>
 						{{template "repo/tag/verification_line" (dict "ctxData" $ "release" $release)}}
 						{{if $release.RenderedNote}}
@@ -131,7 +134,7 @@
 												{{svg "octicon-file-zip" 16 "tw-mr-1"}}{{ctx.Locale.Tr "repo.release.source_code"}} (zip)
 											</a>
 											<div class="tw-mr-2">
-												<span class="text grey">{{DateUtils.TimeSince $release.CreatedUnix}}</span>
+												<span class="text grey"><span data-tooltip-content="{{ctx.Locale.TrPluralString $release.ArchiveDownloadCount.Zip "release.n_downloads" (ctx.Locale.PrettyNumber $release.ArchiveDownloadCount.Zip)}}">{{ctx.Locale.PrettyNumber $release.ArchiveDownloadCount.Zip}} {{svg "octicon-download" 16}}</span> · {{DateUtils.TimeSince $release.CreatedUnix}}</span>
 											</div>
 										</li>
 										<li >
@@ -139,7 +142,7 @@
 												{{svg "octicon-file-zip" 16 "tw-mr-1"}}{{ctx.Locale.Tr "repo.release.source_code"}} (tar.gz)
 											</a>
 											<div class="tw-mr-2">
-												<span class="text grey">{{DateUtils.TimeSince $release.CreatedUnix}}</span>
+												<span class="text grey"><span data-tooltip-content="{{ctx.Locale.TrPluralString $release.ArchiveDownloadCount.TarGz "release.n_downloads" (ctx.Locale.PrettyNumber $release.ArchiveDownloadCount.TarGz)}}">{{ctx.Locale.PrettyNumber $release.ArchiveDownloadCount.TarGz}} {{svg "octicon-download" 16}}</span> · {{DateUtils.TimeSince $release.CreatedUnix}}</span>
 											</div>
 										</li>
 
