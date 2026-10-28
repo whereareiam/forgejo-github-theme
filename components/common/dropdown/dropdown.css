@@ -22,6 +22,15 @@
   background: var(--github-button-default-bgColor-active);
 }
 
+/* A primary trigger keeps the global green button colours; open, it shows the pressed shade. */
+.theme-dropdown > summary.theme-control.primary {
+  border-color: var(--github-button-primary-borderColor-rest);
+}
+
+.theme-dropdown[open] > summary.theme-control.primary {
+  background: var(--github-button-primary-bgColor-active);
+}
+
 .theme-dropdown.theme-dropdown-quiet > summary.theme-control {
   border-color: transparent;
   background: transparent;
@@ -116,7 +125,7 @@
 /* Destructive actions such as Delete, red like GitHub's danger menu items. */
 .theme-dropdown-panel > .theme-dropdown-action.theme-dropdown-danger,
 .theme-dropdown-panel > .theme-dropdown-action.theme-dropdown-danger > .svg {
-  color: var(--github-fgColor-danger, var(--color-red));
+  color: var(--color-red);
 }
 
 .theme-dropdown-panel > .theme-dropdown-action.theme-dropdown-danger:hover {

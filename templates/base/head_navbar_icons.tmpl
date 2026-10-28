@@ -12,8 +12,10 @@
 	{{- if $data.NotificationUnreadCount -}}
 		{{- $notificationUnreadCount = call $data.NotificationUnreadCount -}}
 	{{- end -}}
-	{{if and EnableTimetracking $data.ActiveStopwatch}}
-	<a class="item active-stopwatch {{$itemExtraClass}}" href="{{$data.ActiveStopwatch.IssueLink}}" title="{{ctx.Locale.Tr "active_stopwatch"}}" data-seconds="{{$data.ActiveStopwatch.Seconds}}" aria-label="{{ctx.Locale.Tr "active_stopwatch"}}">
+	{{/* Forgejo's stopwatch.js binds only the first trigger and shows or hides it itself, also when a stopwatch starts
+	     in another tab, so only the desktop icons render one, hidden while none runs; phones get it in the drawer. */}}
+	{{if and .Stopwatch EnableTimetracking}}
+	<a class="item active-stopwatch-trigger {{$itemExtraClass}}{{if not $data.ActiveStopwatch}} tw-hidden{{end}}" href="{{$data.ActiveStopwatch.IssueLink}}" data-tippy-content="{{ctx.Locale.Tr "active_stopwatch"}}" aria-label="{{ctx.Locale.Tr "active_stopwatch"}}">
 		<div class="tw-relative flex-text-block">
 			{{svg "octicon-stopwatch"}}
 			<span class="header-stopwatch-dot"></span>

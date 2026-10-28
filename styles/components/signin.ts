@@ -95,6 +95,37 @@ const signIn = css`
           height: 40px;
           font-size: 16px;
         }
+        /* A site-wide username prefix sits in a box joined to the start of the field, with its note below. */
+        .ui.labeled.input {
+          width: 100%;
+          > .ui.label {
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+            font-weight: 400;
+          }
+        }
+        .help {
+          display: block;
+          margin-top: 4px;
+          color: ${themeVars.color.text.light.num1};
+          font-size: 12px;
+        }
+      }
+      .signin-remember {
+        margin: 0 0 16px;
+        label {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          margin: 0;
+          font-size: 14px;
+          font-weight: 400;
+          cursor: pointer;
+        }
+        input {
+          margin: 0;
+        }
       }
       .button {
         height: 40px;

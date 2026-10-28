@@ -1,7 +1,8 @@
 {{/* Kind: single (radio), multiple (checkbox), or actions (links/buttons). Items owns page-specific content. Small uses the 28px control.
-NoCaret leaves the caret out of a labelled trigger, as on GitHub's Edit button over a profile picture. */}}
-<details class="theme-dropdown{{if .Quiet}} theme-dropdown-quiet{{end}}" data-theme-dropdown="{{.Kind}}">
-	<summary class="theme-control{{if .Small}} button theme-control-small{{end}}"{{if .IconOnly}} aria-label="{{.Label}}" data-tooltip-content="{{.Label}}"{{end}}>
+NoCaret leaves the caret out of a labelled trigger, as on GitHub's Edit button over a profile picture. Primary makes the trigger a green
+primary button, as on GitHub's Code menu. Class adds a page layout hook to the menu. */}}
+<details class="theme-dropdown{{if .Quiet}} theme-dropdown-quiet{{end}}{{with .Class}} {{.}}{{end}}" data-theme-dropdown="{{.Kind}}">
+	<summary class="theme-control{{if or .Small .Primary}} button{{end}}{{if .Small}} theme-control-small{{end}}{{if .Primary}} primary{{end}}"{{if .IconOnly}} aria-label="{{.Label}}" data-tooltip-content="{{.Label}}"{{end}}>
 		{{if .Icon}}{{svg .Icon 16}}{{end}}
 		{{if not .IconOnly}}<span{{if .UpdateLabel}} data-theme-dropdown-label{{end}}>{{.Label}}</span>{{if not .NoCaret}}{{svg "octicon-triangle-down" 12}}{{end}}{{end}}
 	</summary>

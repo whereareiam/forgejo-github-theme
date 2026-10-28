@@ -1,0 +1,34 @@
+{{/* GitHub's upload page: the folder with the branch, the drop zone, then the commit box with Commit changes and Cancel
+(repo/editor/commit_form keeps it on the page here). */}}
+{{template "base/head" .}}
+<div role="main" aria-label="{{.Title}}" class="page-content repository file editor upload">
+	{{template "repo/header" .}}
+	<div class="ui container">
+		{{template "base/alert" .}}
+		<form class="ui comment form" method="post">
+			<div class="repo-editor-header">
+				<div class="ui breadcrumb field {{if .Err_TreePath}}error{{end}}">
+					<a class="section" href="{{$.BranchLink}}">{{.Repository.Name}}</a>
+					{{$n := len .TreeNames}}
+					{{$l := Eval $n "-" 1}}
+					{{range $i, $v := .TreeNames}}
+						<div class="breadcrumb-divider">/</div>
+						{{if eq $i $l}}
+							<input type="text" id="file-name" maxlength="255" value="{{$v}}" placeholder="{{ctx.Locale.Tr "repo.editor.add_subdir"}}" autofocus>
+							<span data-tooltip-content="{{ctx.Locale.Tr "repo.editor.filename_help"}}">{{svg "octicon-info"}}</span>
+						{{else}}
+							<span class="section"><a href="{{$.BranchLink}}/{{index $.TreePaths $i | PathEscapeSegments}}">{{$v}}</a></span>
+						{{end}}
+					{{end}}
+					{{template "components/repository/editor/branch" .}}
+					<input type="hidden" id="tree_path" name="tree_path" value="{{.TreePath}}" required>
+				</div>
+			</div>
+			<div class="field">
+				{{template "repo/upload" .}}
+			</div>
+			{{template "repo/editor/commit_form" .}}
+		</form>
+	</div>
+</div>
+{{template "base/footer" .}}

@@ -368,6 +368,10 @@ const repositoryHeader = css`
     font-size: 12px;
     line-height: 20px;
   }
+  /* GitHub's Sponsor button keeps its heart pink, unlike the muted icons of the other header buttons. */
+  .page-content.repository .repo-buttons.button-row > .repo-header-donation > svg {
+    color: ${themeVars.color.pink.self};
+  }
   .page-content.repository .repo-buttons.button-row .ui.labeled.button > .ui.button > .text {
     line-height: 20px;
   }

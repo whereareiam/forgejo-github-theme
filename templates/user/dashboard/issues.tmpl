@@ -57,7 +57,7 @@
 					</a>
 				</div>
 			</div>
-			<div class="issue-list-toolbar-right" id="issue-filter-controls">
+			<div class="issue-list-toolbar-right">
 				<div class="ui secondary filter menu">
 					{{if .PageIsOrgIssues}}
 						{{template "shared/label_filter" .}}
@@ -88,10 +88,8 @@
 					</div>
 				</div>
 			</div>
-			<button type="button" class="theme-icon-button issue-mobile-filter-toggle" aria-label="{{ctx.Locale.Tr "filter"}}" aria-controls="issue-filter-controls" aria-expanded="false">…</button>
 		</div>
 		{{template "shared/issuelist" dict "." . "listType" "dashboard" "themeList" $themeList}}
 	</div>
 </div>
-<script src="{{AssetUrlPrefix}}/js/issue-list.js" defer></script>
 {{template "base/footer" .}}

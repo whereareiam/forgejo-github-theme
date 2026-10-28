@@ -1,0 +1,62 @@
+{{/* Forgejo's patch page in GitHub's file editor: what is patched with the branch, Cancel changes and Commit changes…
+at the top right, the patch in the editor box, and the commit dialog of repo/editor/commit_form. */}}
+{{template "base/head" .}}
+<div role="main" aria-label="{{.Title}}" class="page-content repository file editor edit">
+	{{template "repo/header" .}}
+	<div class="ui container">
+		{{template "base/alert" .}}
+		<form class="ui edit form" method="post" action="{{.RepoLink}}/_diffpatch/{{.BranchName | PathEscapeSegments}}">
+			<input type="hidden" name="last_commit" value="{{.last_commit}}">
+			<input type="hidden" name="page_has_posted" value="{{.PageHasPosted}}">
+			<div class="repo-editor-header">
+				<div class="ui breadcrumb field {{if .Err_TreePath}}error{{end}}">
+					<span class="theme-editor-intro">{{ctx.Locale.Tr "repo.editor.patching"}}</span>
+					<a class="section" href="{{$.RepoLink}}">{{.Repository.FullName}}</a>
+					{{template "components/repository/editor/branch" .}}
+					<input type="hidden" id="tree_path" name="tree_path" value="patch" required>
+					<input id="file-name" maxlength="500" type="hidden" value="diff.patch">
+				</div>
+				{{template "components/repository/editor/actions" dict "CancelLink" $.BranchLink}}
+			</div>
+			<div class="field">
+				<div id="editor-bar">
+					<div class="switch" data-write="write">
+						<button type="button" class="active item" data-tab="write">{{svg "octicon-code" 16 "tw-mr-1"}}{{ctx.Locale.Tr "repo.editor.new_patch"}}</button>
+					</div>
+					<button class="secondary button" id="editor-find" type="button">{{svg "octicon-search"}}<span class="text not-mobile">Search</span></button>
+				</div>
+				<div class="ui bottom attached active tab segment" data-tab="write">
+					<textarea id="edit_area" name="content" class="tw-hidden" data-id="repo-{{.Repository.Name}}-patch"
+						data-context="{{.RepoLink}}"
+						data-line-wrap-extensions="{{.LineWrapExtensions}}">
+{{.FileContent}}</textarea>
+					{{template "shared/codemirror_container" .}}
+				</div>
+			</div>
+			{{template "repo/editor/commit_form" .}}
+		</form>
+	</div>
+
+	<dialog id="edit-empty-content-modal">
+		<article>
+			<header>
+				{{svg "octicon-file"}}
+				{{ctx.Locale.Tr "repo.editor.commit_empty_file_header"}}
+			</header>
+			<div class="content">
+				<p>{{ctx.Locale.Tr "repo.editor.commit_empty_file_text"}}</p>
+			</div>
+			<div class="actions">
+				<button class="ui cancel button">
+					{{svg "octicon-x"}}
+					{{ctx.Locale.Tr "repo.editor.cancel"}}
+				</button>
+				<button class="ui primary ok button">
+					{{svg "fontawesome-save"}}
+					{{ctx.Locale.Tr "repo.editor.commit_changes"}}
+				</button>
+			</div>
+		</article>
+	</dialog>
+</div>
+{{template "base/footer" .}}

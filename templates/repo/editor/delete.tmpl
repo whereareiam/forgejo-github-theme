@@ -1,0 +1,38 @@
+{{/* Deleting a file in GitHub's file editor: the file's path with the branch, Cancel changes and Commit changes… at the
+top right, and the commit dialog of repo/editor/commit_form. Forgejo does not render the deleted file's diff here, so
+the box below names the deletion instead. */}}
+{{template "base/head" .}}
+<div role="main" aria-label="{{.Title}}" class="page-content repository file editor delete">
+	{{template "repo/header" .}}
+	<div class="ui container">
+		{{template "base/alert" .}}
+		<form class="ui form" method="post">
+			<input type="hidden" name="last_commit" value="{{.last_commit}}">
+			<div class="repo-editor-header">
+				<div class="ui breadcrumb">
+					<a class="section" href="{{$.BranchLink}}">{{.Repository.Name}}</a>
+					{{$names := StringUtils.Split .TreePath "/"}}
+					{{$last := Eval (len $names) "-" 1}}
+					{{$path := ""}}
+					{{range $i, $name := $names}}
+						{{if $i}}{{$path = printf "%s/%s" $path $name}}{{else}}{{$path = $name}}{{end}}
+						<div class="breadcrumb-divider">/</div>
+						{{if eq $i $last}}
+							<strong class="active section">{{$name}}</strong>
+						{{else}}
+							<a class="section" href="{{$.BranchLink}}/{{PathEscapeSegments $path}}">{{$name}}</a>
+						{{end}}
+					{{end}}
+					{{template "components/repository/editor/branch" .}}
+				</div>
+				{{template "components/repository/editor/actions" dict "CancelLink" (printf "%s/%s" $.BranchLink (PathEscapeSegments .TreePath))}}
+			</div>
+			<div class="theme-empty theme-editor-summary">
+				{{svg "octicon-trash" 32}}
+				<h3>{{ctx.Locale.Tr "repo.editor.delete" .TreePath}}</h3>
+			</div>
+			{{template "repo/editor/commit_form" .}}
+		</form>
+	</div>
+</div>
+{{template "base/footer" .}}

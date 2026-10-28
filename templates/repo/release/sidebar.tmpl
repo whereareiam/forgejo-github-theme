@@ -1,0 +1,21 @@
+{{/* GitHub's releases sidebar, shared by the release list, a single release and the tag list: Releases and Tags,
+	then, on a list of releases, "On this page" with the release in view marked (the shared sidebar controller tracks
+	it). Forgejo hides either page when its unit cannot be read. */}}
+{{$single := StringUtils.Contains .Link "/releases/tag/"}}
+{{$tags := or .PageIsTagList .PageIsSingleTag}}
+<aside class="theme-sidebar" aria-label="{{ctx.Locale.Tr "repo.releases"}}">
+	<div class="theme-sidebar-content">
+		<nav aria-label="{{ctx.Locale.Tr "repo.releases"}}, {{ctx.Locale.Tr "repo.tags"}}">
+			{{if .Permission.CanRead .UnitTypeReleases}}<a class="{{if not $tags}}active{{end}}"{{if and .PageIsReleaseList (not $single)}} aria-current="page"{{end}} href="{{.RepoLink}}/releases">{{svg "octicon-rocket" 16}}<span>{{ctx.Locale.Tr "repo.releases"}}</span></a>{{end}}
+			{{if .Permission.CanRead .UnitTypeCode}}<a class="{{if $tags}}active{{end}}"{{if .PageIsTagList}} aria-current="page"{{end}} href="{{.RepoLink}}/tags">{{svg "octicon-tag" 16}}<span>{{ctx.Locale.Tr "repo.tags"}}</span></a>{{end}}
+		</nav>
+		{{if and .PageIsReleaseList (not $single) .Releases}}
+			<hr>
+			<nav aria-label="On this page" data-theme-sidebar-outline>
+				<h2 class="theme-sidebar-label">{{svg "octicon-list-unordered" 16}}On this page</h2>
+				{{range .Releases}}<a href="#release-{{.Release.ID}}"><span>{{.Release.Title}}</span></a>{{end}}
+			</nav>
+		{{end}}
+	</div>
+	{{template "components/common/sidebar/toggle" .}}
+</aside>

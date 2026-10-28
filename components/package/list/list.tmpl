@@ -51,7 +51,7 @@ headed by the package count with a row per package, or the empty state. Called w
 					{{$packagesUrl := URLJoin .Owner.HomeLink "-" "packages"}}
 					<p>{{ctx.Locale.Tr "packages.empty.repo" $packagesUrl}}</p>
 				{{end}}
-				<p>{{ctx.Locale.Tr "packages.empty.documentation" "https://forgejo.org/docs/latest/user/packages/"}}</p>
+				<p>{{ctx.Locale.Tr "packages.empty.documentation" (AppDocsURL "user/packages/")}}</p>
 			</div>
 		{{else}}
 			{{template "user/profile_empty" dict "Icon" "octicon-package" "Title" (ctx.Locale.Tr "packages.filter.no_result")}}

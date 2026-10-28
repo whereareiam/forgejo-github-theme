@@ -1,0 +1,82 @@
+{{/* GitHub's file editor: the path with the branch, Cancel changes and Commit changes… at the top right, and the
+editor box with Edit and Preview. Commit changes… opens repo/editor/commit_form's dialog, part of the same form. */}}
+{{template "base/head" .}}
+<div role="main" aria-label="{{.Title}}" class="page-content repository file editor edit">
+	{{template "repo/header" .}}
+	<div class="ui container">
+		{{template "base/alert" .}}
+		<form class="ui edit form" method="post">
+			<input type="hidden" name="last_commit" value="{{.last_commit}}">
+			<input type="hidden" name="page_has_posted" value="{{.PageHasPosted}}">
+			<div class="repo-editor-header">
+				<div class="ui breadcrumb field{{if .Err_TreePath}} error{{end}}">
+					<a class="section" href="{{$.BranchLink}}">{{.Repository.Name}}</a>
+					{{$n := len .TreeNames}}
+					{{$l := Eval $n "-" 1}}
+					{{range $i, $v := .TreeNames}}
+						<div class="breadcrumb-divider">/</div>
+						{{if eq $i $l}}
+							<input id="file-name" maxlength="255" value="{{$v}}" placeholder="{{ctx.Locale.Tr "repo.editor.name_your_file"}}" data-editorconfig="{{$.EditorconfigJson}}" required autofocus>
+							<span data-tooltip-content="{{ctx.Locale.Tr "repo.editor.filename_help"}}">{{svg "octicon-info"}}</span>
+						{{else}}
+							<span class="section"><a href="{{$.BranchLink}}/{{index $.TreePaths $i | PathEscapeSegments}}">{{$v}}</a></span>
+						{{end}}
+					{{end}}
+					{{template "components/repository/editor/branch" .}}
+					<input type="hidden" id="tree_path" name="tree_path" value="{{.TreePath}}" required>
+				</div>
+				{{$cancel := $.BranchLink}}{{if not .IsNewFile}}{{$cancel = printf "%s/%s" $.BranchLink (PathEscapeSegments .TreePath)}}{{end}}
+				{{template "components/repository/editor/actions" dict "CancelLink" $cancel}}
+			</div>
+			<div class="field">
+				<div id="editor-bar">
+					<div class="switch" data-write="write" data-preview="preview" data-diff="diff">
+						<button type="button" class="active item" data-tab="write">{{svg "octicon-code"}} {{ctx.Locale.Tr "edit"}}</button>
+						<button type="button" class="item" data-tab="preview" data-url="{{.Repository.Link}}/markup" data-context="{{.RepoLink}}" data-branch-path="{{.BranchNameSubURL}}" data-markup-mode="file">{{svg "octicon-eye"}} {{ctx.Locale.Tr "preview"}}</button>
+						{{if not .IsNewFile}}
+							<button type="button" class="item" data-tab="diff" hx-params="context,content" hx-vals='{"context":"{{.BranchLink}}"}' hx-include="#edit_area" hx-swap="innerHTML" hx-target=".tab[data-tab='diff']" hx-indicator=".tab[data-tab='diff']" hx-post="{{.RepoLink}}/_preview/{{.BranchName | PathEscapeSegments}}/{{.TreePath | PathEscapeSegments}}">{{svg "octicon-diff"}} {{ctx.Locale.Tr "file_editor.preview_changes"}}</button>
+						{{end}}
+					</div>
+					<button class="secondary button" id="editor-find" type="button">{{svg "octicon-search"}}<span class="text not-mobile">Search</span></button>
+				</div>
+				<div class="ui bottom active tab segment" data-tab="write">
+					<textarea id="edit_area" name="content" class="tw-hidden" data-id="repo-{{.Repository.Name}}-{{.TreePath}}"
+						data-url="{{.Repository.Link}}/markup"
+						data-context="{{.RepoLink}}"
+						data-previewable-extensions="{{.PreviewableExtensions}}"
+						data-line-wrap-extensions="{{.LineWrapExtensions}}">{{.FileContent}}</textarea>
+					{{template "shared/codemirror_container" .}}
+				</div>
+				<div class="ui bottom tab segment markup" data-tab="preview">
+					{{ctx.Locale.Tr "loading"}}
+				</div>
+				<div class="ui bottom tab segment diff edit-diff" data-tab="diff">
+					<div class="tw-p-16"></div>
+				</div>
+			</div>
+			{{template "repo/editor/commit_form" .}}
+		</form>
+	</div>
+	<dialog id="edit-empty-content-modal">
+		<article>
+			<header>
+				{{svg "octicon-file"}}
+				{{ctx.Locale.Tr "repo.editor.commit_empty_file_header"}}
+			</header>
+			<div class="content">
+				<p>{{ctx.Locale.Tr "repo.editor.commit_empty_file_text"}}</p>
+			</div>
+			<div class="actions">
+				<button class="ui cancel button">
+					{{svg "octicon-x"}}
+					{{ctx.Locale.Tr "repo.editor.cancel"}}
+				</button>
+				<button class="ui primary ok button">
+					{{svg "fontawesome-save"}}
+					{{ctx.Locale.Tr "repo.editor.commit_changes"}}
+				</button>
+			</div>
+		</article>
+	</dialog>
+</div>
+{{template "base/footer" .}}

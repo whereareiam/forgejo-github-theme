@@ -109,6 +109,31 @@
   line-height: 32px;
 }
 
+/* A pending team invitation is GitHub's flash banner, with its action on the right. */
+.page-content.organization .ui.info.message.org-invite-flash {
+  gap: 16px;
+  margin: 0;
+  padding: 20px 16px;
+  border: 1px solid var(--color-info-border);
+  border-radius: var(--border-radius);
+  background: var(--color-info-bg);
+  box-shadow: none;
+  color: var(--color-text);
+  font-size: 14px;
+  line-height: 21px;
+}
+
+.page-content.organization .org-invite-flash > .button {
+  flex: none;
+  margin: 0;
+}
+
+@media (max-width: 767px) {
+  .page-content.organization .ui.info.message.org-invite-flash {
+    flex-wrap: wrap;
+  }
+}
+
 .github-org #readme_profile {
   margin: 0 0 24px;
   padding: 24px;
@@ -283,6 +308,36 @@
 
 .organization.teams .org-team-card .team-meta {
   margin: 0;
+}
+
+/* The name and its actions share a row, so a long name wraps before View and Leave instead of running under them. */
+.organization.teams .org-team-card > .top.header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.organization.teams .org-team-card > .top.header > :first-child {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.organization.teams .org-team-card > .top.header > .ui.right {
+  position: static;
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 8px;
+  margin-inline-start: auto;
+}
+
+/* Members of other teams see only the description, under the name, as on GitHub. */
+.organization.teams .org-team-card > .team-description {
+  grid-column: 1 / -1;
+  color: var(--color-text-light-1);
+  font-size: 14px;
+  line-height: 21px;
+  overflow-wrap: anywhere;
 }
 
 .organization.teams .org-team-card .avatar {
@@ -631,6 +686,18 @@
   font-size: 14px;
   line-height: 22px;
   font-weight: 500;
+}
+
+/* Forgejo's donation button is GitHub's Sponsor button: the heart in the sponsors colour before the label. */
+.page-content.organization .org-actions > .donation.button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.page-content.organization .org-actions > .donation.button > .svg {
+  /* Forgejo's .text.light colour helper is !important too. */
+  color: var(--color-pink) !important;
 }
 
 .page-content.organization .org-actions > details > summary {

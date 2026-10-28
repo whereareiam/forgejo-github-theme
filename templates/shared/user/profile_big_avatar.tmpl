@@ -24,6 +24,12 @@
 		<div class="profile-bio markup">{{.RenderedDescription}}</div>
 	{{end}}
 	<div class="actions button-row">
+		{{/* GitHub's Sponsor beside Follow: the heart opens Forgejo's list of the profile's funding links. */}}
+		{{if .Funding}}
+			<button type="button" class="secondary button profile-sponsor" command="show-modal" commandfor="funding-modal" aria-label="{{ctx.Locale.Tr "funding.action.title" .FundingTarget}}">
+				{{svg "octicon-heart"}} {{ctx.Locale.Tr "funding.action.button"}}
+			</button>
+		{{end}}
 		{{if $showFollow}}
 			<div class="primary-action" hx-target="#profile-avatar-card" hx-indicator="#profile-avatar-card">
 				{{if .IsFollowing}}
@@ -121,3 +127,7 @@
 		</ul>
 	</div>
 </div>
+
+{{if .Funding}}
+	{{template "shared/funding" .}}
+{{end}}
