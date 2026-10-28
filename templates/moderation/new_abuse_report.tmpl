@@ -1,0 +1,40 @@
+{{/* The abuse report as a GitHub form page instead of Forgejo's box: a 768px column with the title over a divider,
+the explanation, the settings form groups with the shared select and the actions after a divider. Field names and the
+disabled fieldset for invalid reports are Forgejo's. */}}
+{{template "base/head" .}}
+<div role="main" aria-label="{{.Title}}" class="page-content moderation new-report">
+	<div class="theme-report">
+		<form class="ui form" action="{{.Link}}" method="post">
+			<h1 class="theme-report-title">{{ctx.Locale.Tr "moderation.report_abuse_form.header"}}</h1>
+			{{template "base/alert" .}}
+			<p class="theme-report-details">{{ctx.Locale.Tr "moderation.report_abuse_form.details"}}</p>
+
+			<input type="hidden" name="content_id" value="{{.ContentID}}" />
+			<input type="hidden" name="content_type" value="{{.ContentType}}" />
+
+			<fieldset{{if not .ContentID}} disabled{{end}}>
+				<label{{if .Err_AbuseCategory}} class="field error"{{end}}>
+					{{ctx.Locale.Tr "moderation.abuse_category"}}
+					<span class="theme-select-wrap"><select class="theme-select" id="abuse_category" name="abuse_category" required autofocus>
+						<option value="">{{ctx.Locale.Tr "moderation.abuse_category.placeholder"}}</option>
+						{{range $cat := .AbuseCategories}}
+						<option value="{{$cat.Value}}"{{if eq $.abuse_category $cat.Value}} selected{{end}}>{{ctx.Locale.Tr $cat.TranslationKey}}</option>
+						{{end}}
+					</select></span>
+				</label>
+				<label{{if .Err_Remarks}} class="field error"{{end}}>
+					{{ctx.Locale.Tr "moderation.report_remarks"}}
+					<textarea id="remarks" name="remarks" required minlength="20" maxlength="500" placeholder="{{ctx.Locale.Tr "moderation.report_remarks.placeholder"}}">{{.remarks}}</textarea>
+				</label>
+			</fieldset>
+
+			<div class="theme-report-actions">
+				<a class="ui cancel button theme-control theme-control-wide" href="{{$.CancelLink}}">{{ctx.Locale.Tr "cancel"}}</a>
+				{{if .ContentID}}
+				<button class="ui primary button theme-control theme-control-wide">{{ctx.Locale.Tr "moderation.submit_report"}}</button>
+				{{end}}
+			</div>
+		</form>
+	</div>
+</div>
+{{template "base/footer" .}}

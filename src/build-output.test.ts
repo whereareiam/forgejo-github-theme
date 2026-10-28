@@ -1679,6 +1679,96 @@ describe("Forgejo 15 native integration", () => {
     expect(challenge).not.toContain('class="page-content user signin');
     expect(challenge).not.toContain("tw-max-w-2xl");
   });
+
+  it("centres the error pages as GitHub's, with the 500 page linking the site stylesheet itself", () => {
+    const read = (...parts: string[]) => fs.readFileSync(path.join(ROOT_DIR, "templates", ...parts), "utf-8");
+    const notFound = read("status", "404.tmpl");
+    expect(notFound).toContain('<section class="theme-status">');
+    expect(notFound).toContain('{{ctx.Locale.Tr "error.not_found.title"}}');
+    expect(notFound).toContain('{{if .NotFoundPrompt}}{{.NotFoundPrompt}}{{else}}{{ctx.Locale.Tr "error404"}}{{end}}');
+    expect(notFound).toContain('href="{{.NotFoundGoBackURL}}"');
+    expect(notFound).toContain('{{if .IsRepo}}{{template "repo/header" .}}{{end}}');
+    expect(notFound).toContain('action="{{AppSubUrl}}/explore/repos" method="get" role="search"');
+    const quota = read("status", "413.tmpl");
+    expect(quota).toContain('{{ctx.Locale.Tr "error413"}}');
+    for (const page of [notFound, quota]) {
+      expect(page).toContain('href="{{AppDocsURL "/"}}"');
+      expect(page).not.toContain("https://forgejo.org/docs");
+    }
+
+    const serverError = read("status", "500.tmpl");
+    expect(serverError).toContain('{{template "base/head_style" .}}');
+    expect(serverError).toContain('href="{{AssetUrlPrefix}}/css/components/pages/site.css"');
+    expect(serverError).toContain("<pre>{{.ErrorMsg}}</pre>");
+    expect(serverError).toContain("document.querySelector('.page-content .page-content.status-page-500')");
+    expect(serverError).not.toContain('template "base/head"');
+
+    const assets = read("base", "component_assets.tmpl");
+    expect(assets).toContain('href="{{AssetUrlPrefix}}/css/components/pages/site.css"');
+    expect(
+      fs.existsSync(path.join(DIST_DIR, "forgejo", "public", "assets", "css", "components", "pages", "site.css"))
+    ).toBe(true);
+  });
+
+  it("gives the signed-out home a hero with Forgejo's register and sign-in actions", () => {
+    const home = fs.readFileSync(path.join(ROOT_DIR, "templates", "home.tmpl"), "utf-8");
+    expect(home).toContain('<section class="theme-home-hero">');
+    expect(home).toContain("{{if .ShowRegistrationButton}}");
+    expect(home).toContain('href="{{AppSubUrl}}/user/sign_up">{{ctx.Locale.Tr "register"}}</a>');
+    expect(home).toContain('href="{{AppSubUrl}}/user/login">{{ctx.Locale.Tr "sign_in"}}</a>');
+    expect(home).toContain('{{template "home_forgejo" .}}');
+  });
+
+  it("lists stargazers and watchers in the profile's people rows", () => {
+    const cards = fs.readFileSync(path.join(ROOT_DIR, "templates", "repo", "user_cards.tmpl"), "utf-8");
+    expect(cards).toContain('<section class="theme-box-list-page theme-people user-cards">');
+    expect(cards).toContain('<ol class="profile-person-list">');
+    expect(cards).toContain("{{ctx.AvatarUtils.Avatar . 75}}");
+    expect(cards).toContain("<h3>{{.CardsNoneMsg}}</h3>");
+    expect(cards).toContain('{{template "base/paginate" .}}');
+    const people = fs.readFileSync(path.join(ROOT_DIR, "styles", "pages", "profile-subpages.css"), "utf-8");
+    expect(people).toContain(":is(.github-profile, .github-org, .theme-people) .profile-person {");
+    expect(people).toContain(
+      ":is(.github-profile .profile-content, .github-org .profile-content, .theme-people) .page.buttons {"
+    );
+  });
+
+  it("keeps account linking and OAuth authorization contracts in the sign-in column", () => {
+    const read = (file: string) => fs.readFileSync(path.join(ROOT_DIR, "templates", "user", "auth", file), "utf-8");
+    const link = read("link_account.tmpl");
+    expect(link).toContain('<div class="tabular menu theme-switch">');
+    for (const tab of ["auth-link-signup-tab", "auth-link-signin-tab"]) {
+      expect(link).toContain(`data-tab="${tab}"`);
+    }
+    expect(link).toContain('{{template "user/auth/signup_inner" .}}');
+    expect(link).toContain('{{template "user/auth/signin_inner" .}}');
+    expect(link).toContain("{{if not .AllowOnlyInternalRegistration}}");
+
+    const grant = read("grant.tmpl");
+    expect(grant).toContain('method="post" action="{{AppSubUrl}}/login/oauth/grant"');
+    for (const field of ["client_id", "state", "scope", "nonce", "redirect_uri"]) {
+      expect(grant).toContain(`<input type="hidden" name="${field}"`);
+    }
+    expect(grant).toContain('id="authorize-app" name="granted" value="true"');
+    expect(grant).toContain('name="granted" value="false"');
+    expect(grant).toContain(".ApplicationRedirectDomainHTML");
+    expect(read("grant_error.tmpl")).toContain("{{.Error.ErrorDescription}}");
+  });
+
+  it("keeps the abuse report's fields in a GitHub form page", () => {
+    const report = fs.readFileSync(path.join(ROOT_DIR, "templates", "moderation", "new_abuse_report.tmpl"), "utf-8");
+    expect(report).toContain('<form class="ui form" action="{{.Link}}" method="post">');
+    for (const field of ["content_id", "content_type", "abuse_category", "remarks"]) {
+      expect(report).toContain(`name="${field}"`);
+    }
+    expect(report).toContain("<fieldset{{if not .ContentID}} disabled{{end}}>");
+    expect(report).toContain('<a class="ui cancel button theme-control theme-control-wide" href="{{$.CancelLink}}">');
+    expect(report).toContain('<button class="ui primary button theme-control theme-control-wide">');
+    const form = fs.readFileSync(path.join(ROOT_DIR, "components", "common", "form", "form.css"), "utf-8");
+    expect(form).toContain(".page-content.moderation.new-report");
+    expect(form).toContain(":is(.field.error, label.error) > .theme-select-wrap > select {");
+    expect(form).toContain("border-color: var(--color-error-border);");
+  });
 });
 
 describe("auto 主题 CSS 内容验证", () => {

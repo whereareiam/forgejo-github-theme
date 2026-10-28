@@ -1,0 +1,14 @@
+{{/* The quota page in the not-found page's layout: the status code over the reason, centred. */}}
+{{template "base/head" .}}
+<div role="main" aria-label="{{.Title}}" class="page-content ui {{if .IsRepo}}repository{{end}}">
+	{{if .IsRepo}}{{template "repo/header" .}}{{end}}
+	<section class="theme-status">
+		<p class="error-code">413</p>
+		<h1>{{ctx.Locale.Tr "error413"}}</h1>
+		<div class="theme-status-links">
+			<a href="{{AppSubUrl}}/">{{ctx.Locale.Tr "home"}}</a>
+			<a href="{{AppDocsURL "/"}}" target="_blank" rel="noopener noreferrer">{{ctx.Locale.Tr "help"}}</a>
+		</div>
+	</section>
+</div>
+{{template "base/footer" .}}

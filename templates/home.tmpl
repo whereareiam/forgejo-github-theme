@@ -1,0 +1,20 @@
+{{/* GitHub's signed-out home: a centred hero with the site's name, its description and the register and sign-in
+actions, then Forgejo's feature blocks (home_forgejo, which admins may replace) as cards. */}}
+{{template "base/head" .}}
+<div role="main" aria-label="{{if .IsSigned}}{{ctx.Locale.Tr "dashboard"}}{{else}}{{ctx.Locale.Tr "home"}}{{end}}" class="page-content home">
+	<section class="theme-home-hero">
+		<img class="logo" width="64" height="64" src="{{AssetUrlPrefix}}/img/logo.svg" alt="{{ctx.Locale.Tr "logo"}}">
+		<h1>{{AppDisplayName}}</h1>
+		<p>{{ctx.Locale.Tr "startpage.app_desc"}}</p>
+		{{if not .IsSigned}}
+			<div class="theme-home-actions">
+				{{if .ShowRegistrationButton}}
+					<a class="ui primary button theme-control theme-control-wide" href="{{AppSubUrl}}/user/sign_up">{{ctx.Locale.Tr "register"}}</a>
+				{{end}}
+				<a class="ui button theme-control theme-control-wide" rel="nofollow" href="{{AppSubUrl}}/user/login">{{ctx.Locale.Tr "sign_in"}}</a>
+			</div>
+		{{end}}
+	</section>
+	{{template "home_forgejo" .}}
+</div>
+{{template "base/footer" .}}

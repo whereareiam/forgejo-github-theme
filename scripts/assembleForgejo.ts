@@ -57,6 +57,7 @@ for (const file of [
   "pull-request.css",
   "releases.css",
   "settings.css",
+  "site.css",
   "user-profile.css",
   "wiki.css",
 ]) {

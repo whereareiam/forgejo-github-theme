@@ -1,0 +1,22 @@
+{{/* A failed OAuth authorization in the authorization page's centred column: the logo and heading, the error from the
+request and Forgejo's explanation in a box. */}}
+{{template "base/head" .}}
+<div role="main" aria-label="{{.Title}}" class="page-content oauth2-authorize-application-box {{if .IsRepo}}repository{{end}}">
+	{{if .IsRepo}}{{template "repo/header" .}}{{end}}
+	<div class="theme-auth-card">
+		<div class="signin-branding">
+			<img class="signin-logo" width="48" height="48" src="{{AssetUrlPrefix}}/img/logo.svg" alt="{{ctx.Locale.Tr "logo"}}">
+			<h1 class="signin-title">{{ctx.Locale.Tr "auth.authorization_failed"}}</h1>
+		</div>
+		<div class="theme-auth-card-box">
+			<div class="theme-auth-card-row">
+				{{svg "octicon-alert" 16}}
+				<div>
+					<h2>{{.Error.ErrorDescription}}</h2>
+					<p>{{ctx.Locale.Tr "auth.authorization_failed_desc"}}</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{{template "base/footer" .}}

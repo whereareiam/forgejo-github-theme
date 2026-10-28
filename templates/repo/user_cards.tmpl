@@ -1,0 +1,30 @@
+{{/* A repository's stargazers and watchers as GitHub lists them: the heading over a grid of people with a large round
+avatar, their name and one line about them, or an empty state. The rows reuse the profile's people list. */}}
+<section class="theme-box-list-page theme-people user-cards">
+	{{if .CardsTitle}}
+		<div class="theme-list-heading"><div class="theme-list-title"><h1>{{.CardsTitle}}</h1></div></div>
+	{{end}}
+	{{if .Cards}}
+		<ol class="profile-person-list">
+			{{range .Cards}}
+				<li class="profile-person">
+					<a href="{{.HomeLink}}" class="profile-person-avatar">{{ctx.AvatarUtils.Avatar . 75}}</a>
+					<div class="profile-person-content">
+						<h3><a href="{{.HomeLink}}">{{.DisplayName}}{{if .FullName}}<span class="profile-person-username">{{.Name}}</span>{{end}}</a></h3>
+						<div class="profile-row-meta">
+							{{if .Website}}{{svg "octicon-link" 16}}<a href="{{.Website}}" target="_blank" rel="noopener noreferrer">{{.Website}}</a>
+							{{else if .Location}}{{svg "octicon-location" 16}}{{.Location}}
+							{{else}}{{svg "octicon-clock" 16}}{{ctx.Locale.Tr "user.joined_on" (DateUtils.AbsoluteShort .CreatedUnix)}}{{end}}
+						</div>
+					</div>
+				</li>
+			{{end}}
+		</ol>
+	{{else if .CardsNoneMsg}}
+		<div class="theme-empty">
+			{{if .PageIsStargazers}}{{svg "octicon-star" 24}}{{else}}{{svg "octicon-eye" 24}}{{end}}
+			<h3>{{.CardsNoneMsg}}</h3>
+		</div>
+	{{end}}
+	{{template "base/paginate" .}}
+</section>

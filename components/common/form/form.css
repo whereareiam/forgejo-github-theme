@@ -1,11 +1,12 @@
-/* GitHub's form groups, in settings and on the create pages (repository, organization, migration, fork, milestone), whose
-   templates stay Forgejo's. The label sits on its own line (14px semibold, 6px above the control), controls are 32px
-   and no wider than 440px with an inset shadow and an accent focus ring, notes are muted 12px. Forgejo writes fields
-   as .field with a label beside the control, or as a label wrapping its control inside a fieldset or straight in the
-   form; all get the same look. */
+/* GitHub's form groups, in settings, on the create pages (repository, organization, migration, fork, milestone) and on
+   the abuse report, whose fields stay Forgejo's. The label sits on its own line (14px semibold, 6px above the
+   control), controls are 32px and no wider than 440px with an inset shadow and an accent focus ring, notes are muted
+   12px. Forgejo writes fields as .field with a label beside the control, or as a label wrapping its control inside a
+   fieldset or straight in the form; all get the same look. */
 :is(
     .page-content > .ui.container.flex-container.theme-settings > .flex-container-main,
-    .page-content.new:is(.repo, .org, .migrate, .fork, .milestone)
+    .page-content.new:is(.repo, .org, .migrate, .fork, .milestone),
+    .page-content.moderation.new-report
   )
   .ui.form {
   & .field,
@@ -88,6 +89,18 @@
   & textarea {
     padding: 8px 12px;
     line-height: 21px;
+  }
+  /* A field Forgejo marks invalid keeps a danger border, the shared select's too; the look above would otherwise hide
+     Forgejo's own. */
+  &
+    :is(.field.error, label.error)
+    > :is(
+      input:not([type="checkbox"], [type="radio"], [type="file"], [type="hidden"], [type="color"]),
+      select,
+      textarea
+    ),
+  & :is(.field.error, label.error) > .theme-select-wrap > select {
+    border-color: var(--color-error-border);
   }
 
   /* Selects look like GitHub's: the default button surface with a caret. Fomantic sizes its selection dropdown with
@@ -382,7 +395,8 @@
 /* Choices inside a radio group sit 8px apart; the checkbox-field margin above does not apply to them. */
 :is(
     .page-content > .ui.container.flex-container.theme-settings > .flex-container-main,
-    .page-content.new:is(.repo, .org, .migrate, .fork, .milestone)
+    .page-content.new:is(.repo, .org, .migrate, .fork, .milestone),
+    .page-content.moderation.new-report
   )
   .ui.form
   .inline.fields
@@ -393,7 +407,8 @@
 @media (max-width: 767.98px) {
   :is(
       .page-content > .ui.container.flex-container.theme-settings > .flex-container-main,
-      .page-content.new:is(.repo, .org, .migrate, .fork, .milestone)
+      .page-content.new:is(.repo, .org, .migrate, .fork, .milestone),
+      .page-content.moderation.new-report
     )
     .ui.form
     .field
