@@ -1,11 +1,14 @@
 {{/* GitHub's empty state in settings: a bordered box with a centred semibold title and an optional muted line. Title
 	is text; Description may be rendered HTML. Plain gives the plain line GitHub shows instead where a page lists
-	keys or blocked users. */}}
+	keys or blocked users. Icon (an octicon name) makes it GitHub's spacious blankslate, with the icon above a larger
+	title; Action is rendered HTML below the description, such as the button that starts the first item. */}}
 {{if .Plain}}
 <p class="theme-settings-blankslate-plain">{{.Title}}</p>
 {{else}}
-<div class="theme-settings-blankslate">
+<div class="theme-settings-blankslate{{if .Icon}} theme-settings-blankslate-spacious{{end}}">
+	{{if .Icon}}{{svg .Icon 24}}{{end}}
 	<h3>{{.Title}}</h3>
 	{{if .Description}}<p>{{.Description}}</p>{{end}}
+	{{if .Action}}<div class="theme-settings-blankslate-action">{{.Action}}</div>{{end}}
 </div>
 {{end}}

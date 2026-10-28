@@ -61,7 +61,7 @@
 				{{end}}
 			</div>
 			{{else}}
-				<div class="theme-settings-blankslate">
+				<div class="theme-settings-blankslate theme-settings-blankslate-spacious">
 					{{svg "octicon-people" 32}}
 					<h3>{{ctx.Locale.Tr "repo.settings.collaboration.none"}}</h3>
 					<button type="button" class="ui button show-modal" data-modal="#add-collaborator-modal">{{ctx.Locale.Tr "repo.settings.add_collaborator"}}</button>
@@ -110,7 +110,7 @@
 				{{end}}
 			</div>
 			{{else}}
-				<div class="theme-settings-blankslate">
+				<div class="theme-settings-blankslate theme-settings-blankslate-spacious">
 					{{svg "octicon-people" 32}}
 					<h3>No teams have access to this repository.</h3>
 					{{if $allowedToChangeTeams}}<button type="button" class="ui button show-modal" data-modal="#add-team-modal">{{ctx.Locale.Tr "repo.settings.add_team"}}</button>{{end}}

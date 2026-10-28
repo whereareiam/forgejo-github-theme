@@ -1,0 +1,72 @@
+{{/* GitHub's OAuth apps: the applications in a box, one row each with its client ID and Edit and Delete on the right,
+	then the form that registers a new one under its own title. Also used by organization and site administration
+	settings. */}}
+<div class="ui attached segment">
+	<p class="theme-settings-description">{{ctx.Locale.Tr "settings.oauth2_application_create_description"}}</p>
+	{{if .Applications}}
+	<ul class="theme-settings-box">
+		{{range .Applications}}
+			<li class="theme-settings-box-row">
+				<span class="theme-settings-box-icon">{{svg "octicon-apps"}}</span>
+				<div class="theme-settings-box-main">
+					<span class="theme-settings-box-title">{{.Name}}</span>
+					<p class="theme-settings-box-meta">
+						{{ctx.Locale.Tr "settings.oauth2_client_id"}}
+						<code>{{.ClientID}}</code>
+					</p>
+				</div>
+				{{$isBuiltin := and $.BuiltinApplications (index $.BuiltinApplications .ClientID)}}
+				<div class="theme-settings-box-actions">
+					{{if $isBuiltin}}
+						<span class="ui basic label theme-label theme-label-muted" data-tooltip-content="{{ctx.Locale.Tr "settings.oauth2_application_locked"}}">{{ctx.Locale.Tr "locked"}}</span>
+					{{else}}
+						<a href="{{$.Link}}/oauth2/{{.ID}}" class="ui tiny button">
+							{{ctx.Locale.Tr "settings.oauth2_application_edit"}}
+						</a>
+						<button class="ui red tiny button delete-button" data-modal-id="remove-gitea-oauth2-application"
+								data-url="{{$.Link}}/oauth2/{{.ID}}/delete">
+							{{ctx.Locale.Tr "settings.delete_key"}}
+						</button>
+					{{end}}
+				</div>
+			</li>
+		{{end}}
+	</ul>
+	{{end}}
+
+	<div class="ui g-modal-confirm delete modal" id="remove-gitea-oauth2-application">
+		<div class="header">
+			{{svg "octicon-trash"}}
+			{{ctx.Locale.Tr "settings.remove_oauth2_application"}}
+		</div>
+		<div class="content">
+			<p>{{ctx.Locale.Tr "settings.oauth2_application_remove_description"}}</p>
+		</div>
+		{{template "base/modal_actions_confirm" .}}
+	</div>
+</div>
+
+<div class="ui attached bottom segment">
+	<div class="theme-settings-subsection">
+		<h3>{{ctx.Locale.Tr "settings.create_oauth2_application"}}</h3>
+	</div>
+	<form class="ui form ignore-dirty" action="{{.Link}}/oauth2" method="post">
+		<div class="field {{if .Err_AppName}}error{{end}}">
+			<label for="application-name">{{ctx.Locale.Tr "settings.oauth2_application_name"}}</label>
+			<input id="application-name" name="application_name" value="{{.application_name}}" required maxlength="255">
+		</div>
+		<div class="field {{if .Err_RedirectURI}}error{{end}}">
+			<label for="redirect-uris">{{ctx.Locale.Tr "settings.oauth2_redirect_uris"}}</label>
+			<textarea name="redirect_uris" id="redirect-uris" required></textarea>
+		</div>
+		<div class="field {{if .Err_ConfidentialClient}}error{{end}}">
+			<div class="ui checkbox">
+				<input type="checkbox" id="confidential-client" name="confidential_client" checked>
+				<label for="confidential-client">{{ctx.Locale.Tr "settings.oauth2_confidential_client"}}</label>
+			</div>
+		</div>
+		<button class="ui primary button">
+			{{ctx.Locale.Tr "settings.create_oauth2_application_button"}}
+		</button>
+	</form>
+</div>

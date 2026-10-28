@@ -1,0 +1,265 @@
+{{/* GitHub's branch protection rule: the title in one line (the branch name stays inside it), the options that depend
+	on the one above them indented under its title (theme-settings-nested), and the recent status checks in a box. */}}
+{{template "repo/settings/layout_head" (dict "ctxData" . "pageClass" "repository settings branches")}}
+	<div class="repo-setting-content">
+		<h4 class="ui top attached header">
+			<span>
+			{{if .Rule.RuleName}}
+				{{ctx.Locale.Tr "repo.settings.branch_protection" .Rule.RuleName}}
+			{{else}}
+				{{ctx.Locale.Tr "repo.settings.protect_new_rule"}}
+			{{end}}
+			</span>
+		</h4>
+		<form class="ui form attached segment theme-settings-branch-rule" action="{{.Link}}" method="post">
+			<input name="rule_id" type="hidden" value="{{.Rule.ID}}">
+			<fieldset class="branch-protection">
+				<legend>{{ctx.Locale.Tr "repo.settings.protect_patterns"}}</legend>
+				<label>{{ctx.Locale.Tr "repo.settings.protect_branch_name_pattern"}}
+					<input name="rule_name" type="text" value="{{.Rule.RuleName}}">
+					<span class="help">{{ctx.Locale.Tr "repo.settings.protect_branch_name_pattern_desc" "https://github.com/gobwas/glob"}}</span>
+				</label>
+				<label>{{ctx.Locale.Tr "repo.settings.protect_protected_file_patterns"}}
+					<input name="protected_file_patterns" type="text" value="{{.Rule.ProtectedFilePatterns}}">
+					<span class="help">{{ctx.Locale.Tr "repo.settings.protect_protected_file_patterns_desc" "https://pkg.go.dev/github.com/gobwas/glob#Compile" "github.com/gobwas/glob"}}</span>
+				</label>
+				<label>{{ctx.Locale.Tr "repo.settings.protect_unprotected_file_patterns"}}
+					<input name="unprotected_file_patterns" type="text" value="{{.Rule.UnprotectedFilePatterns}}">
+					<span class="help">{{ctx.Locale.Tr "repo.settings.protect_unprotected_file_patterns_desc" "https://pkg.go.dev/github.com/gobwas/glob#Compile" "github.com/gobwas/glob"}}</span>
+				</label>
+			</fieldset>
+
+			<fieldset>
+				<legend>{{ctx.Locale.Tr "repo.settings.event_push"}}</legend>
+				<label>
+					<input name="enable_push" type="radio" value="none" class="toggle-target-disabled" data-target="#whitelist_box" {{if not .Rule.CanPush}}checked{{end}}>
+					{{ctx.Locale.Tr "repo.settings.protect_disable_push"}}
+					<span class="help">{{ctx.Locale.Tr "repo.settings.protect_disable_push_desc"}}</span>
+				</label>
+				<label>
+					<input name="enable_push" type="radio" value="all" class="toggle-target-disabled" data-target="#whitelist_box" {{if and (.Rule.CanPush) (not .Rule.EnableWhitelist)}}checked{{end}}>
+					{{ctx.Locale.Tr "repo.settings.protect_enable_push"}}
+					<span class="help">{{ctx.Locale.Tr "repo.settings.protect_enable_push_desc"}}</span>
+				</label>
+				<label>
+					<input name="enable_push" type="radio" value="whitelist" class="toggle-target-enabled" data-target="#whitelist_box" {{if and (.Rule.CanPush) (.Rule.EnableWhitelist)}}checked{{end}}>
+					{{ctx.Locale.Tr "repo.settings.protect_whitelist_committers"}}
+					<span class="help">{{ctx.Locale.Tr "repo.settings.protect_whitelist_committers_desc"}}</span>
+				</label>
+					<div id="whitelist_box" class="grouped fields theme-settings-nested {{if not .Rule.EnableWhitelist}}disabled{{end}}">
+						<div class="checkbox-sub-item field">
+							<label>{{ctx.Locale.Tr "repo.settings.protect_whitelist_users"}}</label>
+							<div class="ui multiple search selection dropdown">
+								<input type="hidden" name="whitelist_users" value="{{.whitelist_users}}">
+								<div class="default text">{{ctx.Locale.Tr "search.user_kind"}}</div>
+								<div class="menu">
+									{{range .Users}}
+										<div class="item" data-value="{{.ID}}">
+											{{ctx.AvatarUtils.Avatar . 28 "mini"}}{{template "repo/search_name" .}}
+										</div>
+									{{end}}
+								</div>
+							</div>
+						</div>
+						{{if .Owner.IsOrganization}}
+							<div class="checkbox-sub-item field">
+								<label>{{ctx.Locale.Tr "repo.settings.protect_whitelist_teams"}}</label>
+								<div class="ui multiple search selection dropdown">
+									<input type="hidden" name="whitelist_teams" value="{{.whitelist_teams}}">
+									<div class="default text">{{ctx.Locale.Tr "search.team_kind"}}</div>
+									<div class="menu">
+										{{range .Teams}}
+											<div class="item" data-value="{{.ID}}">
+												{{svg "octicon-people"}}
+												{{.Name}}
+											</div>
+										{{end}}
+									</div>
+								</div>
+							</div>
+						{{end}}
+						<div class="checkbox-sub-item field">
+							<div class="ui checkbox">
+								<input type="checkbox" name="whitelist_deploy_keys" {{if .Rule.WhitelistDeployKeys}}checked{{end}}>
+								<label>{{ctx.Locale.Tr "repo.settings.protect_whitelist_deploy_keys"}}</label>
+							</div>
+						</div>
+					</div>
+				<label>
+					<input name="require_signed_commits" type="checkbox" {{if .Rule.RequireSignedCommits}}checked{{end}}>
+					{{ctx.Locale.Tr "repo.settings.require_signed_commits"}}
+					<span class="help">{{ctx.Locale.Tr "repo.settings.require_signed_commits_desc"}}</span>
+				</label>
+			</fieldset>
+			<fieldset>
+				<legend>{{ctx.Locale.Tr "repo.settings.event_pull_request_approvals"}}</legend>
+				<label>
+					{{ctx.Locale.Tr "repo.settings.protect_required_approvals"}}
+					<input name="required_approvals" type="number" value="{{.Rule.RequiredApprovals}}">
+					<span class="help tw-ml-0">{{ctx.Locale.Tr "repo.settings.protect_required_approvals_desc"}}</span>
+				</label>
+				<fieldset>
+					<label>
+						<input name="enable_approvals_whitelist" type="checkbox" class="toggle-target-enabled" data-target="#approvals_whitelist_box" {{if .Rule.EnableApprovalsWhitelist}}checked{{end}}>
+						{{ctx.Locale.Tr "repo.settings.protect_approvals_whitelist_enabled"}}
+						<span class="help">{{ctx.Locale.Tr "repo.settings.protect_approvals_whitelist_enabled_desc"}}</span>
+					</label>
+					<div id="approvals_whitelist_box" class="grouped fields theme-settings-nested {{if not .Rule.EnableApprovalsWhitelist}}disabled{{end}}">
+						<div class="checkbox-sub-item field">
+							<label>{{ctx.Locale.Tr "repo.settings.protect_approvals_whitelist_users"}}</label>
+							<div class="ui multiple search selection dropdown">
+								<input type="hidden" name="approvals_whitelist_users" value="{{.approvals_whitelist_users}}">
+								<div class="default text">{{ctx.Locale.Tr "search.user_kind"}}</div>
+								<div class="menu">
+								{{range .Users}}
+									<div class="item" data-value="{{.ID}}">
+										{{ctx.AvatarUtils.Avatar . 28 "mini"}}{{template "repo/search_name" .}}
+									</div>
+								{{end}}
+								</div>
+							</div>
+						</div>
+						{{if .Owner.IsOrganization}}
+							<div class="checkbox-sub-item field">
+								<label>{{ctx.Locale.Tr "repo.settings.protect_approvals_whitelist_teams"}}</label>
+								<div class="ui multiple search selection dropdown">
+									<input type="hidden" name="approvals_whitelist_teams" value="{{.approvals_whitelist_teams}}">
+									<div class="default text">{{ctx.Locale.Tr "search.team_kind"}}</div>
+									<div class="menu">
+									{{range .Teams}}
+										<div class="item" data-value="{{.ID}}">
+											{{svg "octicon-people"}}
+										{{.Name}}
+										</div>
+									{{end}}
+									</div>
+								</div>
+							</div>
+						{{end}}
+					</div>
+				</fieldset>
+				<label>
+					<input id="dismiss_stale_approvals" name="dismiss_stale_approvals" type="checkbox" {{if .Rule.DismissStaleApprovals}}checked{{end}}>
+					{{ctx.Locale.Tr "repo.settings.dismiss_stale_approvals"}}
+					<span class="help">{{ctx.Locale.Tr "repo.settings.dismiss_stale_approvals_desc"}}</span>
+				</label>
+				<div id="ignore_stale_approvals_box" class="field theme-settings-nested {{if .Rule.DismissStaleApprovals}}disabled{{end}}">
+					<div class="ui checkbox">
+						<input id="ignore_stale_approvals" name="ignore_stale_approvals" type="checkbox" {{if .Rule.IgnoreStaleApprovals}}checked{{end}}>
+						<label>{{ctx.Locale.Tr "repo.settings.ignore_stale_approvals"}}</label>
+						<p class="help">{{ctx.Locale.Tr "repo.settings.ignore_stale_approvals_desc"}}</p>
+					</div>
+				</div>
+				<fieldset>
+					<div class="field">
+						<div class="ui checkbox">
+							<input name="enable_status_check" type="checkbox" class="toggle-target-enabled" data-target="#statuscheck_contexts_box" {{if .Rule.EnableStatusCheck}}checked{{end}}>
+							<label>{{ctx.Locale.Tr "repo.settings.protect_check_status_contexts"}}</label>
+							<p class="help">{{ctx.Locale.Tr "repo.settings.protect_check_status_contexts_desc"}}</p>
+						</div>
+					</div>
+					<div id="statuscheck_contexts_box" class="checkbox-sub-item field theme-settings-nested {{if not .Rule.EnableStatusCheck}}disabled{{end}}">
+						<label>{{ctx.Locale.Tr "repo.settings.protect_status_check_patterns"}}</label>
+						<textarea id="status_check_contexts" name="status_check_contexts" rows="3">{{.status_check_contexts}}</textarea>
+						<p class="help">{{ctx.Locale.Tr "repo.settings.protect_status_check_patterns_desc"}}</p>
+						<table class="ui celled table theme-settings-table">
+							<thead>
+								<tr>
+									<th>{{ctx.Locale.Tr "repo.settings.protect_check_status_contexts_list"}}</th>
+								</tr>
+							</thead>
+							<tbody>
+							{{range $.recent_status_checks}}
+								<tr>
+									<td>
+										<span>{{.}}</span>
+										<span class="status-check-matched-mark tw-hidden" data-status-check="{{.}}">{{ctx.Locale.Tr "repo.settings.protect_status_check_matched"}}</span>
+									</td>
+								</tr>
+							{{else}}
+								<tr><td>-</td></tr>
+							{{end}}
+							</tbody>
+						</table>
+					</div>
+				</fieldset>
+			</fieldset>
+			<fieldset>
+				<legend>{{ctx.Locale.Tr "repo.settings.event_pull_request_merge"}}</legend>
+				<div class="grouped fields">
+					<div class="field">
+						<div class="ui radio checkbox">
+							<input name="enable_merge_whitelist" type="radio" value="false" class="toggle-target-disabled" data-target="#merge_whitelist_box" {{if not .Rule.EnableMergeWhitelist}}checked{{end}}>
+							<label>{{ctx.Locale.Tr "repo.settings.protect_enable_merge"}}</label>
+							<p class="help">{{ctx.Locale.Tr "repo.settings.protect_enable_merge_desc"}}</p>
+						</div>
+					</div>
+					<div class="field">
+						<div class="ui radio checkbox">
+							<input name="enable_merge_whitelist" type="radio" value="true" class="toggle-target-enabled" data-target="#merge_whitelist_box" {{if .Rule.EnableMergeWhitelist}}checked{{end}}>
+							<label>{{ctx.Locale.Tr "repo.settings.protect_merge_whitelist_committers"}}</label>
+							<p class="help">{{ctx.Locale.Tr "repo.settings.protect_merge_whitelist_committers_desc"}}</p>
+						</div>
+					</div>
+					<div id="merge_whitelist_box" class="grouped fields theme-settings-nested {{if not .Rule.EnableMergeWhitelist}}disabled{{end}}">
+						<div class="checkbox-sub-item field">
+							<label>{{ctx.Locale.Tr "repo.settings.protect_merge_whitelist_users"}}</label>
+							<div class="ui multiple search selection dropdown">
+								<input type="hidden" name="merge_whitelist_users" value="{{.merge_whitelist_users}}">
+								<div class="default text">{{ctx.Locale.Tr "search.user_kind"}}</div>
+								<div class="menu">
+								{{range .Users}}
+									<div class="item" data-value="{{.ID}}">
+										{{ctx.AvatarUtils.Avatar . 28 "mini"}}{{template "repo/search_name" .}}
+									</div>
+								{{end}}
+								</div>
+							</div>
+						</div>
+					{{if .Owner.IsOrganization}}
+						<div class="checkbox-sub-item field">
+							<label>{{ctx.Locale.Tr "repo.settings.protect_merge_whitelist_teams"}}</label>
+							<div class="ui multiple search selection dropdown">
+								<input type="hidden" name="merge_whitelist_teams" value="{{.merge_whitelist_teams}}">
+								<div class="default text">{{ctx.Locale.Tr "search.team_kind"}}</div>
+								<div class="menu">
+								{{range .Teams}}
+									<div class="item" data-value="{{.ID}}">
+										{{svg "octicon-people"}}
+									{{.Name}}
+									</div>
+								{{end}}
+								</div>
+							</div>
+						</div>
+					{{end}}
+					</div>
+				</div>
+				<label>
+					<input name="block_on_rejected_reviews" type="checkbox" {{if .Rule.BlockOnRejectedReviews}}checked{{end}}>
+					{{ctx.Locale.Tr "repo.settings.block_rejected_reviews"}}
+					<span class="help">{{ctx.Locale.Tr "repo.settings.block_rejected_reviews_desc"}}</span>
+				</label>
+				<label>
+					<input name="block_on_official_review_requests" type="checkbox" {{if .Rule.BlockOnOfficialReviewRequests}}checked{{end}}>
+					{{ctx.Locale.Tr "repo.settings.block_on_official_review_requests"}}
+					<span class="help">{{ctx.Locale.Tr "repo.settings.block_on_official_review_requests_desc"}}</span>
+				</label>
+				<label>
+					<input name="block_on_outdated_branch" type="checkbox" {{if .Rule.BlockOnOutdatedBranch}}checked{{end}}>
+					{{ctx.Locale.Tr "repo.settings.block_outdated_branch"}}
+					<span class="help">{{ctx.Locale.Tr "repo.settings.block_outdated_branch_desc"}}</span>
+				</label>
+			</fieldset>
+			<fieldset>
+				<legend>{{ctx.Locale.Tr "repo.settings.event_pull_request_enforcement"}}</legend>
+				<label>
+					<input name="apply_to_admins" type="checkbox" {{if .Rule.ApplyToAdmins}}checked{{end}}>
+					{{ctx.Locale.Tr "repo.settings.enforce_on_admins"}}
+					<span class="help">{{ctx.Locale.Tr "repo.settings.enforce_on_admins_desc"}}</span>
+				</label>
+			</fieldset>
+			<button class="ui primary button">{{ctx.Locale.Tr "repo.settings.protected_branch.save_rule"}}</button>
+		</form>
+	</div>
+{{template "repo/settings/layout_footer" .}}

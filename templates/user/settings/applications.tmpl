@@ -1,0 +1,94 @@
+{{/* GitHub's personal access tokens: the description, then the tokens in a box, one row each with its name (which
+	opens its access and permissions), when it was added and last used, and Regenerate and Delete on the right. */}}
+{{template "user/settings/layout_head" (dict "ctxData" . "pageClass" "user settings applications")}}
+<div class="user-setting-content">
+	<h4 class="ui top attached header">
+		{{ctx.Locale.Tr "settings.manage_access_token"}}
+		<div class="ui right">
+			<a class="ui primary tiny button" href="{{AppSubUrl}}/user/settings/applications/tokens/new">{{ctx.Locale.Tr "settings.new_access_token"}}</a>
+		</div>
+	</h4>
+	<div class="ui attached segment">
+		<p class="theme-settings-description">{{ctx.Locale.Tr "settings.tokens_desc"}}</p>
+		{{if .TokensWithResources}}
+		<ul class="theme-settings-box theme-settings-tokens">
+			{{range .TokensWithResources}}
+				<li class="theme-settings-box-row">
+					<span class="theme-settings-box-icon{{if .Token.HasRecentActivity}} text green{{end}}" {{if .Token.HasRecentActivity}}data-tooltip-content="{{ctx.Locale.Tr "settings.token_state_desc"}}"{{end}}>
+						{{svg "octicon-key"}}
+					</span>
+					<div class="theme-settings-box-main">
+						<details class="theme-settings-token-details">
+							<summary><span class="theme-settings-box-title">{{.Token.Name}}</span></summary>
+							<div class="theme-settings-box-meta">
+								{{if .Token.ResourceAllRepos}}
+									<p>{{ctx.Locale.Tr "settings.repo_and_org_access"}}:
+									{{if .Token.DisplayPublicOnly}}
+										{{ctx.Locale.Tr "settings.permissions_public_only"}}
+									{{else}}
+										{{ctx.Locale.Tr "settings.permissions_access_all"}}
+									{{end}}
+									</p>
+								{{else}}
+									<p>{{ctx.Locale.Tr "settings.specific_repo_access"}}:</p>
+									<ul>
+										{{range .Repositories}}
+											<li><a href="{{.HTMLURL}}">{{.FullName}}</a></li>
+										{{end}}
+									</ul>
+								{{end}}
+								<p>{{ctx.Locale.Tr "settings.permissions_list"}}</p>
+								<ul>
+								{{range .Token.Scope.StringSlice}}
+									{{if (ne . $.AccessTokenScopePublicOnly)}}
+										<li><code>{{.}}</code></li>
+									{{end}}
+								{{end}}
+								</ul>
+							</div>
+						</details>
+						<p class="theme-settings-box-meta">{{ctx.Locale.Tr "settings.added_on" (DateUtils.AbsoluteShort .Token.CreatedUnix)}} — {{if .Token.HasUsed}}{{ctx.Locale.Tr "settings.last_used"}} <span {{if .Token.HasRecentActivity}}class="text green"{{end}}>{{DateUtils.AbsoluteShort .Token.UpdatedUnix}}</span>{{else}}{{ctx.Locale.Tr "settings.no_activity"}}{{end}}</p>
+					</div>
+					<div class="theme-settings-box-actions">
+						<button class="ui tiny button delete-button" data-modal-id="regenerate-token" data-url="{{$.Link}}/tokens/regenerate" data-id="{{.Token.ID}}">
+							{{ctx.Locale.Tr "settings.regenerate_token"}}
+						</button>
+						<button class="ui red tiny button delete-button" data-modal-id="delete-token" data-url="{{$.Link}}/tokens/delete" data-id="{{.Token.ID}}">
+							{{ctx.Locale.Tr "settings.delete_token"}}
+						</button>
+					</div>
+				</li>
+			{{end}}
+		</ul>
+		{{end}}
+	</div>
+
+	{{if .EnableOAuth2}}
+		{{template "user/settings/grants_oauth2" .}}
+		{{template "user/settings/applications_oauth2" .}}
+	{{end}}
+</div>
+
+<div class="ui g-modal-confirm delete modal" id="regenerate-token">
+	<div class="header">
+		{{svg "octicon-issue-reopened" 16 "tw-mr-1"}}
+		{{ctx.Locale.Tr "settings.access_token_regeneration"}}
+	</div>
+	<div class="content">
+		<p>{{ctx.Locale.Tr "settings.access_token_regeneration_desc"}}</p>
+	</div>
+	{{template "base/modal_actions_confirm" (dict "ModalButtonColors" "primary")}}
+</div>
+
+<div class="ui g-modal-confirm delete modal" id="delete-token">
+	<div class="header">
+		{{svg "octicon-trash"}}
+		{{ctx.Locale.Tr "settings.access_token_deletion"}}
+	</div>
+	<div class="content">
+		<p>{{ctx.Locale.Tr "settings.access_token_deletion_desc"}}</p>
+	</div>
+	{{template "base/modal_actions_confirm"}}
+</div>
+
+{{template "user/settings/layout_footer" .}}
