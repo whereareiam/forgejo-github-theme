@@ -529,6 +529,18 @@
       font-size: 12px;
       line-height: 18px;
     }
+    /* The Gravatar address: a labelled field and its button under the picture's note. */
+    & > .theme-avatar-gravatar {
+      margin: 16px 0 0;
+      & > .field {
+        margin: 0 0 8px;
+      }
+      & label {
+        font-size: 14px;
+        font-weight: 600;
+        line-height: 21px;
+      }
+    }
     & .field.tw-pl-4 {
       padding-left: 20px !important;
     }

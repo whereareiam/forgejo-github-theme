@@ -123,13 +123,19 @@
 				<input type="hidden" name="source" value="local">
 				<input id="new-avatar" name="avatar" aria-describedby="new-avatar-description" type="file" accept="image/png,image/jpeg,image/gif,image/webp">
 			</form>
+			<p id="new-avatar-description" class="help">{{ctx.Locale.Tr "avatar.constraints_hint" (ctx.Locale.TrSize .MaxAvatarFileSize) .MaxAvatarWidth .MaxAvatarHeight}}</p>
+			{{/* The address Gravatar looks the picture up by, editable below the picture; its button and the menu's
+			Gravatar choice both send it. */}}
 			{{if not .DisableGravatar}}
-				<form id="avatar-gravatar-form" class="tw-hidden" action="{{.Link}}/avatar" method="post">
+				<form id="avatar-gravatar-form" class="ui form theme-avatar-gravatar" action="{{.Link}}/avatar" method="post">
 					<input type="hidden" name="source" value="lookup">
-					<input type="hidden" name="gravatar" value="{{.SignedUser.AvatarEmail}}">
+					<div class="field{{if .Err_Gravatar}} error{{end}}">
+						<label for="gravatar">{{ctx.Locale.Tr "settings.lookup_avatar_by_mail"}}</label>
+						<input id="gravatar" name="gravatar" value="{{.SignedUser.AvatarEmail}}" autocomplete="email">
+					</div>
+					<button class="ui button">{{ctx.Locale.Tr "settings.update_avatar"}}</button>
 				</form>
 			{{end}}
-			<p id="new-avatar-description" class="help">{{ctx.Locale.Tr "avatar.constraints_hint" (ctx.Locale.TrSize .MaxAvatarFileSize) .MaxAvatarWidth .MaxAvatarHeight}}</p>
 			<script>
 				document.getElementById("new-avatar").addEventListener("change", (event) => {
 					if (event.target.files.length) event.target.form.requestSubmit();

@@ -175,9 +175,14 @@
 }
 
 .github-profile #profile-avatar-card .primary-action,
-.github-profile .profile-edit {
+.github-profile .profile-edit,
+.github-profile .profile-sponsor {
   flex: 1;
   min-width: 0;
+}
+
+.github-profile .profile-sponsor .svg {
+  color: var(--color-pink);
 }
 
 .github-profile #profile-avatar-card .actions .button {
