@@ -158,11 +158,20 @@
 /* A small heading inside a nav group, like GitHub's "Workflows". */
 .theme-sidebar-label {
   display: block;
+  margin: 0;
   padding: 8px 16px 4px;
   color: var(--color-text-light-1);
   font-size: 12px;
   font-weight: 600;
   line-height: 18px;
+}
+
+/* "On this page" (data-theme-sidebar-outline): a heading with an icon over links to the page's sections. sidebar.js
+   marks the section in view as the active entry. */
+.theme-sidebar-label:has(> svg) {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 /* Secondary links pinned to the bottom of the sidebar, above the collapse toggle. */

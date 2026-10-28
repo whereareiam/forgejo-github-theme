@@ -1,22 +1,23 @@
 {{template "base/head" .}}
-<div role="main" aria-label="{{.Title}}" class="page-content repository tags github-tags">
-	<div class="ui container">
+{{/* GitHub's tags page: the releases sidebar with Tags marked, and the tags in a box in the main column. */}}
+<div role="main" aria-label="{{.Title}}" class="page-content repository tags github-tags theme-sidebar-layout" data-theme-sidebar="releases_sidebar_collapsed">
+	{{template "repo/release/sidebar" .}}
+	<div class="ui container theme-sidebar-main github-tags-main">
 		{{template "base/alert" .}}
 		{{$canReadReleases := $.Permission.CanRead $.UnitTypeReleases}}
 		{{$canReadCode := $.Permission.CanRead $.UnitTypeCode}}
-		<div class="github-tags-toolbar">
-			<nav class="theme-switch" aria-label="Releases and Tags">
-				{{if $canReadReleases}}<a href="{{.RepoLink}}/releases">Releases</a>{{end}}
-				{{if $canReadCode}}<a class="active" aria-current="page" href="{{.RepoLink}}/tags">Tags</a>{{end}}
-			</nav>
-			{{if .ShowReleaseSearch}}
-				<form class="ignore-dirty github-tags-search" method="get">
-					{{template "components/common/search/search" dict "Kind" "icon" "Value" .Keyword "Placeholder" "Find a tag"}}
-				</form>
-			{{end}}
+		<div class="theme-list-heading github-release-heading">
+			<div class="theme-list-title"><button type="button" class="theme-icon-button" data-theme-sidebar-toggle data-theme-sidebar-expand aria-expanded="false" aria-label="Expand sidebar">{{svg "octicon-sidebar-expand" 16}}</button><h1>{{ctx.Locale.Tr "repo.tags"}}</h1></div>
+			<div class="github-release-actions">
+				{{if .ShowReleaseSearch}}
+					<form class="ignore-dirty github-release-search" method="get" role="search">
+						{{template "components/common/search/search" dict "Kind" "icon" "Value" .Keyword "Placeholder" "Find a tag"}}
+					</form>
+				{{end}}
+				{{if .EnableFeed}}<a class="theme-icon-button theme-icon-button-outlined" href="{{.RepoLink}}/tags.rss" aria-label="{{ctx.Locale.Tr "rss_feed"}}" data-tooltip-content="{{ctx.Locale.Tr "rss_feed"}}">{{svg "octicon-rss" 16}}</a>{{end}}
+			</div>
 		</div>
 		<div class="github-tags-box">
-			<h2 class="github-tags-box-header">{{svg "octicon-tag" 16}}{{ctx.Locale.Tr "repo.release.tags"}}</h2>
 			<div class="github-tags-list">
 				{{range $idx, $release := .Releases}}
 					<div class="github-tag-row">
@@ -33,10 +34,10 @@
 								{{if $release.CreatedUnix}}<span>{{svg "octicon-clock" 16}}{{DateUtils.TimeSince $release.CreatedUnix}}</span>{{end}}
 								<a class="tw-font-mono" href="{{$.RepoLink}}/src/commit/{{$release.Sha1}}" rel="nofollow">{{svg "octicon-git-commit" 16}}{{ShortSha $release.Sha1}}</a>
 								{{if not $.DisableDownloadSourceArchives}}
-									<a href="{{$.RepoLink}}/archive/{{$release.TagName | PathEscapeSegments}}.zip" rel="nofollow">{{svg "octicon-file-zip" 16}}zip</a>
-									<a href="{{$.RepoLink}}/archive/{{$release.TagName | PathEscapeSegments}}.tar.gz" rel="nofollow">{{svg "octicon-file-zip" 16}}tar.gz</a>
+									<a class="archive-link" href="{{$.RepoLink}}/archive/{{$release.TagName | PathEscapeSegments}}.zip" rel="nofollow">{{svg "octicon-file-zip" 16}}zip</a>
+									<a class="archive-link" href="{{$.RepoLink}}/archive/{{$release.TagName | PathEscapeSegments}}.tar.gz" rel="nofollow">{{svg "octicon-file-zip" 16}}tar.gz</a>
 								{{end}}
-								{{if and $canReadReleases $release.IsTag $.CanCreateRelease}}<a href="{{$.RepoLink}}/releases/new?tag={{$release.TagName}}">{{svg "octicon-tag" 16}}Release details</a>{{end}}
+								{{if and $canReadReleases $release.IsTag $.CanCreateRelease}}<a href="{{$.RepoLink}}/releases/new?tag={{$release.TagName}}">{{svg "octicon-tag" 16}}{{ctx.Locale.Tr "repo.release.new_release"}}</a>{{end}}
 								{{if and ($.Permission.CanWrite $.UnitTypeCode) $release.IsTag}}<a class="github-tag-delete delete-button" data-url="{{$.RepoLink}}/tags/delete" data-id="{{$release.ID}}" data-modal-id="delete-tag">{{svg "octicon-trash" 16}}{{ctx.Locale.Tr "repo.release.delete_tag"}}</a>{{end}}
 								{{if and $canReadReleases (not $release.IsTag)}}<a href="{{$.RepoLink}}/releases/tag/{{$release.TagName | PathEscapeSegments}}">{{svg "octicon-tag" 16}}{{ctx.Locale.Tr "repo.release.detail"}}</a>{{end}}
 							{{end}}

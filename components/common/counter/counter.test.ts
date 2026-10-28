@@ -20,10 +20,8 @@ it("renders every count pill through the shared counter", () => {
   }
 });
 
-it("keeps one segmented switch and one boxed empty state", () => {
+it("keeps one boxed empty state", () => {
   const templates = files("templates", ".tmpl").map(read).join("\n");
-  expect(templates).not.toMatch(/github-(release|tags)-switch/);
-  expect(templates.match(/class="theme-switch"/g)).toHaveLength(2);
   for (const box of templates.match(/class="[^"]*\b(profile-empty|github-release-empty)\b[^"]*"/g) ?? [])
     expect(box).toContain("theme-empty");
 });

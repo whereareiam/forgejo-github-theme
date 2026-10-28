@@ -54,7 +54,6 @@ export const github = {
     accent: {
       /** 强调色
        * @diff 折叠/展开按钮的悬停颜色
-       * @release `releaseTagMenu` 顶部栏左侧按钮激活背景色
        * @navbar `navbarRight` 头像管理员标识背景颜色
        * @dropdown `dropdown` emoji 的悬停背景色
        * @menu `paginationMenu` 分页菜单的激活背景色
