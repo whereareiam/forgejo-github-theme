@@ -636,6 +636,25 @@ describe("Forgejo 15 native integration", () => {
     expect(read("components", "project", "list", "list.tmpl")).toContain("There aren't any projects yet");
   });
 
+  it("puts GitHub's popular repositories below the profile README on the Overview tab", () => {
+    const read = (...parts: string[]) => fs.readFileSync(path.join(ROOT_DIR, ...parts), "utf-8");
+    const profile = read("templates", "user", "profile.tmpl");
+    const overview = profile.slice(profile.indexOf('{{else if eq .TabName "overview"}}'));
+    expect(overview.indexOf('id="readme_profile"')).toBeLessThan(overview.indexOf('class="profile-popular"'));
+    expect(overview).toContain(
+      'data-theme-profile-popular="{{.ContextUser.HomeLink}}?tab=repositories&sort=moststars&private=false" hidden'
+    );
+    expect(overview).toContain('<script src="{{AssetUrlPrefix}}/js/profile-overview.js" defer></script>');
+    const css = read("styles", "pages", "user-profile.css");
+    expect(css).toMatch(
+      /\.profile-popular-list \{\s*display: grid;\s*grid-template-columns: repeat\(2, minmax\(0, 1fr\)\);/
+    );
+    expect(css).toMatch(
+      /@media \(max-width: 767\.98px\) \{\s*\.github-profile \.profile-popular-list \{\s*grid-template-columns: minmax\(0, 1fr\);/
+    );
+    expect(fs.existsSync(path.join(DIST_DIR, "forgejo", "public", "assets", "js", "profile-overview.js"))).toBe(true);
+  });
+
   it("matches GitHub's personal settings: the centred column, the header, key buttons, plain empty lines and org settings", () => {
     const read = (...parts: string[]) => fs.readFileSync(path.join(ROOT_DIR, ...parts), "utf-8");
     const head = read("templates", "user", "settings", "layout_head.tmpl");

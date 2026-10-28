@@ -393,6 +393,127 @@
   margin: 0;
 }
 
+/* GitHub's popular repositories: cards two to a row below the README, one to a row on phones. */
+.github-profile .profile-popular {
+  margin-top: 24px;
+}
+
+.github-profile .profile-popular-title {
+  margin: 0 0 8px;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+}
+
+.github-profile .profile-popular-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.github-profile .profile-popular-item {
+  display: flex;
+  min-width: 0;
+}
+
+.github-profile .profile-popular-card {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 16px;
+  border: 1px solid var(--color-secondary);
+  border-radius: var(--border-radius);
+  background: var(--color-box-body);
+  font-size: 12px;
+  line-height: 18px;
+}
+
+.github-profile .profile-popular-heading {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  min-width: 0;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.github-profile .profile-popular-icon {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  height: 20px;
+  color: var(--color-text-light-1);
+}
+
+.github-profile .profile-popular-icon :is(.svg, img) {
+  width: 16px;
+  min-width: 16px;
+  height: 16px;
+}
+
+.github-profile .profile-popular-name {
+  flex: 1;
+  min-width: 0;
+  color: var(--color-primary);
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.github-profile .profile-popular-name:hover {
+  text-decoration: underline;
+}
+
+/* The labels use components/common/label; here they only keep their size beside a long name. */
+.github-profile .profile-popular-heading .ui.label {
+  flex: none;
+  margin: 0;
+}
+
+/* Like GitHub's, the description takes the free height so every card's details line up at its bottom. */
+.github-profile .profile-popular-description {
+  flex: 1 0 auto;
+  margin: 8px 0 0;
+  color: var(--color-text-light-1);
+  line-height: 18px;
+  overflow-wrap: anywhere;
+}
+
+.github-profile .profile-popular-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 16px;
+  margin: 8px 0 0;
+  color: var(--color-text-light-1);
+  line-height: 18px;
+}
+
+.github-profile .profile-popular-meta-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: inherit;
+}
+
+.github-profile a.profile-popular-meta-item:hover {
+  color: var(--color-primary);
+}
+
+.github-profile .profile-popular-meta .color-icon {
+  width: 12px;
+  height: 12px;
+  margin: 0 !important;
+}
+
+@media (max-width: 767.98px) {
+  .github-profile .profile-popular-list {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
 /* Keep contribution cells readable instead of shrinking a full year to phone width. */
 .github-profile #user-heatmap .total-contributions {
   position: static;
