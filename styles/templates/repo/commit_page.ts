@@ -90,6 +90,11 @@ const commitPage = css`
       padding-right: 8px;
     }
 
+    /* The open menu rises above the diff's sticky toolbar (21) as a page popover. */
+    .commit-page-actions > .commit-operations.ui.dropdown.button.active {
+      z-index: 100;
+    }
+
     .commit-attribution {
       align-items: center;
       color: ${themeVars.color.text.light.num1};
@@ -311,6 +316,64 @@ const commitPage = css`
     .commit-copy.btn:hover {
       background: ${themeVars.github.control.transparent.bgColor.hover};
       color: ${themeVars.color.text.self};
+    }
+
+    /* Forgejo's signature details as one compact row of the card, coloured like the commit list's sign badge. */
+    .commit-signature-row {
+      align-items: center;
+      border-top: 1px solid ${themeVars.color.light.border};
+      color: ${themeVars.color.text.light.num1};
+      display: flex;
+      flex-wrap: wrap;
+      font-size: 12px;
+      gap: 4px 16px;
+      justify-content: space-between;
+      line-height: 20px;
+      padding: 8px 12px;
+    }
+
+    .commit-signature-signer,
+    .commit-signature-key {
+      align-items: center;
+      display: inline-flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      min-width: 0;
+    }
+
+    .commit-signature-signer > img.ui.avatar {
+      border-radius: 9999px;
+      height: 20px;
+      margin: 0 0 0 4px;
+      width: 20px;
+    }
+
+    .commit-signature-signer > a,
+    .commit-signature-signer > strong {
+      color: ${themeVars.color.text.self};
+      font-weight: 600;
+    }
+
+    .commit-signature-key > code {
+      color: ${themeVars.color.text.self};
+      font-family: var(--fonts-monospace);
+      overflow-wrap: anywhere;
+    }
+
+    .commit-signature-row.sign-trusted .commit-signature-icon {
+      color: ${themeVars.color.green.badge.self};
+    }
+
+    .commit-signature-row.sign-untrusted .commit-signature-icon {
+      color: ${themeVars.color.yellow.badge.self};
+    }
+
+    .commit-signature-row.sign-unmatched .commit-signature-icon {
+      color: ${themeVars.color.orange.badge.self};
+    }
+
+    .commit-signature-row.sign-warning .commit-signature-icon {
+      color: ${themeVars.color.red.badge.self};
     }
 
     .commit-stats-row {

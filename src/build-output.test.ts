@@ -773,6 +773,26 @@ describe("Forgejo 15 native integration", () => {
     expect(read("navbar.tmpl")).toContain('<span class="theme-counter theme-counter-tab">{{.Team.NumMembers}}</span>');
   });
 
+  it("keeps Forgejo's organization blocks: team privacy, invitations, empty members and funding", () => {
+    const read = (...parts: string[]) => fs.readFileSync(path.join(ROOT_DIR, "templates", "org", ...parts), "utf-8");
+    // Only a team's members and the owners see who is in it; everyone else gets its description.
+    const teams = read("team", "teams.tmpl");
+    const gate = "{{if or (index $.DoerIsMember .ID) $.IsOrganizationOwner}}";
+    const members = teams.indexOf('{{template "shared/user/avatarlink" dict "user" .}}');
+    expect(members).toBeGreaterThan(teams.lastIndexOf(gate, members));
+    expect(teams.lastIndexOf(gate, members)).toBeGreaterThan(teams.indexOf('{{ctx.Locale.Tr "view"}}'));
+    expect(teams.slice(members)).toContain('{{ctx.Locale.Tr "org.teams.no_desc"}}');
+    const home = read("home.tmpl");
+    expect(home).toContain("{{if .Invite}}");
+    expect(home).toContain('href="{{AppSubUrl}}/org/invite/{{.Invite.Token}}">{{ctx.Locale.Tr "org.view_invite"}}</a>');
+    expect(read("member", "members.tmpl")).toMatch(
+      /\{\{else\}\}\s*<div class="theme-empty theme-empty-compact">[\s\S]*?org\.members\.no_public_members/
+    );
+    const header = read("header.tmpl");
+    expect(header).toContain('{{template "shared/donation_button" .}}');
+    expect(header).toContain('{{template "shared/funding" .}}');
+  });
+
   it("lays out password recovery and activation like sign-in", () => {
     for (const page of ["forgot_passwd.tmpl", "reset_passwd.tmpl", "activate.tmpl"]) {
       const template = fs.readFileSync(path.join(ROOT_DIR, "templates", "user", "auth", page), "utf-8");
@@ -939,6 +959,44 @@ describe("Forgejo 15 native integration", () => {
     expect(commitPageStyle).not.toContain("repository-content-header");
     expect(diffBoxTemplate).toContain('template "repo/diff/file_header"');
     expect(commitPageTemplate).toContain('template "repo/diff/change_summary"');
+    // Forgejo's signature details, which commit_header shows below the commit, as a row of the card.
+    expect(commitPageTemplate).toContain('class="commit-signature-row {{$signClass}}"');
+    expect(commitPageTemplate).toContain('ctx.Locale.Tr "repo.commits.signed_by_untrusted_user_unmatched"');
+    expect(commitPageTemplate).toContain("{{.Verification.SigningKey.PaddedKeyID}}");
+    expect(commitPageTemplate).toContain("{{.Verification.SigningSSHKey.Fingerprint}}");
+    expect(commitPageStyle).toContain(".commit-signature-row.sign-warning .commit-signature-icon");
+  });
+
+  it("opens every show-modal target as a <dialog>, which Forgejo 17's show-modal calls showModal() on", () => {
+    // Targets a theme template triggers but Forgejo's own, unchanged templates render.
+    const upstreamDialogs = new Set(["push-mirror-edit-modal"]);
+    const templates = ["templates", "components"].flatMap(dir =>
+      fs
+        .readdirSync(path.join(ROOT_DIR, dir), { recursive: true })
+        .map(String)
+        .filter(file => file.endsWith(".tmpl"))
+        .map(file => fs.readFileSync(path.join(ROOT_DIR, dir, file), "utf-8"))
+    );
+    const source = templates.join("\n");
+    // Template ids such as "edit-project-column-modal-{{.ID}}" are compared up to their first action.
+    const idPrefix = (id: string) => id.split("{{")[0];
+    const dialogIds = [...source.matchAll(/<dialog\b[^>]*\bid="([^"]+)"/g)].map(match => idPrefix(match[1]));
+    const modalIds = [...source.matchAll(/<div\b[^>]*\bclass="[^"]*\bmodal\b[^"]*"[^>]*\bid="([^"]+)"/g)].map(match =>
+      idPrefix(match[1])
+    );
+    const targets = templates.flatMap(template =>
+      [...template.matchAll(/<[a-z]+\b[^>]*\bshow-modal\b[^>]*>/g)].flatMap(match =>
+        [...match[0].matchAll(/\bdata-modal="#([^"]+)"/g)].map(target => idPrefix(target[1]))
+      )
+    );
+
+    expect(targets).toContain("cherry-pick-modal");
+    expect(targets).toContain("delete-note-modal");
+    for (const target of new Set(targets)) {
+      if (upstreamDialogs.has(target)) continue;
+      expect(modalIds, `#${target} is a Fomantic modal`).not.toContain(target);
+      expect(dialogIds, `#${target} has no <dialog>`).toContain(target);
+    }
   });
 
   it("keeps the adapted repository and commit layouts bounded at phone breakpoints", () => {
@@ -979,11 +1037,58 @@ describe("Forgejo 15 native integration", () => {
     }
   });
 
-  it("keeps the native dated fallback for zero-contribution heatmap tooltips", () => {
+  it("passes the heatmap every locale string Forgejo's heatmap.js reads", () => {
     const heatmapTemplate = fs.readFileSync(path.join(ROOT_DIR, "templates", "user", "heatmap.tmpl"), "utf-8");
 
     expect(heatmapTemplate).toContain("data-heatmap-data");
-    expect(heatmapTemplate).not.toContain("data-locale-contributions-zero");
+    for (const key of [
+      "total-contributions",
+      "contributions-zero",
+      "contributions-format",
+      "contributions-one",
+      "contributions-few",
+      "more",
+      "less",
+    ])
+      expect(heatmapTemplate).toContain(`data-locale-${key}=`);
+  });
+
+  it("renders the navbar stopwatch as Forgejo's stopwatch.js expects", () => {
+    const read = (...parts: string[]) => fs.readFileSync(path.join(ROOT_DIR, "templates", ...parts), "utf-8");
+    const navbar = read("base", "head_navbar.tmpl");
+    const icons = read("base", "head_navbar_icons.tmpl");
+    const drawer = read("base", "navbar_drawer.tmpl");
+
+    // One trigger, rendered while no stopwatch runs so a stopwatch started in another tab can show it.
+    expect(navbar.match(/"Stopwatch" true/g)).toHaveLength(1);
+    expect(icons).toContain(
+      'class="item active-stopwatch-trigger {{$itemExtraClass}}{{if not $data.ActiveStopwatch}} tw-hidden{{end}}"'
+    );
+    // A tooltip on the trigger would replace the popup in its tippy, as upstream avoids too.
+    expect(icons).toContain('data-tippy-content="{{ctx.Locale.Tr "active_stopwatch"}}"');
+    expect(navbar).toContain("{{if and .IsSigned (not .HideNavbarLinks) EnableTimetracking}}");
+    for (const name of [
+      "active-stopwatch-popup",
+      "stopwatch-link",
+      "stopwatch-issue",
+      "stopwatch-commit",
+      "stopwatch-cancel",
+    ])
+      expect(navbar).toContain(`class="${name}`);
+    expect(navbar).toContain('stopwatch-time tw-m-0" data-seconds="{{.ActiveStopwatch.Seconds}}"');
+    expect(drawer).toContain('{{if and EnableTimetracking .ActiveStopwatch}}<a href="{{.ActiveStopwatch.IssueLink}}">');
+  });
+
+  it("links the documentation through AppDocsURL", () => {
+    const templates = ["templates", "components"].flatMap(dir =>
+      fs
+        .readdirSync(path.join(ROOT_DIR, dir), { recursive: true, encoding: "utf-8" })
+        .filter(file => file.endsWith(".tmpl"))
+        .map(file => path.join(ROOT_DIR, dir, file))
+    );
+
+    for (const file of templates)
+      expect(fs.readFileSync(file, "utf-8"), path.relative(ROOT_DIR, file)).not.toContain("forgejo.org/docs");
   });
 
   it("matches GitHub's sign-in form structure", () => {

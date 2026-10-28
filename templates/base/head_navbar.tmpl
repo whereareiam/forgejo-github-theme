@@ -75,7 +75,7 @@
 		<template id="navbar-extra-links-end"></template>
 
 		{{if not .IsSigned}}
-			<a class="item" target="_blank" rel="noopener noreferrer" href="https://forgejo.org/docs/latest/">{{ctx.Locale.Tr "help"}}</a>
+			<a class="item" target="_blank" rel="noopener noreferrer" href="{{AppDocsURL "/"}}">{{ctx.Locale.Tr "help"}}</a>
 		{{end}}
 	</div>
 
@@ -118,7 +118,7 @@
 					{{template "base/navbar_create_items" .}}
 				</div><!-- end content create new menu -->
 			</div><!-- end dropdown menu create new -->
-			{{template "base/head_navbar_icons" dict "ItemExtraClass" "not-mobile" "Data" .}}
+			{{template "base/head_navbar_icons" dict "ItemExtraClass" "not-mobile" "Stopwatch" true "Data" .}}
 
 			<div class="ui dropdown jump item" data-tooltip-content="{{ctx.Locale.Tr "user_profile_and_more"}}">
 				<span class="text tw-flex tw-items-center">
@@ -153,7 +153,7 @@
 						{{svg "octicon-tools"}}
 						{{ctx.Locale.Tr "your_settings"}}
 					</a>
-					<a class="item" target="_blank" rel="noopener noreferrer" href="https://forgejo.org/docs/latest/">
+					<a class="item" target="_blank" rel="noopener noreferrer" href="{{AppDocsURL "/"}}">
 						{{svg "octicon-question"}}
 						{{ctx.Locale.Tr "help"}}
 					</a>
@@ -183,23 +183,24 @@
 		{{end}}
 	</div><!-- end full right menu -->
 
-	{{$activeStopwatch := and .IsSigned EnableTimetracking .ActiveStopwatch}}
-	{{if $activeStopwatch}}
+	{{/* Rendered with the trigger even while no stopwatch runs: stopwatch.js fills it in when one starts. */}}
+	{{if and .IsSigned (not .HideNavbarLinks) EnableTimetracking}}
 		<div class="active-stopwatch-popup tippy-target">
 			<div class="flex-text-block tw-p-3">
-				<a class="stopwatch-link flex-text-block muted" href="{{$activeStopwatch.IssueLink}}">
+				<a class="stopwatch-link flex-text-block muted" href="{{.ActiveStopwatch.IssueLink}}">
 					{{svg "octicon-issue-opened" 16}}
-					<span class="stopwatch-issue">{{$activeStopwatch.RepoSlug}}#{{$activeStopwatch.IssueIndex}}</span>
+					<span class="stopwatch-issue">{{.ActiveStopwatch.RepoSlug}}#{{.ActiveStopwatch.IssueIndex}}</span>
+					<span class="ui primary label stopwatch-time tw-m-0" data-seconds="{{.ActiveStopwatch.Seconds}}">{{if .ActiveStopwatch}}{{Sec2Time .ActiveStopwatch.Seconds}}{{end}}</span>
 				</a>
 				<div class="tw-flex tw-gap-1">
-					<form class="stopwatch-commit" method="post" action="{{$activeStopwatch.IssueLink}}/times/stopwatch/toggle">
+					<form class="stopwatch-commit" method="post" action="{{.ActiveStopwatch.IssueLink}}/times/stopwatch/toggle">
 						<button
 							type="submit"
 							class="ui button mini compact basic icon tw-mr-0"
 							data-tooltip-content="{{ctx.Locale.Tr "repo.issues.stop_tracking"}}"
 						>{{svg "octicon-square-fill"}}</button>
 					</form>
-					<form class="stopwatch-cancel" method="post" action="{{$activeStopwatch.IssueLink}}/times/stopwatch/cancel">
+					<form class="stopwatch-cancel" method="post" action="{{.ActiveStopwatch.IssueLink}}/times/stopwatch/cancel">
 						<button
 							type="submit"
 							class="ui button mini compact basic icon tw-mr-0"

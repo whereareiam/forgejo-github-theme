@@ -12,11 +12,13 @@
 					{{if not .UnitPullsGlobalDisabled}}<a href="{{AppSubUrl}}/pulls">{{svg "octicon-git-pull-request" 16}}<span>{{ctx.Locale.Tr "pull_requests"}}</span></a>{{end}}
 					{{if and (not (and .UnitIssuesGlobalDisabled .UnitPullsGlobalDisabled)) .ShowMilestonesDashboardPage}}<a href="{{AppSubUrl}}/milestones">{{svg "octicon-milestone" 16}}<span>{{ctx.Locale.Tr "milestones"}}</span></a>{{end}}
 					<a href="{{AppSubUrl}}/notifications">{{svg "octicon-inbox" 16}}<span>{{ctx.Locale.Tr "notifications"}}</span></a>
+					{{/* The navbar's stopwatch trigger is desktop only; on phones the running stopwatch links to its issue here. */}}
+					{{if and EnableTimetracking .ActiveStopwatch}}<a href="{{.ActiveStopwatch.IssueLink}}">{{svg "octicon-stopwatch" 16}}<span>{{ctx.Locale.Tr "active_stopwatch"}}</span></a>{{end}}
 				{{end}}
 			</div>
 			<div class="navbar-drawer-group navbar-drawer-links">
 				<a href="{{AppSubUrl}}/explore/{{if .IsLandingPageOrganizations}}organizations{{else}}repos{{end}}">{{svg "octicon-telescope" 16}}<span>{{ctx.Locale.Tr "explore"}}</span></a>
-				<a href="https://forgejo.org/docs/latest/" target="_blank" rel="noopener noreferrer">{{svg "octicon-question" 16}}<span>{{ctx.Locale.Tr "help"}}</span></a>
+				<a href="{{AppDocsURL "/"}}" target="_blank" rel="noopener noreferrer">{{svg "octicon-question" 16}}<span>{{ctx.Locale.Tr "help"}}</span></a>
 			</div>
 		{{end}}
 		<div id="navbar-drawer-extra-links" class="navbar-drawer-group navbar-drawer-links" hidden></div>

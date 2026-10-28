@@ -11,6 +11,9 @@
 				</span>
 			</div>
 			<span class="button-sequence org-actions tw-ml-auto tw-whitespace-nowrap">
+				{{if .Funding}}
+					{{template "shared/donation_button" .}}
+				{{end}}
 				{{if .IsSigned}}
 					{{template "org/follow_unfollow" .}}
 				{{end}}
@@ -33,4 +36,7 @@
 		</div>
 	</div>
 </div>
+{{if .Funding}}
+	{{template "shared/funding" .}}
+{{end}}
 {{end}}

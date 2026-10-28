@@ -41,25 +41,28 @@
 								{{end}}
 							</div>
 						</div>
-						<div class="ui g-modal-confirm modal" id="cherry-pick-modal">
-							<div class="header">
-								<span id="cherry-pick-header"></span>
-							</div>
-							<div class="content">
-								<p id="cherry-pick-content" class="branch-dropdown"></p>
-								{{template "repo/branch_dropdown" dict "root" .
-									"noTag" true "disableCreateBranch" true
-									"branchForm" "branch-dropdown-form"
-									"branchURLPrefix" (printf "%s/_cherrypick/%s/" $.RepoLink .CommitID) "branchURLSuffix" ""
-									"setAction" true "submitForm" true}}
+						<dialog id="cherry-pick-modal">
+							<article>
+								<header><span id="cherry-pick-header"></span></header>
+								<div class="content">
+									<p id="cherry-pick-content" class="branch-dropdown"></p>
+									{{template "repo/branch_dropdown" dict "root" .
+										"noTag" true "disableCreateBranch" true
+										"branchForm" "branch-dropdown-form"
+										"branchURLPrefix" (printf "%s/_cherrypick/%s/" $.RepoLink .CommitID) "branchURLSuffix" ""
+										"setAction" true "submitForm" true}}
+								</div>
 								<form method="get" action="{{$.RepoLink}}/_cherrypick/{{.CommitID}}/{{PathEscapeSegments $.Repository.DefaultBranch}}" id="branch-dropdown-form">
 									<input type="hidden" name="ref" value="{{$.Repository.DefaultBranch}}">
 									<input type="hidden" name="refType" value="branch">
-									<input type="hidden" id="cherry-pick-type" name="cherry-pick-type"><br>
-									<button type="submit" id="cherry-pick-submit" class="ui primary button"></button>
+									<input type="hidden" id="cherry-pick-type" name="cherry-pick-type">
+									<div class="actions">
+										<button type="button" class="ui cancel button">{{ctx.Locale.Tr "settings.cancel"}}</button>
+										<button type="submit" id="cherry-pick-submit" class="ui primary button"></button>
+									</div>
 								</form>
-							</div>
-						</div>
+							</article>
+						</dialog>
 						<dialog id="create-branch-modal">
 							<article>
 								<header>{{ctx.Locale.Tr "repo.branch.new_branch"}}</header>
@@ -156,13 +159,16 @@
 					{{template "repo/commit_load_branches_and_tags" .}}
 					<div class="commit-identifiers">
                         <a href="{{.Link}}.patch">patch</a><a href="{{.Link}}.diff">diff</a><span>·</span>
-						{{range .Parents}}
+						{{if .Parents}}
 							<span class="commit-identifier">
-								<span>{{len $.Parents}} {{ctx.Locale.Tr "repo.diff.parent"}}</span>
-								{{if $.PageIsWiki}}
-									<a href="{{$.RepoLink}}/wiki/commit/{{PathEscape .}}">{{printf "%.7s" .}}</a>
-								{{else}}
-									<a href="{{$.RepoLink}}/commit/{{PathEscape .}}">{{printf "%.7s" .}}</a>
+								<span>{{len .Parents}} {{ctx.Locale.Tr "repo.diff.parent"}}</span>
+								{{range $i, $parent := .Parents}}
+									{{if $i}}<span>+</span>{{end}}
+									{{if $.PageIsWiki}}
+										<a href="{{$.RepoLink}}/wiki/commit/{{PathEscape $parent}}">{{printf "%.7s" $parent}}</a>
+									{{else}}
+										<a href="{{$.RepoLink}}/commit/{{PathEscape $parent}}">{{printf "%.7s" $parent}}</a>
+									{{end}}
 								{{end}}
 							</span>
 						{{end}}
@@ -175,6 +181,62 @@
 						</span>
 					</div>
 				</div>
+				{{if .Commit.Signature}}
+					{{/* Forgejo's signature details from commit_header: who signed the commit with which key, or why it is not verified. */}}
+					{{$signClass := "sign-unverified"}}
+					{{if .Verification.Verified}}
+						{{if eq .Verification.TrustStatus "trusted"}}
+							{{$signClass = "sign-trusted"}}
+						{{else if eq .Verification.TrustStatus "untrusted"}}
+							{{$signClass = "sign-untrusted"}}
+						{{else}}
+							{{$signClass = "sign-unmatched"}}
+						{{end}}
+					{{else if .Verification.Warning}}
+						{{$signClass = "sign-warning"}}
+					{{end}}
+					<div class="commit-signature-row {{$signClass}}">
+						<div class="commit-signature-signer">
+							{{if .Verification.Verified}}
+								{{svg "octicon-verified" 16 "commit-signature-icon"}}
+								{{if ne .Verification.SigningUser.ID 0}}
+									{{if eq .Verification.TrustStatus "trusted"}}
+										<span>{{ctx.Locale.Tr "repo.commits.signed_by"}}:</span>
+									{{else if eq .Verification.TrustStatus "untrusted"}}
+										<span>{{ctx.Locale.Tr "repo.commits.signed_by_untrusted_user"}}:</span>
+									{{else}}
+										<span>{{ctx.Locale.Tr "repo.commits.signed_by_untrusted_user_unmatched"}}:</span>
+									{{end}}
+									{{ctx.AvatarUtils.Avatar .Verification.SigningUser 20}}
+									<a href="{{.Verification.SigningUser.HomeLink}}">{{.Verification.SigningUser.GetDisplayName}}</a>
+								{{else}}
+									<span data-tooltip-content="{{ctx.Locale.Tr "gpg.default_key"}}">{{ctx.Locale.Tr "repo.commits.signed_by"}}:</span>
+									{{ctx.AvatarUtils.AvatarByEmail .Verification.SigningEmail "" 20}}
+									<strong>{{.Verification.SigningUser.GetDisplayName}}</strong>
+								{{end}}
+							{{else}}
+								{{svg "octicon-unverified" 16 "commit-signature-icon"}}
+								<span>{{ctx.Locale.Tr .Verification.Reason}}</span>
+							{{end}}
+						</div>
+						{{/* A verified or warned signature names the key it was checked with; an unverified one names any key it carries. */}}
+						{{$checkedKey := or .Verification.Verified .Verification.Warning}}
+						{{if and .Verification.SigningKey .Verification.SigningKey.KeyID (not (and $checkedKey .Verification.SigningSSHKey))}}
+							<div class="commit-signature-key">
+								{{svg "octicon-key" 16}}
+								<span>{{ctx.Locale.Tr "repo.commits.gpg_key_id"}}:</span>
+								<code>{{.Verification.SigningKey.PaddedKeyID}}</code>
+							</div>
+						{{end}}
+						{{if and .Verification.SigningSSHKey .Verification.SigningSSHKey.Fingerprint}}
+							<div class="commit-signature-key">
+								{{svg "octicon-key" 16}}
+								<span>{{ctx.Locale.Tr "repo.commits.ssh_key_fingerprint"}}:</span>
+								<code>{{.Verification.SigningSSHKey.Fingerprint}}</code>
+							</div>
+						{{end}}
+					</div>
+				{{end}}
 				{{if not .DiffNotAvailable}}
 					<div class="commit-stats-row">
 						<div class="commit-files-changed">{{.DiffMetadata.TotalNumberOfFiles}} {{if eq .DiffMetadata.TotalNumberOfFiles 1}}file{{else}}files{{end}} changed</div>
@@ -206,18 +268,20 @@
 							<button id="commit-notes-edit-button" class="ui tiny primary button tw-py-[6px] tw-px-[10px]">{{ctx.Locale.Tr "edit"}}</button>
 							<button class="ui tiny button red show-modal tw-py-[6px] tw-px-[10px]" data-modal="#delete-note-modal">{{ctx.Locale.Tr "remove"}}</button>
 						</div>
-						<div class="ui small modal" id="delete-note-modal">
-							<div class="header">{{ctx.Locale.Tr "repo.diff.git-notes.remove-header"}}</div>
-							<div class="content">
-								<p>{{ctx.Locale.Tr "repo.diff.git-notes.remove-body"}}</p>
-								<div class="text right actions">
-									<form action="{{.Link}}/notes/remove" method="post">
+						<dialog id="delete-note-modal">
+							<article>
+								<header>{{ctx.Locale.Tr "repo.diff.git-notes.remove-header"}}</header>
+								<div class="content">
+									<p>{{ctx.Locale.Tr "repo.diff.git-notes.remove-body"}}</p>
+								</div>
+								<form action="{{.Link}}/notes/remove" method="post">
+									<div class="actions">
 										<button type="button" class="ui cancel button">{{ctx.Locale.Tr "settings.cancel"}}</button>
 										<button type="submit" class="ui red button">{{ctx.Locale.Tr "remove"}}</button>
-									</form>
-								</div>
-							</div>
-						</div>
+									</div>
+								</form>
+							</article>
+						</dialog>
 					{{end}}
 				</div>
 				<div id="commit-notes-display-area" class="ui bottom attached info segment git-notes">
