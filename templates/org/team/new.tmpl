@@ -1,0 +1,166 @@
+{{/* GitHub's team settings in the theme's settings look: the name and description, repository access and permission
+as titled groups of GitHub checkboxes and radios, the unit permissions as a boxed table, and Delete team in the danger
+zone below the form instead of beside its submit button. */}}
+{{template "base/head" .}}
+<div role="main" aria-label="{{.Title}}" class="page-content organization new team">
+	{{template "org/header" .}}
+	<div class="ui container flex-container theme-settings theme-team-form">
+		<div class="flex-container-main">
+			<form class="ui form" action="{{if .PageIsOrgTeamsNew}}{{.OrgLink}}/teams/new{{else}}{{.OrgLink}}/teams/{{.Team.LowerName | PathEscape}}/edit{{end}}" data-delete-url="{{.OrgLink}}/teams/{{.Team.LowerName | PathEscape}}/delete" method="post">
+				<h3 class="ui top attached header">
+					{{if .PageIsOrgTeamsNew}}{{ctx.Locale.Tr "org.create_new_team"}}{{else}}{{ctx.Locale.Tr "org.teams.settings"}}{{end}}
+					{{if not .PageIsOrgTeamsNew}}
+						<div class="ui right">
+							<a class="ui button" href="{{.OrgLink}}/teams/{{.Team.LowerName | PathEscape}}">{{svg "octicon-people" 16}}{{.Team.Name}}</a>
+						</div>
+					{{end}}
+				</h3>
+				<div class="ui attached segment">
+					{{template "base/alert" .}}
+					<div class="required field {{if .Err_TeamName}}error{{end}}">
+						<label for="team_name">{{ctx.Locale.Tr "org.team_name"}}</label>
+						{{if eq .Team.LowerName "owners"}}
+							<input type="hidden" name="team_name" value="{{.Team.Name}}">
+						{{end}}
+						<input id="team_name" name="team_name" value="{{.Team.Name}}" required {{if eq .Team.LowerName "owners"}}disabled{{end}} autofocus>
+						<span class="help">{{ctx.Locale.Tr "org.team_name_helper"}}</span>
+					</div>
+					<div class="field {{if .Err_Description}}error{{end}}">
+						<label for="description">{{ctx.Locale.Tr "org.team_desc"}}</label>
+						<input id="description" name="description" value="{{.Team.Description}}">
+						<span class="help">{{ctx.Locale.Tr "org.team_desc_helper"}}</span>
+					</div>
+					{{if not (eq .Team.LowerName "owners")}}
+						<fieldset>
+							<legend>{{ctx.Locale.Tr "settings.specific_repo_access"}}</legend>
+							<label class="theme-team-choice">
+								<input type="radio" name="repo_access" value="specific" {{if not .Team.IncludesAllRepositories}}checked{{end}}>
+								{{ctx.Locale.Tr "org.teams.specific_repositories"}}
+								<span class="help">{{ctx.Locale.Tr "org.teams.specific_repositories_helper"}}</span>
+							</label>
+							<label class="theme-team-choice">
+								<input type="radio" name="repo_access" value="all" {{if .Team.IncludesAllRepositories}}checked{{end}}>
+								{{ctx.Locale.Tr "org.teams.all_repositories"}}
+								<span class="help">{{ctx.Locale.Tr "org.teams.all_repositories_helper"}}</span>
+							</label>
+							<label class="theme-team-choice">
+								<input name="can_create_org_repo" type="checkbox" {{if .Team.CanCreateOrgRepo}}checked{{end}}>
+								{{ctx.Locale.Tr "org.teams.can_create_org_repo"}}
+								<span class="help">{{ctx.Locale.Tr "org.teams.can_create_org_repo_helper"}}</span>
+							</label>
+						</fieldset>
+						<fieldset>
+							<legend>{{ctx.Locale.Tr "org.team_permission_desc"}}</legend>
+							<label class="theme-team-choice">
+								<input type="radio" name="permission" value="admin" {{if eq .Team.AccessMode 3}}checked{{end}}>
+								{{ctx.Locale.Tr "org.teams.admin_access"}}
+								<span class="help">{{ctx.Locale.Tr "org.teams.admin_access_helper"}}</span>
+							</label>
+							<label class="theme-team-choice">
+								<input type="radio" name="permission" value="read" {{if or .PageIsOrgTeamsNew (le .Team.AccessMode 2)}}checked{{end}}>
+								{{ctx.Locale.Tr "org.teams.general_access"}}
+								<span class="help">{{ctx.Locale.Tr "org.teams.general_access_helper"}}</span>
+							</label>
+							<fieldset class="hide-unless-checked theme-team-units">
+								<legend>{{ctx.Locale.Tr "org.team_unit_desc"}}
+									<span class="help">{{ctx.Locale.Tr "org.teams.none_access_helper"}}</span>
+								</legend>
+								<table class="ui table optionmatrix">
+									<thead>
+										<tr>
+											<th>{{ctx.Locale.Tr "units.unit"}}</th>
+											<th id="access_none">{{ctx.Locale.Tr "org.teams.none_access"}}</th>
+											<th>{{ctx.Locale.Tr "org.teams.read_access"}}</th>
+											<th>{{ctx.Locale.Tr "org.teams.write_access"}}</th>
+										</tr>
+									</thead>
+									<tbody>
+										{{range $t, $unit := $.Units}}
+											{{if ge $unit.MaxPerm 2}}
+												<tr>
+													<td>
+														<label {{if $unit.Type.UnitGlobalDisabled}} data-tooltip-content="{{ctx.Locale.Tr "repo.unit_disabled"}}"{{end}}>
+															<span id="help_{{$unit.Type.Value}}_name">{{ctx.Locale.Tr $unit.NameKey}}{{if $unit.Type.UnitGlobalDisabled}} {{ctx.Locale.Tr "org.team_unit_disabled"}}{{end}}</span>
+															<span class="help" id="help_{{$unit.Type.Value}}_r">{{ctx.Locale.Tr (print "repo.permissions." $unit.Name ".read")}}</span>
+															<span class="help" id="help_{{$unit.Type.Value}}_w">{{ctx.Locale.Tr (print "repo.permissions." $unit.Name ".write")}}</span>
+														</label>
+													</td>
+													<td>
+														<label>
+															<input aria-labelledby="help_{{$unit.Type.Value}}_name access_none" type="radio" name="unit_{{$unit.Type.Value}}" value="0"{{if or ($unit.Type.UnitGlobalDisabled) (eq ($.Team.UnitAccessMode $.Context $unit.Type) 0)}} checked{{end}}>
+															<span class="only-mobile">{{ctx.Locale.Tr "org.teams.none_access"}}</span>
+														</label>
+													</td>
+													<td>
+														<label>
+															<input aria-labelledby="help_{{$unit.Type.Value}}_name help_{{$unit.Type.Value}}_r" type="radio" name="unit_{{$unit.Type.Value}}" value="1"{{if or (eq $.Team.ID 0) (eq ($.Team.UnitAccessMode $.Context $unit.Type) 1)}} checked{{end}} {{if $unit.Type.UnitGlobalDisabled}}disabled{{end}}>
+															<span class="only-mobile">{{ctx.Locale.Tr "org.teams.read_access"}}</span>
+														</label>
+													</td>
+													<td>
+														<label>
+															<input aria-labelledby="help_{{$unit.Type.Value}}_name help_{{$unit.Type.Value}}_w" type="radio" name="unit_{{$unit.Type.Value}}" value="2"{{if (ge ($.Team.UnitAccessMode $.Context $unit.Type) 2)}} checked{{end}} {{if $unit.Type.UnitGlobalDisabled}}disabled{{end}}>
+															<span class="only-mobile">{{ctx.Locale.Tr "org.teams.write_access"}}</span>
+														</label>
+													</td>
+												</tr>
+											{{end}}
+										{{end}}
+									</tbody>
+								</table>
+								<fieldset>
+								{{range $t, $unit := $.Units}}
+									{{if lt $unit.MaxPerm 2}}
+										<label class="theme-team-choice" {{if $unit.Type.UnitGlobalDisabled}}data-tooltip-content="{{ctx.Locale.Tr "repo.unit_disabled"}}"{{end}}>
+											<input type="checkbox" name="unit_{{$unit.Type.Value}}" value="1"{{if or (eq $.Team.ID 0) (eq ($.Team.UnitAccessMode $.Context $unit.Type) 1)}} checked{{end}} {{if $unit.Type.UnitGlobalDisabled}}disabled{{end}}>
+												{{ctx.Locale.Tr $unit.NameKey}}{{if $unit.Type.UnitGlobalDisabled}} {{ctx.Locale.Tr "org.team_unit_disabled"}}{{end}}
+											<span class="help">{{ctx.Locale.Tr (print "repo.permissions." $unit.Name)}}</span>
+										</label>
+									{{end}}
+								{{end}}
+								</fieldset>
+							</fieldset>
+						</fieldset>
+					{{end}}
+
+					<div class="field theme-team-submit">
+						{{if .PageIsOrgTeamsNew}}
+							<button class="ui primary button">{{ctx.Locale.Tr "org.create_team"}}</button>
+						{{else}}
+							<button class="ui primary button">{{ctx.Locale.Tr "org.teams.update_settings"}}</button>
+						{{end}}
+					</div>
+				</div>
+			</form>
+			{{if and (not .PageIsOrgTeamsNew) (not (eq .Team.LowerName "owners"))}}
+				<h4 class="ui top attached error header">
+					{{ctx.Locale.Tr "repo.settings.danger_zone"}}
+				</h4>
+				<div class="ui attached error danger segment">
+					<div class="flex-list">
+						<div class="flex-item">
+							<div class="flex-item-main">
+								<div class="flex-item-title">{{ctx.Locale.Tr "org.teams.delete_team"}}</div>
+							</div>
+							<div class="flex-item-trailing">
+								<button class="ui basic red button delete-button" data-url="{{.OrgLink}}/teams/{{.Team.Name | PathEscape}}/delete" data-modal-id="delete-team">{{ctx.Locale.Tr "org.teams.delete_team"}}</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			{{end}}
+		</div>
+	</div>
+</div>
+
+<div class="ui g-modal-confirm delete modal" id="delete-team">
+	<div class="header">
+		{{svg "octicon-trash"}}
+		{{ctx.Locale.Tr "org.teams.delete_team_title"}}
+	</div>
+	<div class="content">
+		<p>{{ctx.Locale.Tr "org.teams.delete_team_desc"}}</p>
+	</div>
+	{{template "base/modal_actions_confirm" .}}
+</div>
+{{template "base/footer" .}}

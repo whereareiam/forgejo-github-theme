@@ -256,6 +256,11 @@
       border: 0;
       background: transparent;
     }
+    /* GitHub's danger zone rows: 16px inside the red box, the action centred beside its title. */
+    & > .flex-list > .flex-item {
+      align-items: center;
+      padding: 16px;
+    }
     & .flex-item-title {
       font-size: 14px;
       font-weight: 600;
@@ -767,6 +772,16 @@
     > .flex-container-main
     .ui.attached.segment.theme-settings-columns {
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* A danger zone row puts its button under the text on a phone, as GitHub does, instead of wrapping the label. */
+  .page-content > .ui.container.flex-container.theme-settings > .flex-container-main .ui.attached.error.segment {
+    & > .flex-list > .flex-item {
+      flex-wrap: wrap;
+      & > .flex-item-main {
+        flex-basis: 100%;
+      }
+    }
   }
 
   .theme-settings-context {

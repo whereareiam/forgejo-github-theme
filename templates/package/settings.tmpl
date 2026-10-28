@@ -1,0 +1,77 @@
+{{/* A package's settings in GitHub's settings look: the package as the settings context with a button back to it,
+the repository link as a section with the picker beside its button, and deletion in the danger zone. */}}
+{{template "base/head" .}}
+<div role="main" aria-label="{{.Title}}" class="page-content repository settings options{{if .ContextUser.IsOrganization}} organization{{end}} theme-package-settings">
+	{{if .ContextUser.IsOrganization}}
+		{{template "org/header" .}}
+	{{else}}
+		{{template "shared/user/org_profile_avatar" .}}
+		<div class="ui container">
+			{{template "user/overview/header" .}}
+		</div>
+	{{end}}
+	<div class="ui container theme-settings-context-container">
+		{{template "components/common/settings/context" dict "Icon" .PackageDescriptor.Package.Type.SVGName "Title" .PackageDescriptor.Package.Name "Login" .PackageDescriptor.Version.Version "Subtitle" (ctx.Locale.Tr "repo.settings") "Link" .PackageDescriptor.VersionWebLink "LinkIcon" "octicon-package" "LinkLabel" (ctx.Locale.Tr "home.view_home" .PackageDescriptor.Package.Name)}}
+	</div>
+	<div class="ui container flex-container theme-settings">
+		<div class="flex-container-main">
+			{{template "base/alert" .}}
+			<h4 class="ui top attached header">
+				{{ctx.Locale.Tr "packages.settings.link"}}
+			</h4>
+			<div class="ui attached segment">
+				<p class="theme-settings-description">{{ctx.Locale.Tr "packages.settings.link.description"}}</p>
+				<form class="ui form theme-settings-inline-form" action="{{.Link}}" method="post">
+					{{template "base/disable_form_autofill"}}
+					<input type="hidden" name="action" value="link">
+					<div class="ui clearable selection dropdown search">
+						{{$repoID := 0}}
+						{{if .PackageDescriptor.Repository}}
+							{{$repoID = .PackageDescriptor.Repository.ID}}
+						{{end}}
+						<input type="hidden" name="repo_id" value="{{$repoID}}">
+						{{svg "octicon-triangle-down" 14 "dropdown icon"}}
+						<div class="default text">{{ctx.Locale.Tr "packages.settings.link.select"}}</div>
+						<div class="menu">
+							{{range .Repos}}
+								<div class="item" data-value="{{.ID}}">{{.Name}}</div>
+							{{end}}
+						</div>
+					</div>
+					<button class="ui primary button">{{ctx.Locale.Tr "packages.settings.link.button"}}</button>
+				</form>
+			</div>
+			<h4 class="ui top attached error header">
+				{{ctx.Locale.Tr "repo.settings.danger_zone"}}
+			</h4>
+			<div class="ui attached error danger segment">
+				<div class="flex-list">
+					<div class="flex-item">
+						<div class="flex-item-main">
+							<div class="flex-item-title">{{ctx.Locale.Tr "packages.settings.delete"}}</div>
+							<div class="flex-item-body">{{ctx.Locale.Tr "packages.settings.delete.description"}}</div>
+						</div>
+						<div class="flex-item-trailing">
+							<button class="ui basic red show-modal button" data-modal="#delete-package-modal">{{ctx.Locale.Tr "packages.settings.delete"}}</button>
+						</div>
+						<dialog id="delete-package-modal">
+							<article>
+								<header>{{ctx.Locale.Tr "packages.settings.delete"}}</header>
+								<div class="content">
+									<div class="ui warning message tw-break-anywhere">
+										{{ctx.Locale.Tr "packages.settings.delete.notice" .PackageDescriptor.Package.Name .PackageDescriptor.Version.Version}}
+									</div>
+								</div>
+								<form class="ui form" action="{{.Link}}" method="post">
+									<input type="hidden" name="action" value="delete">
+									{{template "base/modal_actions_confirm" .}}
+								</form>
+							</article>
+						</dialog>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{{template "base/footer" .}}

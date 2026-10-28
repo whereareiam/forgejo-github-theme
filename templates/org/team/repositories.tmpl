@@ -1,0 +1,87 @@
+{{/* GitHub's team repositories: the repository search with Add, Add all and Remove all above a box that counts the
+repositories, with a row per repository and Remove where the team's repositories are picked one by one. */}}
+{{template "base/head" .}}
+<div role="main" aria-label="{{.Title}}" class="page-content organization teams">
+	{{template "org/header" .}}
+	<div class="ui container">
+		{{template "base/alert" .}}
+		<div class="ui stackable grid">
+			{{template "org/team/sidebar" .}}
+			<div class="ui ten wide column">
+				{{template "org/team/navbar" .}}
+				{{$canAddRemove := and $.IsOrganizationOwner (not $.Team.IncludesAllRepositories)}}
+				{{if $canAddRemove}}
+					<div class="theme-box-list-toolbar theme-team-toolbar">
+						<form class="ui form ignore-dirty theme-team-add" action="{{$.OrgLink}}/teams/{{$.Team.LowerName | PathEscape}}/action/repo/add" method="post">
+							<div id="search-repo-box" data-uid="{{.Org.ID}}" class="ui search theme-team-search">
+								<div class="ui input">
+									<input class="prompt" name="repo_name" placeholder="{{ctx.Locale.Tr "search.repo_kind"}}" aria-label="{{ctx.Locale.Tr "search.repo_kind"}}" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" required>
+								</div>
+							</div>
+							<button class="ui primary button theme-control">{{ctx.Locale.Tr "add"}}</button>
+						</form>
+						<div class="theme-team-toolbar-actions">
+							<button class="ui button theme-control show-modal" data-modal="#addall-repos-modal">{{ctx.Locale.Tr "add_all"}}</button>
+							<button class="ui red button theme-control show-modal" data-modal="#removeall-repos-modal">{{ctx.Locale.Tr "remove_all"}}</button>
+						</div>
+					</div>
+				{{end}}
+				<div class="theme-box-list theme-team-list">
+					<div class="theme-box-list-header">
+						<h2 class="theme-box-list-title">{{ctx.Locale.Tr "user.repositories"}} <span class="theme-counter">{{ctx.Locale.PrettyNumber .Team.NumRepos}}</span></h2>
+					</div>
+					{{if .Team.Repos}}
+					<ul class="theme-box-list-rows">
+						{{range .Team.Repos}}
+							<li class="theme-box-list-row theme-team-row">
+								<span class="theme-team-repo-icon">{{template "repo/icon" .}}</span>
+								<div class="theme-box-list-main">
+									<h3><a href="{{$.Org.HomeLink}}/{{.Name | PathEscape}}">{{$.Org.Name}}/{{.Name}}</a></h3>
+									{{if .Description}}<p class="theme-box-list-meta">{{.Description}}</p>{{end}}
+								</div>
+								{{if $canAddRemove}}
+									<form method="post" action="{{$.OrgLink}}/teams/{{$.Team.LowerName | PathEscape}}/action/repo/remove">
+										<button type="submit" class="ui red button theme-control theme-control-small" name="repoid" value="{{.ID}}">{{ctx.Locale.Tr "remove"}}</button>
+									</form>
+								{{end}}
+							</li>
+						{{end}}
+					</ul>
+					{{else}}
+					<div class="theme-empty theme-empty-compact">
+						{{svg "octicon-repo" 24}}
+						<h3>{{ctx.Locale.Tr "org.teams.repos.none"}}</h3>
+					</div>
+					{{end}}
+				</div>
+				{{template "base/paginate" .}}
+			</div>
+		</div>
+	</div>
+</div>
+
+<dialog id="addall-repos-modal">
+	<article>
+		<header>{{ctx.Locale.Tr "teams.add_all_repos.modal.header"}}</header>
+		<div class="content">
+			<span>{{ctx.Locale.Tr "org.teams.add_all_repos_desc"}}</span>
+		</div>
+		<form class="ui form" action="{{$.OrgLink}}/teams/{{$.Team.LowerName | PathEscape}}/action/repo/addall" method="post">
+			{{template "base/modal_actions_confirm" .}}
+		</form>
+	</article>
+</dialog>
+
+<dialog id="removeall-repos-modal">
+	<article>
+		<header>{{ctx.Locale.Tr "teams.remove_all_repos.modal.header"}}</header>
+		<div class="content">
+			<span>{{ctx.Locale.Tr "org.teams.remove_all_repos_desc"}}</span>
+		</div>
+		<form class="ui form" action="{{$.OrgLink}}/teams/{{$.Team.LowerName | PathEscape}}/action/repo/removeall" method="post">
+			{{template "base/modal_actions_confirm" .}}
+		</form>
+	</article>
+</dialog>
+
+{{template "base/footer" .}}

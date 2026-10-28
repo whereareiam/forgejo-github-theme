@@ -1,5 +1,15 @@
-<section class="profile-packages">
-<h2 class="profile-subpage-title"><a href="{{.PackageDescriptor.PackageWebLink}}">{{.PackageDescriptor.Package.Name}}</a> / {{ctx.Locale.Tr "packages.versions"}}</h2>
+{{/* GitHub's package versions: the package and Versions as a breadcrumb over the Versions heading, the search and
+sort, then a box whose header counts the versions (or switches between tagged and untagged container images), with a
+row per version and its downloads. */}}
+<section class="profile-packages theme-package-versions-page">
+<nav class="theme-package-breadcrumb" aria-label="{{ctx.Locale.Tr "packages.versions"}}">
+	<a href="{{.PackageDescriptor.PackageWebLink}}">{{.PackageDescriptor.Package.Name}}</a>
+	<span aria-hidden="true">/</span>
+	<a href="{{.PackageDescriptor.PackageWebLink}}/versions" aria-current="page">{{ctx.Locale.Tr "packages.versions"}}</a>
+</nav>
+<h2 class="theme-package-subhead">{{ctx.Locale.Tr "packages.versions"}}</h2>
+{{$isContainer := eq .PackageDescriptor.Package.Type "container"}}
+{{$isTagged := or (eq .Tagged "") (eq .Tagged "tagged")}}
 <form class="ui form ignore-dirty profile-list-search">
 	<div class="profile-search-controls">
 		{{template "components/common/search/search" dict "Kind" "plain" "Value" .Query "Placeholder" (ctx.Locale.Tr "search.package_kind")}}
@@ -9,32 +19,40 @@
 			<option value="created_asc"{{if eq .Sort "created_asc"}} selected="selected"{{end}}>{{ctx.Locale.Tr "issues.search.sort.oldest"}}</option>
 			<option value="created_desc"{{if or (eq .Sort "") (eq .Sort "created_desc")}} selected="selected"{{end}}>{{ctx.Locale.Tr "issues.search.sort.latest"}}</option>
 		</select></span>
-		{{if eq .PackageDescriptor.Package.Type "container"}}
-		<span class="theme-select-wrap"><select class="theme-select" name="tagged" aria-label="{{ctx.Locale.Tr "packages.filter.container.tagged"}}">
-			{{$isTagged := or (eq .Tagged "") (eq .Tagged "tagged")}}
-			<option value="tagged"{{if $isTagged}} selected="selected"{{end}}>{{ctx.Locale.Tr "packages.filter.container.tagged"}}</option>
-			<option value="untagged"{{if not $isTagged}} selected="selected"{{end}}>{{ctx.Locale.Tr "packages.filter.container.untagged"}}</option>
-		</select></span>
-		{{end}}
+		{{if $isContainer}}<input type="hidden" name="tagged" value="{{if $isTagged}}tagged{{else}}untagged{{end}}">{{end}}
 		<button class="secondary button theme-control theme-control-wide" type="submit">{{ctx.Locale.Tr "search.search"}}</button>
 	</div>
 </form>
-<div class="profile-package-list">
-	{{range .PackageDescriptors}}
-	<div class="profile-package-row">
-		<div class="flex-item">
-			<div class="flex-item-main">
-				<a class="flex-item-title" href="{{.VersionWebLink}}">{{.Version.LowerVersion}}</a>
-				<div class="flex-item-body">
-					{{ctx.Locale.Tr "packages.published_by" (DateUtils.TimeSince .Version.CreatedUnix) .Creator.HomeLink .Creator.GetDisplayName}}
-				</div>
-			</div>
-		</div>
+<div class="theme-box-list theme-package-version-list">
+	<div class="theme-box-list-header">
+		{{if $isContainer}}
+			{{$base := printf "%s/versions?q=%s&sort=%s" .PackageDescriptor.PackageWebLink (QueryEscape .Query) (QueryEscape .Sort)}}
+			<nav class="theme-box-list-states" aria-label="{{ctx.Locale.Tr "packages.versions"}}">
+				<a href="{{$base}}&tagged=tagged"{{if $isTagged}} aria-current="page"{{end}}>{{svg "octicon-tag" 16}}{{ctx.Locale.Tr "packages.filter.container.tagged"}}{{if $isTagged}} <span class="theme-counter">{{ctx.Locale.PrettyNumber .Total}}</span>{{end}}</a>
+				<a href="{{$base}}&tagged=untagged"{{if not $isTagged}} aria-current="page"{{end}}>{{ctx.Locale.Tr "packages.filter.container.untagged"}}{{if not $isTagged}} <span class="theme-counter">{{ctx.Locale.PrettyNumber .Total}}</span>{{end}}</a>
+			</nav>
+		{{else}}
+			<h3 class="theme-box-list-title">{{svg "octicon-versions" 16}}{{ctx.Locale.Tr "packages.versions"}} <span class="theme-counter">{{ctx.Locale.PrettyNumber .Total}}</span></h3>
+		{{end}}
 	</div>
+	{{if .PackageDescriptors}}
+	<ul class="theme-box-list-rows">
+		{{range .PackageDescriptors}}
+		<li class="theme-box-list-row">
+			<div class="theme-box-list-main">
+				<h3><a href="{{.VersionWebLink}}">{{.Version.LowerVersion}}</a></h3>
+				<p class="theme-box-list-meta">{{ctx.Locale.Tr "packages.published_by" (DateUtils.TimeSince .Version.CreatedUnix) .Creator.HomeLink .Creator.GetDisplayName}}</p>
+			</div>
+			<span class="theme-package-downloads">{{svg "octicon-download" 16}}{{ctx.Locale.PrettyNumber .Version.DownloadCount}}<span class="tw-sr-only">{{ctx.Locale.Tr "repo.release.downloads"}}</span></span>
+		</li>
+		{{end}}
+	</ul>
 	{{else}}
-		{{template "user/profile_empty" dict "Icon" "octicon-package" "Title" (ctx.Locale.Tr "packages.filter.no_result")}}
+	<div class="theme-empty theme-empty-compact">
+		{{svg "octicon-versions" 24}}
+		<h3>{{ctx.Locale.Tr "packages.filter.no_result"}}</h3>
+	</div>
 	{{end}}
 </div>
 {{template "base/paginate" .}}
-
 </section>

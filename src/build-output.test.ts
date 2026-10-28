@@ -1131,6 +1131,56 @@ describe("Forgejo 15 native integration", () => {
     expect(header).toContain('{{template "shared/funding" .}}');
   });
 
+  it("lists a team's members and repositories in box lists, with team settings in the settings layout", () => {
+    const read = (...parts: string[]) =>
+      fs.readFileSync(path.join(ROOT_DIR, "templates", "org", "team", ...parts), "utf-8");
+    const members = read("members.tmpl");
+    expect(members).toContain('<li class="theme-box-list-row theme-team-row">');
+    // Forgejo's user search and removal confirmation keep their hooks.
+    expect(members).toContain('id="search-user-box"');
+    expect(members).toContain('data-modal-id="remove-team-member"');
+    // Remove is a 28px small control in the row, not Forgejo's 40px button.
+    expect(members).toContain('class="ui red button theme-control theme-control-small delete-button"');
+    const repositories = read("repositories.tmpl");
+    expect(repositories).toContain('id="search-repo-box" data-uid="{{.Org.ID}}"');
+    expect(repositories).toContain('data-modal="#removeall-repos-modal"');
+    // The sidebar's permission table keeps its two columns on a phone instead of Fomantic's stacked cells.
+    expect(read("sidebar.tmpl")).toContain('<table class="ui unstackable table">');
+    const form = read("new.tmpl");
+    expect(form).toContain('class="ui container flex-container theme-settings theme-team-form"');
+    // Custom access must stay the label right before the unit table, which Forgejo hides until it is ticked.
+    expect(form).toMatch(
+      /value="read"[^\n]*\n(?:[^\n]*\n){3}\s*<fieldset class="hide-unless-checked theme-team-units">/
+    );
+    // Delete team moves to a danger zone after the form, keeping its confirmation.
+    expect(form.indexOf('data-modal-id="delete-team"')).toBeGreaterThan(form.indexOf("</form>"));
+    expect(form).toContain('{{ctx.Locale.Tr "repo.settings.danger_zone"}}');
+  });
+
+  it("matches GitHub's package page, versions list and package settings", () => {
+    const read = (...parts: string[]) => fs.readFileSync(path.join(ROOT_DIR, ...parts), "utf-8");
+    const view = read("templates", "package", "view.tmpl");
+    const sidebar = view.slice(view.indexOf('class="theme-package-sidebar"'));
+    expect(view).toContain('class="theme-package-header-version"');
+    // Every package type keeps its installation content and its details in the sidebar.
+    for (const type of ["container", "generic", "npm", "maven", "pypi", "vagrant"]) {
+      expect(view).toContain(`{{template "package/content/${type}" .}}`);
+      expect(sidebar).toContain(`{{template "package/metadata/${type}" .}}`);
+    }
+    expect(sidebar.indexOf("packages.details")).toBeLessThan(sidebar.indexOf("packages.versions"));
+    expect(sidebar).toContain('href="{{$.PackageDescriptor.PackageWebLink}}/versions"');
+    expect(view).not.toContain("issue-content-right");
+    const versions = read("templates", "user", "profile_package_versions.tmpl");
+    expect(versions).toContain('<li class="theme-box-list-row">');
+    expect(versions).toContain('name="tagged"');
+    expect(versions).toContain(".Version.DownloadCount");
+    const settings = read("templates", "package", "settings.tmpl");
+    expect(settings).toContain('template "components/common/settings/context"');
+    expect(settings).toContain('<form class="ui form theme-settings-inline-form" action="{{.Link}}" method="post">');
+    expect(settings).toContain('<input type="hidden" name="action" value="delete">');
+    expect(read("styles", "components", "repo", "packages.ts")).not.toContain(".issue-content-left");
+  });
+
   it("lays out password recovery and activation like sign-in", () => {
     for (const page of ["forgot_passwd.tmpl", "reset_passwd.tmpl", "activate.tmpl"]) {
       const template = fs.readFileSync(path.join(ROOT_DIR, "templates", "user", "auth", page), "utf-8");
