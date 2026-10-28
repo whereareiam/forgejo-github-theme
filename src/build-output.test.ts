@@ -915,6 +915,60 @@ describe("Forgejo 15 native integration", () => {
     expect(style).toContain("background: ${themeVars.color.box.header};");
   });
 
+  it("commits from GitHub's dialog in the editor's own form, keeping Forgejo's commit fields", () => {
+    const read = (...parts: string[]) => fs.readFileSync(path.join(ROOT_DIR, ...parts), "utf-8");
+    const editor = (name: string) => read("templates", "repo", "editor", `${name}.tmpl`);
+    const commit = editor("commit_form");
+    // The dialog is the commit form itself: inside the page's <form>, out of the unsaved-changes check.
+    expect(commit).toContain('<dialog id="theme-commit-dialog" class="commit-form-wrapper theme-commit-dialog"');
+    expect(commit).toContain('<div class="commit-form-wrapper theme-commit-box">');
+    for (const contract of [
+      'name="commit_summary"',
+      'name="commit_message"',
+      'name="signoff"',
+      'class="js-quick-pull-choice-option" name="commit_choice" value="direct"',
+      'class="js-quick-pull-choice-option" name="commit_choice" value="commit-to-new-branch"',
+      'class="quick-pull-branch-name',
+      'name="new_branch_name"',
+      "js-quick-pull-normalization-info",
+      'name="commit_mail_id"',
+      'id="commit-button" type="submit"',
+    ])
+      expect(commit, contract).toContain(contract);
+    // A refused branch name or email reopens the dialog over Forgejo's alert, so the dialog repeats it.
+    expect(commit).toContain("{{if and $dialog (or .Err_NewBranchName .Err_CommitMailID) .Flash.ErrorMsg}}");
+    // Commit changes… opens it everywhere but on the upload page, which keeps GitHub's commit box.
+    for (const page of ["edit", "patch", "cherry_pick", "delete"])
+      expect(editor(page), page).toContain('{{template "components/repository/editor/actions"');
+    expect(editor("upload")).not.toContain("components/repository/editor/actions");
+    expect(read("components", "repository", "editor", "actions.tmpl")).toContain(
+      'command="show-modal" commandfor="theme-commit-dialog"'
+    );
+    // Forgejo's editor script reads these; "or Cancel" became the Cancel button.
+    const edit = editor("edit");
+    for (const hook of [
+      'class="ui edit form"',
+      'name="last_commit"',
+      'name="page_has_posted"',
+      'id="file-name"',
+      'id="tree_path" name="tree_path"',
+      '<div id="editor-bar">',
+      'data-tab="diff"',
+      'id="editor-find"',
+      'id="edit_area" name="content"',
+      '<dialog id="edit-empty-content-modal">',
+    ])
+      expect(edit, hook).toContain(hook);
+    expect(edit).not.toContain("repo.editor.or");
+    expect(read("components", "repository", "editor", "branch.tmpl")).not.toContain('class="section"');
+    expect(read("templates", "base", "component_assets.tmpl")).toContain("/js/components/repository/editor/editor.js");
+    expect(
+      fs.existsSync(
+        path.join(DIST_DIR, "forgejo", "public", "assets", "js", "components", "repository", "editor", "editor.js")
+      )
+    ).toBe(true);
+  });
+
   it("lists forks in a box and shows GitHub's empty state without them", () => {
     const forks = fs.readFileSync(path.join(ROOT_DIR, "templates", "repo", "forks.tmpl"), "utf-8");
     expect(forks).toContain('<li class="theme-box-list-row theme-fork-row">');

@@ -1,0 +1,119 @@
+{{/* GitHub commits an edit, a new file, a patch, a cherry-pick or a deletion from a dialog that Commit changes… at the
+top right opens (components/repository/editor/actions); the upload page keeps the commit box under the files, as on
+GitHub. Both are Forgejo's commit form inside the page's <form>: the same fields, choices and #commit-button, and the
+commit-form-wrapper class that keeps them out of the editor's unsaved-changes check. */}}
+{{$dialog := not .PageIsUpload}}
+{{if $dialog}}
+<dialog id="theme-commit-dialog" class="commit-form-wrapper theme-commit-dialog" aria-labelledby="theme-commit-dialog-title">
+{{else}}
+<div class="commit-form-wrapper theme-commit-box">
+	{{ctx.AvatarUtils.Avatar .SignedUser 48 "commit-avatar"}}
+{{end}}
+	<div class="commit-form">
+		<header class="theme-commit-header">
+			<h2 id="theme-commit-dialog-title">{{- if .CanCommitToBranch.WillSign}}
+				<span title="{{ctx.Locale.Tr "repo.signing.will_sign" .CanCommitToBranch.SigningKey}}">{{svg "octicon-lock" 16}}</span>
+				{{ctx.Locale.Tr "repo.editor.commit_signed_changes"}}
+			{{- else}}
+				<span title="{{ctx.Locale.Tr (printf "repo.signing.wont_sign.%s" .CanCommitToBranch.WontSignReason)}}">{{svg "octicon-unlock" 16}}</span>
+				{{ctx.Locale.Tr "repo.editor.commit_changes"}}
+			{{- end}}</h2>
+			{{if $dialog}}
+				<button type="button" class="theme-commit-close" command="close" commandfor="theme-commit-dialog" aria-label="{{ctx.Locale.Tr "modal.close"}}">{{svg "octicon-x" 16}}</button>
+			{{end}}
+		</header>
+		<div class="theme-commit-body">
+			{{/* Forgejo's alert for a refused branch name or email sits behind the reopened dialog; repeat it here. */}}
+			{{if and $dialog (or .Err_NewBranchName .Err_CommitMailID) .Flash.ErrorMsg}}
+				<div class="ui negative message theme-commit-error" role="alert"><p>{{.Flash.ErrorMsg | SanitizeHTML}}</p></div>
+			{{end}}
+			<div class="field">
+				{{if $dialog}}<label for="commit_summary">{{ctx.Locale.Tr "form.CommitMessage"}}</label>{{end}}
+				<input id="commit_summary" name="commit_summary" maxlength="100" placeholder="{{if .PageIsDelete}}{{ctx.Locale.Tr "repo.editor.delete" .TreePath}}{{else if .PageIsUpload}}{{ctx.Locale.Tr "repo.editor.upload_files_to_dir" .TreePath}}{{else if .IsNewFile}}{{ctx.Locale.TrString "repo.editor.add_tmpl" (ctx.Locale.TrString "repo.editor.add_tmpl.filename")}}{{else if .PageIsPatch}}{{ctx.Locale.Tr "repo.editor.patch"}}{{else}}{{ctx.Locale.Tr "repo.editor.update" .TreePath}}{{end}}" value="{{.commit_summary}}" autofocus>
+			</div>
+			<div class="field">
+				{{if $dialog}}<label for="commit_message">{{ctx.Locale.Tr "form.Description"}}</label>{{end}}
+				<textarea id="commit_message" name="commit_message" placeholder="{{ctx.Locale.Tr "repo.editor.commit_message_desc"}}" rows="5">{{.commit_message}}</textarea>
+			</div>
+			<div class="inline field">
+				<div class="ui checkbox">
+					<input id="commit_signoff" name="signoff" type="checkbox">
+					<label for="commit_signoff">{{ctx.Locale.Tr "repo.editor.signoff_desc"}}</label>
+				</div>
+			</div>
+			<div class="quick-pull-choice js-quick-pull-choice">
+				<div class="field">
+					<div class="ui radio checkbox {{if not .CanCommitToBranch.CanCommitToBranch}}disabled{{end}}">
+						<input id="commit_choice_direct" type="radio" class="js-quick-pull-choice-option" name="commit_choice" value="direct" button_text="{{ctx.Locale.Tr "repo.editor.commit_changes"}}" {{if eq .commit_choice "direct"}}checked{{end}}>
+						<label for="commit_choice_direct">
+							{{svg "octicon-git-commit"}}
+							{{ctx.Locale.Tr "repo.editor.commit_directly_to_this_branch" .BranchName "branch-name"}}
+							{{if not .CanCommitToBranch.CanCommitToBranch}}
+							<div class="ui visible small warning message">
+								{{ctx.Locale.Tr "repo.editor.no_commit_to_branch"}}
+								<ul>
+									{{if not .CanCommitToBranch.UserCanPush}}<li>{{ctx.Locale.Tr "repo.editor.user_no_push_to_branch"}}</li>{{end}}
+									{{if and .CanCommitToBranch.RequireSigned (not .CanCommitToBranch.WillSign)}}<li>{{ctx.Locale.Tr "repo.editor.require_signed_commit"}}</li>{{end}}
+								</ul>
+							</div>
+							{{end}}
+						</label>
+					</div>
+				</div>
+				{{if not .Repository.IsEmpty}}
+				<div class="field">
+					<div class="ui radio checkbox">
+						{{if .CanCreatePullRequest}}
+							<input id="commit_choice_new_branch" type="radio" class="js-quick-pull-choice-option" name="commit_choice" value="commit-to-new-branch" button_text="{{ctx.Locale.Tr "repo.editor.propose_file_change"}}" {{if eq .commit_choice "commit-to-new-branch"}}checked{{end}}>
+						{{else}}
+							<input id="commit_choice_new_branch" type="radio" class="js-quick-pull-choice-option" name="commit_choice" value="commit-to-new-branch" button_text="{{ctx.Locale.Tr "repo.editor.commit_changes"}}" {{if eq .commit_choice "commit-to-new-branch"}}checked{{end}}>
+						{{end}}
+						<label for="commit_choice_new_branch">
+							{{svg "octicon-git-pull-request"}}
+							{{if .CanCreatePullRequest}}
+								{{ctx.Locale.Tr "repo.editor.create_new_branch"}}
+							{{else}}
+								{{ctx.Locale.Tr "repo.editor.create_new_branch_np"}}
+							{{end}}
+						</label>
+					</div>
+				</div>
+				<div class="quick-pull-branch-name {{if not (eq .commit_choice "commit-to-new-branch")}}tw-hidden{{end}}">
+					<div class="new-branch-name-input field {{if .Err_NewBranchName}}error{{end}}">
+						{{svg "octicon-git-branch"}}
+						<input type="text" name="new_branch_name" maxlength="100" value="{{.new_branch_name}}" class="input-contrast tw-mr-1 js-quick-pull-new-branch-name" placeholder="{{ctx.Locale.Tr "repo.editor.new_branch_name_desc"}}" {{if eq .commit_choice "commit-to-new-branch"}}required{{end}} title="{{ctx.Locale.Tr "repo.editor.new_branch_name"}}" aria-label="{{ctx.Locale.Tr "repo.editor.new_branch_name"}}">
+						<span class="text-muted js-quick-pull-normalization-info"></span>
+					</div>
+				</div>
+				{{end}}
+			</div>
+			<div class="field {{if .Err_CommitMailID}}error{{end}}">
+				<label for="commit_mail_id">{{ctx.Locale.Tr "repo.editor.commit_email"}}</label>
+				<span class="theme-select-wrap">
+					<select id="commit_mail_id" class="theme-select" name="commit_mail_id">
+					{{range .CommitMails}}
+						<option{{if eq $.DefaultCommitMail .Email}} selected="selected"{{end}} value="{{.ID}}">{{.Email}}</option>
+					{{end}}
+					</select>
+				</span>
+			</div>
+		</div>
+{{if $dialog}}
+		<footer class="theme-commit-footer">
+			<button type="button" class="button theme-control" command="close" commandfor="theme-commit-dialog">{{ctx.Locale.Tr "repo.editor.cancel"}}</button>
+			<button id="commit-button" type="submit" class="ui primary button theme-control">
+				{{if eq .commit_choice "commit-to-new-branch"}}{{ctx.Locale.Tr "repo.editor.propose_file_change"}}{{else}}{{ctx.Locale.Tr "repo.editor.commit_changes"}}{{end}}
+			</button>
+		</footer>
+	</div>
+</dialog>
+{{else}}
+	</div>
+	<div class="theme-commit-buttons">
+		<button id="commit-button" type="submit" class="ui primary button theme-control">
+			{{if eq .commit_choice "commit-to-new-branch"}}{{ctx.Locale.Tr "repo.editor.propose_file_change"}}{{else}}{{ctx.Locale.Tr "repo.editor.commit_changes"}}{{end}}
+		</button>
+		<a class="button theme-control" href="{{$.BranchLink}}/{{PathEscapeSegments .TreePath}}">{{ctx.Locale.Tr "repo.editor.cancel"}}</a>
+	</div>
+</div>
+{{end}}

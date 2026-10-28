@@ -1,0 +1,4 @@
+{{/* The branch the editor commits to, after the path as GitHub's "in main", linking to the branch as Forgejo's patch and
+cherry-pick headers did. Not a .section: the editor script builds the tree path from the breadcrumb's span.section
+elements. */}}
+<a class="theme-editor-branch" href="{{.BranchLink}}">{{svg "octicon-git-branch" 16}}<span class="theme-branch-name">{{.BranchName}}</span></a>
