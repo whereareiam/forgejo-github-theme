@@ -1,22 +1,25 @@
 {{template "base/head" .}}
-{{/* Forgejo 17 compare.tmpl, laid out like GitHub's "Compare changes": centred container, the create box with its text and
-     the button on the right, and the equal-branches notice with a disabled button. */}}
+{{/* Forgejo 17 compare.tmpl, laid out like GitHub's "Comparing changes": the Subhead, the range editor with the base and
+     compare pickers, the create box with what the pull request would merge and its button on the right, the pull
+     request form (repo/issue/new_form, shared with new issues), GitHub's open pull request row, a blank slate for equal
+     branches, then the commit and file summary over the commits and the diff. */}}
 <div role="main" aria-label="{{.Title}}" class="page-content repository diff github-compare {{if .PageIsComparePull}}compare pull{{end}}">
 	{{$showDiffBox := false}}
 	{{$canReadPullRequests := .Permission.CanRead $.UnitTypePullRequests}}
 	<div class="ui container">
-	<h2 class="ui header">
+	{{/* GitHub's Subhead: the large title and its description over a divider. */}}
+	<div class="theme-compare-header">
 		{{if and $.PageIsComparePull $.IsSigned (not .Repository.IsArchived)}}
 			{{if $canReadPullRequests}}
-				{{ctx.Locale.Tr "repo.pulls.compare_changes"}}
-				<div class="sub header">{{ctx.Locale.Tr "repo.pulls.compare_changes_desc"}}</div>
+				<h1>{{ctx.Locale.Tr "repo.pulls.compare_changes"}}</h1>
+				<p>{{ctx.Locale.Tr "repo.pulls.compare_changes_desc"}}</p>
 			{{else}}
-				{{ctx.Locale.Tr "compare.branches.title"}}
+				<h1>{{ctx.Locale.Tr "compare.branches.title"}}</h1>
 			{{end}}
 		{{else}}
-			{{ctx.Locale.Tr "action.compare_commits_general"}}
+			<h1>{{ctx.Locale.Tr "action.compare_commits_general"}}</h1>
 		{{end}}
-	</h2>
+	</div>
 	{{$BaseCompareName := $.BaseName -}}
 	{{- $HeadCompareName := $.HeadRepo.OwnerName -}}
 	{{- if and (eq $.BaseName $.HeadRepo.OwnerName) (ne $.Repository.Name $.HeadRepo.Name) -}}
@@ -158,48 +161,50 @@
 		</div>
 	</div>
 
+	{{/* What a new pull request would merge, in Forgejo's words from the pull request header. */}}
+	{{$headRef := $.HeadBranch}}{{if not $.PullRequestCtx.SameRepo}}{{$headRef = printf "%s:%s" $HeadCompareName $.HeadBranch}}{{end}}
+	{{$baseRef := $.BaseBranch}}{{if not $.PullRequestCtx.SameRepo}}{{$baseRef = printf "%s:%s" $BaseCompareName $.BaseBranch}}{{end}}
 	{{if .IsNothingToCompare}}
 		{{if and $.IsSigned $.AllowEmptyPr (not .Repository.IsArchived) .PageIsComparePull}}
-			<div class="ui segment">{{ctx.Locale.Tr "repo.pulls.nothing_to_compare_and_allow_empty_pr"}}</div>
-			<div class="ui info message show-form-container github-compare-notice {{if .Flash}}tw-hidden{{end}}">
-				<span>Discuss and review the changes in this comparison with others. <a href="{{AppDocsURL "user/pull-requests-and-git-flow/"}}" target="_blank" rel="noopener noreferrer">Learn about pull requests</a></span>
+			<div class="ui info message show-form-container theme-compare-create {{if .Flash}}tw-hidden{{end}}">
+				<span>{{ctx.Locale.Tr "repo.pulls.nothing_to_compare_and_allow_empty_pr"}}</span>
 				<button class="ui button primary show-form">{{ctx.Locale.Tr "repo.pulls.create"}}</button>
 			</div>
 			<div class="pullrequest-form {{if not .Flash}}tw-hidden{{end}}">
 				{{template "repo/issue/new_form" .}}
 			</div>
-		{{else if and .HeadIsBranch .BaseIsBranch}}
-			<div class="ui warning message github-compare-notice">
-				<span>{{ctx.Locale.Tr "repo.pulls.nothing_to_compare"}}</span>
-				{{if and $.IsSigned $canReadPullRequests (not .Repository.IsArchived)}}<button class="ui button primary" disabled>{{ctx.Locale.Tr "repo.pulls.create"}}</button>{{end}}
-			</div>
 		{{else}}
-			<div class="ui warning message github-compare-notice"><span>{{ctx.Locale.Tr "repo.pulls.nothing_to_compare_have_tag"}}</span></div>
+			{{/* GitHub's blank slate for a comparison without changes. */}}
+			<div class="theme-empty theme-compare-empty">
+				{{svg "octicon-git-compare" 32}}
+				<h3>{{if and .HeadIsBranch .BaseIsBranch}}{{ctx.Locale.Tr "repo.commits.nothing_to_compare"}}{{else}}{{ctx.Locale.Tr "repo.pulls.nothing_to_compare_have_tag"}}{{end}}</h3>
+			</div>
 		{{end}}
 	{{else if and .PageIsComparePull (gt .CommitCount 0) $canReadPullRequests}}
 		{{if .HasPullRequest}}
-			<div class="ui segment grid title">
-				<div class="twelve wide column issue-title">
-					{{ctx.Locale.Tr "repo.pulls.has_pull_request" (print $.RepoLink "/pulls/" .PullRequest.Issue.Index) $.RepoRelPath .PullRequest.Index}}
-					<h1>
-						<span id="issue-title">{{RenderIssueTitle $.Context .PullRequest.Issue.Title ($.Repository.ComposeMetas ctx)}}</span>
+			{{/* GitHub's row for the open pull request of these branches: its state icon, title, number and a button. */}}
+			{{$pullLink := print $.RepoLink "/pulls/" .PullRequest.Issue.Index}}
+			<div class="theme-compare-existing">
+				<div class="theme-compare-existing-main">
+					<h2>
+						{{if .PullRequest.HasMerged}}
+							{{svg "octicon-git-merge" 16 "theme-compare-existing-merged"}}
+						{{else if .PullRequest.Issue.IsClosed}}
+							{{svg "octicon-git-pull-request-closed" 16 "theme-compare-existing-closed"}}
+						{{else}}
+							{{svg "octicon-git-pull-request" 16 "theme-compare-existing-open"}}
+						{{end}}
+						<a id="issue-title" href="{{$pullLink}}">{{RenderIssueTitle $.Context .PullRequest.Issue.Title ($.Repository.ComposeMetas ctx)}}</a>
 						<span class="index">#{{.PullRequest.Issue.Index}}</span>
-					</h1>
+					</h2>
+					<p>{{ctx.Locale.Tr "repo.pulls.has_pull_request" $pullLink $.RepoRelPath .PullRequest.Index}}</p>
 				</div>
-				<div class="four wide column middle aligned text right">
-				{{- if .PullRequest.HasMerged -}}
-				<a href="{{$.RepoLink}}/pulls/{{.PullRequest.Issue.Index}}" class="ui button purple show-form">{{svg "octicon-git-merge" 16}} {{ctx.Locale.Tr "repo.pulls.view"}}</a>
-				{{else if .Issue.IsClosed}}
-				<a href="{{$.RepoLink}}/pulls/{{.PullRequest.Issue.Index}}" class="ui button red show-form">{{svg "octicon-issue-closed" 16}} {{ctx.Locale.Tr "repo.pulls.view"}}</a>
-				{{else}}
-				<a href="{{$.RepoLink}}/pulls/{{.PullRequest.Issue.Index}}" class="ui button primary show-form">{{svg "octicon-git-pull-request" 16}} {{ctx.Locale.Tr "repo.pulls.view"}}</a>
-				{{end}}
-				</div>
+				<a href="{{$pullLink}}" class="ui button primary show-form">{{svg "octicon-git-pull-request" 16}} {{ctx.Locale.Tr "repo.pulls.view"}}</a>
 			</div>
 		{{else}}
 			{{if and $.IsSigned (not .Repository.IsArchived)}}
-				<div class="ui info message show-form-container github-compare-notice {{if .Flash}}tw-hidden{{end}}">
-					<span>Discuss and review the changes in this comparison with others. <a href="{{AppDocsURL "user/pull-requests-and-git-flow/"}}" target="_blank" rel="noopener noreferrer">Learn about pull requests</a></span>
+				<div class="ui info message show-form-container theme-compare-create {{if .Flash}}tw-hidden{{end}}">
+					<span><strong>{{$.SignedUser.Name}}</strong> {{ctx.Locale.TrPluralString .CommitCount "repo.pulls.title_desc" .CommitCount $headRef $baseRef "theme-compare-base"}}</span>
 					<button class="ui button primary show-form">{{ctx.Locale.Tr "repo.pulls.create"}}</button>
 				</div>
 			{{else if .Repository.IsArchived}}
@@ -230,17 +235,17 @@
 	{{if $showDiffBox}}
 	<div class="ui container">
 		{{if and .Commits (gt .CommitCount 0)}}
-			{{/* GitHub's summary row and its commits grouped by day. */}}
-			{{$contributors := 0}}{{$seen := ""}}
+			{{/* GitHub's summary of commits, changed files and people over the commits grouped by day. */}}
+			{{$authors := 0}}{{$seen := ""}}
 			{{range .Commits}}
 				{{$key := printf "<%s>" .Author.Email}}
-				{{if not (StringUtils.Contains $seen $key)}}{{$seen = print $seen $key}}{{$contributors = Eval $contributors "+" 1}}{{end}}
+				{{if not (StringUtils.Contains $seen $key)}}{{$seen = print $seen $key}}{{$authors = Eval $authors "+" 1}}{{end}}
 			{{end}}
-			<div class="github-compare-summary">
-				<span>{{svg "octicon-git-commit" 16}}{{ctx.Locale.TrPluralString .CommitCount "counters.n_commits" (ctx.Locale.PrettyNumber .CommitCount)}}</span>
-				{{if not .DiffNotAvailable}}<span>{{svg "octicon-file-diff" 16}}<strong>{{.DiffMetadata.TotalNumberOfFiles}}</strong> {{if eq .DiffMetadata.TotalNumberOfFiles 1}}file{{else}}files{{end}} changed</span>{{end}}
-				<span>{{svg "octicon-people" 16}}<strong>{{$contributors}}</strong> {{if eq $contributors 1}}contributor{{else}}contributors{{end}}</span>
-			</div>
+			<ul class="theme-compare-summary">
+				<li>{{svg "octicon-git-commit" 16}}{{ctx.Locale.TrPluralString .CommitCount "counters.n_commits" (ctx.Locale.PrettyNumber .CommitCount)}}</li>
+				{{if not .DiffNotAvailable}}<li>{{svg "octicon-file-diff" 16}}{{ctx.Locale.TrN .DiffMetadata.TotalNumberOfFiles "repo.activity.git_stats_file_1" "repo.activity.git_stats_file_n" .DiffMetadata.TotalNumberOfFiles}}</li>{{end}}
+				<li>{{svg "octicon-people" 16}}{{ctx.Locale.TrN $authors "repo.activity.git_stats_author_1" "repo.activity.git_stats_author_n" $authors}}</li>
+			</ul>
 			{{template "repo/pulls/commits_list" .}}
 		{{else}}
 			{{template "repo/commits_table" .}}

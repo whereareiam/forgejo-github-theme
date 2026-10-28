@@ -120,7 +120,9 @@ details > summary.button.theme-control-small {
   .review-box-panel form > .ui.ui.ui.button,
   .comment-code-cloud .field.footer .ui.ui.ui.button,
   .comment-code-cloud :is(.button-row, .button-sequence):has(.comment-form-reply) .ui.ui.ui.button,
-  .page-content.repository.new.issue.github-issue-new .issue-content-left .text.right .ui.ui.ui.button,
+  .theme-issue-form-actions > .ui.ui.ui.button,
+  .theme-compare-create > .ui.ui.ui.button,
+  .theme-compare-existing > .ui.ui.ui.button,
   .page-content.repository.new.release .ui.form .ui.ui.ui.button:not(.mini),
   .repo-button-row .ui.ui.ui.button.repo-add-file,
   .js-branch-tag-selector .ui.ui.ui.button.branch-dropdown-button

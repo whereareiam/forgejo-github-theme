@@ -1,0 +1,54 @@
+{{template "base/head" .}}
+{{/* Forgejo 17's issue template chooser as GitHub's "Create new issue" list: the page heading of the new issue form,
+then one box with a row per template, the blank issue and the contact links, each row a link with its description
+below the name. Forgejo opens the new issue form straight away when a repository has no templates. */}}
+<div role="main" aria-label="{{.Title}}" class="page-content repository new issue github-issue-new theme-issue-choose">
+	<div class="ui container">
+		{{template "base/alert" .}}
+		<h1 class="issue-new-heading">{{ctx.Locale.Tr "repo.issues.new"}}</h1>
+		<ul class="theme-box-list theme-box-list-rows theme-issue-choose-list">
+			{{range .IssueTemplates}}
+				<li class="theme-box-list-row">
+					<a href="{{$.RepoLink}}/issues/new?template={{.FileName}}{{if $.milestone}}&milestone={{$.milestone}}{{end}}{{if $.project}}&project={{$.project}}{{end}}">
+						<span class="theme-box-list-main">
+							<strong>{{.Name}}</strong>
+							{{if .About}}<span class="theme-box-list-description">{{.About}}</span>{{end}}
+						</span>
+						<span class="theme-issue-choose-action"><span class="theme-issue-choose-label">{{ctx.Locale.Tr "repo.issues.choose.get_started"}}</span>{{svg "octicon-chevron-right" 16}}</span>
+					</a>
+				</li>
+			{{end}}
+			{{if .IssueConfig.BlankIssuesEnabled}}
+				<li class="theme-box-list-row">
+					<a href="{{.RepoLink}}/issues/new?{{if .milestone}}&milestone={{.milestone}}{{end}}{{if $.project}}&project={{$.project}}{{end}}">
+						<span class="theme-box-list-main">
+							<strong>{{ctx.Locale.Tr "repo.issues.choose.blank"}}</strong>
+							<span class="theme-box-list-description">{{ctx.Locale.Tr "repo.issues.choose.blank_about"}}</span>
+						</span>
+						<span class="theme-issue-choose-action"><span class="theme-issue-choose-label">{{ctx.Locale.Tr "repo.issues.choose.get_started"}}</span>{{svg "octicon-chevron-right" 16}}</span>
+					</a>
+				</li>
+			{{end}}
+			{{range .IssueConfig.ContactLinks}}
+				<li class="theme-box-list-row">
+					<a href="{{.URL}}">
+						<span class="theme-box-list-main">
+							<strong>{{.Name}}</strong>
+							{{if .About}}<span class="theme-box-list-description">{{.About}}</span>{{end}}
+						</span>
+						<span class="theme-issue-choose-action"><span class="theme-issue-choose-label">{{ctx.Locale.Tr "repo.issues.choose.open_external_link"}}</span>{{svg "octicon-link-external" 16}}</span>
+					</a>
+				</li>
+			{{end}}
+		</ul>
+		{{- if .IssueConfigError}}{{/* normal warning flash makes problems here*/}}
+			<div class="ui warning message">
+				<div class="text left">
+					<div>{{ctx.Locale.Tr "repo.issues.choose.invalid_config"}}</div>
+					<div>{{.IssueConfigError}}</div>
+				</div>
+			</div>
+		{{end}}
+	</div>
+</div>
+{{template "base/footer" .}}
