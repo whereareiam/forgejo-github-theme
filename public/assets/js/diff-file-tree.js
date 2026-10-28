@@ -7,10 +7,12 @@
   const container = document.getElementById("diff-container");
   const toggle = document.querySelector(".diff-toggle-file-tree-button");
   const mobile = matchMedia("(max-width: 767.98px)");
+  // Forgejo shows and hides the tree with tw-hidden; the template sets the first state before paint and this keeps the
+  // layout and the toggle in step. On phones the toggle opens the tree above the files instead.
   const updateToggle = () => {
-    const expanded = mobile.matches
-      ? container.classList.contains("diff-mobile-tree-open")
-      : !tree.classList.contains("tw-hidden");
+    const treeHidden = tree.classList.contains("tw-hidden");
+    container.classList.toggle("diff-file-tree-hidden", treeHidden);
+    const expanded = mobile.matches ? container.classList.contains("diff-mobile-tree-open") : !treeHidden;
     toggle.setAttribute("aria-expanded", expanded);
     toggle.setAttribute("aria-label", toggle.dataset[expanded ? "hideText" : "showText"]);
     toggle.classList.toggle("active", expanded);

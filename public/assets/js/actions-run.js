@@ -26,6 +26,11 @@
     })
     .catch(() => {});
   const svgElement = name => document.createElementNS("http://www.w3.org/2000/svg", name);
+  const durationOf = job => job.querySelector(".step-summary-duration")?.textContent.trim() ?? "";
+  // A live run's durations tick on every poll, so the graph keeps its duration labels by job link and only their text
+  // changes; the graph is rebuilt when a job or the run changes state.
+  let durations = new Map();
+  let graphObserver;
   function jobGraph(jobs) {
     const scroller = make("div", "actions-job-graph");
     const canvas = make("div", "actions-job-canvas");
@@ -40,6 +45,7 @@
       edges: [],
     };
     const cardOf = new Map();
+    durations = new Map();
     for (const stage of stages) {
       const column = make("div", "actions-job-stage");
       for (const group of stage) {
@@ -50,8 +56,9 @@
           const icon = node.job.querySelector(".job-brief-item-left > span");
           if (icon) row.append(icon.cloneNode(true));
           row.append(make("strong", "", node.name));
-          const duration = node.job.querySelector(".step-summary-duration")?.textContent.trim();
-          row.append(make("span", "actions-job-duration", duration));
+          const duration = make("span", "actions-job-duration", durationOf(node.job));
+          durations.set(node.job.href, duration);
+          row.append(duration);
           card.append(row);
           cardOf.set(node, card);
         }
@@ -86,7 +93,9 @@
         );
       }
     };
-    new ResizeObserver(draw).observe(canvas);
+    graphObserver?.disconnect();
+    graphObserver = new ResizeObserver(draw);
+    graphObserver.observe(canvas);
     // GitHub highlights a linked job's own links and dims the jobs it is not linked to.
     const highlight = card => {
       const active = card ? paths.filter(link => link.from === card || link.to === card) : [];
@@ -196,9 +205,20 @@
     const status = header.querySelector(".action-info-summary-title > span")?.getAttribute("aria-label") || run.status;
     const next = JSON.stringify([
       status,
-      jobs.map(job => [job.href, job.textContent, job.querySelector("svg")?.getAttribute("class")]),
+      jobs.map(job => [
+        job.href,
+        job.querySelector(".job-brief-name")?.textContent.trim(),
+        job.querySelector("svg")?.getAttribute("class"),
+      ]),
     ]);
-    if (next === fingerprint && body.querySelector(".actions-run-overview")) return;
+    if (next === fingerprint && body.querySelector(".actions-run-overview")) {
+      for (const job of jobs) {
+        const duration = durations.get(job.href);
+        const text = durationOf(job);
+        if (duration && duration.textContent !== text) duration.textContent = text;
+      }
+      return;
+    }
     fingerprint = next;
     const overview = make("section", "actions-run-overview");
     overview.setAttribute("aria-label", "Run summary");
@@ -235,21 +255,32 @@
     body.querySelector(".actions-run-overview")?.remove();
     body.append(overview);
   }
+  // Forgejo re-renders the run on every poll and appends log lines as they stream in; one render a frame is enough.
+  let frame = 0;
   new MutationObserver(() => {
-    filterLogs();
-    render();
+    frame ||= requestAnimationFrame(() => {
+      frame = 0;
+      render();
+    });
   }).observe(page.parentElement, { childList: true, subtree: true });
+  let filtered = false;
   function filterLogs() {
     const panel = document.querySelector(".action-view-right");
     const input = panel?.querySelector(".actions-log-search input");
     if (!input) return;
     const query = input.value.trim().toLowerCase();
+    const result = input.closest(".actions-log-search").querySelector("[aria-live]");
+    // Without a query no line is hidden, so long logs are not walked on every poll.
+    if (!query && !filtered) {
+      if (result.textContent) result.textContent = "";
+      return;
+    }
+    filtered = Boolean(query);
     let matches = 0;
     for (const line of panel.querySelectorAll(".job-log-line")) {
       line.hidden = !!query && !line.textContent.toLowerCase().includes(query);
       if (!line.hidden) matches++;
     }
-    const result = input.closest(".actions-log-search").querySelector("[aria-live]");
     const text = query ? `${matches} ${matches === 1 ? "match" : "matches"}` : "";
     if (result.textContent !== text) result.textContent = text;
   }
