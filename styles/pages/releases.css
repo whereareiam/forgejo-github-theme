@@ -441,24 +441,6 @@
       font-size: 12px;
       color: var(--color-text-light-1) !important;
     }
-    .github-release-digest {
-      align-items: center;
-      display: inline-flex;
-      font-family: var(--fonts-monospace);
-      font-size: 12px;
-      gap: 4px;
-      margin-right: 16px;
-    }
-    .github-release-copy-digest {
-      background: transparent;
-      border: 0;
-      color: var(--color-text-light-1);
-      cursor: pointer;
-      padding: 0;
-    }
-    .github-release-copy-digest:hover {
-      color: var(--color-text);
-    }
   }
   .github-release-empty {
     padding: 64px 24px;
@@ -603,10 +585,6 @@
   }
   .detail .download .list > li .text.grey {
     font-size: 14px;
-  }
-  .github-release-digest {
-    color: var(--color-text-light-1);
-    font-weight: 400;
   }
 }
 /* A single release: a breadcrumb instead of the Releases/Tags bar, and no release list. */

@@ -1,21 +1,6 @@
 // Keep the release navigator in sync with its anchor and the visible release.
 const releaseLinks = [...document.querySelectorAll(".github-release-toc a, .github-release-mobile-toc a")];
 const releaseCards = [...document.querySelectorAll("#release-list.github-release-list > li")];
-for (const digest of document.querySelectorAll(".github-release-digest[data-digest-url]")) {
-  fetch(digest.dataset.digestUrl)
-    .then(response => response.arrayBuffer())
-    .then(buffer => crypto.subtle.digest("SHA-256", buffer))
-    .then(hash => {
-      const value = [...new Uint8Array(hash)].map(byte => byte.toString(16).padStart(2, "0")).join("");
-      digest.dataset.value = value;
-      digest.firstChild.textContent = `sha256:${value.slice(0, 7)}…`;
-      digest.querySelector("button").addEventListener("click", async () => {
-        await navigator.clipboard.writeText(`sha256:${value}`);
-        digest.querySelector("button").setAttribute("aria-label", "SHA-256 digest copied");
-      });
-    })
-    .catch(() => digest.remove());
-}
 const releaseMenu = document.querySelector(".github-release-mobile-toc");
 releaseMenu?.addEventListener("click", event => {
   if (event.target.closest("a")) releaseMenu.open = false;

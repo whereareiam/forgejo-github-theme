@@ -119,7 +119,6 @@
 														{{svg "octicon-package" 16 "tw-mr-1"}}{{.Name}}
 													</a>
 													<div>
-														<span class="github-release-digest" data-digest-url="{{.DownloadURL}}">sha256… <button type="button" class="github-release-copy-digest" aria-label="Copy SHA-256 digest">{{svg "octicon-copy" 16}}</button></span>
 														<span class="text grey">{{ctx.Locale.PrettyNumber .DownloadCount}} {{svg "octicon-download" 16}} · {{.Size | ctx.Locale.TrSize}} · {{DateUtils.TimeSince .CreatedUnix}}</span>
 													</div>
 											</li>
