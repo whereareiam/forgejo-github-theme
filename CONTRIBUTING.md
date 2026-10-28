@@ -136,6 +136,24 @@ For PR submission — check and compile all project code with formatting:
 bun commit
 ```
 
+## Upgrading Forgejo
+
+The files in `templates` are Forgejo's templates with the theme's changes. The `forgejo` field of `package.json` pins
+the Forgejo release they were copied from; the dev preview runs the same release, and a test checks that
+`dev/docker-compose.yml` names its image.
+
+`bun drift` checks out the templates of the pinned release into `node_modules/.cache/forgejo` (git and network on the
+first run only) and lists each override by the lines the theme added and removed, the largest first, then the templates
+Forgejo does not have. `bun drift 17.1.0` does the same against another release.
+
+To move to a new release:
+
+1. Run `bun drift <pinned> <new>`, for example `bun drift 17.0.0 17.1.0`. It lists the overridden templates Forgejo
+   changed between the two releases, with Forgejo's diff of each, and the ones it added or removed.
+2. Port each change into the override, and rename or remove an override whose file Forgejo moved or removed.
+3. Set `forgejo` in `package.json` and the image in `dev/docker-compose.yml` to the new release, then check the changed
+   pages in the dev preview.
+
 ## Development Conventions
 
 `src`, `styles`, and `themes` are the project's main directories.

@@ -10,6 +10,7 @@
   "engines": {
     "bun": ">=1.3.14"
   },
+  "forgejo": "17.0.0",
   "exports": {
     "./core": "./src/index.ts",
     "./vite-plugin": "./src/vite-plugin/index.ts",
@@ -36,6 +37,7 @@
     "bundle:ci": "bun bundle && bun vitest",
     "sync:theme": "bun scripts/syncTheme.ts",
     "update:primer": "bun scripts/buildPrimerTSToken.ts",
+    "drift": "bun scripts/templateDrift.ts",
     "update:snapshot": "bun vitest --update",
     "install:clean": "rm -rf node_modules bun.lock bun.lockb && bun install"
   },

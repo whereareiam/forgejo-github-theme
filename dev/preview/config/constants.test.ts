@@ -1,12 +1,13 @@
 import { readFileSync } from "node:fs";
-import { fileURLToPath } from "node:url";
+import { join } from "node:path";
 import { expect, it } from "vitest";
 
+import pkg from "../../../package.json";
 import { COMPOSE } from "./constants.ts";
 
-it("runs its one-off containers on the image of the Compose service", () => {
-  // The ownership repair and database cleanup start the image by name; another version would be pulled beside it.
-  const compose = readFileSync(fileURLToPath(new URL(`../../../${COMPOSE.file}`, import.meta.url)), "utf-8");
-  const service = compose.slice(compose.indexOf(`  ${COMPOSE.service}:\n`));
-  expect(service.match(/^ {4}image: (\S+)$/m)?.[1]).toBe(COMPOSE.image);
+it("runs the Forgejo release that package.json pins", () => {
+  const compose = readFileSync(join(import.meta.dirname, "../../docker-compose.yml"), "utf8");
+  const image = /^\s+image: (code\.forgejo\.org\/forgejo\/forgejo:\S+)$/m.exec(compose)?.[1];
+  expect(image).toBe(`code.forgejo.org/forgejo/forgejo:${pkg.forgejo}-rootless`);
+  expect(COMPOSE.image).toBe(image);
 });
