@@ -132,14 +132,20 @@ it("ships component stylesheets unchanged with valid CSS and a template referenc
       .readdirSync(path.join(ROOT_DIR, "components"), { recursive: true })
       .filter(file => String(file).endsWith(".css"))
       .map(file => [`components/${String(file)}`, `components/${String(file)}`]),
-    ...["organization.css", "profile-subpages.css", "user-profile.css"].map(name => [name, `components/pages/${name}`]),
+    ...["organization.css", "profile-subpages.css", "user-profile.css", "wiki.css"].map(name => [
+      name,
+      `components/pages/${name}`,
+    ]),
   ];
   const output = path.join(DIST_DIR, "forgejo", "public", "assets", "css");
   for (const [source, asset] of sources) {
     const code = fs.readFileSync(path.join(output, asset));
     const original = source.startsWith("components/")
       ? fs.readFileSync(path.join(ROOT_DIR, source))
-      : source.startsWith("organization") || source.startsWith("profile-") || source.startsWith("user-profile")
+      : source.startsWith("organization") ||
+          source.startsWith("profile-") ||
+          source.startsWith("user-profile") ||
+          source === "wiki.css"
         ? fs.readFileSync(path.join(ROOT_DIR, "styles/pages", source))
         : fs.readFileSync(path.join(ROOT_DIR, "public", source));
     expect(code.equals(original), `changed component asset: ${asset}`).toBe(true);
@@ -583,6 +589,38 @@ describe("Forgejo 15 native integration", () => {
     );
     expect(fs.existsSync(path.join(ROOT_DIR, "public", "pull-commits.css"))).toBe(false);
     expect(read("templates", "base", "component_assets.tmpl")).toContain("/css/components/pages/commits.css");
+  });
+
+  it("shows the wiki as GitHub's: a page beside its Pages box, the pages index, revisions and editor", () => {
+    const read = (...parts: string[]) => fs.readFileSync(path.join(ROOT_DIR, ...parts), "utf-8");
+    const wiki = (name: string) => read("templates", "repo", "wiki", `${name}.tmpl`);
+    expect(wiki("start")).toContain('<div class="theme-empty theme-wiki-blankslate">');
+    expect(wiki("start")).toContain("{{if and .CanWriteWiki (not .Repository.IsMirror)}}");
+    const view = wiki("view");
+    expect(view).toContain('"counters.n_commits"');
+    expect(view).toContain('<details class="theme-wiki-pages"{{if not .sidebarPresent}} open{{end}}>');
+    expect(view).toContain('"Local" true "ID" "wiki-pages-filter"');
+    // Forgejo's hooks: the content search, the table of contents its script folds on phones, the clone switch.
+    expect(view).toContain('"Live" (print $.RepoLink "/wiki/search") "LiveTarget" "#wiki-search"');
+    expect(read("components", "common", "search", "search.tmpl")).toContain(
+      'hx-get="{{.Live}}" hx-target="{{.LiveTarget}}" hx-swap="innerHTML" hx-trigger="keyup changed delay:.5s"'
+    );
+    expect(view).toContain('class="markup wiki-content-toc theme-wiki-toc"');
+    expect(view).toContain('{{template "repo/clone_buttons" .}}');
+    // Forgejo's way to the pages index stays at the foot of the Pages box.
+    expect(view).toContain('href="{{.RepoLink}}/wiki/?action=_pages"');
+    expect(view).toContain("/js/repo-wiki.js");
+    // Delete page lives on the edit page, as on GitHub, with the same confirmation.
+    expect(view).not.toContain("delete-wiki-page");
+    const editor = wiki("new");
+    expect(editor).toContain('data-modal-id="delete-wiki-page"');
+    expect(editor).toContain('<div class="ui g-modal-confirm delete modal" id="delete-wiki-page">');
+    for (const field of ['name="title"', 'name="message"', '"TextareaName" "content"']) expect(editor).toContain(field);
+    expect(wiki("pages")).toContain('class="wiki-git-entry muted"');
+    expect(wiki("revision")).toContain('{{template "repo/commit_list_item" dict "Commit" . "Page" $}}');
+    expect(read("components", "common", "editor", "editor.css")).toContain(".page-content.repository.wiki.new");
+    expect(read("templates", "base", "component_assets.tmpl")).toContain("/css/components/pages/wiki.css");
+    expect(read("scripts", "assembleForgejo.ts")).toContain('"wiki.css"');
   });
 
   it("lists branches in GitHub's branch tables with Forgejo's branch actions", () => {

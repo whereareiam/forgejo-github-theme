@@ -55,6 +55,7 @@ for (const file of [
   "pull-request.css",
   "releases.css",
   "user-profile.css",
+  "wiki.css",
 ]) {
   cpSync(join(root, "styles", "pages", file), join(css, "components", "pages", file));
 }

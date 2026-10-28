@@ -1,0 +1,34 @@
+{{/* GitHub's page history: the page's title and last edit, then one box of revisions, newest first, each the shared
+commit row (message, author and time, the short hash linking to the change). The clone URL stays in the page's
+sidebar. */}}
+{{template "base/head" .}}
+<div role="main" aria-label="{{.Title}}" class="page-content repository wiki revisions">
+	{{template "repo/header" .}}
+	{{$title := .title}}
+	<div class="ui container theme-wiki">
+		<div class="theme-wiki-header">
+			<h1 class="theme-wiki-title"><a href="{{.RepoLink}}/wiki/{{.PageURL}}">{{$title}}</a></h1>
+			<div class="theme-wiki-actions">
+				<a class="ui small button" href="{{.RepoLink}}/wiki/{{.PageURL}}">{{svg "octicon-home"}}{{ctx.Locale.Tr "repo.wiki.back_to_wiki"}}</a>
+			</div>
+		</div>
+		<p class="theme-wiki-meta tw-break-anywhere">
+			{{ctx.Locale.Tr "repo.wiki.last_commit_info" .Author.Name (DateUtils.TimeSince .Author.When)}}
+		</p>
+		<section class="theme-wiki-revisions">
+			<h2 class="theme-wiki-revisions-header">
+				{{ctx.Locale.Tr "repo.wiki.wiki_page_revisions"}}
+				<span class="theme-counter">{{ctx.Locale.PrettyNumber .CommitCount}}</span>
+			</h2>
+			{{if and .Commits (gt .CommitCount 0)}}
+				<ul class="gitea-github-theme-templates-commits-list">
+					{{range .Commits}}
+						{{template "repo/commit_list_item" dict "Commit" . "Page" $}}
+					{{end}}
+				</ul>
+			{{end}}
+		</section>
+		{{template "base/paginate" .}}
+	</div>
+</div>
+{{template "base/footer" .}}

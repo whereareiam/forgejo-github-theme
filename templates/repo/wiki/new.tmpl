@@ -1,0 +1,63 @@
+{{/* GitHub's wiki editor: the page title (New page for a new one) with the page's revisions and Delete page beside it
+when editing, a large title field, the Write/Preview editor, the edit message and Save page. */}}
+{{template "base/head" .}}
+<div role="main" aria-label="{{.Title}}" class="page-content repository wiki new">
+	{{template "repo/header" .}}
+	<div class="ui container theme-wiki">
+		{{template "base/alert" .}}
+		<div class="theme-wiki-header">
+			<h1 class="theme-wiki-title">{{if .PageIsWikiEdit}}{{.old_title}}{{else}}{{ctx.Locale.Tr "repo.wiki.new_page_button"}}{{end}}</h1>
+			{{if .PageIsWikiEdit}}
+				<div class="theme-wiki-actions">
+					<a class="ui small button" href="{{.RepoLink}}/wiki/{{.PageURL}}?action=_revision">{{svg "octicon-history"}}{{ctx.Locale.Tr "repo.wiki.wiki_page_revisions"}}</a>
+					<a class="ui small red button delete-button" href="" data-url="{{.RepoLink}}/wiki/{{.PageURL}}?action=_delete" data-id="{{.PageURL}}" data-modal-id="delete-wiki-page">{{ctx.Locale.Tr "repo.wiki.delete_page_button"}}</a>
+				</div>
+			{{end}}
+		</div>
+		<form class="ui form theme-wiki-form" action="?action={{if .PageIsWikiEdit}}_edit{{else}}_new{{end}}" method="post">
+			<div class="field {{if .Err_Title}}error{{end}}">
+				<input class="theme-wiki-form-title" name="title" value="{{.title}}" aria-label="{{ctx.Locale.Tr "repo.wiki.page_title"}}" placeholder="{{ctx.Locale.Tr "repo.wiki.page_title"}}" autofocus required>
+				<p class="help">{{ctx.Locale.Tr "repo.wiki.page_name_desc"}}</p>
+			</div>
+
+			{{$content := .content}}
+			{{if not .PageIsWikiEdit}}
+				{{$content = ctx.Locale.Tr "repo.wiki.welcome"}}
+			{{end}}
+			{{template "shared/combomarkdowneditor" (dict
+				"MarkdownPreviewUrl" (print .Repository.Link "/markup")
+				"MarkdownPreviewContext" .RepoLink
+				"TextareaName" "content"
+				"TextareaPlaceholder" (ctx.Locale.Tr "repo.wiki.page_content")
+				"TextareaAriaLabel" (ctx.Locale.Tr "repo.wiki.page_content")
+				"TextareaContent" $content
+				"EasyMDE" true
+			)}}
+
+			<div class="field theme-wiki-form-message">
+				<label for="wiki-edit-message">{{ctx.Locale.Tr "form.CommitMessage"}}</label>
+				<input id="wiki-edit-message" name="message" placeholder="{{ctx.Locale.Tr "repo.wiki.default_commit_message"}}">
+			</div>
+			<div class="theme-wiki-form-actions">
+				<a class="ui button" href="{{.Link}}">{{ctx.Locale.Tr "repo.wiki.cancel"}}</a>
+				<button class="ui primary button">
+					{{ctx.Locale.Tr "repo.wiki.save_page"}}
+				</button>
+			</div>
+		</form>
+	</div>
+</div>
+
+{{if .PageIsWikiEdit}}
+	<div class="ui g-modal-confirm delete modal" id="delete-wiki-page">
+		<div class="header">
+			{{svg "octicon-trash"}}
+			{{ctx.Locale.Tr "repo.wiki.delete_page_button"}}
+		</div>
+		<div class="content">
+			<p>{{ctx.Locale.Tr "repo.wiki.delete_page_notice_1" .old_title}}</p>
+		</div>
+		{{template "base/modal_actions_confirm" .}}
+	</div>
+{{end}}
+{{template "base/footer" .}}

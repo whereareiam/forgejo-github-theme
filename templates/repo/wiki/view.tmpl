@@ -1,0 +1,112 @@
+{{/* GitHub's wiki page: the title with Edit and New page, who edited it last and its revisions, then the page and its
+footer beside a sidebar with the pages, the custom sidebar and the clone URL. Forgejo's wiki search, the page's table of
+contents (under its row in the pages) and the link to the pages index are kept; Delete page moves to the edit page, as
+on GitHub. */}}
+{{template "base/head" .}}
+<div role="main" aria-label="{{.Title}}" class="page-content repository wiki view">
+	{{template "repo/header" .}}
+	{{$title := .title}}
+	{{$canWrite := and .CanWriteWiki (not .Repository.IsMirror)}}
+	<div class="ui container file-content theme-wiki">
+		<div class="theme-wiki-header">
+			<h1 class="theme-wiki-title">{{$title}}</h1>
+			{{if or .EscapeStatus.Escaped $canWrite}}
+				<div class="theme-wiki-actions">
+					{{if .EscapeStatus.Escaped}}
+						<a class="ui small button unescape-button tw-hidden">{{ctx.Locale.Tr "repo.unescape_control_characters"}}</a>
+						<a class="ui small button escape-button">{{ctx.Locale.Tr "repo.escape_control_characters"}}</a>
+					{{end}}
+					{{if $canWrite}}
+						<a class="ui small button" href="{{.RepoLink}}/wiki/{{.PageURL}}?action=_edit">{{ctx.Locale.Tr "repo.wiki.edit_page_button"}}</a>
+						<a class="ui small primary button" href="{{.RepoLink}}/wiki?action=_new">{{ctx.Locale.Tr "repo.wiki.new_page_button"}}</a>
+					{{end}}
+				</div>
+			{{end}}
+		</div>
+		<p class="theme-wiki-meta">
+			{{ctx.Locale.Tr "repo.wiki.last_commit_info" .Author.Name (DateUtils.TimeSince .Author.When)}}
+			{{if .CommitCount}}
+				&middot;
+				<a href="{{.RepoLink}}/wiki/{{.PageURL}}?action=_revision" title="{{ctx.Locale.Tr "repo.wiki.file_revision"}}">{{ctx.Locale.TrPluralString .CommitCount "counters.n_commits" (ctx.Locale.PrettyNumber .CommitCount)}}</a>
+			{{end}}
+		</p>
+
+		<div class="theme-wiki-layout">
+			<div class="theme-wiki-main">
+				{{if .FormatWarning}}
+					<div class="ui negative message">
+						<p>{{.FormatWarning}}</p>
+					</div>
+				{{end}}
+				<div class="file-view markup wiki-content-main">
+					{{template "repo/unicode_escape_prompt" dict "EscapeStatus" .EscapeStatus "root" $}}
+					{{.content | TrustHTML}}
+				</div>
+				{{if .footerPresent}}
+					<div class="file-view markup wiki-content-footer theme-wiki-footer">
+						{{template "repo/unicode_escape_prompt" dict "EscapeStatus" .sidebarEscapeStatus "root" $}}
+						{{if $canWrite}}
+							<a class="theme-wiki-edit-part muted" href="{{.RepoLink}}/wiki/_Footer?action=_edit" aria-label="{{ctx.Locale.Tr "repo.wiki.edit_page_button"}}" data-tooltip-content="{{ctx.Locale.Tr "repo.wiki.edit_page_button"}}">{{svg "octicon-pencil"}}</a>
+						{{end}}
+						{{.footerContent | TrustHTML}}
+					</div>
+				{{end}}
+			</div>
+
+			<div class="theme-wiki-sidebar">
+				<div class="ui floating dropdown jump theme-wiki-search">
+					{{template "components/common/search/search" dict "Kind" "icon" "Live" (print $.RepoLink "/wiki/search") "LiveTarget" "#wiki-search" "Placeholder" (printf "%s…" (ctx.Locale.Tr "repo.wiki.search")) "Label" (ctx.Locale.Tr "repo.wiki.search")}}
+					<div id="wiki-search" class="menu tw-absolute tw-max-h-[65dvh] tw-overflow-y-auto tw-mt-3 tw-rounded left">
+						<div class="item muted">{{ctx.Locale.Tr "repo.wiki.no_search_results"}}</div>
+					</div>
+				</div>
+
+				<details class="theme-wiki-pages"{{if not .sidebarPresent}} open{{end}}>
+					<summary class="theme-wiki-pages-header">
+						{{svg "octicon-triangle-down" 16 "theme-wiki-pages-chevron"}}
+						<h2>{{ctx.Locale.Tr "repo.wiki.pages"}} <span class="theme-counter">{{len .Pages}}</span></h2>
+					</summary>
+					<div class="theme-wiki-pages-filter">
+						{{template "components/common/search/search" dict "Kind" "plain" "Local" true "ID" "wiki-pages-filter" "Placeholder" (printf "%s…" (ctx.Locale.Tr "repo.wiki.filter_page")) "Label" (ctx.Locale.Tr "repo.wiki.filter_page")}}
+					</div>
+					<ul class="theme-wiki-pages-list">
+						{{range .Pages}}
+							{{$current := eq $.Title .Name}}
+							<li{{if $current}} class="active"{{end}}>
+								<a href="{{$.RepoLink}}/wiki/{{.SubURL}}"{{if $current}} aria-current="page"{{end}}>{{.Name}}</a>
+								{{if and $current $.sidebarTocContent}}
+									<div class="markup wiki-content-toc theme-wiki-toc">
+										{{$.sidebarTocContent | TrustHTML}}
+									</div>
+								{{end}}
+							</li>
+						{{end}}
+					</ul>
+					<p class="theme-wiki-pages-empty" hidden>{{ctx.Locale.Tr "repo.pulls.no_results"}}</p>
+					<a class="theme-wiki-pages-all" href="{{.RepoLink}}/wiki/?action=_pages">{{ctx.Locale.Tr "packages.versions.view_all"}}</a>
+				</details>
+
+				{{if .sidebarPresent}}
+					<div class="file-view markup theme-wiki-custom-sidebar">
+						{{template "repo/unicode_escape_prompt" dict "EscapeStatus" .sidebarEscapeStatus "root" $}}
+						{{if $canWrite}}
+							<a class="theme-wiki-edit-part muted" href="{{.RepoLink}}/wiki/_Sidebar?action=_edit" aria-label="{{ctx.Locale.Tr "repo.wiki.edit_page_button"}}" data-tooltip-content="{{ctx.Locale.Tr "repo.wiki.edit_page_button"}}">{{svg "octicon-pencil"}}</a>
+						{{end}}
+						{{.sidebarContent | TrustHTML}}
+					</div>
+				{{end}}
+
+				<div class="theme-wiki-clone">
+					<h3>{{ctx.Locale.Tr "repo.clone_this_repo"}}</h3>
+					<div class="clone-panel ui action small input">
+						{{template "repo/clone_buttons" .}}
+						{{template "repo/clone_script" .}}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script src="{{AssetUrlPrefix}}/js/repo-wiki.js" defer></script>
+{{template "base/footer" .}}

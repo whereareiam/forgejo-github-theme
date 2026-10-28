@@ -1,0 +1,631 @@
+/* Wiki: GitHub's wiki pages. A page is its title with Edit and New page, who edited it last over a rule, then the page
+   and its footer box beside a sidebar of the Pages box, the custom sidebar and the clone URL; the pages index and a
+   page's revisions are single boxes, and the editor is a large title field over the shared markdown editor. Kept as a
+   page stylesheet, outside the size-limited theme files. */
+
+.page-content.repository.wiki .theme-wiki-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.page-content.repository.wiki .theme-wiki-title {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  color: var(--color-text);
+  font-size: 32px;
+  font-weight: 400;
+  line-height: 40px;
+  overflow-wrap: anywhere;
+}
+
+.page-content.repository.wiki .theme-wiki-title > a {
+  color: inherit;
+}
+
+.page-content.repository.wiki .theme-wiki-actions {
+  display: flex;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.page-content.repository.wiki .theme-wiki-actions > .ui.button {
+  margin: 0;
+}
+
+.page-content.repository.wiki .theme-wiki-meta {
+  margin: 4px 0 0;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--color-secondary);
+  color: var(--color-text-light-1);
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.page-content.repository.wiki .theme-wiki-meta > a {
+  color: var(--github-fgColor-accent);
+  text-decoration: underline;
+  white-space: nowrap;
+}
+
+/* Page: the content and the footer, with GitHub's 256px sidebar on the right (220px below 1012px, beneath the page on
+   phones). */
+.page-content.repository.wiki .theme-wiki-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 256px;
+  gap: 24px;
+  margin-top: 24px;
+}
+
+.page-content.repository.wiki .theme-wiki-main {
+  min-width: 0;
+}
+
+.page-content.repository.wiki .theme-wiki-main > .wiki-content-main {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+}
+
+.page-content.repository.wiki .theme-wiki-footer,
+.page-content.repository.wiki .theme-wiki-custom-sidebar {
+  position: relative;
+  border: 1px solid var(--color-secondary);
+  border-radius: var(--border-radius);
+  box-shadow: var(--github-shadow-resting-small);
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.page-content.repository.wiki .theme-wiki-footer {
+  margin-top: 32px;
+  padding: 8px 16px;
+  background: var(--color-box-header);
+}
+
+.page-content.repository.wiki .theme-wiki-custom-sidebar {
+  margin-bottom: 16px;
+  padding: 8px 16px;
+  background: var(--color-box-body);
+}
+
+.page-content.repository.wiki :is(.theme-wiki-footer, .theme-wiki-custom-sidebar) > :is(p, ul, ol):last-child {
+  margin-bottom: 0;
+}
+
+.page-content.repository.wiki .theme-wiki-edit-part {
+  float: right;
+  display: inline-flex;
+  margin-left: 8px;
+  padding: 2px;
+  border-radius: var(--border-radius);
+}
+
+.page-content.repository.wiki .theme-wiki-edit-part:hover {
+  background: var(--github-control-transparent-bgColor-hover);
+  color: var(--color-text);
+}
+
+.page-content.repository.wiki .theme-wiki-sidebar {
+  min-width: 0;
+}
+
+/* Forgejo's search through the wiki's content, which GitHub's wiki has no counterpart for. */
+.page-content.repository.wiki .theme-wiki-search {
+  display: block;
+  margin-bottom: 16px;
+}
+
+/* Results open leftwards over the page, wider than the sidebar: each a page name over its matching lines. The theme
+   sizes dropdown menus and draws their items as 32px rows with !important on more specific rules, so these go by the
+   results' id. */
+.page-content.repository.wiki #wiki-search {
+  right: 0 !important;
+  left: auto !important;
+  width: 400px !important;
+  max-width: calc(100vw - 32px) !important;
+}
+
+.page-content.repository.wiki #wiki-search > .item {
+  display: block !important;
+  height: auto !important;
+  min-height: 32px !important;
+  padding: 8px 16px !important;
+  font-size: 12px;
+  line-height: 18px;
+  white-space: normal;
+}
+
+.page-content.repository.wiki #wiki-search > a.item > :is(b, p) {
+  display: block;
+  margin: 0;
+}
+
+.page-content.repository.wiki #wiki-search > a.item > b {
+  margin-bottom: 4px;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+}
+
+.page-content.repository.wiki #wiki-search > a.item > p {
+  color: var(--color-text-light-1);
+  overflow-wrap: anywhere;
+}
+
+/* The Pages box: a header that folds the list (open unless the wiki has a custom sidebar), a filter, a row per
+   page. */
+.page-content.repository.wiki .theme-wiki-pages {
+  margin-bottom: 16px;
+  border: 1px solid var(--color-secondary);
+  border-radius: var(--border-radius);
+  box-shadow: var(--github-shadow-resting-small);
+}
+
+.page-content.repository.wiki .theme-wiki-pages-header {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 38px;
+  padding: 4px 8px;
+  border-radius: var(--border-radius);
+  background: var(--color-box-header);
+  cursor: pointer;
+  list-style: none;
+}
+
+.page-content.repository.wiki .theme-wiki-pages-header::-webkit-details-marker {
+  display: none;
+}
+
+.page-content.repository.wiki .theme-wiki-pages[open] > .theme-wiki-pages-header {
+  border-bottom: 1px solid var(--color-secondary);
+  border-radius: var(--border-radius) var(--border-radius) 0 0;
+}
+
+.page-content.repository.wiki .theme-wiki-pages-chevron {
+  flex-shrink: 0;
+  margin: 6px;
+  color: var(--color-text-light-1);
+  transform: rotate(-90deg);
+}
+
+.page-content.repository.wiki .theme-wiki-pages[open] .theme-wiki-pages-chevron {
+  transform: none;
+}
+
+.page-content.repository.wiki .theme-wiki-pages-header > h2 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+}
+
+.page-content.repository.wiki .theme-wiki-pages-header .theme-counter {
+  background: var(--github-bgColor-neutral-emphasis);
+  color: var(--github-fgColor-onEmphasis);
+}
+
+.page-content.repository.wiki .theme-wiki-pages-filter {
+  padding: 8px;
+  border-bottom: 1px solid var(--color-secondary);
+  background: var(--color-box-header);
+}
+
+.page-content.repository.wiki .theme-wiki-pages-filter .theme-search-field {
+  width: 100%;
+}
+
+.page-content.repository.wiki .theme-wiki-pages-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.page-content.repository.wiki .theme-wiki-pages-list > li {
+  padding: 8px;
+  border-top: 1px solid var(--color-secondary);
+}
+
+.page-content.repository.wiki .theme-wiki-pages-list > li:first-child {
+  border-top: 0;
+}
+
+.page-content.repository.wiki .theme-wiki-pages-list > li[hidden] {
+  display: none;
+}
+
+.page-content.repository.wiki .theme-wiki-pages-list > li > a {
+  display: block;
+  padding: 4px 0;
+  overflow: hidden;
+  color: var(--github-fgColor-accent);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.page-content.repository.wiki .theme-wiki-pages-list > li > a[aria-current] {
+  color: var(--color-text);
+}
+
+.page-content.repository.wiki .theme-wiki-pages-empty {
+  margin: 0;
+  padding: 16px 8px;
+  color: var(--color-text-light-1);
+  font-size: 12px;
+  line-height: 18px;
+  text-align: center;
+}
+
+/* Forgejo's link to the pages index closes the box, where GitHub offers the rest of a long list. */
+.page-content.repository.wiki .theme-wiki-pages-all {
+  display: block;
+  padding: 8px;
+  border-top: 1px solid var(--color-secondary);
+  color: var(--github-fgColor-accent);
+  font-size: 12px;
+  line-height: 18px;
+  text-align: center;
+}
+
+.page-content.repository.wiki .theme-wiki-pages-all:hover {
+  text-decoration: underline;
+}
+
+/* The page's headings under its row, as GitHub unfolds a page's structure there. */
+.page-content.repository.wiki .theme-wiki-toc {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.page-content.repository.wiki .theme-wiki-toc summary {
+  padding: 4px 0;
+  color: var(--color-text-light-1);
+  font-size: 12px;
+  line-height: 18px;
+  cursor: pointer;
+}
+
+.page-content.repository.wiki .theme-wiki-toc ul {
+  margin: 0;
+  padding: 0 0 0 12px;
+  list-style: none;
+}
+
+.page-content.repository.wiki .theme-wiki-toc > details > ul {
+  padding-left: 0;
+}
+
+.page-content.repository.wiki .theme-wiki-toc ul ul {
+  margin-left: 4px;
+  border-left: 1px solid var(--color-secondary);
+}
+
+.page-content.repository.wiki .theme-wiki-toc li {
+  margin: 0;
+}
+
+.page-content.repository.wiki .theme-wiki-toc li > a {
+  display: block;
+  padding: 2px 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Clone this wiki: GitHub's small heading over the URL and its copy button; Forgejo's HTTP and SSH switch leads. */
+.page-content.repository.wiki .theme-wiki-clone > h3 {
+  margin: 0 0 8px;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+}
+
+/* The HTTP and SSH switch on its own row, as in the repository's Code menu, then the URL joined to its copy button. */
+.page-content.repository.wiki .theme-wiki-clone > .clone-panel.ui.action.input {
+  display: grid;
+  grid-template-columns: max-content max-content minmax(0, 1fr) 32px;
+  gap: 8px 0;
+  width: 100%;
+  height: auto;
+}
+
+.page-content.repository.wiki .theme-wiki-clone > .clone-panel > :is(#repo-clone-https, #repo-clone-ssh) {
+  grid-row: 1;
+  height: 28px;
+  min-height: 28px;
+  margin: 0;
+  padding: 0 8px;
+  border: 1px solid transparent;
+  border-radius: var(--border-radius);
+  background: transparent;
+  box-shadow: none;
+  color: var(--color-text);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 18px;
+}
+
+.page-content.repository.wiki .theme-wiki-clone > .clone-panel > .basic:is(#repo-clone-https, #repo-clone-ssh):hover {
+  background: var(--github-control-transparent-bgColor-hover);
+}
+
+.page-content.repository.wiki .theme-wiki-clone > .clone-panel > .primary:is(#repo-clone-https, #repo-clone-ssh) {
+  border-color: var(--color-secondary);
+  background: light-dark(var(--github-controlKnob-bgColor-rest), var(--color-hover));
+  font-weight: 600;
+}
+
+.page-content.repository.wiki .theme-wiki-clone > .clone-panel > #repo-clone-url {
+  grid-row: 2;
+  grid-column: 1 / 4;
+  width: 100%;
+  min-width: 0;
+  height: 32px;
+  padding: 5px 8px;
+  border: 1px solid var(--color-light-border);
+  border-radius: var(--border-radius) 0 0 var(--border-radius);
+  background: var(--color-box-header);
+  color: var(--color-text-light-1);
+  font-family: var(--fonts-monospace);
+  font-size: 12px;
+  line-height: 20px;
+}
+
+.page-content.repository.wiki .theme-wiki-clone > .clone-panel > #repo-clone-url:focus {
+  border-color: var(--github-borderColor-accent-emphasis);
+}
+
+.page-content.repository.wiki .theme-wiki-clone > .clone-panel > #clipboard-btn {
+  grid-row: 2;
+  grid-column: 4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  min-height: 32px;
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--color-light-border);
+  border-left: 0;
+  border-radius: 0 var(--border-radius) var(--border-radius) 0;
+  background: var(--color-button);
+  color: var(--color-text-light-1);
+}
+
+.page-content.repository.wiki .theme-wiki-clone > .clone-panel > #clipboard-btn:hover {
+  background: var(--color-hover);
+}
+
+/* Pages index: one box, a row per page with its file icon, name and when it was last updated. */
+.page-content.repository.wiki .theme-wiki-index {
+  margin: 24px 0 0;
+  padding: 0;
+  border: 1px solid var(--color-secondary);
+  border-radius: var(--border-radius);
+  list-style: none;
+}
+
+.page-content.repository.wiki .theme-wiki-index > li {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px;
+  border-top: 1px solid var(--color-secondary);
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.page-content.repository.wiki .theme-wiki-index > li:first-child {
+  border-top: 0;
+}
+
+.page-content.repository.wiki .theme-wiki-index > li:hover {
+  background: var(--color-hover);
+}
+
+.page-content.repository.wiki .theme-wiki-index-icon {
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: var(--color-text-light-1);
+}
+
+.page-content.repository.wiki .theme-wiki-index-main {
+  display: flex;
+  flex: 1;
+  gap: 8px;
+  min-width: 0;
+}
+
+.page-content.repository.wiki .theme-wiki-index-name {
+  display: flex;
+  align-items: center;
+  flex: 2;
+  gap: 4px;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.page-content.repository.wiki .theme-wiki-index-name > a:first-child {
+  color: var(--github-fgColor-accent);
+}
+
+.page-content.repository.wiki .theme-wiki-index .wiki-git-entry {
+  display: none;
+  margin: 0;
+}
+
+.page-content.repository.wiki .theme-wiki-index > li:hover .wiki-git-entry {
+  display: inline-flex;
+}
+
+.page-content.repository.wiki .theme-wiki-index-updated {
+  flex: 1;
+  color: var(--color-text);
+}
+
+/* Page revisions: one box headed with the count, newest revision first. */
+.page-content.repository.wiki .theme-wiki-revisions {
+  margin-top: 24px;
+  border: 1px solid var(--color-secondary);
+  border-radius: var(--border-radius);
+}
+
+.page-content.repository.wiki .theme-wiki-revisions-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  padding: 16px;
+  border-bottom: 1px solid var(--color-secondary);
+  border-radius: var(--border-radius) var(--border-radius) 0 0;
+  background: var(--color-box-header);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+}
+
+.page-content.repository.wiki .theme-wiki-revisions li.gitea-github-theme-commit {
+  min-height: 64px;
+  align-items: center;
+}
+
+.page-content.repository.wiki .theme-wiki-revisions li.gitea-github-theme-commit .commit-summary {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  overflow-wrap: anywhere;
+}
+
+.page-content.repository.wiki .theme-wiki-revisions li.gitea-github-theme-commit .metadata img.ui.avatar {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+}
+
+.page-content.repository.wiki .theme-wiki-revisions li.gitea-github-theme-commit .extra a.commit-id-short {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--color-text-light-1);
+  font-family: var(--fonts-monospace);
+  font-size: 12px;
+}
+
+/* Editor: GitHub's large title field, the shared editor, the edit message and Save page on the right. */
+.page-content.repository.wiki .theme-wiki-form {
+  margin-top: 16px;
+}
+
+.page-content.repository.wiki .theme-wiki-form .field {
+  margin: 0 0 16px;
+}
+
+.page-content.repository.wiki .theme-wiki-form .theme-wiki-form-title {
+  height: 40px;
+  padding: 8px 12px;
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.page-content.repository.wiki .theme-wiki-form .field > .help {
+  margin: 4px 0 0;
+  color: var(--color-text-light-1);
+  font-size: 12px;
+  line-height: 18px;
+}
+
+.page-content.repository.wiki .theme-wiki-form .theme-wiki-form-message {
+  margin-top: 16px;
+}
+
+.page-content.repository.wiki .theme-wiki-form .theme-wiki-form-message > label {
+  display: block;
+  margin: 0 0 4px;
+  color: var(--color-text);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+}
+
+.page-content.repository.wiki .theme-wiki-form .theme-wiki-form-message > input {
+  height: 32px;
+  padding: 5px 12px;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.page-content.repository.wiki .theme-wiki-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.page-content.repository.wiki .theme-wiki-form-actions > .ui.button {
+  margin: 0;
+}
+
+@media (max-width: 1011.98px) {
+  .page-content.repository.wiki .theme-wiki-layout {
+    grid-template-columns: minmax(0, 1fr) 220px;
+    gap: 16px;
+  }
+}
+
+@media (max-width: 767.98px) {
+  /* GitHub keeps a 16px gutter on phones. */
+  .page-content.repository.wiki > .ui.ui.ui.container {
+    max-width: calc(100% - 32px);
+  }
+
+  .page-content.repository.wiki .theme-wiki-header {
+    flex-direction: column;
+  }
+
+  .page-content.repository.wiki .theme-wiki-title {
+    font-size: 24px;
+    line-height: 32px;
+  }
+
+  .page-content.repository.wiki .theme-wiki-actions {
+    margin-top: 0;
+  }
+
+  .page-content.repository.wiki .theme-wiki-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .page-content.repository.wiki .theme-wiki-index-main {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  /* A revision keeps its short hash beside the message, as GitHub's history does on phones. */
+  .page-content.repository.wiki .theme-wiki-revisions li.gitea-github-theme-commit {
+    grid-template-areas: "primary metadata actions" "secondary metadata actions";
+    grid-template-rows: repeat(2, auto);
+    grid-template-columns: minmax(0, 1fr) max-content max-content;
+    padding: 8px;
+  }
+
+  .page-content.repository.wiki .theme-wiki-index-updated {
+    color: var(--color-text-light-1);
+    font-size: 12px;
+    line-height: 18px;
+  }
+}
