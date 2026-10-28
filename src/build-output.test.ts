@@ -132,20 +132,16 @@ it("ships component stylesheets unchanged with valid CSS and a template referenc
       .readdirSync(path.join(ROOT_DIR, "components"), { recursive: true })
       .filter(file => String(file).endsWith(".css"))
       .map(file => [`components/${String(file)}`, `components/${String(file)}`]),
-    ...["organization.css", "profile-subpages.css", "user-profile.css", "wiki.css"].map(name => [
-      name,
-      `components/pages/${name}`,
-    ]),
+    ...["blame.css", "find-file.css", "organization.css", "profile-subpages.css", "user-profile.css", "wiki.css"].map(
+      name => [name, `components/pages/${name}`]
+    ),
   ];
   const output = path.join(DIST_DIR, "forgejo", "public", "assets", "css");
   for (const [source, asset] of sources) {
     const code = fs.readFileSync(path.join(output, asset));
     const original = source.startsWith("components/")
       ? fs.readFileSync(path.join(ROOT_DIR, source))
-      : source.startsWith("organization") ||
-          source.startsWith("profile-") ||
-          source.startsWith("user-profile") ||
-          source === "wiki.css"
+      : /^(blame|find-file|organization|profile-|user-profile)/.test(source) || source === "wiki.css"
         ? fs.readFileSync(path.join(ROOT_DIR, "styles/pages", source))
         : fs.readFileSync(path.join(ROOT_DIR, "public", source));
     expect(code.equals(original), `changed component asset: ${asset}`).toBe(true);
@@ -1088,6 +1084,42 @@ describe("Forgejo 15 native integration", () => {
     const forks = fs.readFileSync(path.join(ROOT_DIR, "templates", "repo", "forks.tmpl"), "utf-8");
     expect(forks).toContain('<li class="theme-box-list-row theme-fork-row">');
     expect(forks).toContain("No one has forked this repository yet");
+  });
+
+  it("shows blame as GitHub's in the code view while keeping Forgejo's line and reblame hooks", () => {
+    const read = (...parts: string[]) => fs.readFileSync(path.join(ROOT_DIR, ...parts), "utf-8");
+    const blame = read("templates", "repo", "blame.tmpl");
+    expect(blame).toContain('<nav class="repo-file-view-tabs"');
+    expect(blame).toContain('{{ctx.Locale.Tr "repo.blame"}}');
+    expect(blame).toContain('class="theme-blame-legend"');
+    for (const hook of [
+      'class="lines-commit"',
+      'class="lines-blame-btn"',
+      'href="{{$row.PreviousShaURL}}"',
+      '<span id="L{{$row.RowNumber}}" data-line-number="{{$row.RowNumber}}"></span>',
+      'class="lines-code blame-code chroma"',
+      "unescape-button",
+      "toggle-escape-button",
+      'class="item ref-in-new-issue"',
+      'class="item copy-line-permalink"',
+      "repo.blame.ignore_revs",
+    ])
+      expect(blame).toContain(hook);
+    expect(blame).toContain('<script src="{{AssetUrlPrefix}}/js/blame-age.js" defer></script>');
+    expect(read("templates", "base", "component_assets.tmpl")).toContain("/css/components/pages/blame.css");
+  });
+
+  it("gives Find a file the Go to file picker's look around Forgejo's find-file script", () => {
+    const read = (...parts: string[]) => fs.readFileSync(path.join(ROOT_DIR, ...parts), "utf-8");
+    const find = read("templates", "repo", "find", "files.tmpl");
+    expect(find).toContain('<label class="theme-search-field theme-search-field-icon">');
+    expect(find).toContain('id="repo-file-find-input"');
+    expect(find).toContain('data-url-data-link="{{.DataLink}}" data-url-tree-link="{{.TreeLink}}"');
+    expect(find).toContain('id="repo-find-file-table"');
+    expect(find).toContain('id="repo-find-file-no-result"');
+    expect(find).toContain('"repo.find_file.no_matching"');
+    expect(read("styles", "pages", "find-file.css")).toContain("& > tbody > tr > td > a > .ui.text.red {");
+    expect(read("templates", "base", "component_assets.tmpl")).toContain("/css/components/pages/find-file.css");
   });
 
   it("heads organization settings with the settings context, as personal settings", () => {

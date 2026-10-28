@@ -1,0 +1,107 @@
+{{/* GitHub's blame view in the theme's code view: the file header with the Code and Blame switch and the age legend,
+then per hunk the commit's date, author and title, a button to the blame before that commit and an age bar beside
+the line numbers. blame-age.js colours the bars from the hunks' dates. */}}
+{{if or .UsesIgnoreRevs .FaultyIgnoreRevsFile}}
+	{{$revsFileLink := URLJoin .RepoLink "src" .BranchNameSubURL "/.git-blame-ignore-revs"}}
+	{{if .UsesIgnoreRevs}}
+		<div class="ui info message">
+			<p>{{ctx.Locale.Tr "repo.blame.ignore_revs" $revsFileLink "?bypass-blame-ignore=true"}}</p>
+		</div>
+	{{else}}
+		<div class="ui error message">
+			<p>{{ctx.Locale.Tr "repo.blame.ignore_revs.failed" $revsFileLink}}</p>
+		</div>
+	{{end}}
+{{end}}
+{{$escaped := and .EscapeStatus .EscapeStatus.Escaped}}
+<div class="{{TabSizeClass .Editorconfig .FileName}} non-diff-file-content theme-blame">
+	<h4 class="file-header ui top attached header tw-flex tw-items-center tw-justify-between tw-flex-wrap">
+		<div class="file-header-left tw-flex tw-items-center tw-pr-4 tw-flex-wrap tw-gap-2">
+			<nav class="repo-file-view-tabs" aria-label="{{ctx.Locale.Tr "repo.code"}}">
+				<a href="{{.RepoLink}}/src/{{.BranchNameSubURL}}/{{.TreePath | PathEscapeSegments}}">{{ctx.Locale.Tr "repo.code"}}</a>
+				<a class="active" aria-current="page" href="{{.RepoLink}}/blame/{{.BranchNameSubURL}}/{{.TreePath | PathEscapeSegments}}">{{ctx.Locale.Tr "repo.blame"}}</a>
+			</nav>
+			{{template "repo/file_info" .}}
+		</div>
+		<div class="file-header-right file-actions tw-flex tw-items-center tw-flex-wrap">
+			{{if .BlameRows}}
+				<div class="theme-blame-legend" aria-hidden="true">
+					<span>{{ctx.Locale.Tr "issues.search.sort.oldest"}}</span>
+					<span class="theme-blame-legend-scale"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span>
+					<span>{{ctx.Locale.Tr "issues.search.sort.latest"}}</span>
+				</div>
+			{{end}}
+			<div class="ui buttons">
+				<a class="ui mini basic button" href="{{$.RawFileLink}}">{{ctx.Locale.Tr "repo.file_raw"}}</a>
+				{{if not .IsViewCommit}}
+					<a class="ui mini basic button" href="{{.RepoLink}}/src/commit/{{.CommitID | PathEscape}}/{{.TreePath | PathEscapeSegments}}">{{ctx.Locale.Tr "repo.file_permalink"}}</a>
+				{{end}}
+				{{if $escaped}}
+					<button class="ui mini basic button unescape-button">{{ctx.Locale.Tr "repo.unescape_control_characters"}}</button>
+					<button class="ui mini basic button escape-button tw-hidden">{{ctx.Locale.Tr "repo.escape_control_characters"}}</button>
+				{{end}}
+			</div>
+			<a class="ui mini basic button theme-blame-history" href="{{.RepoLink}}/commits/{{.BranchNameSubURL}}/{{.TreePath | PathEscapeSegments}}">{{svg "octicon-history" 16}}{{ctx.Locale.Tr "repo.file_history"}}</a>
+			<a download class="btn-octicon" href="{{$.RawFileLink}}" data-tooltip-content="{{ctx.Locale.Tr "repo.download_file"}}" aria-label="{{ctx.Locale.Tr "repo.download_file"}}">{{svg "octicon-download"}}</a>
+		</div>
+	</h4>
+	<div class="ui bottom attached table unstackable segment">
+		<div class="file-view code-view unicode-escaped">
+			{{if .IsFileTooLarge}}
+				<table>
+					<tbody>
+						<tr>
+							<td class="gt-text-center tw-p-0.5"><strong>{{ctx.Locale.Tr "repo.file_too_large"}}</strong></td>
+						</tr>
+					</tbody>
+				</table>
+			{{else}}
+			<table>
+				<tbody>
+					{{range $row := .BlameRows}}
+						<tr class="{{if and (gt $.CommitCnt 1) $row.CommitURL}}top-line-blame{{end}}">
+							<td class="lines-commit">
+								{{if $row.CommitURL}}
+									{{$subject := index (StringUtils.Cut $row.CommitMessage "\n") 0}}
+									<div class="blame-info">
+										<span class="blame-time">{{$row.CommitSince}}</span>
+										<span class="blame-avatar">{{$row.Avatar}}</span>
+										<a class="blame-message" href="{{$row.CommitURL}}" title="{{$row.CommitMessage}}">{{if $subject}}{{$subject}}{{else}}<i>{{ctx.Locale.Tr "repo.empty_commit_message"}}</i>{{end}}</a>
+									</div>
+								{{end}}
+							</td>
+							<td class="lines-blame-btn">
+								{{if $row.PreviousSha}}
+									<a role="button" class="muted" href="{{$row.PreviousShaURL}}" data-tooltip-content="{{ctx.Locale.Tr "repo.blame_prior"}}" aria-label="{{ctx.Locale.Tr "repo.blame_prior"}}">
+										{{svg "octicon-versions"}}
+									</a>
+								{{end}}
+							</td>
+							<td class="lines-num">
+								<span id="L{{$row.RowNumber}}" data-line-number="{{$row.RowNumber}}"></span>
+							</td>
+							{{if $escaped}}
+								<td class="lines-escape">
+									{{if $row.EscapeStatus.Escaped}}
+										<button class="toggle-escape-button btn interact-bg" title="{{template "repo/diff/escape_title" dict "diff" $row}}"></button>
+									{{end}}
+								</td>
+							{{end}}
+							<td rel="L{{$row.RowNumber}}" class="lines-code blame-code chroma">
+								<code class="code-inner">{{$row.Code}}</code>
+							</td>
+						</tr>
+					{{end}}
+				</tbody>
+			</table>
+			<div class="code-line-menu tippy-target">
+				{{if $.Permission.CanRead $.UnitTypeIssues}}
+					<a class="item ref-in-new-issue" role="menuitem" data-url-issue-new="{{.RepoLink}}/issues/new" data-url-param-body-link="{{.Repository.Link}}/src/commit/{{PathEscape .CommitID}}/{{PathEscapeSegments .TreePath}}{{if $.HasSourceRenderedToggle}}?display=source{{end}}" rel="nofollow noindex">{{ctx.Locale.Tr "repo.issues.context.reference_issue"}}</a>
+				{{end}}
+				<a class="item copy-line-permalink" role="menuitem" data-url="{{.Repository.Link}}/src/commit/{{PathEscape .CommitID}}/{{PathEscapeSegments .TreePath}}{{if $.HasSourceRenderedToggle}}?display=source{{end}}">{{ctx.Locale.Tr "repo.file_copy_permalink"}}</a>
+			</div>
+			{{end}}
+		</div>
+	</div>
+</div>
+<script src="{{AssetUrlPrefix}}/js/blame-age.js" defer></script>

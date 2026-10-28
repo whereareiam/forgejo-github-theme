@@ -1,0 +1,25 @@
+{{/* Find a file in the look of the theme's Go to file picker: the repository and a search field, then a box of
+matching paths with the matched characters in bold. Forgejo's find-file script reads the field's data links and fills
+the table, so its text input keeps Forgejo's id and data attributes inside the shared search field's frame. */}}
+{{template "base/head" .}}
+<div role="main" aria-label="{{.Title}}" class="page-content repository theme-find-file">
+	{{template "repo/header" .}}
+	<div class="ui container">
+		<div class="theme-find-file-bar">
+			<a class="theme-find-file-repo" href="{{$.RepoLink}}">{{.RepoName}}</a>
+			<span class="theme-find-file-divider" aria-hidden="true">/</span>
+			<label class="theme-search-field theme-search-field-icon">
+				{{svg "octicon-search" 16}}
+				<input id="repo-file-find-input" type="text" autofocus autocomplete="off" spellcheck="false" placeholder="{{ctx.Locale.Tr "repo.find_file.go_to_file"}}" aria-label="{{ctx.Locale.Tr "repo.find_file.go_to_file"}}" aria-controls="repo-find-file-table" data-url-data-link="{{.DataLink}}" data-url-tree-link="{{.TreeLink}}">
+			</label>
+		</div>
+		<table id="repo-find-file-table" class="ui single line unstackable table theme-find-file-results">
+			<tbody></tbody>
+		</table>
+		<div id="repo-find-file-no-result" class="theme-empty theme-find-file-empty tw-hidden">
+			{{svg "octicon-search" 24}}
+			<h3>{{ctx.Locale.Tr "repo.find_file.no_matching"}}</h3>
+		</div>
+	</div>
+</div>
+{{template "base/footer" .}}
