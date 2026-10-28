@@ -7,6 +7,27 @@
 			{{template "base/alert" .}}
 		</div>
 	{{end}}
+	{{if .Invite}}
+		<div class="ui container tw-mb-8">
+			<div class="ui info message org-invite-flash tw-flex tw-items-center tw-justify-between">
+				<div>
+					{{if eq (len .TeamsInvitedTo) 1}}
+						{{$teamsFormatted := HTMLFormat "<b>%s</b>" (index .TeamsInvitedTo 0).Name}}
+						{{ctx.Locale.Tr "org.pending_invite_notification_single_team" $teamsFormatted}}
+					{{else}}
+						{{$teamsFormatted := ""}}
+						{{range $i, $v := .TeamsInvitedTo}}
+							{{$comma := ""}}
+							{{if $i}}{{$comma = ", "}}{{end}}
+							{{$teamsFormatted = HTMLFormat "%s%s<b>%s</b>" $teamsFormatted $comma .Name}}
+						{{end}}
+						{{ctx.Locale.Tr "org.pending_invite_notification_multiple_teams" $teamsFormatted}}
+					{{end}}
+				</div>
+				<a class="primary button" href="{{AppSubUrl}}/org/invite/{{.Invite.Token}}">{{ctx.Locale.Tr "org.view_invite"}}</a>
+			</div>
+		</div>
+	{{end}}
 	{{if not $repositories}}{{template "org/header" .}}{{end}}
 
 	{{if $repositories}}{{template "org/repository_nav" .}}{{end}}

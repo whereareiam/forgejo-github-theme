@@ -79,6 +79,11 @@
 					{{end}}
 				</div>
 				</div>
+			{{else}}
+				<div class="theme-empty theme-empty-compact">
+					{{svg "octicon-person" 24}}
+					<h3>{{ctx.Locale.Tr "org.members.no_public_members"}}</h3>
+				</div>
 			{{end}}
 		</div>
 

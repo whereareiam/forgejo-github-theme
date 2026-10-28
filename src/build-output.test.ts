@@ -764,6 +764,26 @@ describe("Forgejo 15 native integration", () => {
     expect(read("navbar.tmpl")).toContain('<span class="theme-counter theme-counter-tab">{{.Team.NumMembers}}</span>');
   });
 
+  it("keeps Forgejo's organization blocks: team privacy, invitations, empty members and funding", () => {
+    const read = (...parts: string[]) => fs.readFileSync(path.join(ROOT_DIR, "templates", "org", ...parts), "utf-8");
+    // Only a team's members and the owners see who is in it; everyone else gets its description.
+    const teams = read("team", "teams.tmpl");
+    const gate = "{{if or (index $.DoerIsMember .ID) $.IsOrganizationOwner}}";
+    const members = teams.indexOf('{{template "shared/user/avatarlink" dict "user" .}}');
+    expect(members).toBeGreaterThan(teams.lastIndexOf(gate, members));
+    expect(teams.lastIndexOf(gate, members)).toBeGreaterThan(teams.indexOf('{{ctx.Locale.Tr "view"}}'));
+    expect(teams.slice(members)).toContain('{{ctx.Locale.Tr "org.teams.no_desc"}}');
+    const home = read("home.tmpl");
+    expect(home).toContain("{{if .Invite}}");
+    expect(home).toContain('href="{{AppSubUrl}}/org/invite/{{.Invite.Token}}">{{ctx.Locale.Tr "org.view_invite"}}</a>');
+    expect(read("member", "members.tmpl")).toMatch(
+      /\{\{else\}\}\s*<div class="theme-empty theme-empty-compact">[\s\S]*?org\.members\.no_public_members/
+    );
+    const header = read("header.tmpl");
+    expect(header).toContain('{{template "shared/donation_button" .}}');
+    expect(header).toContain('{{template "shared/funding" .}}');
+  });
+
   it("lays out password recovery and activation like sign-in", () => {
     for (const page of ["forgot_passwd.tmpl", "reset_passwd.tmpl", "activate.tmpl"]) {
       const template = fs.readFileSync(path.join(ROOT_DIR, "templates", "user", "auth", page), "utf-8");
