@@ -116,7 +116,7 @@
 /* Destructive actions such as Delete, red like GitHub's danger menu items. */
 .theme-dropdown-panel > .theme-dropdown-action.theme-dropdown-danger,
 .theme-dropdown-panel > .theme-dropdown-action.theme-dropdown-danger > .svg {
-  color: var(--github-fgColor-danger, var(--color-red));
+  color: var(--color-red);
 }
 
 .theme-dropdown-panel > .theme-dropdown-action.theme-dropdown-danger:hover {

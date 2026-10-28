@@ -195,6 +195,30 @@ it("defines the colour variables Forgejo 17 only sets in its own themes", () => 
   }
 });
 
+it("colours the plain stylesheets with variables every theme defines", () => {
+  // The release page took GitHub's dark palette literally, so light, colorblind and catppuccin themes showed dark
+  // rows, and a --github-* variable no theme sets only ever shows its hard-coded dark fallback.
+  const stylesheets = ["styles", "components", "public"].flatMap(dir =>
+    fs
+      .readdirSync(path.join(ROOT_DIR, dir), { recursive: true })
+      .map(String)
+      .filter(file => file.endsWith(".css"))
+      .map(file => path.join(dir, file))
+  );
+  const themes = fs.readdirSync(DIST_DIR).filter(name => /^theme-.+\.css$/.test(name) && !name.endsWith("-auto.css"));
+  expect(themes.length).toBeGreaterThan(0);
+  const themeCss = themes.map(theme => [theme, fs.readFileSync(path.join(DIST_DIR, theme), "utf-8")] as const);
+  for (const file of stylesheets) {
+    const css = fs.readFileSync(path.join(ROOT_DIR, file), "utf-8");
+    for (const [, variable] of css.matchAll(/var\((--github-[\w-]+)/g)) {
+      for (const [theme, output] of themeCss)
+        expect(output, `${theme} defines ${variable} (${file})`).toContain(`${variable}:`);
+    }
+  }
+  const releases = fs.readFileSync(path.join(ROOT_DIR, "styles/pages/releases.css"), "utf-8");
+  expect(releases).not.toMatch(/#[\da-f]{3,8}\b|rgba?\(/i);
+});
+
 it("resets Fomantic's will-change on dropdown menus and modals", () => {
   // will-change keeps the element on its own GPU layer; at a fractional position its text renders blurry.
   for (const file of ["styles/public/dropdown/dropdown.ts", "styles/public/modal.ts"]) {

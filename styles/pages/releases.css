@@ -80,10 +80,10 @@
   position: relative;
 }
 .github-release-toc li:has(a[aria-current="location"]) {
-  background: rgba(101, 108, 118, 0.2);
+  background: var(--color-active);
 }
 .github-release-toc li:has(a[aria-current="location"])::before {
-  background: #1f6feb;
+  background: var(--github-borderColor-accent-emphasis);
   border-radius: 6px;
   bottom: 4px;
   content: "";
@@ -201,13 +201,13 @@
   content: "Checks";
 }
 #release-list.github-release-list > li .release-title-wrap h4 a[data-tippy="commit-statuses"]:has(svg.text.yellow) {
-  color: #d29922;
+  color: var(--color-yellow);
 }
 #release-list.github-release-list > li .release-title-wrap h4 a[data-tippy="commit-statuses"]:has(svg.text.green) {
-  color: #3fb950;
+  color: var(--color-green);
 }
 #release-list.github-release-list > li .release-title-wrap h4 a[data-tippy="commit-statuses"]:has(svg.text.red) {
-  color: #f85149;
+  color: var(--color-red);
 }
 #release-list.github-release-list
   > li
@@ -528,7 +528,7 @@
         color: var(--github-fgColor-accent);
       }
       a[aria-current="location"] {
-        background: #262c36;
+        background: var(--color-active);
       }
     }
     ul#release-list.github-release-list > li {
