@@ -1,0 +1,146 @@
+{{/* GitHub's package page: the package's icon, name, version and type as the heading, the installation and readme
+boxes of each package type in the main column, and a sidebar with the details, the downloads, the assets and the
+most recent versions. */}}
+{{template "base/head" .}}
+<div role="main" aria-label="{{.Title}}" class="page-content repository view issue packages theme-package-view">
+	{{template "shared/user/org_profile_avatar" .}}
+	<div class="ui container">
+		{{template "user/overview/header" .}}
+		<div class="theme-package-header">
+			<h1>
+				<span class="theme-package-header-icon">{{svg .PackageDescriptor.Package.Type.SVGName 24}}</span>
+				<span class="theme-package-header-name">{{.PackageDescriptor.Package.Name}}</span>
+				<span class="theme-package-header-version">{{.PackageDescriptor.Version.Version}}</span>
+				<span class="ui basic label">{{.PackageDescriptor.Package.Type.Name}}</span>
+			</h1>
+			<p>
+				{{$timeStr := DateUtils.TimeSince .PackageDescriptor.Version.CreatedUnix}}
+				{{if .HasRepositoryAccess}}
+					{{ctx.Locale.Tr "packages.published_by_in" $timeStr .PackageDescriptor.Creator.HomeLink .PackageDescriptor.Creator.GetDisplayName .PackageDescriptor.Repository.Link .PackageDescriptor.Repository.FullName}}
+				{{else}}
+					{{ctx.Locale.Tr "packages.published_by" $timeStr .PackageDescriptor.Creator.HomeLink .PackageDescriptor.Creator.GetDisplayName}}
+				{{end}}
+			</p>
+		</div>
+		<div class="theme-package-layout">
+			<div class="theme-package-main">
+				{{template "package/content/alpine" .}}
+				{{template "package/content/arch" .}}
+				{{template "package/content/cargo" .}}
+				{{template "package/content/chef" .}}
+				{{template "package/content/composer" .}}
+				{{template "package/content/conan" .}}
+				{{template "package/content/conda" .}}
+				{{template "package/content/container" .}}
+				{{template "package/content/cran" .}}
+				{{template "package/content/debian" .}}
+				{{template "package/content/generic" .}}
+				{{template "package/content/go" .}}
+				{{template "package/content/helm" .}}
+				{{template "package/content/maven" .}}
+				{{template "package/content/npm" .}}
+				{{template "package/content/nuget" .}}
+				{{template "package/content/pub" .}}
+				{{template "package/content/pypi" .}}
+				{{template "package/content/rpm" .}}
+				{{template "package/content/alt" .}}
+				{{template "package/content/rubygems" .}}
+				{{template "package/content/swift" .}}
+				{{template "package/content/vagrant" .}}
+			</div>
+			<div class="theme-package-sidebar">
+				<section>
+					<h2>{{ctx.Locale.Tr "packages.details"}}</h2>
+					<div class="theme-package-details">
+						<div class="item">{{ctx.AvatarUtils.Avatar .PackageDescriptor.Owner 16 "tw-mr-2"}}<a class="theme-package-owner" href="{{.PackageDescriptor.Owner.HomeLink}}">{{.PackageDescriptor.Owner.Name}}</a></div>
+						{{if .HasRepositoryAccess}}
+						<div class="item">{{svg "octicon-repo" 16 "tw-mr-2"}}<a href="{{.PackageDescriptor.Repository.Link}}">{{.PackageDescriptor.Repository.FullName}}</a></div>
+						{{end}}
+						<div class="item">{{svg .PackageDescriptor.Package.Type.SVGName 16 "tw-mr-2"}}{{.PackageDescriptor.Package.Type.Name}}</div>
+						{{template "package/metadata/alpine" .}}
+						{{template "package/metadata/arch" .}}
+						{{template "package/metadata/cargo" .}}
+						{{template "package/metadata/chef" .}}
+						{{template "package/metadata/composer" .}}
+						{{template "package/metadata/conan" .}}
+						{{template "package/metadata/conda" .}}
+						{{template "package/metadata/container" .}}
+						{{template "package/metadata/cran" .}}
+						{{template "package/metadata/debian" .}}
+						{{template "package/metadata/generic" .}}
+						{{template "package/metadata/helm" .}}
+						{{template "package/metadata/maven" .}}
+						{{template "package/metadata/npm" .}}
+						{{template "package/metadata/nuget" .}}
+						{{template "package/metadata/pub" .}}
+						{{template "package/metadata/pypi" .}}
+						{{template "package/metadata/rpm" .}}
+						{{template "package/metadata/alt" .}}
+						{{template "package/metadata/rubygems" .}}
+						{{template "package/metadata/swift" .}}
+						{{template "package/metadata/vagrant" .}}
+						{{if not (and (eq .PackageDescriptor.Package.Type "container") .PackageDescriptor.Metadata.Manifests)}}
+						<div class="item" title="{{ctx.Locale.Tr "admin.packages.size"}}">{{svg "octicon-database" 16 "tw-mr-2"}}{{ctx.Locale.TrSize .PackageDescriptor.CalculateBlobSize}}</div>
+						{{end}}
+					</div>
+				</section>
+				{{/* GitHub's figures: when the version was published and how often it was downloaded. */}}
+				<section class="theme-package-stats">
+					<div>
+						<span>{{ctx.Locale.Tr "admin.packages.published"}}</span>
+						<strong>{{DateUtils.TimeSince .PackageDescriptor.Version.CreatedUnix}}</strong>
+					</div>
+					<div>
+						<span>{{ctx.Locale.Tr "repo.release.downloads"}}</span>
+						<strong>{{ctx.Locale.PrettyNumber .PackageDescriptor.Version.DownloadCount}}</strong>
+					</div>
+					{{if .PackageDescriptor.Version.LastDownloadUnix}}
+					<div>
+						<span>{{ctx.Locale.Tr "admin.packages.last_download"}}</span>
+						<strong>{{DateUtils.TimeSince .PackageDescriptor.Version.LastDownloadUnix}}</strong>
+					</div>
+					{{end}}
+				</section>
+				{{if not (eq .PackageDescriptor.Package.Type "container")}}
+				<section>
+					<h2>{{ctx.Locale.Tr "packages.assets"}} <span class="theme-counter">{{len .PackageDescriptor.Files}}</span></h2>
+					<ul class="theme-package-assets">
+						{{range .PackageDescriptor.Files}}
+						<li>
+							{{svg "octicon-file-zip" 16}}
+							<a href="{{$.Link}}/files/{{.File.ID}}">{{.File.Name}}</a>
+							<span>{{ctx.Locale.TrSize .Blob.Size}}</span>
+						</li>
+						{{end}}
+					</ul>
+				</section>
+				{{end}}
+				<section>
+					<h2>{{ctx.Locale.Tr "packages.versions"}} <span class="theme-counter">{{.TotalVersionCount}}</span></h2>
+					<ul class="theme-package-versions">
+						{{range .LatestVersions}}
+						<li{{if eq .ID $.PackageDescriptor.Version.ID}} aria-current="true"{{end}}>
+							<a class="gt-ellipsis" title="{{.Version}}" href="{{$.PackageDescriptor.PackageWebLink}}/{{PathEscape .LowerVersion}}">{{.Version}}</a>
+							<span>{{DateUtils.AbsoluteShort .CreatedUnix}}</span>
+						</li>
+						{{end}}
+					</ul>
+					<a class="theme-package-versions-all" href="{{$.PackageDescriptor.PackageWebLink}}/versions">{{ctx.Locale.Tr "packages.versions.view_all"}}</a>
+				</section>
+				{{if or .CanWritePackages .HasRepositoryAccess}}
+				<section>
+					<div class="theme-package-details">
+						{{if .HasRepositoryAccess}}
+						<div class="item">{{svg "octicon-issue-opened" 16 "tw-mr-2"}}<a href="{{.PackageDescriptor.Repository.Link}}/issues">{{ctx.Locale.Tr "repo.issues"}}</a></div>
+						{{end}}
+						{{if .CanWritePackages}}
+						<div class="item">{{svg "octicon-gear" 16 "tw-mr-2"}}<a href="{{.Link}}/settings">{{ctx.Locale.Tr "repo.settings"}}</a></div>
+						{{end}}
+					</div>
+				</section>
+				{{end}}
+			</div>
+		</div>
+	</div>
+</div>
+{{template "base/footer" .}}

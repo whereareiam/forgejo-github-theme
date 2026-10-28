@@ -45,7 +45,7 @@ permissions, then Settings as a default button. */}}
 				{{if (eq .Team.AccessMode 3)}}
 					{{ctx.Locale.Tr "org.teams.admin_permission_desc"}}
 				{{else}}
-					<table class="ui table">
+					<table class="ui unstackable table">
 						<thead>
 							<tr>
 								<th>{{ctx.Locale.Tr "units.unit"}}</th>

@@ -426,10 +426,59 @@
   font-weight: 600;
 }
 
-/* Under the tabs the add form and the list are one box instead of Forgejo's attached segments. */
-.organization.teams .ten.wide.column > .theme-team-tabs + .ui.attached.segment {
-  border-top-width: 1px;
-  border-radius: var(--border-radius) var(--border-radius) 0 0;
+/* Under the tabs: the search with its Add button (and Add all, Remove all) above GitHub's box list of members or
+   repositories (components/common/box-list). */
+.theme-team-toolbar {
+  flex-wrap: wrap;
+}
+
+.theme-team-toolbar.ui.form,
+.theme-team-add {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.theme-team-search {
+  flex: 1;
+  min-width: 0;
+}
+
+.theme-team-search > .ui.input,
+.theme-team-search > .ui.input > input {
+  width: 100%;
+}
+
+.theme-team-toolbar-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.theme-team-row > a > img.ui.avatar {
+  display: block;
+  border-radius: 50%;
+}
+
+.theme-team-row > form {
+  flex: none;
+}
+
+.theme-team-repo-icon {
+  display: inline-flex;
+  flex: none;
+  color: var(--color-text-light-1);
+}
+
+.theme-team-list + .page.buttons {
+  margin-top: 16px;
+}
+
+@media (max-width: 767.98px) {
+  .theme-team-toolbar-actions {
+    flex-basis: 100%;
+  }
 }
 
 /* Inner team pages retain the permission summary beside members/repositories. */
@@ -523,19 +572,153 @@
   max-width: 768px !important;
 }
 
-.organization.new.team .ui.form > .ui.header {
-  padding: 0 0 16px;
-  border: 0;
-  border-bottom: 1px solid var(--color-secondary);
-  background: transparent;
-  font-size: 24px;
-  font-weight: 400;
+/* Creating or editing a team (templates/org/team/new.tmpl) sits in the settings layout, whose form styles
+   (components/common/form) draw its fields and checkboxes. The rules below are anchored like the settings rules they
+   refine. */
+.page-content > .ui.container.theme-settings.theme-team-form > .flex-container-main .ui.form {
+  /* Radios get the checkboxes' grid: the box in a 20px gutter beside the semibold title, the note beneath it. */
+  & label.theme-team-choice {
+    display: grid;
+    grid-template-columns: 20px minmax(0, 1fr);
+    align-items: start;
+    cursor: pointer;
+    & > input {
+      grid-column: 1;
+      grid-row: 1;
+    }
+    & > .help {
+      grid-column: 2;
+      margin: 0;
+    }
+  }
+
+  /* The repository sections under Custom access, indented under it: a 14px title with its note, then the units in
+     a boxed table with the access levels as centred columns. */
+  & fieldset.theme-team-units {
+    margin: 0 0 0 20px;
+    padding: 0;
+    border: 0;
+    & > legend {
+      margin: 0 0 8px;
+      font-size: 14px;
+      line-height: 20px;
+      & > .help {
+        margin: 0;
+      }
+    }
+    & > fieldset {
+      margin: 0;
+      padding: 0;
+      border: 0;
+    }
+  }
+
+  & table.optionmatrix {
+    margin: 0 0 8px;
+    border: 1px solid var(--color-light-border);
+    border-radius: var(--border-radius);
+    background: var(--color-box-body);
+    border-collapse: separate;
+    border-spacing: 0;
+    overflow: hidden;
+    & th {
+      padding: 8px 16px;
+      border-bottom: 1px solid var(--color-light-border);
+      background: var(--color-box-header);
+      color: var(--color-text);
+      font-size: 12px;
+      font-weight: 600;
+      line-height: 18px;
+    }
+    & td {
+      padding: 12px 16px;
+      border-top: 1px solid var(--color-light-border);
+      vertical-align: middle;
+    }
+    & tr:first-child > td {
+      border-top: 0;
+    }
+    & td:first-child > label {
+      display: block;
+      margin: 0;
+      color: var(--color-text);
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 20px;
+      & > .help {
+        margin: 0;
+      }
+    }
+    & td + td > label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0;
+      cursor: pointer;
+    }
+  }
+
+  /* The submit button sits below the last group, as GitHub's Create team and Save changes. */
+  & .theme-team-submit {
+    margin: 24px 0 0;
+  }
 }
 
-.organization.new.team .ui.form > .ui.segment {
-  padding: 24px 0;
-  border: 0;
-  background: transparent;
+/* The danger zone follows the form 40px down, as a settings section follows another. */
+.page-content > .ui.container.theme-settings.theme-team-form > .flex-container-main > form + .ui.top.attached.header {
+  margin-top: 40px;
+}
+
+@media (min-width: 768px) {
+  .page-content
+    > .ui.container.theme-settings.theme-team-form
+    > .flex-container-main
+    .ui.form
+    table.optionmatrix
+    :is(th, td)
+    + :is(th, td) {
+    width: 96px;
+    min-width: 0;
+    padding-inline: 8px;
+  }
+}
+
+/* On a phone each unit is a block: its name and notes, then the three access levels in a row. Fomantic stacks the
+   cells of a table on phones with !important, which this replaces. */
+@media (max-width: 767.98px) {
+  .page-content > .ui.container.theme-settings.theme-team-form > .flex-container-main .ui.form {
+    & fieldset.theme-team-units {
+      margin-left: 0;
+    }
+    & table.optionmatrix {
+      display: block;
+      & thead {
+        display: none;
+      }
+      & tbody {
+        display: block;
+      }
+      & tr {
+        display: flex !important;
+        flex-wrap: wrap;
+        gap: 8px 16px;
+        padding: 12px 16px !important;
+        border-top: 1px solid var(--color-light-border);
+        box-shadow: none !important;
+      }
+      & tr:first-child {
+        border-top: 0;
+      }
+      & td {
+        width: auto !important;
+        padding: 0 !important;
+        border: 0 !important;
+      }
+      & td:first-child {
+        flex-basis: 100%;
+      }
+    }
+  }
 }
 
 .page-content.organization.teams .org-team-card .members .ui.avatar {
