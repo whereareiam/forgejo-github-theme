@@ -113,6 +113,7 @@ export const github = {
        * @menu `verticalMenu` 垂直菜单项激活时左侧的伪元素颜色
        * @dropdown `selectionDropdown` 选择输入框的内部边框颜色
        * @notification `notification` 通知列表悬停时的左边框颜色
+       * @pages `releases.css` 发行版目录当前项左侧的指示条颜色
        */
       emphasis: null,
     },
@@ -318,11 +319,15 @@ export const github = {
        * @dashboard `dashboard` 仓库/组织切换按钮和列表边框和阴影
        * @heatmap `heatmap` 热力图阴影
        * @heatmap `activity` 动态活动阴影
+       * @components `common/search` 搜索语法菜单阴影
+       * @pages `projects.css` 项目侧边面板阴影
+       * @public `navbar-drawer.css` 导航抽屉阴影 `repo-mirror.css` 镜像信息浮层阴影
        */
       small: null,
     },
     /** 内嵌阴影
      * @input `input` 输入框阴影
+     * @components `common/form` 表单输入框和选择框阴影
      */
     inset: null,
     resting: {
