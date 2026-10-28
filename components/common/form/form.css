@@ -60,7 +60,7 @@
   &
     :is(
       input:not([type="checkbox"], [type="radio"], [type="file"], [type="hidden"], [type="color"]),
-      select,
+      select:not(.theme-select),
       textarea
     ) {
     border: 1px solid var(--color-light-border);
@@ -88,7 +88,7 @@
 
   /* Selects look like GitHub's: the default button surface with a caret. Fomantic sizes its selection dropdown with
      a more specific rule. */
-  & select,
+  & select:not(.theme-select),
   & .ui.selection.dropdown {
     min-height: 32px;
     padding: 5px 24px 5px 12px;
@@ -98,6 +98,15 @@
     box-shadow: var(--github-shadow-inset);
     font-size: 14px;
     line-height: 20px;
+  }
+  /* The shared select (components/common/select) keeps its own look in a field, as wide as the other controls. */
+  & .field > .theme-select-wrap {
+    display: flex;
+    width: 100%;
+    max-width: 440px;
+    & > .theme-select {
+      width: 100%;
+    }
   }
   /* Fields wrapped in Fomantic's search or input containers get the same 440px limit. */
   & .field > :is(.ui.search, .ui.input) {
@@ -116,6 +125,11 @@
       margin: 3px 0 3px 4px;
       padding: 0;
       line-height: 20px;
+    }
+    /* The search input inside is a line of text, not a 32px control of its own. */
+    & > input.search {
+      height: 20px;
+      min-height: 0;
     }
   }
   & .ui.selection.dropdown:not(.multiple) {
@@ -149,18 +163,30 @@
     accent-color: var(--github-bgColor-accent-emphasis);
     vertical-align: top;
   }
+  /* Radios are the browser's 13px circle in the same gutter (the push rule of a protected branch, a webhook's
+     trigger). */
+  & input[type="radio"] {
+    appearance: auto;
+    flex: none;
+    width: 13px;
+    height: 13px;
+    margin: 4px 7px 0 0;
+    margin-block-start: 4px !important;
+    accent-color: var(--github-bgColor-accent-emphasis);
+    vertical-align: top;
+  }
   /* Forgejo draws its own check mark as the input's ::after; the browser's box draws it instead. */
   & input:is([type="checkbox"], [type="radio"])::after {
     display: none;
   }
-  /* A label wrapping its checkbox (the hidden comment types): the box in the gutter, the text beside it, the note
-     under the text. */
-  & label:has(> input[type="checkbox"]) {
+  /* A label wrapping its checkbox or radio (the hidden comment types, a protected branch's rules, a webhook's
+     events): the box in the gutter, the text beside it, the note under the text. */
+  & label:has(> input:is([type="checkbox"], [type="radio"])) {
     display: grid;
     grid-template-columns: 20px minmax(0, 1fr);
     align-items: start;
     font-weight: 600;
-    & > input[type="checkbox"] {
+    & > input:is([type="checkbox"], [type="radio"]) {
       grid-column: 1;
       grid-row: 1;
       margin: 4px 0 0;

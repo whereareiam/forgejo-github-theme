@@ -1,0 +1,37 @@
+{{/* GitHub's authorized OAuth apps: the description, then the applications in a box with Revoke on each row. */}}
+<h4 class="ui top attached header">
+	{{ctx.Locale.Tr "settings.authorized_oauth2_applications"}}
+</h4>
+<div class="ui attached segment">
+	<p class="theme-settings-description">{{ctx.Locale.Tr "settings.authorized_oauth2_applications_description"}}</p>
+	{{if .Grants}}
+	<ul class="theme-settings-box">
+		{{range .Grants}}
+			<li class="theme-settings-box-row">
+				<span class="theme-settings-box-icon">{{svg "octicon-apps"}}</span>
+				<div class="theme-settings-box-main">
+					<span class="theme-settings-box-title">{{.Application.Name}}</span>
+					<p class="theme-settings-box-meta">{{ctx.Locale.Tr "settings.added_on" (DateUtils.AbsoluteShort .CreatedUnix)}}</p>
+				</div>
+				<div class="theme-settings-box-actions">
+					<button class="ui red tiny button delete-button" data-modal-id="revoke-gitea-oauth2-grant"
+							data-url="{{AppSubUrl}}/user/settings/applications/oauth2/{{.ApplicationID}}/revoke/{{.ID}}">
+						{{ctx.Locale.Tr "settings.revoke_key"}}
+					</button>
+				</div>
+			</li>
+		{{end}}
+	</ul>
+	{{end}}
+
+	<div class="ui g-modal-confirm delete modal" id="revoke-gitea-oauth2-grant">
+		<div class="header">
+			{{svg "octicon-shield" 16 "tw-mr-1"}}
+			{{ctx.Locale.Tr "settings.revoke_oauth2_grant"}}
+		</div>
+		<div class="content">
+			<p>{{ctx.Locale.Tr "settings.revoke_oauth2_grant_description"}}</p>
+		</div>
+		{{template "base/modal_actions_confirm" .}}
+	</div>
+</div>

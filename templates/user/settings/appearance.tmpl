@@ -1,0 +1,147 @@
+{{/* GitHub's appearance settings: the theme and the language as labelled shared selects (as GitHub's theme mode)
+	with their buttons, then Forgejo's hints and hidden comment types as checkbox lists. */}}
+{{template "user/settings/layout_head" (dict "ctxData" . "pageClass" "user settings sshkeys")}}
+	<div class="user-setting-content">
+
+		<!-- Theme -->
+		<h4 class="ui top attached header">
+			{{ctx.Locale.Tr "settings.manage_themes"}}
+		</h4>
+		<div class="ui attached segment">
+			<p class="theme-settings-description">{{ctx.Locale.Tr "settings.theme_desc"}}</p>
+			<form class="ui form" action="{{.Link}}/theme" method="post">
+				<div class="field">
+					<label for="ui">{{ctx.Locale.Tr "settings.ui"}}</label>
+					<span class="theme-select-wrap">
+						<select class="theme-select" id="ui" name="theme">
+							{{range $i,$a := .AllThemes}}
+								<option value="{{$a}}"{{if eq $.SignedUser.Theme $a}} selected{{end}}>{{call $.ThemeName $a}}</option>
+							{{end}}
+						</select>
+					</span>
+				</div>
+				<div class="field">
+					<button class="ui primary button">{{ctx.Locale.Tr "settings.update_theme"}}</button>
+				</div>
+			</form>
+		</div>
+
+		<!-- Language -->
+		<h4 class="ui top attached header">
+			{{ctx.Locale.Tr "settings.language.title"}}
+		</h4>
+		<div class="ui attached segment">
+			<form class="ui form" action="{{.Link}}/language" method="post">
+				<p class="theme-settings-description">{{ctx.Locale.Tr "settings.language.description"}}</p>
+				<div class="field">
+					<label for="language">{{ctx.Locale.Tr "settings.language"}}</label>
+					<span class="theme-select-wrap">
+						<select class="theme-select" id="language" name="language">
+							{{range .AllLangs}}
+								<option value="{{.Lang}}"{{if eq $.SignedUser.Language .Lang}} selected{{end}}>{{.Name}}</option>
+							{{end}}
+						</select>
+					</span>
+					<p class="help">{{ctx.Locale.Tr "settings.language.localization_project" (AppNextDocsURL "contributor/localization/")}}</p>
+				</div>
+				<div class="field">
+					<button class="ui primary button">{{ctx.Locale.Tr "settings.update_language"}}</button>
+				</div>
+			</form>
+		</div>
+
+		<!-- Hints -->
+		<h4 id="hints" class="ui top attached header">
+			{{ctx.Locale.Tr "settings.hints"}}
+		</h4>
+		<div class="ui attached segment">
+			<form class="ui form" action="{{.Link}}/hints" method="post">
+				<label>
+					<input name="enable_repo_unit_hints" type="checkbox" {{if $.SignedUser.EnableRepoUnitHints}}checked{{end}}>
+					{{ctx.Locale.Tr "settings.additional_repo_units_hint"}}
+					<span class="help">{{ctx.Locale.Tr "settings.additional_repo_units_hint_description"}}</span>
+				</label>
+				<div class="field">
+					<button class="ui primary button">{{ctx.Locale.Tr "settings.update_hints"}}</button>
+				</div>
+			</form>
+		</div>
+
+		<!-- Shown comment event types -->
+		<h4 class="ui top attached header">
+			{{ctx.Locale.Tr "settings.hidden_comment_types"}}
+		</h4>
+		<div class="ui attached segment">
+			<p class="theme-settings-description">
+				{{ctx.Locale.Tr "settings.hidden_comment_types_description"}}
+			</p>
+			<form class="ui form" action="{{.Link}}/hidden_comments" method="post">
+				<fieldset>
+					<label>
+						<input name="reference" type="checkbox" {{if(call .IsCommentTypeGroupChecked "reference")}}checked{{end}}>
+						{{ctx.Locale.Tr "settings.comment_type_group_reference"}}
+						<span class="help">
+							{{ctx.Locale.Tr "settings.hidden_comment_types.ref_tooltip"}}
+						</span>
+					</label>
+					<label>
+						<input name="label" type="checkbox" {{if (call .IsCommentTypeGroupChecked "label")}}checked{{end}}>
+						{{ctx.Locale.Tr "settings.comment_type_group_label"}}
+					</label>
+					<label>
+						<input name="milestone" type="checkbox" {{if (call .IsCommentTypeGroupChecked "milestone")}}checked{{end}}>
+						{{ctx.Locale.Tr "settings.comment_type_group_milestone"}}
+					</label>
+					<label>
+						<input name="assignee" type="checkbox" {{if (call .IsCommentTypeGroupChecked "assignee")}}checked{{end}}>
+						{{ctx.Locale.Tr "settings.comment_type_group_assignee"}}
+					</label>
+					<label>
+						<input name="title" type="checkbox" {{if (call .IsCommentTypeGroupChecked "title")}}checked{{end}}>
+						{{ctx.Locale.Tr "settings.comment_type_group_title"}}
+					</label>
+					<label>
+						<input name="branch" type="checkbox" {{if (call .IsCommentTypeGroupChecked "branch")}}checked{{end}}>
+						{{ctx.Locale.Tr "settings.comment_type_group_branch"}}
+					</label>
+					<label>
+						<input name="time_tracking" type="checkbox" {{if (call .IsCommentTypeGroupChecked "time_tracking")}}checked{{end}}>
+						{{ctx.Locale.Tr "settings.comment_type_group_time_tracking"}}
+					</label>
+					<label>
+						<input name="deadline" type="checkbox" {{if (call .IsCommentTypeGroupChecked "deadline")}}checked{{end}}>
+						{{ctx.Locale.Tr "settings.comment_type_group_deadline"}}
+					</label>
+					<label>
+						<input name="dependency" type="checkbox" {{if (call .IsCommentTypeGroupChecked "dependency")}}checked{{end}}>
+						{{ctx.Locale.Tr "settings.comment_type_group_dependency"}}
+					</label>
+					<label>
+						<input name="lock" type="checkbox" {{if (call .IsCommentTypeGroupChecked "lock")}}checked{{end}}>
+						{{ctx.Locale.Tr "settings.comment_type_group_lock"}}
+					</label>
+					<label>
+						<input name="review_request" type="checkbox" {{if (call .IsCommentTypeGroupChecked "review_request")}}checked{{end}}>
+						{{ctx.Locale.Tr "settings.comment_type_group_review_request"}}
+					</label>
+					<label>
+						<input name="pull_request_push" type="checkbox" {{if (call .IsCommentTypeGroupChecked "pull_request_push")}}checked{{end}}>
+						{{ctx.Locale.Tr "settings.comment_type_group_pull_request_push"}}
+					</label>
+					<label>
+						<input name="project" type="checkbox" {{if (call .IsCommentTypeGroupChecked "project")}}checked{{end}}>
+						{{ctx.Locale.Tr "settings.comment_type_group_project"}}
+					</label>
+					<label>
+						<input name="issue_ref" type="checkbox" {{if (call .IsCommentTypeGroupChecked "issue_ref")}}checked{{end}}>
+						{{ctx.Locale.Tr "settings.comment_type_group_issue_ref"}}
+						<span class="help">
+							{{ctx.Locale.Tr "settings.hidden_comment_types.issue_ref_tooltip"}}
+						</span>
+					</label>
+				</fieldset>
+				<button class="ui primary button">{{ctx.Locale.Tr "save"}}</button>
+			</form>
+		</div>
+	</div>
+{{template "user/settings/layout_footer" .}}

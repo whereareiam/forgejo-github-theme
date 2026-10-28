@@ -1,0 +1,43 @@
+{{/* GitHub's security keys: the registered keys in a box, one row each with when it was added and Remove, and the
+	nickname of a new key beside its Add security key button. */}}
+<h4 class="ui top attached header">{{ctx.Locale.Tr "settings.webauthn"}}</h4>
+<div class="ui attached segment">
+	<p class="theme-settings-description">{{ctx.Locale.Tr "settings.webauthn_desc" "https://w3c.github.io/webauthn/#webauthn-authenticator"}}</p>
+	<p class="theme-settings-description">{{ctx.Locale.Tr "settings.webauthn_key_loss_warning"}} {{ctx.Locale.Tr "settings.webauthn_alternative_tip"}}</p>
+	{{template "user/auth/webauthn_error" .}}
+	{{if .WebAuthnCredentials}}
+	<ul class="theme-settings-box">
+		{{range .WebAuthnCredentials}}
+			<li class="theme-settings-box-row">
+				<span class="theme-settings-box-icon">{{svg "octicon-key"}}</span>
+				<div class="theme-settings-box-main">
+					<span class="theme-settings-box-title">{{.Name}}</span>
+					<p class="theme-settings-box-meta">{{ctx.Locale.Tr "settings.added_on" (DateUtils.AbsoluteShort .CreatedUnix)}}</p>
+				</div>
+				<div class="theme-settings-box-actions">
+					<button class="ui red tiny button delete-button" data-modal-id="delete-registration" data-url="{{$.Link}}/webauthn/delete" data-id="{{.ID}}">
+						{{ctx.Locale.Tr "settings.delete_key"}}
+					</button>
+				</div>
+			</li>
+		{{end}}
+	</ul>
+	{{end}}
+	<div class="ui form theme-settings-field-row">
+		<div class="required field">
+			<label for="nickname">{{ctx.Locale.Tr "settings.webauthn_nickname"}}</label>
+			<input id="nickname" name="nickname" type="text" required>
+		</div>
+		<button id="register-webauthn" class="ui button">{{svg "octicon-key"}} {{ctx.Locale.Tr "settings.webauthn_register_key"}}</button>
+	</div>
+	<div class="ui g-modal-confirm delete modal" id="delete-registration">
+		<div class="header">
+			{{svg "octicon-trash"}}
+			{{ctx.Locale.Tr "settings.webauthn_delete_key"}}
+		</div>
+		<div class="content">
+			<p>{{ctx.Locale.Tr "settings.webauthn_delete_key_desc"}}</p>
+		</div>
+		{{template "base/modal_actions_confirm" .}}
+	</div>
+</div>

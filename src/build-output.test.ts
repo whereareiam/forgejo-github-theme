@@ -774,6 +774,79 @@ describe("Forgejo 15 native integration", () => {
     expect(orgs).toContain('href="{{.OrganisationLink}}/settings"');
   });
 
+  it("matches GitHub's settings sub-pages with explicit hooks and Forgejo's own fields and confirmations", () => {
+    const read = (...parts: string[]) => fs.readFileSync(path.join(ROOT_DIR, ...parts), "utf-8");
+    const css = read("components", "common", "settings", "settings.css");
+    // The overridden pages mark their rows and add forms; the structural guesses they replaced are gone.
+    expect(css).not.toContain('input[name="email"]');
+    expect(css).not.toContain(":has(> form)");
+    expect(css).not.toContain(".theme-settings-blankslate:has(> .svg)");
+    for (const hook of [
+      "& .theme-settings-box {",
+      "& .ui.form.theme-settings-field-row,",
+      "& .theme-settings-blankslate-spacious {",
+      "& .theme-settings-nested {",
+      "& table.theme-settings-table {",
+    ])
+      expect(css).toContain(hook);
+    expect(read("components", "common", "form", "form.css")).toContain(
+      '& label:has(> input:is([type="checkbox"], [type="radio"])) {'
+    );
+    // Rules that lose to Forgejo's or the shared form's specificity unless they say more: the approvals field, the
+    // empty multiple dropdown's search input and the deliveries' tabs.
+    const page = read("styles", "pages", "settings.css");
+    expect(page).toContain('& fieldset > label > input[type="number"][name="required_approvals"] {');
+    expect(page).toContain("padding: 8px 12px !important;");
+    expect(read("components", "common", "form", "form.css")).toMatch(
+      /& > input\.search \{\s+height: 20px;\s+min-height: 0;/
+    );
+
+    const account = read("templates", "user", "settings", "account.tmpl");
+    expect(account).toContain('class="ui form theme-settings-field-row"');
+    expect(account).toContain('data-modal-id="delete-email"');
+    expect(account).toContain('data-modal-id="delete-account" data-type="form" data-form="#delete-form"');
+    for (const method of ["SENDACTIVATION", "PRIMARY", "NOTIFICATION"]) expect(account).toContain(`value="${method}"`);
+
+    const twofa = read("templates", "user", "settings", "security", "twofa.tmpl");
+    expect(twofa).toContain('"Icon" "octicon-shield-lock"');
+    expect(twofa).toContain('data-modal-id="disable-twofa" data-type="form" data-form="#disable-form"');
+    expect(twofa).toContain("/user/settings/security/two_factor/regenerate_scratch");
+    const webauthn = read("templates", "user", "settings", "security", "webauthn.tmpl");
+    expect(webauthn).toContain('<button id="register-webauthn"');
+    expect(webauthn).toContain('<input id="nickname" name="nickname"');
+    expect(webauthn).toContain('{{template "user/auth/webauthn_error" .}}');
+    expect(read("templates", "user", "settings", "security", "twofa_enroll.tmpl")).toContain(
+      '<input id="passcode" name="passcode"'
+    );
+
+    const tokens = read("templates", "user", "settings", "applications.tmpl");
+    expect(tokens).toContain('data-modal-id="regenerate-token"');
+    expect(tokens).toContain('data-modal-id="delete-token"');
+    expect(read("templates", "user", "settings", "applications_oauth2_list.tmpl")).toContain(
+      'name="confidential_client"'
+    );
+    // Theme and language are shared selects posting the fields Forgejo's dropdowns posted, sized as a form field.
+    const appearance = read("templates", "user", "settings", "appearance.tmpl");
+    expect(appearance).toContain('<select class="theme-select" id="ui" name="theme">');
+    expect(appearance).toContain('<select class="theme-select" id="language" name="language">');
+    expect(read("components", "common", "form", "form.css")).toContain("& .field > .theme-select-wrap {");
+
+    // Every option of a branch rule keeps the ID its script toggles; the nested ones gain the hook.
+    const rule = read("templates", "repo", "settings", "protected_branch.tmpl");
+    for (const box of ["whitelist_box", "approvals_whitelist_box", "merge_whitelist_box", "ignore_stale_approvals_box"])
+      expect(rule).toMatch(new RegExp(`id="${box}" class="[^"]*theme-settings-nested`));
+    expect(rule).toContain('id="statuscheck_contexts_box" class="checkbox-sub-item field theme-settings-nested');
+    const history = read("templates", "repo", "settings", "webhook", "history.tmpl");
+    expect(history).toContain('id="test-delivery" data-link="{{.Link}}/test" data-redirect="{{.Link}}"');
+    expect(history).toContain('class="theme-settings-delivery-id toggle show-panel"');
+    expect(history).toContain('<div class="ui top attached tabular menu">');
+
+    expect(read("templates", "base", "component_assets.tmpl")).toContain("css/components/pages/settings.css");
+    expect(
+      fs.existsSync(path.join(DIST_DIR, "forgejo", "public", "assets", "css", "components", "pages", "settings.css"))
+    ).toBe(true);
+  });
+
   it("lists a repository's packages like a user's or an organization's", () => {
     const read = (...parts: string[]) => fs.readFileSync(path.join(ROOT_DIR, ...parts), "utf-8");
     expect(read("templates", "repo", "packages.tmpl")).toContain('{{template "components/package/list/list" .}}');
