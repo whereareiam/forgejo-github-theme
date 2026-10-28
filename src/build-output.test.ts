@@ -930,6 +930,44 @@ describe("Forgejo 15 native integration", () => {
     expect(commitPageStyle).not.toContain("repository-content-header");
     expect(diffBoxTemplate).toContain('template "repo/diff/file_header"');
     expect(commitPageTemplate).toContain('template "repo/diff/change_summary"');
+    // Forgejo's signature details, which commit_header shows below the commit, as a row of the card.
+    expect(commitPageTemplate).toContain('class="commit-signature-row {{$signClass}}"');
+    expect(commitPageTemplate).toContain('ctx.Locale.Tr "repo.commits.signed_by_untrusted_user_unmatched"');
+    expect(commitPageTemplate).toContain("{{.Verification.SigningKey.PaddedKeyID}}");
+    expect(commitPageTemplate).toContain("{{.Verification.SigningSSHKey.Fingerprint}}");
+    expect(commitPageStyle).toContain(".commit-signature-row.sign-warning .commit-signature-icon");
+  });
+
+  it("opens every show-modal target as a <dialog>, which Forgejo 17's show-modal calls showModal() on", () => {
+    // Targets a theme template triggers but Forgejo's own, unchanged templates render.
+    const upstreamDialogs = new Set(["push-mirror-edit-modal"]);
+    const templates = ["templates", "components"].flatMap(dir =>
+      fs
+        .readdirSync(path.join(ROOT_DIR, dir), { recursive: true })
+        .map(String)
+        .filter(file => file.endsWith(".tmpl"))
+        .map(file => fs.readFileSync(path.join(ROOT_DIR, dir, file), "utf-8"))
+    );
+    const source = templates.join("\n");
+    // Template ids such as "edit-project-column-modal-{{.ID}}" are compared up to their first action.
+    const idPrefix = (id: string) => id.split("{{")[0];
+    const dialogIds = [...source.matchAll(/<dialog\b[^>]*\bid="([^"]+)"/g)].map(match => idPrefix(match[1]));
+    const modalIds = [...source.matchAll(/<div\b[^>]*\bclass="[^"]*\bmodal\b[^"]*"[^>]*\bid="([^"]+)"/g)].map(match =>
+      idPrefix(match[1])
+    );
+    const targets = templates.flatMap(template =>
+      [...template.matchAll(/<[a-z]+\b[^>]*\bshow-modal\b[^>]*>/g)].flatMap(match =>
+        [...match[0].matchAll(/\bdata-modal="#([^"]+)"/g)].map(target => idPrefix(target[1]))
+      )
+    );
+
+    expect(targets).toContain("cherry-pick-modal");
+    expect(targets).toContain("delete-note-modal");
+    for (const target of new Set(targets)) {
+      if (upstreamDialogs.has(target)) continue;
+      expect(modalIds, `#${target} is a Fomantic modal`).not.toContain(target);
+      expect(dialogIds, `#${target} has no <dialog>`).toContain(target);
+    }
   });
 
   it("keeps the adapted repository and commit layouts bounded at phone breakpoints", () => {
