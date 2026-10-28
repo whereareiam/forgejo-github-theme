@@ -1,0 +1,429 @@
+/* GitHub's file editor around Forgejo's form (templates/repo/editor): the path, the branch and the actions on one row,
+   the commit dialog that Commit changes… opens, and on the upload page the drop zone and the commit box. */
+
+/* The path on the left, Cancel changes and Commit changes… at the right; the actions wrap below on a narrow page. */
+.page-content.repository.file.editor .repo-editor-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
+  margin: 16px 0;
+  padding: 0;
+}
+
+.page-content.repository.file.editor .repo-editor-header > .ui.breadcrumb {
+  display: flex;
+  flex: 1 1 auto;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 8px;
+  min-width: 0;
+  margin: 0;
+  font-size: 16px;
+  line-height: 24px;
+  overflow-wrap: anywhere;
+}
+
+.page-content.repository.file.editor .repo-editor-header > .ui.breadcrumb > .active.section {
+  font-weight: 600;
+}
+
+/* Forgejo's filename field: a 32px control as wide as a file name, never wider than the page. */
+.page-content.repository.file.editor .repo-editor-header #file-name:not([type="hidden"]) {
+  width: 240px !important;
+  max-width: 100%;
+  height: 32px;
+  min-height: 32px;
+  margin: 0 !important;
+  padding: 5px 12px !important;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+/* Cherry-pick, revert and patch say what happens before the repository; the commit is a link in that sentence. */
+.page-content.repository.file.editor .theme-editor-intro {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  color: var(--color-text-light-1);
+  font-size: 14px;
+  & .sha.label {
+    margin: 0;
+    padding: 0 6px;
+    border: 0;
+    border-radius: var(--border-radius);
+    background: var(--color-markup-code-inline);
+    color: var(--color-text);
+    font: 12px/20px var(--fonts-monospace);
+  }
+}
+
+.theme-editor-branch {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+  color: var(--color-text-light-1);
+  & > .theme-branch-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  &:hover {
+    text-decoration: none;
+  }
+  &:hover > .theme-branch-name {
+    text-decoration: underline;
+  }
+}
+
+.theme-editor-actions {
+  display: flex;
+  flex: none;
+  gap: 8px;
+  margin-left: auto;
+}
+
+/* Delete and cherry-pick have no editor; the box names what the commit does. */
+.page-content.repository.file.editor .theme-editor-summary {
+  min-height: 160px;
+}
+
+/* GitHub's commit dialog: a 480px overlay with a titled header, the fields, and Cancel and the commit button at the
+   bottom right. Forgejo styles every <dialog> (padding, a 1.43rem header and a grey actions bar); this replaces it. */
+.page-content.repository.file.editor dialog.theme-commit-dialog {
+  width: min(480px, calc(100vw - 32px));
+  min-width: 0;
+  max-width: none;
+  max-height: min(calc(100dvh - 64px), 720px);
+  padding: 0;
+  border: 1px solid var(--color-light-border);
+  border-radius: 12px;
+  background: var(--color-body);
+  box-shadow: var(--github-shadow-floating-small);
+  color: var(--color-text);
+  overflow: hidden;
+}
+
+.page-content.repository.file.editor dialog.theme-commit-dialog::backdrop {
+  background: var(--color-overlay-backdrop);
+}
+
+/* Forgejo's commit box (border, padding, the avatar's 64px indent) does not apply inside the dialog. */
+.page-content.repository.file.editor dialog.theme-commit-dialog > .commit-form {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+.page-content.repository.file.editor dialog.theme-commit-dialog[open] > .commit-form {
+  display: flex;
+  flex-direction: column;
+  max-height: inherit;
+}
+
+.page-content.repository.file.editor dialog.theme-commit-dialog .theme-commit-header {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  padding: 8px 8px 8px 16px;
+  border: 0;
+  border-bottom: 1px solid var(--color-light-border);
+  border-radius: 0;
+  font-size: 14px;
+  & > h2 {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+    margin: 0;
+    padding: 6px 0;
+    color: var(--color-text);
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 20px;
+  }
+  & > h2 > span {
+    display: inline-flex;
+    color: var(--color-text-light-1);
+  }
+}
+
+.theme-commit-close {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--border-radius);
+  background: transparent;
+  color: var(--color-text-light-1);
+  cursor: pointer;
+  &:hover {
+    background: var(--color-hover);
+    color: var(--color-text);
+  }
+  &:focus-visible {
+    outline: 2px solid var(--github-borderColor-accent-emphasis);
+    outline-offset: -2px;
+  }
+}
+
+.page-content.repository.file.editor dialog.theme-commit-dialog .theme-commit-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  padding: 16px;
+  overflow: auto;
+}
+
+.page-content.repository.file.editor dialog.theme-commit-dialog .theme-commit-footer {
+  display: flex;
+  flex: none;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 16px;
+  border-top: 1px solid var(--color-light-border);
+}
+
+/* The commit box on the upload page: the avatar beside a bordered box with the title and the fields, the buttons below
+   it, as GitHub's upload page has them. */
+.page-content.repository.file.editor .theme-commit-box {
+  margin-top: 24px;
+  & .commit-form {
+    margin-bottom: 16px;
+    padding: 16px;
+    border: 1px solid var(--color-light-border);
+    background: var(--color-body);
+  }
+  & .theme-commit-header {
+    margin: 0 0 16px;
+    & > h2 {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0;
+      font-size: 20px;
+      font-weight: 600;
+      line-height: 30px;
+    }
+    & > h2 > span {
+      display: inline-flex;
+      color: var(--color-text-light-1);
+    }
+  }
+}
+
+.theme-commit-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* The fields, the same in both: full-width 32px controls, 14px labels, and the choices as a list of radios. */
+.page-content.repository.file.editor .commit-form-wrapper :is(.theme-commit-body, .theme-commit-body .field) {
+  & > .field {
+    margin: 0 0 16px;
+  }
+  & > .field > label {
+    display: block;
+    margin: 0 0 4px;
+    color: var(--color-text);
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 20px;
+  }
+}
+
+.page-content.repository.file.editor .commit-form-wrapper .theme-commit-body {
+  & input:is([name="commit_summary"], [name="new_branch_name"]),
+  & textarea {
+    width: 100%;
+    margin: 0;
+    padding: 5px 12px;
+    border: 1px solid var(--color-light-border);
+    border-radius: var(--border-radius);
+    background: var(--color-input-background);
+    color: var(--color-text);
+    font-size: 14px;
+    line-height: 20px;
+  }
+  & input:is([name="commit_summary"], [name="new_branch_name"]) {
+    height: 32px;
+    min-height: 32px;
+  }
+  & textarea {
+    min-height: 100px;
+    resize: vertical;
+  }
+  /* A field Forgejo refused (the branch exists, the email is not the user's). */
+  & .field.error :is(input, .theme-select) {
+    border-color: var(--github-bgColor-danger-emphasis);
+  }
+  & > .theme-commit-error {
+    margin: 0 0 16px;
+    font-size: 14px;
+    line-height: 20px;
+  }
+  & input:is([name="commit_summary"], [name="new_branch_name"]):focus,
+  & textarea:focus {
+    border-color: var(--github-borderColor-accent-emphasis);
+    outline: none;
+    box-shadow: inset 0 0 0 1px var(--github-borderColor-accent-emphasis);
+  }
+  & .ui.checkbox {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    min-height: 20px;
+  }
+  & .ui.checkbox > input {
+    position: static;
+    flex: none;
+    width: 16px;
+    height: 16px;
+    margin: 2px 0 0;
+    opacity: 1;
+  }
+  /* The theme's checkbox rows indent the label past an absolutely placed box and lay it out as flex, which splits
+     Forgejo's sentences with <strong> into columns. */
+  & .ui.checkbox > label {
+    display: block;
+    margin: 0;
+    padding: 0;
+    color: var(--color-text);
+    font-size: 14px;
+    line-height: 20px;
+    cursor: pointer;
+  }
+  & .ui.checkbox > label::before,
+  & .ui.checkbox > label::after {
+    display: none;
+  }
+  & .quick-pull-choice {
+    margin: 0 0 16px;
+    & > .field {
+      margin: 0 0 8px;
+    }
+    & .branch-name {
+      padding: 0 5px;
+      border-radius: var(--border-radius);
+      background: var(--github-bgColor-accent-muted);
+      color: var(--github-fgColor-accent);
+      font: 12px/18px var(--fonts-monospace);
+    }
+    & .ui.warning.message {
+      margin: 8px 0 0;
+      font-size: 12px;
+      line-height: 18px;
+    }
+  }
+  /* The new branch's name, indented under its radio, with the branch icon inside the field. */
+  & .quick-pull-branch-name .new-branch-name-input {
+    position: relative;
+    margin: 8px 0 0 24px;
+    & > .svg {
+      position: absolute;
+      top: 8px;
+      left: 12px;
+      color: var(--color-text-light-1);
+    }
+    /* Forgejo fixes this field at 240px with a 26px indent, both !important. */
+    & > input {
+      width: 100% !important;
+      padding-inline-start: 36px !important;
+    }
+    & > .js-quick-pull-normalization-info:not(:empty) {
+      display: block;
+      margin-top: 4px;
+      font-size: 12px;
+    }
+  }
+  & .theme-select-wrap,
+  & .theme-select-wrap > .theme-select {
+    width: 100%;
+  }
+  & .theme-select-wrap > .theme-select {
+    text-align: left;
+  }
+  & > .field:last-child {
+    margin-bottom: 0;
+  }
+}
+
+/* GitHub's dialog lists the choices without icons; the upload page's box keeps them, as GitHub's does. */
+.page-content.repository.file.editor dialog.theme-commit-dialog .quick-pull-choice .ui.radio.checkbox > label > .svg {
+  display: none;
+}
+
+/* GitHub's upload drop zone: a bordered area with a file icon over the prompt; Dropzone keeps its own behaviour. */
+.page-content.repository.file.editor.upload .ui.dropzone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 220px;
+  padding: 40px 16px;
+  border: 1px dashed var(--color-light-border);
+  border-radius: var(--border-radius);
+  background: var(--color-body);
+  & .dz-message {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    margin: 0;
+  }
+  & .dz-message::before {
+    content: "";
+    width: 32px;
+    height: 32px;
+    background-color: var(--color-text-light-1);
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M5 2.75C5 1.784 5.784 1 6.75 1h6.586c.464 0 .909.184 1.237.513l4.914 4.914c.329.328.513.773.513 1.237v13.586A1.75 1.75 0 0 1 18.25 23H6.75A1.75 1.75 0 0 1 5 21.25Zm1.75-.25a.25.25 0 0 0-.25.25v18.5c0 .138.112.25.25.25h11.5a.25.25 0 0 0 .25-.25V8.5h-4.75A1.75 1.75 0 0 1 12 6.75V2.5Zm6.75.56v3.69c0 .138.112.25.25.25h3.69Z'/%3E%3C/svg%3E")
+      center / 32px no-repeat;
+  }
+  & .dz-button {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--color-text);
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 30px;
+    cursor: pointer;
+  }
+  &.dz-drag-hover {
+    border-color: var(--github-borderColor-accent-emphasis);
+    background: var(--github-bgColor-accent-muted);
+  }
+}
+
+@media (max-width: 767.98px) {
+  .page-content.repository.file.editor .repo-editor-header > .ui.breadcrumb {
+    flex-basis: 100%;
+  }
+  /* The filename shrinks so the branch stays on its row. */
+  .page-content.repository.file.editor .repo-editor-header #file-name:not([type="hidden"]) {
+    flex: 1 1 0;
+    min-width: 96px;
+  }
+  .page-content.repository.file.editor .theme-commit-box {
+    padding-inline-start: 0;
+    & > .commit-avatar {
+      display: none;
+    }
+  }
+  .page-content.repository.file.editor.upload .ui.dropzone .dz-button {
+    font-size: 16px;
+    line-height: 24px;
+  }
+}

@@ -1,0 +1,7 @@
+{{/* GitHub's editor actions at the top right: Cancel changes leaves the editor, Commit changes… opens the commit dialog
+of repo/editor/commit_form, which submits the page's form. editor.js keeps the button disabled while Forgejo's commit
+button is (an unchanged file) and checks the path before the dialog opens. */}}
+<div class="theme-editor-actions">
+	<a class="button theme-control" href="{{.CancelLink}}">{{ctx.Locale.Tr "repo.editor.cancel"}}</a>
+	<button type="button" class="ui primary button theme-control" command="show-modal" commandfor="theme-commit-dialog" aria-haspopup="dialog" data-theme-commit-open>{{ctx.Locale.Tr "repo.editor.commit_changes"}}…</button>
+</div>

@@ -1,0 +1,36 @@
+{{/* Forgejo's cherry-pick and revert page in GitHub's file editor: the commit and the branch it goes onto, Cancel
+changes and Commit changes… at the top right, the commit's title, and the commit dialog of repo/editor/commit_form. */}}
+{{template "base/head" .}}
+<div role="main" aria-label="{{.Title}}" class="page-content repository file editor edit">
+	{{template "repo/header" .}}
+	<div class="ui container">
+		{{template "base/alert" .}}
+		<form class="ui edit form" method="post" action="{{.RepoLink}}/_cherrypick/{{.SHA}}/{{.BranchName | PathEscapeSegments}}">
+			<input type="hidden" name="last_commit" value="{{.last_commit}}">
+			<input type="hidden" name="page_has_posted" value="true">
+			<input type="hidden" name="revert" value="{{if eq .CherryPickType "revert"}}true{{else}}false{{end}}">
+			<div class="repo-editor-header">
+				<div class="ui breadcrumb field {{if .Err_TreePath}}error{{end}}">
+					{{$shaurl := printf "%s/commit/%s" $.RepoLink (PathEscape .SHA)}}
+					{{$shalink := HTMLFormat `<a class="primary sha label" href="%s"><span class="shortsha">%s</span></a>` $shaurl (ShortSha .SHA)}}
+					<span class="theme-editor-intro">
+					{{if eq .CherryPickType "revert"}}
+						{{ctx.Locale.Tr "repo.editor.revert" $shalink}}
+					{{else}}
+						{{ctx.Locale.Tr "repo.editor.cherry_pick" $shalink}}
+					{{end}}
+					</span>
+					<a class="section" href="{{$.RepoLink}}">{{.Repository.FullName}}</a>
+					{{template "components/repository/editor/branch" .}}
+				</div>
+				{{template "components/repository/editor/actions" dict "CancelLink" $shaurl}}
+			</div>
+			<div class="theme-empty theme-editor-summary">
+				{{svg "octicon-git-commit" 32}}
+				<h3>{{.commit_summary}}</h3>
+			</div>
+			{{template "repo/editor/commit_form" .}}
+		</form>
+	</div>
+</div>
+{{template "base/footer" .}}
