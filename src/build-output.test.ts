@@ -365,6 +365,15 @@ describe("Forgejo 15 native integration", () => {
     ".gitea-vscodium",
   ];
 
+  it("does not download release assets to show them", () => {
+    // Every fetch of an asset counts as a download in Forgejo and transfers the whole file.
+    const releases = fs.readFileSync(path.join(ROOT_DIR, "public", "assets", "js", "repo-releases.js"), "utf-8");
+    const list = fs.readFileSync(path.join(ROOT_DIR, "templates", "repo", "release", "list.tmpl"), "utf-8");
+    expect(releases).not.toContain("arrayBuffer");
+    expect(releases).not.toContain("crypto.subtle");
+    expect(list).not.toContain("data-digest-url");
+  });
+
   it("includes Forgejo-native rules in the standard theme output", () => {
     const css = fs.readFileSync(path.join(DIST_DIR, `${PREFIX}light.css`), "utf-8");
 
