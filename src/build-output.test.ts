@@ -964,6 +964,29 @@ describe("Forgejo 15 native integration", () => {
     expect(commitPageStyle).toContain("flex-direction: column;");
   });
 
+  it("keeps the issue list filters in a sideways scrolling row on phones, as GitHub does", () => {
+    const overviewStyle = fs.readFileSync(
+      path.join(ROOT_DIR, "styles", "components", "issues", "issue_overview.ts"),
+      "utf-8"
+    );
+    const phone = overviewStyle.slice(overviewStyle.indexOf("@media (max-width: 767.98px)"));
+    const filters = ["repo/issue/filters.tmpl", "user/dashboard/issues.tmpl"].map(template =>
+      fs.readFileSync(path.join(ROOT_DIR, "templates", template), "utf-8")
+    );
+
+    expect(phone).not.toMatch(/#issue-filters > \.issue-list-toolbar-right \{\s*display: none;/);
+    expect(phone).toMatch(
+      /#issue-filters > \.issue-list-toolbar-right \{[^}]*max-width: none;[^}]*overflow-x: auto;[^}]*scrollbar-width: none;/
+    );
+    expect(phone).toMatch(/#issue-filters > \.issue-list-toolbar-right > \.ui\.menu \{[^}]*flex-wrap: nowrap;/);
+    // A menu inside the scrolling row escapes its clipping as a sheet fixed to the screen.
+    expect(phone).toMatch(/\.issue-list-toolbar-right \.ui\.dropdown > \.menu \{[^}]*position: fixed;/);
+    for (const template of filters) {
+      expect(template).toContain('<div class="issue-list-toolbar-right">');
+      expect(template).not.toContain("issue-mobile-filter-toggle");
+    }
+  });
+
   it("keeps adapted templates in the standard template tree", () => {
     for (const template of requiredTemplates) {
       expect(fs.existsSync(path.join(ROOT_DIR, "templates", template)), `missing template: ${template}`).toBe(true);

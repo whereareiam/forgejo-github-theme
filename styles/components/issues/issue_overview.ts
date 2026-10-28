@@ -78,9 +78,6 @@ export default css`
         min-height: 32px;
       }
     }
-    & .issue-mobile-filter-toggle {
-      display: none;
-    }
     & #issue-list {
       & > .flex-item {
         padding: 8px 16px 10px;
@@ -130,28 +127,45 @@ export default css`
         justify-content: space-between;
         position: relative;
       }
-      & .issue-mobile-filter-toggle {
-        display: inline-flex;
+      /* As on GitHub, Open and Closed keep the first row and the filters follow in a row that scrolls sideways,
+         from one edge of the box to the other, without a scrollbar. */
+      & #issue-filters {
+        flex-wrap: wrap;
+        row-gap: 8px;
+      }
+      & #issue-filters > .issue-list-toolbar-left {
+        flex: 1 1 100%;
+        min-width: 0;
       }
       & #issue-filters > .issue-list-toolbar-right {
+        flex: 1 1 100%;
+        min-width: 0;
+        max-width: none;
+        margin: 0 -8px;
+        padding: 0 8px;
+        overflow-x: auto;
+        scrollbar-width: none;
+      }
+      & #issue-filters > .issue-list-toolbar-right::-webkit-scrollbar {
         display: none;
       }
-      & #issue-filters.issue-mobile-filters-open > .issue-list-toolbar-right {
-        display: block;
-        position: absolute;
-        top: 100%;
-        right: 0;
-        z-index: 30;
-        width: 280px;
-        padding: 8px;
-        background: ${themeVars.color.menu};
-        border-radius: 12px;
-        box-shadow: ${themeVars.github.shadow.floating.small};
+      & #issue-filters > .issue-list-toolbar-right > .ui.menu {
+        flex-wrap: nowrap;
+        width: max-content;
+        margin: 0;
       }
-      & #issue-filters.issue-mobile-filters-open > .issue-list-toolbar-right .ui.menu {
-        display: flex;
-        flex-direction: column;
-        align-items: stretch;
+      & #issue-filters > .issue-list-toolbar-right > .ui.menu > .item {
+        flex: none;
+      }
+      /* The scrolling row would clip a menu below its button, so a menu opens as a sheet at the bottom of the screen. */
+      & #issue-filters > .issue-list-toolbar-right .ui.dropdown > .menu {
+        position: fixed;
+        inset: auto 16px 16px;
+        z-index: 30;
+        min-width: 0;
+        max-width: none;
+        max-height: calc(100dvh - 32px);
+        overflow-y: auto;
       }
       & #issue-list .flex-item-header {
         flex-direction: row;
@@ -174,9 +188,6 @@ export default css`
       }
       & .issue-list-toolbar {
         padding: 8px;
-      }
-      & .issue-mobile-filter-toggle {
-        display: none;
       }
       & #issue-list > .flex-item {
         padding: 12px;
