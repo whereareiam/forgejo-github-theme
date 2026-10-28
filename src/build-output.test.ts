@@ -600,6 +600,28 @@ describe("Forgejo 15 native integration", () => {
     expect(file).not.toContain('tw-whitespace-pre"');
   });
 
+  it("lays out releases and tags in the shared sidebar, as GitHub's releases page does", () => {
+    const read = (...parts: string[]) => fs.readFileSync(path.join(ROOT_DIR, ...parts), "utf-8");
+    const sidebar = read("templates", "repo", "release", "sidebar.tmpl");
+    expect(sidebar).toContain('{{template "components/common/sidebar/toggle" .}}');
+    expect(sidebar).toContain("data-theme-sidebar-outline");
+    expect(sidebar).toContain('ctx.Locale.Tr "repo.releases"');
+    expect(sidebar).toContain('ctx.Locale.Tr "repo.tags"');
+    for (const page of [
+      ["templates", "repo", "release", "list.tmpl"],
+      ["templates", "repo", "tag", "list.tmpl"],
+    ]) {
+      const template = read(...page);
+      expect(template).toContain('{{template "repo/release/sidebar" .}}');
+      expect(template).toContain('data-theme-sidebar="releases_sidebar_collapsed"');
+      expect(template).toContain("data-theme-sidebar-expand");
+      expect(template).not.toContain("theme-switch");
+    }
+    // The sidebar controller marks the release in view; the page script no longer keeps its own list.
+    expect(read("public", "assets", "js", "repo-releases.js")).not.toMatch(/github-release-(toc|mobile-toc)/);
+    expect(read("styles", "pages", "releases.css")).not.toMatch(/github-release-(toc|mobile-toc|toolbar|content)\b/);
+  });
+
   it("lists labels and milestones in the issue sidebar layout with the shared box list", () => {
     const read = (...parts: string[]) => fs.readFileSync(path.join(ROOT_DIR, ...parts), "utf-8");
     const sidebar = read("templates", "repo", "issue", "sidebar.tmpl");

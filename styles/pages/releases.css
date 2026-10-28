@@ -1,617 +1,368 @@
 /* Releases, tags and the release form. Kept as a page stylesheet, outside the size-limited theme files. */
 
-.page-content.repository.github-releases > .ui.container {
-  box-sizing: border-box;
-  max-width: calc(100% - 32px);
-  padding-left: 0;
-  padding-right: 0;
-  width: 1116px !important;
+/* The releases and tags pages sit in the shared sidebar layout (components/common/sidebar): the heading row, with the
+   search and the page's actions on the right, then the list. */
+.github-release-heading {
+  margin-bottom: 16px;
 }
-.github-release-toolbar {
-  align-items: center;
-  border-bottom: 1px solid var(--color-light-border);
-  display: flex;
-  gap: 16px;
-  justify-content: space-between;
-  margin: 0 0 32px;
-  padding: 0 0 24px;
+.github-release-heading > .theme-list-title {
+  min-width: 0;
 }
 .github-release-actions {
-  align-items: center;
   display: flex;
+  align-items: center;
   gap: 8px;
 }
-.github-release-actions .secondary.button {
-  align-items: center;
-  box-sizing: border-box;
-  display: inline-flex;
-  height: 32px !important;
-  line-height: 20px;
-  min-height: 0 !important;
-  min-width: 163px;
-  padding: 5px 16px;
-  background-color: var(--color-button);
-  border-color: var(--color-light-border);
-  box-shadow: none;
-  color: var(--color-text);
-}
-.github-release-actions .secondary.button:hover {
-  background-color: var(--color-hover);
-}
-.github-release-content {
-  display: grid;
-  gap: 0 38px;
-  grid-template-columns: 164px minmax(0, 1fr);
-}
-.github-release-mobile-toc {
-  display: none;
-}
-.github-release-toc h2 {
-  color: var(--color-text);
-  font-size: 20px;
-  font-weight: 600;
-  line-height: 1.5;
-  margin: 0 0 8px;
-  margin-left: 0;
-}
-.github-release-toc ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-.github-release-toc li a {
-  border-radius: 6px;
-  color: var(--color-text) !important;
-  display: block;
-  font-size: 14px;
-  line-height: 20px;
-  margin-left: -10px;
-  overflow: hidden;
-  padding: 8px 10px;
-  text-overflow: ellipsis;
-  text-decoration: none;
-  white-space: nowrap;
-}
-.github-release-toc li a[aria-current="location"] {
-  font-weight: 600;
-}
-.github-release-toc li {
-  border-radius: 6px;
-  position: relative;
-}
-.github-release-toc li:has(a[aria-current="location"]) {
-  background: var(--color-active);
-}
-.github-release-toc li:has(a[aria-current="location"])::before {
-  background: var(--github-borderColor-accent-emphasis);
-  border-radius: 6px;
-  bottom: 4px;
-  content: "";
-  left: -8px;
-  position: absolute;
-  top: 4px;
-  width: 4px;
-}
-.github-release-toc li a:hover:not([aria-current="location"]) {
-  background: var(--color-hover);
-  color: var(--github-fgColor-accent);
-}
-#release-list.github-release-list {
-  grid-column: 2;
-  display: flex !important;
-  flex-direction: column;
-  gap: 32px;
-  margin: 0 0 16px !important;
-}
-#release-list.github-release-list > li {
-  display: block;
-}
-#release-list.github-release-list > li .meta {
-  display: none;
-}
-#release-list.github-release-list > li .release-title-wrap {
-  margin-left: 0 !important;
-  padding: 16px 16px 0;
-}
-#release-list.github-release-list > li .release-title-wrap > div {
-  display: flex;
-  flex-shrink: 0;
-  gap: 8px;
-}
-#release-list.github-release-list > li .release-title-wrap > div > :is(a, button) {
-  align-items: center;
-  background: var(--color-button);
-  border: 1px solid var(--color-light-border);
-  border-radius: 6px;
-  display: inline-flex;
-  height: 28px;
-  justify-content: center;
-  padding: 0;
-  width: 28px;
-}
-#release-list.github-release-list > li .github-release-controls > a {
-  color: var(--color-text-light-1) !important;
-}
-#release-list.github-release-list > li .github-release-controls > a svg {
-  color: var(--color-text-light-1) !important;
-}
-#release-list.github-release-list > li .release-title-wrap > div > :is(a, button):hover {
-  background: var(--color-hover);
-}
-#release-list.github-release-list > li .github-release-delete:hover {
-  color: var(--github-control-danger-fgColor-hover);
-}
-#release-list.github-release-list > li .release-title-wrap h4 {
-  align-items: center;
-  display: flex !important;
-  flex: 1;
-  flex-wrap: wrap;
-  font-size: 32px;
-  font-weight: 600;
-  gap: 8px;
-  line-height: 1.5;
+.github-release-search {
+  flex: 0 1 248px;
   min-width: 0;
 }
-#release-list.github-release-list > li .release-title-wrap h4 .github-release-name {
-  display: contents;
-}
-#release-list.github-release-list > li .github-release-name > a:first-child {
-  flex: 0 1 auto;
-  color: var(--color-text);
-  font-weight: 600;
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  text-decoration: none;
-  white-space: nowrap;
-}
-#release-list.github-release-list > li .release-title-wrap h4 a[data-tippy="commit-statuses"] {
-  align-items: center;
-  border: 1px solid currentColor;
-  border-radius: 24px;
-  display: inline-flex;
-  flex-shrink: 0;
-  font-size: 12px;
-  font-weight: 500;
-  gap: 4px;
-  height: 24px;
-  line-height: 18px;
-  margin: 0 0 0 8px;
-  padding: 2px 8px;
-  text-decoration: none;
-  vertical-align: middle;
-  width: max-content !important;
-}
-#release-list.github-release-list > li .release-title-wrap h4 .github-release-latest {
-  align-items: center;
-  display: inline-flex !important;
-  height: 24px;
-  line-height: 18px;
-  margin: 0 0 0 8px;
-  vertical-align: middle;
-}
-#release-list.github-release-list > li .release-title-wrap h4 .github-release-latest[hidden] {
-  display: none !important;
-}
-#release-list.github-release-list > li .release-title-wrap h4 a[data-tippy="commit-statuses"] svg {
-  height: 12px;
-  width: 12px;
-}
-#release-list.github-release-list > li .release-title-wrap h4 a[data-tippy="commit-statuses"]::after {
-  content: "Checks";
-}
-#release-list.github-release-list > li .release-title-wrap h4 a[data-tippy="commit-statuses"]:has(svg.text.yellow) {
-  color: var(--color-yellow);
-}
-#release-list.github-release-list > li .release-title-wrap h4 a[data-tippy="commit-statuses"]:has(svg.text.green) {
-  color: var(--color-green);
-}
-#release-list.github-release-list > li .release-title-wrap h4 a[data-tippy="commit-statuses"]:has(svg.text.red) {
-  color: var(--color-red);
-}
-#release-list.github-release-list
-  > li
-  .release-title-wrap
-  h4
-  a[data-tippy="commit-statuses"]:has(svg.text.yellow)::after {
-  content: "Checks pending";
-}
-#release-list.github-release-list
-  > li
-  .release-title-wrap
-  h4
-  a[data-tippy="commit-statuses"]:has(svg.text.green)::after {
-  content: "Checks passed";
-}
-#release-list.github-release-list > li .release-title-wrap h4 a[data-tippy="commit-statuses"]:has(svg.text.red)::after {
-  content: "Checks failed";
-}
-#release-list.github-release-list > li .github-release-name > a:first-child:hover {
-  color: var(--github-fgColor-accent);
-  text-decoration: underline;
-}
-#release-list.github-release-list > li .detail {
-  margin-left: 0 !important;
-  padding: 0 16px 16px;
-}
-#release-list.github-release-list > li .detail .author a {
-  color: var(--color-text-light-1) !important;
-  text-decoration: none;
-}
-#release-list.github-release-list > li .detail .author a:hover {
-  color: var(--github-fgColor-accent) !important;
-  text-decoration: underline;
-}
-#release-list.github-release-list > li .detail .markup.desc {
-  color: var(--color-text);
-  font-size: 16px;
-  line-height: 1.5;
-}
-#release-list.github-release-list > li .detail .markup.desc :is(h1, h2, h3, h4, h5, h6) {
-  border-bottom: 1px solid var(--color-light-border);
-  color: var(--color-text);
-  font-weight: 600;
-  line-height: 1.25;
-  padding-bottom: 8px;
-}
-#release-list.github-release-list > li .detail .markup.desc h2 {
-  font-size: 24px;
-}
-#release-list.github-release-list > li .detail .markup.desc h3 {
-  font-size: 20px;
-}
-@media (max-width: 767.98px) {
-  .page-content.repository.github-releases > .ui.container {
-    padding-left: 16px;
-    padding-right: 16px;
-    width: 100%;
-  }
-  .github-release-toolbar {
-    align-items: stretch;
-    flex-direction: column;
-  }
-  .github-release-actions {
-    flex-wrap: wrap;
-  }
-  .github-release-actions .github-release-search {
-    flex: 1 1 100%;
-    min-width: 100%;
-    order: 3;
-  }
-  .github-release-list {
-    gap: 24px;
-  }
-  .github-release-list > li {
-    display: block;
-  }
-  .page-content.repository.github-releases .github-release-list > li .meta {
-    display: none;
-  }
-}
-
-.page-content.repository.github-releases {
-  .github-release-toolbar {
-    margin-bottom: 48px;
-  }
-  .github-release-search {
-    width: 248px;
-    flex: 0 0 248px;
-  }
-  .github-release-toc {
-    align-self: start;
-    position: sticky;
-    top: 24px;
-    overflow: visible;
-    padding-left: 0;
-    margin-left: 0;
-    margin-top: -8px;
-    width: 162px;
-  }
-  .github-release-toc li a {
-    margin-left: 0;
-    padding: 6px 8px;
-  }
-  ul#release-list.github-release-list > li {
-    border: 1px solid var(--color-light-border);
-    border-radius: 6px;
-    background: var(--color-box-body);
-    scroll-margin-top: 24px;
-    min-width: 0;
-    .release-title-wrap,
-    .detail {
-      border: 0;
-      background: transparent;
-      border-radius: 0;
-    }
-    .release-title-wrap {
-      align-items: flex-start;
-      gap: 16px;
-      padding: 16px 16px 0;
-    }
-    .release-title-wrap h4 {
-      display: block;
-      margin: 0;
-      overflow-wrap: anywhere;
-    }
-    .github-release-name > a:first-child {
-      white-space: normal;
-      overflow: visible;
-    }
-    .release-title-wrap h4 a[data-tippy="commit-statuses"] {
-      margin-left: 0;
-    }
-    .github-release-latest {
-      display: inline;
-      margin-left: 8px;
-    }
-    .github-release-latest[hidden] {
-      display: none;
-    }
-    .release-title-wrap h4 .github-release-draft {
-      background: var(--github-bgColor-neutral-emphasis);
-      border: 0;
-      color: var(--github-fgColor-onEmphasis);
-      line-height: 24px;
-      margin-left: 8px;
-      padding: 0 10px;
-    }
-    .github-release-controls {
-      align-items: center;
-    }
-    .github-release-controls .branch-dropdown-button {
-      min-height: 28px;
-      padding: 3px 10px;
-      font-size: 12px;
-      line-height: 20px;
-    }
-    .github-release-delete {
-      cursor: pointer;
-      color: var(--color-text-light-1);
-    }
-    .detail {
-      margin-top: 0;
-      padding: 0 16px 16px;
-    }
-    .detail p.text.grey {
-      align-items: center;
-      margin: 16px 0 0;
-      color: var(--color-text-light-1) !important;
-      font-size: 14px;
-    }
-    .detail p.text.grey .time {
-      color: inherit;
-    }
-    .detail .author {
-      display: inline-flex;
-      align-items: center;
-      font-weight: 600;
-    }
-    .detail .author a {
-      color: var(--color-text-light-1) !important;
-      text-decoration: none;
-    }
-    .detail .author a:hover,
-    .github-release-ref:hover {
-      color: var(--github-fgColor-accent) !important;
-      text-decoration: none;
-    }
-    .github-release-ref {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      margin-left: 16px;
-      color: var(--color-text-light-1);
-      text-decoration: none;
-    }
-    /* "± N commits" beside the tag and commit, as GitHub's commits item in the release's meta row; the full "to main
-       since this release" is its tooltip. The count is not bold here. */
-    .github-release-ahead strong {
-      font-weight: inherit;
-    }
-    .detail .markup.desc {
-      margin-top: 16px;
-    }
-    .detail .markup.desc :is(h3, h4, h5, h6) {
-      border-bottom: 0;
-      padding-bottom: 0;
-    }
-    .github-release-footer {
-      border-top: 1px solid var(--color-light-border);
-      margin: 24px -16px -16px;
-      padding: 16px;
-    }
-    .detail .download summary {
-      font-size: 20px;
-      line-height: 28px;
-      margin-top: 0;
-    }
-    .github-release-asset-count {
-      vertical-align: middle;
-      margin-left: 4px;
-    }
-    .detail .download .list > li {
-      gap: 8px;
-      padding: 8px 12px;
-      flex-wrap: wrap;
-    }
-    .detail .download .list > li > a {
-      min-width: 0;
-      overflow-wrap: anywhere;
-    }
-    .detail .download .list > li > a svg {
-      flex-shrink: 0;
-      color: var(--color-text-light-1);
-    }
-    .detail .download .list > li .text.grey {
-      font-size: 12px;
-      color: var(--color-text-light-1) !important;
-    }
-  }
-  .github-release-empty {
-    padding: 64px 24px;
-  }
-  @media (max-width: 767.98px) {
-    > .ui.container {
-      max-width: calc(100% - 32px);
-      width: calc(100% - 32px) !important;
-      margin: 24px auto 0 !important;
-      padding: 0;
-    }
-    .github-release-toolbar {
-      gap: 8px;
-      margin: 0 14px 16px;
-      padding: 0 0 16px;
-    }
-    .github-release-content {
-      display: block;
-    }
-    .github-release-toc {
-      display: none;
-    }
-    .github-release-mobile-toc {
-      display: block;
-      margin: 0 auto 48px;
-      position: relative;
-      width: max-content;
-      summary {
-        align-items: center;
-        background: var(--color-button);
-        border: 1px solid var(--color-light-border);
-        border-radius: 6px;
-        cursor: pointer;
-        display: flex;
-        gap: 8px;
-        list-style: none;
-        padding: 5px 12px;
-        font-weight: 500;
-      }
-      summary::-webkit-details-marker {
-        display: none;
-      }
-      ul {
-        background: var(--color-box-body);
-        border: 1px solid var(--color-light-border);
-        border-radius: 6px;
-        list-style: none;
-        margin: 4px 0 0;
-        padding: 4px 0;
-        position: absolute;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 280px;
-        max-height: 320px;
-        overflow-y: auto;
-        z-index: 10;
-      }
-      a {
-        color: var(--color-text);
-        display: block;
-        padding: 8px 12px;
-        text-decoration: none;
-      }
-      a:hover,
-      a[aria-current="location"] {
-        background: var(--color-hover);
-        color: var(--github-fgColor-accent);
-      }
-      a[aria-current="location"] {
-        background: var(--color-active);
-      }
-    }
-    ul#release-list.github-release-list > li {
-      .release-title-wrap {
-        flex-direction: column;
-        gap: 12px;
-      }
-      .release-title-wrap h4 {
-        display: flex;
-        gap: 8px;
-        font-size: 26px;
-        width: 100%;
-        .github-release-name {
-          flex: 1;
-          min-width: 0;
-        }
-        > .ui.label,
-        .github-release-latest {
-          align-self: flex-start;
-          flex-shrink: 0;
-          margin-top: 12px;
-        }
-      }
-      .github-release-controls {
-        flex-wrap: wrap;
-      }
-      .detail p.text.grey {
-        margin-top: 16px;
-      }
-      .github-release-ref {
-        margin-left: 0;
-        margin-right: 8px;
-      }
-      .detail .download .list > li > a {
-        flex-basis: 100%;
-      }
-    }
-  }
-}
-
-/* Details measured against GitHub's releases pages. */
-.page-content.repository.github-releases {
-  /* The meta line closes with a divider; the notes start 16px below it. */
-  .github-release-list .detail p.text.grey {
-    min-height: 55px;
-    margin-bottom: 0;
-    padding-bottom: 24px;
-    border-bottom: 1px solid var(--color-light-border);
-  }
-  #release-list.github-release-list > li .detail .markup.desc > :first-child {
-    margin-top: 0 !important;
-  }
-  /* The notes sit inside a list item, so the browser would give their bullets the nested style. */
-  .github-release-list .markup ul {
-    list-style-type: disc;
-  }
-  .github-release-list .markup ul ul {
-    list-style-type: circle;
-  }
-  .github-release-list .markup ul ul ul {
-    list-style-type: square;
-  }
-  /* Asset rows */
-  .detail .download .list > li {
-    min-height: 45px;
-    padding: 8px 16px !important;
-    align-items: center;
-  }
-  .detail .download .list > li > a {
-    font-size: 14px;
-    font-weight: 600 !important;
-  }
-  .detail .download .list > li .text.grey {
-    font-size: 14px;
-  }
-}
-/* A single release: a breadcrumb instead of the Releases/Tags bar, and no release list. */
+/* A single release: "Releases / <title>" in place of the heading. */
 .github-release-breadcrumb {
   display: flex;
   align-items: center;
   gap: 8px;
-  margin: 24px 0 32px;
-  font-size: 14px;
-  line-height: 21px;
+  min-width: 0;
+  font-size: 20px;
+  line-height: 28px;
+}
+.github-release-breadcrumb > a {
+  flex-shrink: 0;
+  color: var(--github-fgColor-accent);
 }
 .github-release-breadcrumb-separator {
   color: var(--color-text-light-1);
 }
-.page-content.repository.github-releases.github-release-single {
-  .github-release-toolbar,
-  .github-release-toc,
-  .github-release-mobile-toc {
-    display: none;
+.github-release-breadcrumb > h1 {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Each release is a box: the title with its label and actions, who released it and from which tag and commit, the
+   notes, then the assets. */
+.github-release-list {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin: 0 0 16px;
+  padding: 0;
+  list-style: none;
+}
+.github-release {
+  min-width: 0;
+  padding: 16px;
+  border: 1px solid var(--color-light-border);
+  border-radius: var(--border-radius);
+  background: var(--color-box-body);
+  scroll-margin-top: 16px;
+}
+.github-release-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+.github-release-title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  margin: 0;
+  font-size: 32px;
+  font-weight: 600;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+.github-release-title > a:first-child {
+  color: var(--color-text);
+}
+.github-release-title > a:first-child:hover {
+  color: var(--github-fgColor-accent);
+  text-decoration: underline;
+}
+.github-release-title > .ui.label,
+.github-release-latest {
+  flex-shrink: 0;
+}
+.github-release-latest {
+  display: inline-flex;
+}
+.github-release-latest[hidden] {
+  display: none;
+}
+.github-release-title > .github-release-draft {
+  border: 0;
+  background: var(--github-bgColor-neutral-emphasis);
+  color: var(--github-fgColor-onEmphasis);
+}
+.github-release-controls {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 8px;
+}
+.github-release-controls > .theme-icon-button {
+  width: 28px;
+  height: 28px;
+}
+/* GitHub's small Compare button. The shared native-button size rule weighs as much as its most specific selector, and
+   Forgejo's Tailwind padding is !important. */
+.github-release-controls .js-branch-tag-selector .ui.ui.ui.ui.button.branch-dropdown-button {
+  height: 28px !important;
+  min-height: 28px !important;
+  padding: 3px 12px !important;
+  font-size: 12px !important;
+  line-height: 20px !important;
+}
+/* The card's controls end at the right edge of the column, so the Compare menu opens towards the left. */
+.github-release-controls .js-branch-tag-selector .menu {
+  right: 0;
+  left: auto;
+}
+.github-release-controls > .github-release-delete:hover {
+  color: var(--github-control-danger-fgColor-hover);
+}
+
+.github-release-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 8px;
+  color: var(--color-text-light-1);
+  font-size: 14px;
+  line-height: 20px;
+}
+/* The meta lines close with a divider; the notes or assets start 16px below it. */
+.github-release-meta:not(:last-child) {
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--color-light-border);
+}
+.github-release-meta > p {
+  margin: 0;
+}
+.github-release-byline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+}
+.github-release-byline > .author {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 600;
+}
+.github-release-byline > .author a {
+  color: var(--color-text);
+}
+.github-release-byline > .author img {
+  border-radius: 50%;
+}
+.github-release-refs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 16px;
+}
+.github-release-ref {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+  color: var(--color-text-light-1);
+  overflow-wrap: anywhere;
+}
+.github-release-ref:hover {
+  color: var(--github-fgColor-accent);
+}
+.github-release-ref > svg,
+.github-release-status svg {
+  flex-shrink: 0;
+}
+.github-release-status svg {
+  width: 16px;
+  height: 16px;
+}
+/* "± N commits" in the refs row, as GitHub's commits item; "to main since this release" is its tooltip. */
+.github-release-ahead strong {
+  font-weight: inherit;
+}
+.github-release-meta > .signature-row {
+  margin: 0 !important;
+}
+
+.github-release-notes {
+  margin-top: 16px;
+  color: var(--color-text);
+  font-size: 16px;
+  line-height: 1.5;
+}
+.github-release-notes > :first-child {
+  margin-top: 0 !important;
+}
+.github-release-notes > :last-child {
+  margin-bottom: 0 !important;
+}
+.github-release-notes :is(h1, h2) {
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--color-light-border);
+  font-weight: 600;
+  line-height: 1.25;
+}
+.github-release-notes h2 {
+  font-size: 24px;
+}
+.github-release-notes h3 {
+  font-size: 20px;
+}
+/* The notes sit inside a list item, so the browser would give their bullets the nested style. */
+.github-release-notes ul {
+  list-style-type: disc;
+}
+.github-release-notes ul ul {
+  list-style-type: circle;
+}
+.github-release-notes ul ul ul {
+  list-style-type: square;
+}
+
+/* "Assets N": a disclosure over a table of files, each with its icon and name, then its downloads, size and
+   date; the source code archives have no size, so their date keeps the same right edge. */
+.github-release-assets {
+  margin: 16px -16px -16px;
+  padding: 16px;
+  border-top: 1px solid var(--color-light-border);
+}
+/* Straight after the meta lines, their divider already separates the assets. */
+.github-release-meta + .github-release-assets {
+  margin-top: 0;
+  border-top: 0;
+}
+.github-release-assets > summary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: max-content;
+  max-width: 100%;
+  color: var(--color-text);
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 28px;
+  list-style: none;
+  cursor: pointer;
+}
+.github-release-assets > summary::-webkit-details-marker {
+  display: none;
+}
+.github-release-assets-marker {
+  color: var(--color-text-light-1);
+  transition: transform 0.12s ease;
+}
+.github-release-assets[open] .github-release-assets-marker {
+  transform: rotate(90deg);
+}
+.github-release-asset-count {
+  font-size: 12px;
+}
+.github-release-asset-list {
+  margin: 16px 0 0;
+  padding: 0;
+  list-style: none;
+  border: 1px solid var(--color-light-border);
+  border-radius: var(--border-radius);
+}
+.github-release-asset {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-height: 45px;
+  padding: 8px 16px;
+  color: var(--color-text-light-1);
+  font-size: 14px;
+  line-height: 20px;
+}
+.github-release-asset + .github-release-asset {
+  border-top: 1px solid var(--color-light-border);
+}
+.github-release-asset-name {
+  display: inline-flex;
+  flex: 1;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  color: var(--color-text);
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+.github-release-asset-name:hover {
+  color: var(--github-fgColor-accent);
+  text-decoration: underline;
+}
+.github-release-asset-name > svg {
+  flex-shrink: 0;
+  color: var(--color-text-light-1);
+}
+.github-release-asset-downloads {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+.github-release-asset-size,
+.github-release-asset-date {
+  text-align: right;
+  white-space: nowrap;
+}
+.github-release-asset-size {
+  flex: 0 0 72px;
+}
+.github-release-asset-date {
+  flex: 0 0 112px;
+}
+.github-release-asset:not(:has(.github-release-asset-size)) .github-release-asset-date {
+  flex-basis: calc(72px + 16px + 112px);
+}
+
+.github-release-empty {
+  padding: 64px 24px;
+}
+
+@media (max-width: 767.98px) {
+  .github-release-actions {
+    flex: 1 1 100%;
   }
-  .github-release-content {
-    display: block;
+  .github-release-search {
+    flex: 1 1 auto;
+  }
+  .github-release-header {
+    flex-direction: column;
+    gap: 12px;
+  }
+  .github-release-title {
+    font-size: 24px;
+  }
+  .github-release-controls {
+    flex-wrap: wrap;
+  }
+  /* Stacked under the title, the controls start at the left edge, and so does the menu. */
+  .github-release-controls .js-branch-tag-selector .menu {
+    right: auto;
+    left: 0;
+  }
+  .github-release-asset {
+    flex-wrap: wrap;
+    gap: 4px 16px;
+  }
+  .github-release-asset-name {
+    flex-basis: 100%;
+  }
+  .github-release-asset-size,
+  .github-release-asset:not(:has(.github-release-asset-size)) .github-release-asset-date,
+  .github-release-asset-date {
+    flex: none;
   }
 }
 /* New and edit release: GitHub's form page, on Forgejo's own template. */
@@ -688,39 +439,10 @@
     font-weight: 500;
   }
 }
-.page-content.repository.github-tags > .ui.container {
-  box-sizing: border-box;
-  max-width: calc(100% - 32px);
-  padding: 0;
-  width: 1116px !important;
-}
-.github-tags-toolbar {
-  align-items: center;
-  border-bottom: 1px solid var(--color-light-border);
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 16px;
-  padding: 0 0 24px;
-}
-.github-tags-search {
-  width: 248px;
-}
 .github-tags-box {
   border: 1px solid var(--color-light-border);
-  border-radius: 6px;
+  border-radius: var(--border-radius);
   overflow: hidden;
-}
-.github-tags-box-header {
-  align-items: center;
-  background: var(--color-box-header);
-  border-bottom: 1px solid var(--color-light-border);
-  display: flex;
-  font-size: 16px;
-  font-weight: 600;
-  gap: 4px;
-  line-height: 20px;
-  margin: 0;
-  padding: 16px;
 }
 .github-tags-list {
   background: var(--color-box-body);
@@ -789,18 +511,6 @@
   text-align: center;
 }
 @media (max-width: 767.98px) {
-  .page-content.repository.github-tags > .ui.container {
-    width: calc(100% - 32px) !important;
-  }
-  .github-tags-toolbar {
-    align-items: stretch;
-    flex-direction: column;
-    gap: 12px;
-  }
-  .github-tags-search {
-    align-self: center;
-    width: 248px;
-  }
   .github-tag-actions {
     gap: 8px 16px;
   }

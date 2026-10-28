@@ -242,7 +242,10 @@ permissions, and form values into the shared controls.
   `theme-sidebar`, `theme-sidebar-content`, and `theme-sidebar-main` for its children. Include
   `shared/theme/sidebar_toggle` inside the sidebar and a button with `data-theme-sidebar-toggle` and
   `data-theme-sidebar-expand` beside the page title. The controller preserves desktop collapse preferences and starts
-  collapsed on mobile. See `templates/repo/issue/sidebar.tmpl` and `templates/org/repository_nav.tmpl`.
+  collapsed on mobile. See `templates/repo/issue/sidebar.tmpl` and `templates/org/repository_nav.tmpl`. For links to
+  sections of a long page, like GitHub's "On this page", add a `nav` with `data-theme-sidebar-outline` holding a
+  `theme-sidebar-label` heading and `#id` links; the controller marks the section in view and, on a phone, closes the
+  sidebar when an entry is followed. See `templates/repo/release/sidebar.tmpl`.
 - **Search:** call `components/common/search/search` with `Value` and `Placeholder` inside the existing form; do not
   write a search input in a page template. `Kind` selects the variant: `submit` (default, trailing search button),
   `icon` (leading search icon, as on releases and Actions), or `plain`. `Name` defaults to `q`, `Label` overrides the
@@ -266,8 +269,6 @@ permissions, and form values into the shared controls.
 - **Counter:** add `theme-counter` to a count pill next to a tab, heading, or filter, including ones a script creates.
   Add `theme-counter-tab` inside a tab, where GitHub's counter is 18px tall and semibold. Keep only layout (`margin`,
   `flex`) under the page's own class.
-- **Segmented switch:** use `<nav class="theme-switch">` with links and `active` on the current one, as on the releases
-  and tags pages.
 - **Empty state:** use `theme-empty` for a bordered "nothing here" box holding an icon, an `h2` or `h3`, and an optional
   paragraph. `templates/user/profile_empty.tmpl` renders one from `Icon`, `Title`, and `Description`. Add
   `theme-empty-compact` for the smaller, borderless block GitHub shows inside a list. Short inline messages inside a

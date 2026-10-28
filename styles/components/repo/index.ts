@@ -24,7 +24,6 @@ import fileTree from "../file_tree";
 import sourceBrowser from "./source_browser";
 import filePicker from "./file_picker";
 import packages from "./packages";
-import release from "./release";
 import repo from "./repo";
 import repoFileView from "./repo_file_view";
 import repoFiles from "./repo_files";
@@ -37,7 +36,6 @@ export default cssCombine(
   fileTree,
   sourceBrowser,
   packages,
-  release,
   repo,
   repoFileView,
   repoFiles,

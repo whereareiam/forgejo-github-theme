@@ -25,7 +25,36 @@ function events() {
 
 class Element {}
 
-function sidebarPage() {
+type Box = { top: number; bottom: number };
+
+/** "On this page": links to sections whose boxes the test moves, in a sidebar list 400px tall. */
+function sections(boxes: Box[], hash = "") {
+  const list = { scrollTop: 0, getBoundingClientRect: () => ({ top: 100, bottom: 500 }) };
+  const links = boxes.map((_, index) => {
+    const classes = new Set<string>();
+    const attributes = new Map<string, string>();
+    return {
+      hash: `#release-${index}`,
+      classes,
+      attributes,
+      classList: { toggle: (name: string, value: boolean) => (value ? classes.add(name) : classes.delete(name)) },
+      setAttribute: (name: string, value: string) => attributes.set(name, value),
+      removeAttribute: (name: string) => attributes.delete(name),
+      getBoundingClientRect: () => ({ top: 120 + index * 32, bottom: 152 + index * 32 }),
+    };
+  });
+  const nav = {
+    ...events(),
+    querySelectorAll: () => links,
+    closest: () => list,
+  };
+  const targets = boxes.map(box => ({ getBoundingClientRect: () => box }));
+  const getElementById = (id: string) => targets[Number(id.replace("release-", ""))] ?? null;
+  const active = () => links.filter(link => link.classes.has("active")).map(link => link.hash);
+  return { nav, links, list, boxes, getElementById, active, hash };
+}
+
+function sidebarPage(outline?: ReturnType<typeof sections>) {
   const control = () => ({ ...events(), setAttribute: vi.fn(), focus: vi.fn() });
   const expand = control();
   const collapse = control();
@@ -40,12 +69,30 @@ function sidebarPage() {
     classList: { toggle: (name: string, value: boolean) => (value ? classes.add(name) : classes.delete(name)) },
     querySelectorAll: () => [expand, collapse],
     querySelector: (selector: string) =>
-      selector === ":scope > .theme-sidebar" ? aside : selector.includes("expand") ? expand : collapse,
+      selector === "[data-theme-sidebar-outline]"
+        ? (outline?.nav ?? null)
+        : selector === ":scope > .theme-sidebar"
+          ? aside
+          : selector.includes("expand")
+            ? expand
+            : collapse,
   });
   return { page, expand, collapse, classes, aside };
 }
 
-function fixture({ mobile = false, stored = "false", storageBlocked = false, replaceable = false } = {}) {
+function fixture({
+  mobile = false,
+  stored = "false",
+  storageBlocked = false,
+  replaceable = false,
+  outline,
+}: {
+  mobile?: boolean;
+  stored?: string;
+  storageBlocked?: boolean;
+  replaceable?: boolean;
+  outline?: ReturnType<typeof sections>;
+} = {}) {
   const media = { ...events(), matches: mobile };
   const storage = {
     getItem: vi.fn(() => {
@@ -54,14 +101,17 @@ function fixture({ mobile = false, stored = "false", storageBlocked = false, rep
     }),
     setItem: vi.fn(),
   };
-  const { page, expand, collapse, classes, aside } = sidebarPage();
+  const { page, expand, collapse, classes, aside } = sidebarPage(outline);
   const document = {
     ...events(),
     querySelectorAll: () => [page],
     querySelector: (selector: string) => (replaceable && selector.startsWith("#notification_div") ? page : null),
+    getElementById: (id: string) => outline?.getElementById(id) ?? null,
   };
   const observers: { target: unknown; options: unknown; callback: (records: unknown[]) => void }[] = [];
+  const window = events();
   runInNewContext(script, {
+    ...window,
     document,
     Element,
     AbortController,
@@ -74,13 +124,25 @@ function fixture({ mobile = false, stored = "false", storageBlocked = false, rep
         observers.push({ target, options, callback: this.callback });
       }
     },
+    location: { hash: outline?.hash ?? "" },
+    innerHeight: 800,
     matchMedia: () => media,
     localStorage: storage,
-    requestAnimationFrame: (callback: () => void) => (callback(), 1),
+    // Runs the frame at once; it returns no handle, so the next scroll schedules another frame.
+    requestAnimationFrame: (callback: () => void) => (callback(), 0),
   });
   // Clicks reach the page, which finds the toggle the event came from.
-  const click = (control: unknown) => page.emit("click", { target: { closest: () => control } });
-  return { media, storage, page, expand, collapse, classes, click, aside, document, observers };
+  const click = (control: unknown) =>
+    page.emit("click", {
+      target: { closest: (selector: string) => (selector === "[data-theme-sidebar-toggle]" ? control : null) },
+    });
+  // A click on an "On this page" entry reaches its nav first, then the page.
+  const follow = (link: unknown) => {
+    const event = { target: { closest: (selector: string) => (selector.endsWith("a") ? link : null) } };
+    outline?.nav.emit("click", event);
+    page.emit("click", event);
+  };
+  return { media, storage, page, expand, collapse, classes, click, follow, aside, document, observers };
 }
 
 describe("shared theme components", () => {
@@ -121,6 +183,73 @@ describe("shared theme components", () => {
     f.media.matches = false;
     f.media.emit("change");
     expect(f.classes.has("theme-sidebar-collapsed")).toBe(false);
+  });
+
+  it("marks the section in view in On this page as the window scrolls", () => {
+    const outline = sections([
+      { top: 200, bottom: 600 },
+      { top: 624, bottom: 1000 },
+      { top: 1024, bottom: 1400 },
+    ]);
+    const f = fixture({ outline });
+    expect(outline.active()).toEqual(["#release-0"]);
+    expect(outline.links[0].attributes.get("aria-current")).toBe("location");
+    // The first release has scrolled up until less than 80px of it is left in view.
+    outline.boxes[0].bottom = 60;
+    outline.boxes[1].top = 84;
+    outline.boxes[1].bottom = 460;
+    f.document.emit("scroll");
+    expect(outline.active()).toEqual(["#release-1"]);
+    expect(outline.links[0].attributes.has("aria-current")).toBe(false);
+  });
+
+  it("keeps a followed entry marked while its section starts in view, then tracks the scroll again", () => {
+    const outline = sections([
+      { top: -900, bottom: -500 },
+      { top: -476, bottom: 300 },
+      { top: 324, bottom: 500 },
+    ]);
+    const f = fixture({ outline });
+    expect(outline.active()).toEqual(["#release-1"]);
+    // The last release is short and at the end of the page, so following it cannot scroll it to the top.
+    f.follow(outline.links[2]);
+    f.document.emit("scroll");
+    expect(outline.active()).toEqual(["#release-2"]);
+    outline.boxes[2].top = -20;
+    outline.boxes[1].bottom = 120;
+    f.document.emit("scroll");
+    expect(outline.active()).toEqual(["#release-1"]);
+  });
+
+  it("scrolls a marked entry into the sidebar's own list when the list is longer than the window", () => {
+    const boxes = Array.from({ length: 20 }, (_, index) => ({ top: index * 400 - 7000, bottom: index * 400 - 6600 }));
+    const outline = sections(boxes);
+    fixture({ outline });
+    // Entry 17 is in view (its bottom is below the reading line); its link sits at 664-696px, below the list's 500px.
+    expect(outline.active()).toEqual(["#release-17"]);
+    expect(outline.list.scrollTop).toBe(196);
+  });
+
+  it("keeps the mark while the open sidebar hides the sections on a phone", () => {
+    const outline = sections([
+      { top: -500, bottom: -100 },
+      { top: -76, bottom: 300 },
+    ]);
+    const f = fixture({ outline });
+    expect(outline.active()).toEqual(["#release-1"]);
+    for (const box of outline.boxes) Object.assign(box, { top: 0, bottom: 0 });
+    f.document.emit("scroll");
+    expect(outline.active()).toEqual(["#release-1"]);
+  });
+
+  it("closes the open sidebar on a phone when an On this page entry is followed", () => {
+    const outline = sections([{ top: 200, bottom: 600 }]);
+    const f = fixture({ mobile: true, outline });
+    f.click(f.expand);
+    expect(f.classes.has("theme-sidebar-collapsed")).toBe(false);
+    f.follow(outline.links[0]);
+    expect(f.classes.has("theme-sidebar-collapsed")).toBe(true);
+    expect(f.storage.setItem).not.toHaveBeenCalled();
   });
 
   it("remains usable when storage is blocked", () => {
