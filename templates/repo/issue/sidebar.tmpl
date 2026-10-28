@@ -23,7 +23,7 @@
         <a class="{{if $isMilestonePage}}active{{end}}" href="{{.RepoLink}}/milestones">{{svg "octicon-milestone" 16}}{{ctx.Locale.Tr "repo.milestones"}}</a>
         <a class="{{if .PageIsLabels}}active{{end}}" href="{{.RepoLink}}/labels">{{svg "octicon-tag" 16}}{{ctx.Locale.Tr "repo.labels"}}</a>
         <a href="{{.RepoLink}}/{{$list}}?state=all">{{svg "octicon-eye" 16}}All states</a>
-        <a href="https://forgejo.org/docs/latest/user/issue-search/" target="_blank" rel="noopener noreferrer">{{svg "octicon-question" 16}}Search syntax</a>
+        <a href="{{AppDocsURL "user/search/issue-search/"}}" target="_blank" rel="noopener noreferrer">{{svg "octicon-question" 16}}{{ctx.Locale.Tr "search.syntax"}}</a>
     </nav>
     </div>
     {{template "components/common/sidebar/toggle" .}}

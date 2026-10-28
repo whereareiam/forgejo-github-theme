@@ -970,11 +970,58 @@ describe("Forgejo 15 native integration", () => {
     }
   });
 
-  it("keeps the native dated fallback for zero-contribution heatmap tooltips", () => {
+  it("passes the heatmap every locale string Forgejo's heatmap.js reads", () => {
     const heatmapTemplate = fs.readFileSync(path.join(ROOT_DIR, "templates", "user", "heatmap.tmpl"), "utf-8");
 
     expect(heatmapTemplate).toContain("data-heatmap-data");
-    expect(heatmapTemplate).not.toContain("data-locale-contributions-zero");
+    for (const key of [
+      "total-contributions",
+      "contributions-zero",
+      "contributions-format",
+      "contributions-one",
+      "contributions-few",
+      "more",
+      "less",
+    ])
+      expect(heatmapTemplate).toContain(`data-locale-${key}=`);
+  });
+
+  it("renders the navbar stopwatch as Forgejo's stopwatch.js expects", () => {
+    const read = (...parts: string[]) => fs.readFileSync(path.join(ROOT_DIR, "templates", ...parts), "utf-8");
+    const navbar = read("base", "head_navbar.tmpl");
+    const icons = read("base", "head_navbar_icons.tmpl");
+    const drawer = read("base", "navbar_drawer.tmpl");
+
+    // One trigger, rendered while no stopwatch runs so a stopwatch started in another tab can show it.
+    expect(navbar.match(/"Stopwatch" true/g)).toHaveLength(1);
+    expect(icons).toContain(
+      'class="item active-stopwatch-trigger {{$itemExtraClass}}{{if not $data.ActiveStopwatch}} tw-hidden{{end}}"'
+    );
+    // A tooltip on the trigger would replace the popup in its tippy, as upstream avoids too.
+    expect(icons).toContain('data-tippy-content="{{ctx.Locale.Tr "active_stopwatch"}}"');
+    expect(navbar).toContain("{{if and .IsSigned (not .HideNavbarLinks) EnableTimetracking}}");
+    for (const name of [
+      "active-stopwatch-popup",
+      "stopwatch-link",
+      "stopwatch-issue",
+      "stopwatch-commit",
+      "stopwatch-cancel",
+    ])
+      expect(navbar).toContain(`class="${name}`);
+    expect(navbar).toContain('stopwatch-time tw-m-0" data-seconds="{{.ActiveStopwatch.Seconds}}"');
+    expect(drawer).toContain('{{if and EnableTimetracking .ActiveStopwatch}}<a href="{{.ActiveStopwatch.IssueLink}}">');
+  });
+
+  it("links the documentation through AppDocsURL", () => {
+    const templates = ["templates", "components"].flatMap(dir =>
+      fs
+        .readdirSync(path.join(ROOT_DIR, dir), { recursive: true, encoding: "utf-8" })
+        .filter(file => file.endsWith(".tmpl"))
+        .map(file => path.join(ROOT_DIR, dir, file))
+    );
+
+    for (const file of templates)
+      expect(fs.readFileSync(file, "utf-8"), path.relative(ROOT_DIR, file)).not.toContain("forgejo.org/docs");
   });
 
   it("matches GitHub's sign-in form structure", () => {
