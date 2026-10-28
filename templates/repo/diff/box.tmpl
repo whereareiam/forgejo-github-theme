@@ -114,17 +114,13 @@
 				<script>
 					if (diffTreeVisible) document.getElementById('diff-file-tree').classList.remove('tw-hidden');
 					else document.getElementById('diff-container').classList.add('diff-file-tree-hidden');
-					// The toggle sits in the toolbar above, so it is wired here, once the tree exists.
+					// The toggle sits in the toolbar above, so its first state is set here, once the tree exists; diff-file-tree.js
+					// keeps it in sync afterwards. Phones start with the tree closed.
 					const diffTreeBtn = document.querySelector('.diff-toggle-file-tree-button');
 					const diffTreeIcon = `.octicon-sidebar-${diffTreeVisible ? 'expand' : 'collapse'}`;
 					diffTreeBtn.querySelector(diffTreeIcon).classList.remove('tw-hidden');
-					diffTreeBtn.classList.toggle('active', diffTreeVisible);
+					diffTreeBtn.classList.toggle('active', diffTreeVisible && !matchMedia('(max-width: 767.98px)').matches);
 					diffTreeBtn.setAttribute('data-tooltip-content', diffTreeBtn.getAttribute(diffTreeVisible ? 'data-hide-text' : 'data-show-text'));
-					new MutationObserver(() => {
-						const treeHidden = document.getElementById('diff-file-tree').classList.contains('tw-hidden');
-						diffTreeBtn.classList.toggle('active', !treeHidden);
-						document.getElementById('diff-container').classList.toggle('diff-file-tree-hidden', treeHidden);
-					}).observe(document.getElementById('diff-file-tree'), {attributes: true, attributeFilter: ['class']});
 				</script>
 				<div class="resizable-divider not-mobile" role="separator" aria-label="Resize file tree" aria-orientation="vertical" aria-valuemin="200" aria-valuenow="296" aria-valuemax="480" data-resize-container="#diff-container" data-resize-content-minimum-width="320" data-resize-default-width="296" data-resize-maximum-width="480" data-resize-minimum-width="200" data-resize-storage-key="diff_file_tree_width" data-resize-variable="--diff-file-tree-width" tabindex="0"></div>
 			{{end}}
