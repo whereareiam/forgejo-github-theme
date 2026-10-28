@@ -244,3 +244,136 @@
   box-shadow: 0 0 0 1px var(--color-light-border);
   font-weight: 600;
 }
+
+/*
+ * GitHub's Code menu on a pull request's title row: the clone URL with its HTTPS/SSH choice, then the commands that
+ * check out the pull request. The protocol buttons and URL field are Forgejo's clone_buttons, driven by its scripts.
+ */
+.pull-code-menu.theme-dropdown[data-theme-dropdown] > .theme-dropdown-panel {
+  width: 400px;
+  padding: 0;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.pull-code-menu .pull-code-section {
+  padding: 16px;
+}
+
+.pull-code-menu .pull-code-section + .pull-code-section {
+  border-top: 1px solid var(--color-light-border);
+}
+
+.pull-code-menu .pull-code-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 8px;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+}
+
+.pull-code-menu .pull-code-title > svg {
+  color: var(--color-text-light-1);
+}
+
+.pull-code-menu .pull-code-description {
+  margin: 0 0 8px;
+  color: var(--color-text-light-1);
+  font-size: 12px;
+  line-height: 18px;
+}
+
+.pull-code-menu .pull-code-clone {
+  display: grid;
+  grid-template-columns: max-content max-content minmax(0, 1fr) 32px;
+  gap: 8px 4px;
+  align-items: center;
+}
+
+.pull-code-menu .pull-code-clone > :is(#repo-clone-https, #repo-clone-ssh) {
+  grid-row: 1;
+  height: 32px;
+  min-height: 32px;
+  margin: 0;
+  padding: 5px 12px;
+  border: 1px solid transparent;
+  border-radius: var(--border-radius);
+  background: transparent;
+  box-shadow: none;
+  color: var(--color-text);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+}
+
+.pull-code-menu .pull-code-clone > :is(#repo-clone-https, #repo-clone-ssh):hover {
+  background: var(--github-control-transparent-bgColor-hover);
+}
+
+/* Forgejo marks the chosen protocol primary and the other basic. */
+.pull-code-menu .pull-code-clone > .primary:is(#repo-clone-https, #repo-clone-ssh) {
+  border-color: var(--color-secondary);
+  background: var(--color-hover);
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+.pull-code-menu .pull-code-clone > #repo-clone-url,
+.pull-code-menu .pull-code-command > pre {
+  min-width: 0;
+  margin: 0;
+  border: 1px solid var(--color-light-border);
+  border-radius: var(--border-radius);
+  background: var(--color-box-header);
+  color: var(--color-text);
+  font-family: var(--fonts-monospace);
+  font-size: 12px;
+  line-height: 18px;
+}
+
+.pull-code-menu .pull-code-clone > #repo-clone-url {
+  grid-row: 2;
+  grid-column: 1 / 4;
+  width: 100%;
+  height: 32px;
+  padding: 6px 12px;
+}
+
+.pull-code-menu .pull-code-clone > #repo-clone-url:focus {
+  border-color: var(--github-borderColor-accent-emphasis);
+  outline: none;
+}
+
+.pull-code-menu .pull-code-clone > #clipboard-btn {
+  grid-row: 2;
+  grid-column: 4;
+  width: 32px;
+  height: 32px;
+  min-height: 32px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  color: var(--color-text-light-1);
+}
+
+.pull-code-menu .pull-code-clone > #clipboard-btn:hover {
+  background: var(--github-control-transparent-bgColor-hover);
+}
+
+.pull-code-menu .pull-code-command {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 32px;
+  gap: 4px;
+  align-items: start;
+}
+
+/* Each command keeps its own line; a long branch name wraps instead of scrolling the narrow menu. */
+.pull-code-menu .pull-code-command > pre {
+  padding: 6px 12px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}

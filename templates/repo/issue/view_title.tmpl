@@ -1,4 +1,4 @@
-{{/* Forgejo 17 view_title.tmpl; pull requests get GitHub's pencil next to the number instead of an Edit button. */}}
+{{/* Forgejo 17 view_title.tmpl; a pull request's title row has GitHub's Edit button and Code menu. */}}
 {{if .Flash}}
 	<div class="sixteen wide column tw-mb-2">
 		{{template "base/alert" .}}
@@ -9,17 +9,18 @@
 	<div class="issue-title" id="issue-title-display">
 		<h1 class="tw-break-anywhere">
 			{{RenderIssueTitle $.Context .Issue.Title ($.Repository.ComposeMetas ctx)}}				<span class="index">#{{.Issue.Index}}</span>
-			{{/* GitHub edits a pull request title from a pencil next to its number. Forgejo binds the button by id. */}}
-			{{if and $canEditIssueTitle .Issue.IsPull}}
-			<button id="issue-title-edit-show" class="btn interact-fg issue-title-edit-pencil" aria-label="{{ctx.Locale.Tr "repo.issues.edit"}}" data-tooltip-content="{{ctx.Locale.Tr "repo.issues.edit"}}">{{svg "octicon-pencil" 16}}</button>
-			{{end}}
 		</h1>
 		<div class="button-row">
-			{{if and $canEditIssueTitle (not .Issue.IsPull)}}
+			{{if $canEditIssueTitle}}
 			<button id="issue-title-edit-show" class="ui small basic button">{{ctx.Locale.Tr "repo.issues.edit"}}</button>
 			{{end}}
 			{{if and (not .Issue.IsPull) (not .Repository.IsArchived)}}
 			<a role="button" class="ui small primary button" href="{{.RepoLink}}/issues/new{{if .NewIssueChooseTemplate}}/choose{{end}}">{{ctx.Locale.Tr "repo.issues.new"}}</a>
+			{{end}}
+			{{/* GitHub's green Code menu: clone the repository and check out the pull request, with Forgejo's command
+				line instructions, shown under the same conditions as at the bottom of the conversation. */}}
+			{{if and .Issue.IsPull .Issue.PullRequest.HeadRepo (not .Issue.PullRequest.HasMerged) (not .Issue.IsClosed) (.Permission.CanRead $.UnitTypeCode)}}
+				{{template "components/common/dropdown/dropdown" dict "Kind" "actions" "Label" (ctx.Locale.Tr "repo.code") "Icon" "octicon-code" "Primary" true "Class" "pull-code-menu" "Items" "repo/issue/view_title_code" "Data" $}}
 			{{end}}
 		</div>
 	</div>

@@ -255,11 +255,12 @@ permissions, and form values into the shared controls.
   `theme-search-field` class directly. Forgejo's native query/mode/submit group (`shared/search/combo_multi`) opts in
   with `theme-search-control` on its form.
 - **Dropdowns:** call `components/common/dropdown/dropdown` with `Kind` (`single`, `multiple`, or `actions`), `Label`,
-  `Items` (the content template name), and `Data` (the page context). `Title`, `Icon`, `IconOnly`, `UpdateLabel`, and
-  `Quiet` customize the header and trigger. Use `components/common/dropdown/option` for radio or checkbox rows; action
-  rows are links or buttons with `theme-dropdown-action`. Single-choice menus use checkmarks, multiple-choice menus use
-  native checkboxes, and action menus omit selection indicators. The controller handles Escape, outside clicks, and
-  opening one menu at a time. See `components/repository/filter/filter`, `components/repository/sort/sort`, and
+  `Items` (the content template name), and `Data` (the page context). `Title`, `Icon`, `IconOnly`, `UpdateLabel`,
+  `Quiet`, and `Primary` (a green trigger, as on GitHub's Code menu) customize the header and trigger; `Class` adds a
+  page layout hook to the menu. Use `components/common/dropdown/option` for radio or checkbox rows; action rows are
+  links or buttons with `theme-dropdown-action`. Single-choice menus use checkmarks, multiple-choice menus use native
+  checkboxes, and action menus omit selection indicators. The controller handles Escape, outside clicks, and opening one
+  menu at a time. See `components/repository/filter/filter`, `components/repository/sort/sort`, and
   `org/action_menu_items`.
 - **Buttons:** keep Forgejo's native `ui button` classes on buttons Forgejo already renders; the theme styles those
   globally. For a button the theme adds, use `button theme-control` (32px, 12px inline padding) instead of sizing it in
