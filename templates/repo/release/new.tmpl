@@ -1,0 +1,179 @@
+{{/* Forgejo 17's release form as GitHub's New release page: the tag menu and the target in one row, the title, the
+description with Write and Preview, the assets and the binaries drop area, the options as checkboxes with their notes,
+then Publish release and Save draft (and Delete on an edit). The field names, JS hooks and the delete confirmation
+stay Forgejo's. */}}
+{{template "base/head" .}}
+<div role="main" aria-label="{{.Title}}" class="page-content repository new release">
+	{{template "repo/header" .}}
+	<div class="ui container">
+		<h2 class="ui dividing header">
+			{{if .PageIsEditRelease}}
+				{{ctx.Locale.Tr "repo.release.edit_release"}}
+				<div class="sub header">{{ctx.Locale.Tr "repo.release.edit_subheader"}}</div>
+			{{else}}
+				{{ctx.Locale.Tr "repo.release.new_release"}}
+				<div class="sub header">{{ctx.Locale.Tr "repo.release.new_subheader"}}</div>
+			{{end}}
+		</h2>
+		{{template "base/alert" .}}
+		<form class="ui form" action="{{.Link}}" method="post">
+			<div class="theme-release-refs field {{if .Err_TagName}}error{{end}}">
+				{{if .PageIsEditRelease}}
+					<span class="theme-control theme-release-ref" title="{{ctx.Locale.Tr "repo.release.tag_name"}}">{{svg "octicon-tag" 16}}<strong>{{.tag_name}}</strong></span>
+					<span class="theme-control theme-release-ref" title="{{ctx.Locale.Tr "repo.release.target"}}">{{svg "octicon-git-branch" 16}}<span class="theme-release-ref-label">{{ctx.Locale.Tr "repo.release.target"}}:</span><strong>{{.tag_target}}</strong></span>
+				{{else}}
+					<input id="tag-name-editor" type="hidden" data-existing-tags="{{JsonUtils.EncodeToString .Tags}}" data-tag-helper="{{ctx.Locale.Tr "repo.release.tag_helper"}}" data-tag-helper-new="{{ctx.Locale.Tr "repo.release.tag_helper_new"}}" data-tag-helper-existing="{{ctx.Locale.Tr "repo.release.tag_helper_existing"}}">
+					<div class="theme-release-tag-picker" data-empty-label="{{ctx.Locale.Tr "repo.release.tag_name"}}">
+						{{template "components/common/dropdown/dropdown" dict "Kind" "actions" "Icon" "octicon-tag" "Label" (or .tag_name (ctx.Locale.Tr "repo.release.tag_name")) "UpdateLabel" true "Title" (ctx.Locale.Tr "repo.release.tags") "Items" "repo/release/tag_menu" "Data" .}}
+					</div>
+					<div id="tag-target-selector">
+						<div class="ui selection dropdown">
+							<input type="hidden" name="tag_target" value="{{.tag_target}}">
+							{{svg "octicon-git-branch" 16}}
+							<span class="theme-release-ref-label">{{ctx.Locale.Tr "repo.release.target"}}:</span>
+							<div class="text">
+								<strong id="repo-branch-current">{{or .tag_target .Repository.DefaultBranch}}</strong>
+							</div>
+							{{svg "octicon-triangle-down" 12 "dropdown icon"}}
+							<div class="menu">
+								{{range .Branches}}
+									<div class="item" data-value="{{.}}">{{.}}</div>
+								{{end}}
+							</div>
+						</div>
+					</div>
+					<p id="tag-helper" class="help">{{ctx.Locale.Tr "repo.release.tag_helper"}}</p>
+				{{end}}
+			</div>
+			<div class="field {{if .Err_Title}}error{{end}}">
+				<input id="release-title" name="title" aria-label="{{ctx.Locale.Tr "repo.release.title"}}" placeholder="{{ctx.Locale.Tr "repo.release.title"}}" value="{{if .PageIsEditRelease}}{{.title}}{{else}}{{.tag_name}}{{end}}" autofocus maxlength="255">
+			</div>
+			<div class="field">
+				{{template "shared/combomarkdowneditor" (dict
+					"MarkdownPreviewUrl" (print .Repository.Link "/markup")
+					"MarkdownPreviewContext" .RepoLink
+					"TextareaName" "content"
+					"TextareaContent" .content
+					"TextareaPlaceholder" (ctx.Locale.Tr "repo.release.message")
+					"TextareaAriaLabel" (ctx.Locale.Tr "repo.release.message")
+					"DropzoneParentContainer" "form"
+					"EasyMDE" true
+				)}}
+			</div>
+			<div class="theme-release-assets">
+				{{range .attachments}}
+					<div class="field flex-text-block" id="attachment-{{.ID}}">
+						<div class="flex-text-inline tw-flex-1">
+							<div class="flex-text-inline tw-shrink-0" title="{{ctx.Locale.Tr "repo.release.type_attachment"}}">
+								{{if .ExternalURL}}
+									{{svg "octicon-link-external" 16}}
+								{{else}}
+									{{svg "octicon-package" 16}}
+								{{end}}
+							</div>
+							<input name="attachment-edit-name-{{.UUID}}" placeholder="{{ctx.Locale.Tr "repo.release.asset_name"}}" class="attachment_edit" required value="{{.Name}}">
+							<input name="attachment-del-{{.UUID}}" type="hidden"
+							value="false">
+							{{if .ExternalURL}}
+								<input name="attachment-edit-exturl-{{.UUID}}" placeholder="{{ctx.Locale.Tr "repo.release.asset_external_url"}}" class="attachment_edit" required value="{{.ExternalURL}}">
+							{{else}}
+								<span class="ui text grey theme-release-asset-meta">{{ctx.Locale.TrPluralString
+								.DownloadCount "release.n_downloads" (ctx.Locale.PrettyNumber .DownloadCount)}} · {{DateUtils.TimeSince .CreatedUnix}} · {{.Size | ctx.Locale.TrSize}}</span>
+							{{end}}
+						</div>
+						<a class="ui mini red button remove-rel-attach" data-id="{{.ID}}" data-uuid="{{.UUID}}">
+							{{ctx.Locale.Tr "remove"}}
+						</a>
+					</div>
+				{{end}}
+				<div class="field flex-text-block tw-hidden" id="attachment-template">
+					<div class="flex-text-inline tw-flex-1">
+						<div class="flex-text-inline tw-shrink-0" title="{{ctx.Locale.Tr "repo.release.type_external_asset"}}">
+							{{svg "octicon-link-external" 16}}
+						</div>
+						<input name="attachment-template-new-name" placeholder="{{ctx.Locale.Tr "repo.release.asset_name"}}" class="attachment_edit">
+						<input name="attachment-template-new-exturl" placeholder="{{ctx.Locale.Tr "repo.release.asset_external_url"}}" class="attachment_edit">
+					</div>
+					<a class="ui mini red button remove-rel-attach">
+						{{ctx.Locale.Tr "remove"}}
+					</a>
+				</div>
+			</div>
+			<button type="button" class="ui mini button" id="add-external-link">
+				{{svg "octicon-link-external" 16}}{{ctx.Locale.Tr "repo.release.add_external_asset"}}
+			</button>
+			{{if .IsAttachmentEnabled}}
+				<div class="field">
+					{{template "repo/upload" .}}
+				</div>
+			{{end}}
+			<fieldset class="theme-release-options">
+				{{if not .PageIsEditRelease}}
+					{{template "components/common/settings/checkbox" dict "ID" "release-add-tag-msg" "Name" "add_tag_msg" "Title" (ctx.Locale.Tr "repo.release.add_tag_msg")}}
+				{{else}}
+					<input type="hidden" name="add_tag_msg" value="false">
+				{{end}}
+				{{template "components/common/settings/checkbox" dict "ID" "release-prerelease" "Name" "prerelease" "Checked" .prerelease "Title" (ctx.Locale.Tr "repo.release.prerelease_desc") "Note" (ctx.Locale.Tr "repo.release.prerelease_helper")}}
+				{{if not .DisableDownloadSourceArchives}}
+					{{template "components/common/settings/checkbox" dict "ID" "release-hide-archive-links" "Name" "hide_archive_links" "Checked" .hide_archive_links "Title" (ctx.Locale.Tr "repo.release.hide_archive_links") "Note" (ctx.Locale.Tr "repo.release.hide_archive_links_helper")}}
+				{{end}}
+			</fieldset>
+			{{/* The buttons keep Forgejo's order, which decides the submit button Enter uses; the stylesheet shows the
+			primary action first, as GitHub does. */}}
+			<div class="theme-release-actions">
+				{{if .PageIsEditRelease}}
+					<div class="button-sequence">
+						<a class="secondary button" href="{{.RepoLink}}/releases">
+							{{ctx.Locale.Tr "repo.release.cancel"}}
+						</a>
+						{{if .IsDraft}}
+							<button class="secondary button" type="submit" name="draft" value="{{ctx.Locale.Tr "repo.release.save_draft"}}">
+								{{ctx.Locale.Tr "repo.release.save_draft"}}
+							</button>
+							<button class="primary button">
+								{{ctx.Locale.Tr "repo.release.publish"}}
+							</button>
+						{{else}}
+							<button class="primary button">
+								{{ctx.Locale.Tr "repo.release.edit_release"}}
+							</button>
+						{{end}}
+					</div>
+					<a class="danger button delete-button" data-url="{{$.RepoLink}}/releases/delete" data-id="{{.ID}}" data-modal-id="delete-release">
+						{{svg "octicon-trash" 16}}{{ctx.Locale.Tr "repo.release.delete_release"}}
+					</a>
+				{{else}}
+					<div class="button-sequence">
+						{{if not .tag_name}}
+							<button class="secondary button" name="tag_only" value="1">
+								{{ctx.Locale.Tr "repo.release.add_tag"}}
+							</button>
+						{{end}}
+						<button class="secondary button" name="draft" value="1">
+							{{ctx.Locale.Tr "repo.release.save_draft"}}
+						</button>
+						<button class="primary button">
+							{{ctx.Locale.Tr "repo.release.publish"}}
+						</button>
+					</div>
+				{{end}}
+			</div>
+		</form>
+	</div>
+</div>
+
+{{if .PageIsEditRelease}}
+	<div class="ui g-modal-confirm delete modal" id="delete-release">
+		<div class="header">
+			{{svg "octicon-trash"}}
+			{{ctx.Locale.Tr "repo.release.deletion"}}
+		</div>
+		<div class="content">
+			<p>{{ctx.Locale.Tr "repo.release.deletion_desc"}}</p>
+		</div>
+		{{template "base/modal_actions_confirm" .}}
+	</div>
+{{else}}
+	<script src="{{AssetUrlPrefix}}/js/repo-release-editor.js" defer></script>
+{{end}}
+{{template "base/footer" .}}

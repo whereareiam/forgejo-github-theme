@@ -804,6 +804,51 @@ describe("Forgejo 15 native integration", () => {
     expect(read("styles", "components", "newrepo.ts")).toContain(".page-content.repository.new.repo {");
   });
 
+  it("lays out the release editor as GitHub's New release page with Forgejo's fields and hooks", () => {
+    const read = (...parts: string[]) => fs.readFileSync(path.join(ROOT_DIR, ...parts), "utf-8");
+    const page = read("templates", "repo", "release", "new.tmpl");
+    const menu = read("templates", "repo", "release", "tag_menu.tmpl");
+    // The tag name field lives in GitHub's tag menu; the rest of Forgejo's form contract stays as it was.
+    expect(page).toContain('"Items" "repo/release/tag_menu"');
+    expect(menu).toContain('<input id="tag-name" name="tag_name"');
+    expect(menu).toContain("data-tag=");
+    expect(menu).toContain('ctx.Locale.Tr "repo.tag.create_tag" "%s"');
+    for (const hook of [
+      'class="page-content repository new release"',
+      'id="tag-name-editor"',
+      'id="tag-target-selector"',
+      'name="tag_target"',
+      'id="tag-helper"',
+      'id="release-title" name="title"',
+      '"TextareaName" "content"',
+      '"DropzoneParentContainer" "form"',
+      'name="attachment-edit-name-{{.UUID}}"',
+      'name="attachment-del-{{.UUID}}"',
+      'name="attachment-edit-exturl-{{.UUID}}"',
+      'id="attachment-template"',
+      'name="attachment-template-new-name"',
+      'name="attachment-template-new-exturl"',
+      'id="add-external-link"',
+      'class="ui mini red button remove-rel-attach" data-id="{{.ID}}" data-uuid="{{.UUID}}"',
+      '"Name" "add_tag_msg"',
+      '<input type="hidden" name="add_tag_msg" value="false">',
+      '"Name" "prerelease"',
+      '"Name" "hide_archive_links"',
+      'name="tag_only" value="1"',
+      'name="draft" value="1"',
+      'class="danger button delete-button" data-url="{{$.RepoLink}}/releases/delete" data-id="{{.ID}}" data-modal-id="delete-release"',
+      'id="delete-release"',
+      "/js/repo-release-editor.js",
+    ])
+      expect(page, hook).toContain(hook);
+    // Remove buttons read their ids from the click target, so they hold text only.
+    expect(page).not.toMatch(/remove-rel-attach[^>]*>\s*\{\{svg/);
+    const css = read("styles", "pages", "releases.css");
+    expect(css).toContain(".theme-release-tag-picker .theme-dropdown-panel {");
+    expect(css).toContain("flex-flow: row-reverse wrap-reverse;");
+    expect(css).not.toContain(".repository.new.release .target");
+  });
+
   it("shows the issue's branch as GitHub's Development section, last in both issue sidebars", () => {
     const read = (...parts: string[]) =>
       fs.readFileSync(path.join(ROOT_DIR, "templates", "repo", "issue", ...parts), "utf-8");
