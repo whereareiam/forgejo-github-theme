@@ -1,0 +1,29 @@
+{{template "base/head" .}}
+<div role="main" aria-label="{{.Title}}" class="page-content repository new migrate">
+	<div class="ui container">
+		{{template "components/common/form/header" dict "Title" (ctx.Locale.Tr "migrate.select.title")}}
+		{{template "repo/migrate/helper" .}}
+		<div class="migrate-entries">
+			{{range .Services}}
+				<a class="migrate-entry" href="{{AppSubUrl}}/repo/migrate?service_type={{.}}&org={{$.Org}}&mirror={{$.Mirror}}">
+					{{if eq .Name "github"}}
+						{{svg "octicon-mark-github" 32}}
+					{{else if eq .Name "bitbucketdc"}}
+						{{svg "bitbucketdc" 32}}
+					{{else}}
+						{{svg (printf "gitea-%s" .Name) 32}}
+					{{end}}
+					<div class="content">
+						<h3>
+							{{.Title}}
+						</h3>
+						<div class="description">
+							{{ctx.Locale.Tr (printf "migrate.%s.description" .Name)}}
+						</div>
+					</div>
+				</a>
+			{{end}}
+		</div>
+	</div>
+</div>
+{{template "base/footer" .}}

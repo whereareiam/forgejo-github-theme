@@ -1,0 +1,56 @@
+{{/* Forgejo's advanced settings as rows of the configuration box, inside its disclosure. */}}
+<div class="theme-create-row">
+	<div class="theme-create-row-text">
+		<span class="theme-create-row-title" id="repo_issue_labels_label">{{ctx.Locale.Tr "repo.issue_labels"}}</span>
+	</div>
+	<div class="ui search selection dropdown" aria-labelledby="repo_issue_labels_label">
+		<input type="hidden" name="issue_labels" value="{{.issueLabels}}">
+		<div class="default text">{{ctx.Locale.Tr "repo.issue_labels_helper"}}</div>
+		<div class="menu">
+			<div class="item" data-value="">{{ctx.Locale.Tr "repo.issue_labels_helper"}}</div>
+			{{range .LabelTemplateFiles}}
+				<div class="item" data-value="{{.DisplayName}}">{{.DisplayName}}<br><p>({{.Description}})</p></div>
+			{{end}}
+		</div>
+	</div>
+</div>
+
+{{$supportedFormatsLength := len .SupportedObjectFormats}}
+{{/* Only offer object format selection if there is an actual choice */}}
+{{if ge $supportedFormatsLength 2}}
+	<div class="theme-create-row">
+		<div class="theme-create-row-text">
+			<span class="theme-create-row-title" id="repo_object_format_label">{{ctx.Locale.Tr "repo.object_format"}}</span>
+			<p class="help">{{ctx.Locale.Tr "repo.object_format_helper"}}</p>
+		</div>
+		<div class="ui selection dropdown" aria-labelledby="repo_object_format_label">
+			<input type="hidden" id="object_format_name" name="object_format_name" value="{{.DefaultObjectFormat.Name}}" required>
+			<div class="default text">{{.DefaultObjectFormat.Name}}</div>
+			<div class="menu">
+				{{range .SupportedObjectFormats}}
+					<div class="item" data-value="{{.Name}}">{{.Name}}</div>
+				{{end}}
+			</div>
+		</div>
+	</div>
+{{else}}
+	<input type="hidden" name="object_format_name" value="{{.DefaultObjectFormat.Name}}" required>
+{{end}}
+
+<div class="theme-create-row">
+	<div class="theme-create-row-text">
+		<label class="theme-create-row-title" for="default_branch">{{ctx.Locale.Tr "repo.default_branch"}}</label>
+		<p class="help">{{ctx.Locale.Tr "repo.default_branch_helper"}}</p>
+	</div>
+	<input id="default_branch" name="default_branch" value="{{.default_branch}}" placeholder="{{.default_branch}}">
+</div>
+
+<label class="theme-create-row">
+	<span class="theme-create-row-text">
+		<span class="theme-create-row-title">{{ctx.Locale.Tr "repo.template_helper"}}</span>
+		<span class="help">{{ctx.Locale.Tr "repo.template_description"}}</span>
+	</span>
+	<span class="theme-create-row-switch">
+		<input class="theme-toggle-switch" role="switch" name="template" type="checkbox">
+	</span>
+</label>

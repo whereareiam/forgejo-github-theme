@@ -1,0 +1,50 @@
+{{/* The template row of the configuration box. Forgejo's script fills #repo_template_search from the owner's templates
+	and shows #template_units once one is chosen. */}}
+<div class="theme-create-row">
+	<div class="theme-create-row-text">
+		<span class="theme-create-row-title" id="repo_template_label">{{ctx.Locale.Tr "repo.template"}}</span>
+		<p class="help">{{ctx.Locale.Tr "repo.new_from_template_description"}}</p>
+	</div>
+	<div id="repo_template_search" class="ui search selection dropdown" aria-labelledby="repo_template_label">
+		<input type="hidden" id="repo_template" name="repo_template" value="{{if ne .repo_template 0}}{{.repo_template}}{{end}}">
+		<div class="default text">{{.repo_template_name}}</div>
+		<div class="menu">
+		</div>
+	</div>
+</div>
+
+<fieldset id="template_units" class="tw-hidden theme-create-row theme-create-units">
+	<legend>{{ctx.Locale.Tr "repo.template.items"}}</legend>
+
+	<label>
+		<input name="git_content" type="checkbox" {{if .git_content}}checked{{end}}>
+		{{ctx.Locale.Tr "repo.template.git_content"}}
+	</label>
+	<label>
+		<input name="webhooks" type="checkbox" {{if .webhooks}}checked{{end}}>
+		{{ctx.Locale.Tr "repo.template.webhooks"}}
+	</label>
+	<label>
+		<input name="topics" type="checkbox" {{if .topics}}checked{{end}}>
+		{{ctx.Locale.Tr "repo.template.topics"}}
+	</label>
+	<label>
+		<input name="avatar" type="checkbox" {{if .avatar}}checked{{end}}>
+		{{ctx.Locale.Tr "repo.template.avatar"}}
+	</label>
+	<label>
+		<input name="labels" type="checkbox" {{if .labels}}checked{{end}}>
+		{{ctx.Locale.Tr "repo.template.issue_labels"}}
+	</label>
+	<label>
+		<input name="protected_branch" type="checkbox" {{if .protected_branch}}checked{{end}}>
+		{{ctx.Locale.Tr "repo.settings.protected_branch"}}
+	</label>
+	<label>
+		<input name="git_hooks" type="checkbox" {{if .git_hooks}}checked{{end}}>
+		{{ctx.Locale.Tr "repo.template.git_hooks"}}
+		{{if not .SignedUser.CanEditGitHook}}
+			<span class="help">{{ctx.Locale.Tr "repo.template.git_hooks_tooltip"}}</span>
+		{{end}}
+	</label>
+</fieldset>

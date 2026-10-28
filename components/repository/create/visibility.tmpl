@@ -1,0 +1,13 @@
+{{/* GitHub's Public and Private choices for a new repository, sent as Forgejo's "private" field: Public sends false,
+	Private sends on as Forgejo's checkbox did. Private checks Private; Forced (the site forces private repositories)
+	and Disabled (a fork keeps its parent's visibility) lock both, so nothing is sent; Note explains why. */}}
+{{$locked := or .Forced .Disabled}}
+{{$private := or .Private .Forced}}
+{{$name := "private"}}
+{{if $locked}}{{$name = ""}}{{end}}
+<div class="theme-form-choices" role="radiogroup" aria-label="{{ctx.Locale.Tr "repo.visibility"}}">
+	{{template "components/common/form/choice" dict "Name" $name "Value" "false" "Checked" (not $private) "Disabled" $locked "Icon" "octicon-repo" "Title" (ctx.Locale.Tr "filter.public") "Note" (ctx.Locale.Tr "user.visibility.public.tooltip")}}
+	{{template "components/common/form/choice" dict "Name" $name "Value" "on" "Checked" $private "Disabled" $locked "Icon" "octicon-lock" "Title" (ctx.Locale.Tr "filter.private") "Note" (ctx.Locale.Tr "repo.visibility_description")}}
+	{{if .Forced}}<p class="help">{{ctx.Locale.Tr "repo.visibility_helper_forced"}}</p>{{end}}
+	{{if .Note}}<p class="help">{{.Note}}</p>{{end}}
+</div>

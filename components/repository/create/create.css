@@ -1,0 +1,68 @@
+/* GitHub's Owner / Repository name row (owner.tmpl): the owner menu sized to its account, a 24px slash and the name
+   field taking the rest, their labels above them. The form groups (components/common/form) give fields a 15px
+   margin, a block layout and a 440px limit, more specifically than a page can; the row takes that back. */
+.theme-create-owner-name {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  min-width: 0;
+  margin: 0 0 16px;
+}
+
+.theme-create-owner-name > .field {
+  margin: 0 !important;
+}
+
+.theme-create-owner {
+  flex: none;
+  max-width: 50%;
+}
+
+/* Forgejo sizes the fork and migration dropdowns to half the form with !important. */
+.theme-create-owner-name > .theme-create-owner > .ui.selection.owner.dropdown {
+  display: inline-flex !important;
+  align-items: center;
+  width: auto !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  & > .text {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+    font-weight: 600;
+  }
+  & > .text > .avatar,
+  & > .menu > .item > .avatar {
+    flex: none;
+    margin: 0;
+  }
+  & > .menu {
+    width: auto;
+    min-width: max(100%, 200px);
+  }
+  & > .menu > .item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+}
+
+.theme-create-slash {
+  flex: none;
+  color: var(--color-text-light-1);
+  font-size: 24px;
+  line-height: 32px;
+}
+
+.theme-create-name {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+/* On a phone the owner takes at most 40% of the row so the name stays wide enough to type in. */
+@media (max-width: 767.98px) {
+  .theme-create-owner {
+    max-width: 40%;
+  }
+}

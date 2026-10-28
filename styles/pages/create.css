@@ -1,6 +1,6 @@
-/* Create pages (repository, organization, migration, fork, milestone): GitHub's page instead of Forgejo's box. An
-   800px column, the title as a 24px heading over a divider and the introduction, then the form with its sections
-   divided by lines. Kept as a page stylesheet, outside the size-limited theme files. */
+/* Create pages (repository, fork, migration, organization, milestone): GitHub's page instead of Forgejo's box. An
+   800px column, the shared form header (components/common/form/header) over the form, sections divided by lines and
+   the submit on the right. Kept as a page stylesheet, outside the size-limited theme files. */
 .page-content.new:is(.repo, .org, .migrate, .fork) > .ui.grid {
   box-sizing: border-box;
   width: 100%;
@@ -14,17 +14,6 @@
   padding: 0 !important;
 }
 
-.page-content.new:is(.repo, .org, .migrate, .fork) .ui.form > .ui.top.attached.header {
-  margin: 0;
-  padding: 0 0 8px;
-  border: 0;
-  background: transparent;
-  font-size: 24px;
-  font-weight: 600;
-  line-height: 36px;
-  text-align: left;
-}
-
 .page-content.new:is(.repo, .org, .migrate, .fork) .ui.form > .ui.attached.segment {
   margin: 0;
   padding: 0;
@@ -32,50 +21,25 @@
   background: transparent;
 }
 
-/* Forgejo's introduction (Migrate repository) follows the divider, muted. */
-.page-content.new:is(.repo, .org, .migrate, .fork) .ui.form > .ui.top.attached.header {
-  margin-bottom: 16px;
-  border-bottom: 1px solid var(--color-light-border);
-}
-
-.page-content.new.repo .ui.form > .ui.attached.segment > p.center {
-  margin: 0 0 8px;
-  color: var(--color-text-light-1);
-  text-align: left;
-}
-
-.page-content.new:is(.repo, .org, .migrate, .fork) .ui.form fieldset {
-  margin: 0;
-  padding: 16px 0 0;
-  border: 0;
-}
-
-.page-content.new:is(.repo, .org, .migrate, .fork) .ui.form fieldset + fieldset,
-.page-content.new.repo #non_template > fieldset:first-child {
-  margin-top: 16px;
+/* Sections are divided by a full-width line, 24px from either side. */
+.page-content.new:is(.repo, .org, .migrate, .fork) .ui.form .divider {
+  margin: 24px 0;
   border-top: 1px solid var(--color-light-border);
 }
 
-.page-content.new:is(.repo, .org, .migrate, .fork) .ui.form fieldset > legend {
-  margin-bottom: 8px;
-  padding: 0;
-  font-size: 16px;
-  font-weight: 600;
-  line-height: 24px;
+/* The submit sits on the right below the last divider, as GitHub's Create repository does. */
+.page-content.new:is(.repo, .org, .migrate, .fork) .theme-create-footer {
+  display: flex;
+  justify-content: flex-end;
+  & > .ui.button {
+    margin: 0;
+  }
 }
 
-/* The submit sits after a divider, as GitHub's Create repository does. */
-.page-content.new:is(.repo, .org, .migrate, .fork) .ui.form > .ui.attached.segment > .ui.primary.button {
-  margin-top: 16px;
-}
-
-/* Forgejo lays these forms out with right-aligned labels in a 250px column and indents the header and notes to match,
-   all with !important; GitHub stacks the label over the control. */
+/* Forgejo lays these forms out with right-aligned labels in a 250px column and indents the notes to match, all with
+   !important, and stretches dropdowns to half the form; GitHub stacks the label over the control. */
 .page-content.new:is(.repo, .org, .migrate, .fork) .ui.form {
   width: 100% !important;
-  & .header {
-    padding-inline-start: 0 !important;
-  }
   & .inline.field > label {
     width: auto !important;
     text-align: start;
@@ -89,21 +53,170 @@
   & .inline.field > :is(input, textarea) {
     width: 100%;
   }
-}
-
-/* The legend sits inside the divided section instead of cutting through its line. */
-.page-content.new:is(.repo, .org, .migrate, .fork) .ui.form fieldset > legend {
-  float: left;
-  width: 100%;
-  /* Forgejo divides sections on the legend; the fieldset draws the divider here. */
-  border: 0;
-  & + * {
-    clear: both;
+  & .field > .ui.selection.dropdown:not(.owner) {
+    width: 100% !important;
   }
 }
 
-/* Migration chooser: GitHub has no gallery of large logos; the services become one box with a row per service, its
-   32px logo beside the name and description. */
+/* A migration's access token keeps its help link (a question mark) beside the field instead of on a line of its own. */
+.page-content.new.migrate .ui.form .inline.field:has(> input + a > .svg) {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  column-gap: 8px;
+  & > :is(label, .help) {
+    flex-basis: 100%;
+  }
+  & > input {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+  & > a {
+    display: flex;
+    color: var(--color-text-light-1);
+  }
+  & > a:hover {
+    color: var(--color-primary);
+  }
+}
+
+/* The description spans the form, as on GitHub; the ID outranks the form groups' 440px limit. */
+.page-content.new:is(.repo, .migrate, .fork) .ui.form #description {
+  max-width: none;
+}
+
+/* The name note under the Owner / Repository name row. */
+.page-content.new.repo .theme-create-owner-help {
+  margin: -8px 0 16px;
+}
+
+/* New repository: GitHub's configuration box, a row per choice with the title and note on the left and the control on
+   the right, rows divided by lines. The advanced settings open as more rows inside it. */
+.page-content.new.repo .theme-create-box {
+  border: 1px solid var(--color-light-border);
+  border-radius: var(--border-radius);
+}
+
+.page-content.new.repo .theme-create-box .theme-create-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 0;
+  padding: 16px;
+  border-top: 1px solid var(--color-light-border);
+  font-weight: 400;
+}
+
+.page-content.new.repo .theme-create-box > .theme-create-row:first-child {
+  border-top: 0;
+}
+
+.page-content.new.repo .theme-create-row-text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+  & .help {
+    margin: 4px 0 0;
+  }
+}
+
+.page-content.new.repo .theme-create-row-title {
+  margin: 0;
+  color: var(--color-text);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+}
+
+/* Controls are 240px wide on the right; Fomantic sizes its dropdowns with !important on phones. */
+.page-content.new.repo .theme-create-row > :is(.ui.dropdown, input) {
+  flex: none;
+  width: 240px !important;
+  min-width: 0;
+  max-width: 100%;
+  margin: 0;
+}
+
+.page-content.new.repo label.theme-create-row {
+  cursor: pointer;
+}
+
+.page-content.new.repo .theme-create-row-switch {
+  display: flex;
+  flex: none;
+}
+
+/* The template's items: Forgejo's checkboxes in two columns. */
+.page-content.new.repo .theme-create-box .theme-create-units {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px 16px;
+  min-width: 0;
+  & > legend {
+    float: left;
+    grid-column: 1 / -1;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 20px;
+  }
+  & > label {
+    margin: 0 !important;
+  }
+}
+
+/* Advanced settings: a disclosure row with a chevron that turns when open. */
+.page-content.new.repo .theme-create-advanced > summary {
+  list-style: none;
+  &::-webkit-details-marker {
+    display: none;
+  }
+  &:hover {
+    background: var(--color-hover);
+  }
+  & > .svg {
+    flex: none;
+    color: var(--color-text-light-1);
+    transition: transform 0.12s ease;
+  }
+}
+
+.page-content.new.repo .theme-create-advanced[open] > summary > .svg {
+  transform: rotate(180deg);
+}
+
+.page-content.new.repo
+  .theme-create-box
+  > #non_template:last-child
+  > .theme-create-advanced:last-child:not([open])
+  > summary {
+  border-radius: 0 0 var(--border-radius) var(--border-radius);
+}
+
+.page-content.new.repo .theme-create-box + .theme-create-footer {
+  margin-top: 24px;
+}
+
+/* On a phone a row's control goes below its title and takes the row's width. */
+@media (max-width: 767.98px) {
+  .page-content.new.repo .theme-create-box .theme-create-row:not(label, summary) {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+  .page-content.new.repo .theme-create-row > :is(.ui.dropdown, input) {
+    width: 100% !important;
+  }
+  .page-content.new.repo .theme-create-box .theme-create-units {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Migration chooser: the header over a grid of cards, two to a row, each with the service's 32px logo beside its
+   name and description. */
 .page-content.repository.new.migrate > .ui.container {
   box-sizing: border-box;
   width: 100% !important;
@@ -112,33 +225,24 @@
   padding: 32px 16px;
 }
 
-.page-content.repository.new.migrate > .ui.container > h2 {
-  margin: 0 0 16px !important;
-  padding-bottom: 8px;
-  border-bottom: 1px solid var(--color-light-border);
-  font-size: 24px;
-  font-weight: 600;
-  line-height: 36px;
-}
-
 .page-content.repository.new.migrate .migrate-entries {
-  display: block;
-  border: 1px solid var(--color-light-border);
-  border-radius: var(--border-radius);
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
 }
 
 .page-content.repository.new.migrate .migrate-entry {
+  display: flex;
   flex-direction: row;
-  align-items: center;
+  align-items: flex-start;
   gap: 16px;
   padding: 16px;
-  border: 0;
-  border-radius: 0;
-  background: transparent;
+  border: 1px solid var(--color-light-border);
+  border-radius: var(--border-radius);
+  background: var(--color-box-body);
+  color: var(--color-text);
+  text-decoration: none;
   transition: none;
-  & + .migrate-entry {
-    border-top: 1px solid var(--color-light-border);
-  }
   &:hover {
     transform: none;
     box-shadow: none;
@@ -151,6 +255,7 @@
     padding: 0;
   }
   & .content {
+    min-width: 0;
     margin: 0;
     padding: 0;
     border: 0;
@@ -164,11 +269,17 @@
     line-height: 24px;
   }
   & .description {
-    margin-top: 2px;
+    margin-top: 4px;
     color: var(--color-text-light-1);
     font-size: 12px;
     line-height: 18px;
     text-wrap: wrap;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .page-content.repository.new.migrate .migrate-entries {
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
