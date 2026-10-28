@@ -1,3 +1,5 @@
+import pkg from "../../../package.json";
+
 export const COMMANDS = {
   bun: "bun",
   docker: "docker",
@@ -10,7 +12,8 @@ export const COMPOSE = {
   file: "dev/docker-compose.yml",
   service: "forgejo",
   container: "forgejo-github-theme-dev",
-  image: "code.forgejo.org/forgejo/forgejo:17.0.0-rootless",
+  /** The pinned Forgejo release of package.json; docker-compose.yml names the same image. */
+  image: `code.forgejo.org/forgejo/forgejo:${pkg.forgejo}-rootless`,
 } as const;
 
 export const PREVIEW = {
