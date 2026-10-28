@@ -18,7 +18,15 @@
 				{{template "custom/signup_top"}}
 				<div class="field {{if and (.Err_UserName) (or (not .LinkAccountMode) (and .LinkAccountMode .LinkAccountModeRegister))}}error{{end}}">
 					<label for="user_name">{{ctx.Locale.Tr "username"}}</label>
-					<input id="user_name" type="text" name="user_name" value="{{.user_name}}" autocomplete="username" autofocus required autocorrect="off" autocapitalize="none">
+					{{if .UsernamePrefix}}
+						<div class="ui labeled input">
+							<div class="ui label">{{.UsernamePrefix}}</div>
+							<input id="user_name" type="text" name="user_name" value="{{.user_name}}" autocomplete="username" autofocus required autocorrect="off" autocapitalize="none" aria-describedby="user_name_prefix_info">
+						</div>
+						<span id="user_name_prefix_info" class="help">{{ctx.Locale.Tr "auth.signup.username.prefix.info" .UsernamePrefix}}</span>
+					{{else}}
+						<input id="user_name" type="text" name="user_name" value="{{.user_name}}" autocomplete="username" autofocus required autocorrect="off" autocapitalize="none">
+					{{end}}
 				</div>
 				<div class="field {{if .Err_Email}}error{{end}}">
 					<label for="email">{{ctx.Locale.Tr "email"}}</label>

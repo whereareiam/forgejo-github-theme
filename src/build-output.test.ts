@@ -626,6 +626,10 @@ describe("Forgejo 15 native integration", () => {
     );
     expect(order).toEqual([...order].sort((a, b) => a - b));
     expect(tabs).toContain('{{svg "octicon-star"}} Stars');
+    // The profile's funding links open from a Sponsor-style button beside Follow.
+    const avatar = read("templates", "shared", "user", "profile_big_avatar.tmpl");
+    expect(avatar).toContain('command="show-modal" commandfor="funding-modal"');
+    expect(avatar).toContain('{{template "shared/funding" .}}');
     const search = read("templates", "user", "profile_repository_search.tmpl");
     expect(search).toContain('"Find a repository…"');
     expect(search).toContain('"Search starred repositories"');
@@ -665,6 +669,10 @@ describe("Forgejo 15 native integration", () => {
     expect(menu).toContain('<label class="theme-dropdown-action" for="new-avatar">Upload a photo…</label>');
     expect(menu).toContain('form="avatar-gravatar-form"');
     expect(menu).toContain("Remove photo");
+    // The Gravatar choice sends the address typed under the picture, not only the stored one.
+    expect(profile).toContain('<form id="avatar-gravatar-form" class="ui form theme-avatar-gravatar"');
+    expect(profile).toContain('<input id="gravatar" name="gravatar" value="{{.SignedUser.AvatarEmail}}"');
+    expect(profile).not.toContain('<input type="hidden" name="gravatar"');
     // Section titles sit inside their fieldset, not on its border, and the picture's title matches them.
     const settingsCss = read("components", "common", "settings", "settings.css");
     expect(settingsCss).toMatch(/fieldset > legend \{\s*float: left;\s*width: 100%;\s*border: 0;/);
@@ -992,7 +1000,8 @@ describe("Forgejo 15 native integration", () => {
     expect(signInTemplate).toContain('role="heading" aria-level="1"');
     expect(signInTemplate).toContain("Sign in to {{AppDisplayName}}");
     expect(signInTemplate).not.toContain('class="required field');
-    expect(signInTemplate).not.toContain('name="remember"');
+    // Forgejo's Remember this device: the session outlives the browser only when it is checked.
+    expect(signInTemplate).toContain('<input name="remember" type="checkbox"> {{ctx.Locale.Tr "auth.remember_me"}}');
     expect(signInTemplate).toContain('href="{{AppSubUrl}}/user/forgot_password"');
     expect(oauthTemplate).toContain("Continue with {{$provider.DisplayName}}");
     expect(oauthTemplate).not.toContain("sign_in_with_provider");
@@ -1026,6 +1035,9 @@ describe("Forgejo 15 native integration", () => {
     expect(form).toContain('class="signin-logo"');
     expect(form).toContain('class="signin-footer"');
     expect(form).not.toContain("ui top attached header");
+    // A site-wide username prefix stays visible before the field, with Forgejo's note on it.
+    expect(form).toContain('<div class="ui label">{{.UsernamePrefix}}</div>');
+    expect(form).toContain('"auth.signup.username.prefix.info" .UsernamePrefix');
   });
 
   it("preserves Forgejo's native two-factor form contracts in the shared challenge layout", () => {
