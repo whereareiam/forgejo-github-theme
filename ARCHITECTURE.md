@@ -22,7 +22,8 @@ routes; `components/project` contains the project list shared by repository, org
 
 The bundle step assembles this source tree into `dist/forgejo/templates` and `dist/forgejo/public/assets`, which are the
 installable Forgejo paths. The local preview mounts that assembled tree, so the same output is exercised during
-development and packaging.
+development and packaging. Every stylesheet in `styles/pages` ships as `css/components/pages/<name>.css`; a new one only
+needs its `<link>` in `templates/base/component_assets.tmpl`.
 
 ## Architecture Layers
 
@@ -454,7 +455,6 @@ outputs static CSS strings.
 ├── scripts/                # Build and utility scripts
 │   ├── buildPrimerTSToken.ts  # Generate primer/ TypeScript tokens from @primer/primitives
 │   ├── syncTheme.ts        # Sync build artifacts to remote Gitea instance
-│   ├── updateGitea.ts      # Update Gitea reference files
 │   └── version.ts          # Version management
 ├── dist/                   # Build output (30+ CSS files)
 └── templates/              # Optional Gitea Go template overrides

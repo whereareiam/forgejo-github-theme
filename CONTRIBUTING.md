@@ -19,7 +19,6 @@
 | primer            | Auto-generated Primer design tokens                               |
 | scripts           | Build and utility scripts                                         |
 | templates         | Gitea template overrides (optional)                               |
-| gitea             | Upstream Gitea reference files                                    |
 | screenshots       | Theme screenshots                                                 |
 
 ## Contribution Notes

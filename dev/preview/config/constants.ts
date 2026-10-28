@@ -10,7 +10,7 @@ export const COMPOSE = {
   file: "dev/docker-compose.yml",
   service: "forgejo",
   container: "forgejo-github-theme-dev",
-  image: "code.forgejo.org/forgejo/forgejo:16.0.3-rootless",
+  image: "code.forgejo.org/forgejo/forgejo:17.0.0-rootless",
 } as const;
 
 export const PREVIEW = {

@@ -36,7 +36,6 @@
     "bundle:ci": "bun bundle && bun vitest",
     "sync:theme": "bun scripts/syncTheme.ts",
     "update:primer": "bun scripts/buildPrimerTSToken.ts",
-    "update:gitea": "bun scripts/updateGitea.ts",
     "update:snapshot": "bun vitest --update",
     "install:clean": "rm -rf node_modules bun.lock bun.lockb && bun install"
   },
@@ -57,7 +56,6 @@
     "style-dictionary": "^5.5.0",
     "typescript": "^7.0.2",
     "typescript-eslint": "^8.63.0",
-    "undici": "^7.28.0",
     "vite": "^8.1.4",
     "vitest": "4.1.10"
   },
