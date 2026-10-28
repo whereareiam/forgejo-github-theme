@@ -19,7 +19,11 @@
 								{{template "repo/commit_statuses" dict "Status" (index $.CommitLastStatus .PullRequest.ID) "Statuses" (index $.CommitStatuses .PullRequest.ID)}}
 							{{end}}
 						{{end}}
-						{{if ne $.themeList "issues"}}{{template "shared/issuelist_labels" dict "." $ "Issue" .}}{{end}}
+						<span class="labels-list tw-ml-1">
+							{{range .Labels}}
+								<a href="?q={{$.Keyword}}&type={{$.ViewType}}&state={{$.State}}&labels={{.ID}}{{if ne $.listType "milestone"}}&milestone={{$.MilestoneID}}{{end}}&assignee={{$.AssigneeID}}&poster={{$.PosterID}}{{if $.ShowArchivedLabels}}&archived=true{{end}}" rel="nofollow">{{template "components/repository/label/label" .}}</a>
+							{{end}}
+						</span>
 					</div>
 					{{if or .TotalTrackedTime .Assignees .NumComments}}
 					<div class="flex-item-trailing">
@@ -143,16 +147,14 @@
 						{{svg "octicon-history" 14}}
 						{{ctx.Locale.Tr "issues.updated" (DateUtils.TimeSince .UpdatedUnix)}}
 					</span>
-								{{end}}
-							</div>
-							{{/* GitHub lists an issue's labels below its title and metadata. */}}
-							{{if and (eq $.themeList "issues") .Labels}}{{template "shared/issuelist_labels" dict "." $ "Issue" .}}{{end}}
-						</div>
-					</div>
-					{{else}}
-					<div class="tw-text-center tw-p-8{{if $.themeList}} theme-empty theme-empty-compact{{end}}">
-						{{if eq $.themeList "pulls"}}{{svg "octicon-git-pull-request" 24}}{{else if eq $.themeList "issues"}}{{svg "octicon-issue-opened" 24}}{{end}}
-						<h3 class="tw-my-4">{{ctx.Locale.Tr "issues.search.no_results.title"}}</h3>
+					{{end}}
+				</div>
+			</div>
+		</div>
+	{{else}}
+		<div class="tw-text-center tw-p-8{{if $.themeList}} theme-empty theme-empty-compact{{end}}">
+			{{if eq $.themeList "pulls"}}{{svg "octicon-git-pull-request" 24}}{{else if eq $.themeList "issues"}}{{svg "octicon-issue-opened" 24}}{{end}}
+			<h3 class="tw-my-4">{{ctx.Locale.Tr "issues.search.no_results.title"}}</h3>
 			<p class="tw-text-placeholder-text">{{ctx.Locale.Tr "issues.search.no_results.hint"}}</p>
 		</div>
 	{{end}}

@@ -1,0 +1,30 @@
+{{/* The Code menu on a pull request's title row, like GitHub's: the repository's clone URL, then the commands that
+	fetch and check out the pull request's branch. They are Forgejo's own, from the command line instructions at the
+	bottom of the conversation (repo/issue/view_content/pull_merge_instruction). */}}
+{{$pull := .Issue.PullRequest}}
+{{$localBranch := $pull.HeadBranch}}
+{{if ne $pull.HeadRepoID $pull.BaseRepoID}}
+	{{$localBranch = print $pull.HeadRepo.OwnerName "-" $pull.HeadBranch}}
+{{end}}
+<section class="pull-code-section">
+	<h2 class="pull-code-title">{{svg "octicon-terminal" 16}}<span>{{ctx.Locale.Tr "repo.clone_this_repo"}}</span></h2>
+	<div class="pull-code-clone">
+		{{template "repo/clone_buttons" .}}
+	</div>
+</section>
+<section class="pull-code-section">
+	<h2 class="pull-code-title">{{svg "octicon-git-branch" 16}}<span>{{ctx.Locale.Tr "repo.pulls.cmd_instruction_checkout_title"}}</span></h2>
+	<p class="pull-code-description">{{ctx.Locale.Tr "repo.pulls.cmd_instruction_checkout_desc"}}</p>
+	<div class="pull-code-command">
+		{{/* One command per line, so copying the block copies both. */}}
+		<pre id="pull-checkout-command">
+			{{- if eq $pull.Flow 0 -}}
+				git fetch -u {{if ne $pull.HeadRepoID $pull.BaseRepoID}}<origin-url data-url="{{$pull.HeadRepo.Link}}"></origin-url>{{else}}origin{{end}} "{{$pull.HeadBranch}}:{{$localBranch}}"
+			{{- else -}}
+				git fetch -u origin "+refs/pull/{{$pull.Index}}/head:{{$localBranch}}"
+			{{- end}}
+git switch "{{$localBranch}}"</pre>
+		<button type="button" class="theme-icon-button" data-clipboard-target="#pull-checkout-command" data-tooltip-content="{{ctx.Locale.Tr "copy"}}" aria-label="{{ctx.Locale.Tr "copy"}}">{{svg "octicon-copy" 16}}</button>
+	</div>
+</section>
+{{template "repo/clone_script" .}}

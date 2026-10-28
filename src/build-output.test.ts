@@ -727,6 +727,47 @@ describe("Forgejo 15 native integration", () => {
     expect([...order].sort((a, b) => a - b)).toEqual(order);
   });
 
+  it("lists labels right after the title for issues and pull requests alike", () => {
+    const list = fs.readFileSync(path.join(ROOT_DIR, "templates", "shared", "issuelist.tmpl"), "utf-8");
+    expect(list.match(/class="labels-list/g)).toHaveLength(1);
+    expect(list.indexOf('class="labels-list')).toBeGreaterThan(list.indexOf("issue-title"));
+    expect(list.indexOf('class="labels-list')).toBeLessThan(list.indexOf("flex-item-trailing"));
+    expect(list).not.toMatch(/themeList "issues"\)? *\.Labels|ne \$\.themeList "issues"/);
+    const css = fs.readFileSync(path.join(DIST_DIR, `${PREFIX}light.css`), "utf-8");
+    expect(css).not.toContain(".flex-item-main>.labels-list");
+    // Inline on phones too: the labels follow the title at every width.
+    const style = fs.readFileSync(path.join(ROOT_DIR, "styles", "components", "issues", "issue_list.ts"), "utf-8");
+    const titleLabels = style.slice(style.indexOf("const titleLabels"), style.indexOf("export default"));
+    expect(titleLabels).toContain("& #issue-list .flex-item-title > .labels-list {\n      display: inline;");
+    expect(titleLabels).not.toContain("@media");
+  });
+
+  it("gives a pull request's title row GitHub's Edit button and green Code menu", () => {
+    const read = (...parts: string[]) => fs.readFileSync(path.join(ROOT_DIR, ...parts), "utf-8");
+    const title = read("templates", "repo", "issue", "view_title.tmpl");
+    // Forgejo's title editor binds the button by id; issues and pull requests share it.
+    expect(title.match(/id="issue-title-edit-show"/g)).toHaveLength(1);
+    expect(title).toContain('<button id="issue-title-edit-show" class="ui small basic button">');
+    expect(title).not.toContain("issue-title-edit-pencil");
+    expect(title).toContain('"Primary" true "Class" "pull-code-menu" "Items" "repo/issue/view_title_code"');
+    expect(title).toContain(
+      "(not .Issue.PullRequest.HasMerged) (not .Issue.IsClosed) (.Permission.CanRead $.UnitTypeCode)"
+    );
+    const menu = read("templates", "repo", "issue", "view_title_code.tmpl");
+    for (const part of [
+      '{{template "repo/clone_buttons" .}}',
+      '{{template "repo/clone_script" .}}',
+      'ctx.Locale.Tr "repo.pulls.cmd_instruction_checkout_title"',
+      'data-clipboard-target="#pull-checkout-command"',
+      "+refs/pull/{{$pull.Index}}/head:{{$localBranch}}",
+      'git switch "{{$localBranch}}"',
+    ])
+      expect(menu).toContain(part);
+    const dropdown = read("components", "common", "dropdown", "dropdown.tmpl");
+    expect(dropdown).toContain("{{with .Class}} {{.}}{{end}}");
+    expect(dropdown).toContain("{{if .Primary}} primary{{end}}");
+  });
+
   it("joins the file editor's tabs and find button to the editor as GitHub's box header", () => {
     const style = fs.readFileSync(path.join(ROOT_DIR, "styles", "components", "repo", "repo_file_view.ts"), "utf-8");
     expect(style).toContain("#editor-bar ~ .ui.bottom.tab.segment {");

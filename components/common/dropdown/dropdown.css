@@ -22,6 +22,15 @@
   background: var(--github-button-default-bgColor-active);
 }
 
+/* A primary trigger keeps the global green button colours; open, it shows the pressed shade. */
+.theme-dropdown > summary.theme-control.primary {
+  border-color: var(--github-button-primary-borderColor-rest);
+}
+
+.theme-dropdown[open] > summary.theme-control.primary {
+  background: var(--github-button-primary-bgColor-active);
+}
+
 .theme-dropdown.theme-dropdown-quiet > summary.theme-control {
   border-color: transparent;
   background: transparent;

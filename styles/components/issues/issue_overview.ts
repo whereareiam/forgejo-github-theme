@@ -92,10 +92,6 @@ export default css`
         line-height: 24px;
         font-weight: 500;
       }
-      & .flex-item-main > .labels-list {
-        display: flex;
-        margin: 8px 0 0 0 !important;
-      }
       & .issue-meta {
         font-size: 12px;
         line-height: 18px;
