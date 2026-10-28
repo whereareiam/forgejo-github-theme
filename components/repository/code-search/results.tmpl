@@ -1,0 +1,97 @@
+{{/* GitHub's code search results, shared by repository and explore code search. Called with the page context: the
+indexer's languages as a filter beside the results, the path being searched, the number of files, and a box per file
+with its path, the number of matching lines, and the matching lines with their matches highlighted. */}}
+{{$languages := .SearchResultLanguages}}
+<div class="theme-code-search-layout{{if $languages}} theme-code-search-has-filters{{end}}">
+	{{if $languages}}
+		<nav class="theme-code-search-filters" aria-label="{{ctx.Locale.Tr "settings.language"}}">
+			<h2>{{ctx.Locale.Tr "settings.language"}}</h2>
+			<div class="ui vertical menu theme-nav-list">
+				{{range $term := $languages}}
+					{{$active := eq $.Language $term.Language}}
+					<a class="{{if $active}}active {{end}}item" href="?q={{$.Keyword}}{{if not $active}}&l={{$term.Language}}{{end}}&mode={{$.CodeSearchMode}}&path={{$.CodeSearchPath}}"{{if $active}} aria-current="true"{{end}}>
+						<i class="color-icon" style="background-color: {{$term.Color}}"></i>
+						<span class="theme-code-search-filter-name">{{$term.Language}}</span>
+						<span class="theme-counter">{{$term.Count}}</span>
+					</a>
+				{{end}}
+			</div>
+		</nav>
+	{{end}}
+	<div class="theme-code-search-main">
+		{{if .CodeSearchPath}}
+			<nav class="breadcrumb theme-code-search-path">
+				<a class="section" href="?q={{.Keyword}}&mode={{.CodeSearchMode}}">@</a>
+				{{$href := ""}}
+				{{- range $i, $path := StringUtils.Split .CodeSearchPath "/" -}}
+					{{if eq $i 0}}
+						{{$href = $path}}
+					{{else}}
+						{{$href = StringUtils.Join (StringUtils.Make $href $path) "/"}}
+					{{end}}
+					<span class="breadcrumb-divider">/</span>
+					<a class="section" href="?q={{$.Keyword}}&mode={{$.CodeSearchMode}}&path={{$href}}">{{$path}}</a>
+				{{- end -}}
+			</nav>
+		{{end}}
+		{{if .SearchResults}}
+			{{$total := .Page.Paginater.Total}}
+			<h2 class="theme-code-search-count">{{ctx.Locale.TrN $total "repo.activity.git_stats_file_1" "repo.activity.git_stats_file_n" $total}}</h2>
+			<div class="repository search theme-code-search-results">
+				{{range $result := .SearchResults}}
+					{{$repo := or $.Repo (index $.RepoMaps $result.RepoID)}}
+					{{$fileLink := printf "%s/src/commit/%s/%s" $repo.Link (PathEscape $result.CommitID) (PathEscapeSegments $result.Filename)}}
+					{{$matches := 0}}
+					{{range $result.Lines}}{{if StringUtils.Contains (StringUtils.ToString .FormattedContent) "search-highlight"}}{{$matches = Eval $matches "+" 1}}{{end}}{{end}}
+					<details class="theme-code-result repo-search-result" open>
+						<summary class="theme-code-result-header">
+							<span class="theme-code-result-toggle">{{svg "octicon-chevron-down" 16}}</span>
+							<span class="theme-code-result-title">
+								{{if not $.Repo}}
+									{{svg "octicon-repo" 16}}
+									<a class="theme-code-result-repo" rel="nofollow" href="{{$repo.Link}}">{{$repo.FullName}}</a>
+									{{if $repo.IsArchived}}<span class="ui basic label">{{ctx.Locale.Tr "repo.desc.archived"}}</span>{{end}}
+									<span class="theme-code-result-separator" aria-hidden="true">·</span>
+								{{end}}
+								<a class="theme-code-result-path file-link" rel="nofollow" href="{{$fileLink}}">{{$result.Filename}}</a>
+								{{if $matches}}<span class="theme-counter">{{$matches}}</span>{{end}}
+							</span>
+							{{if or $result.Language (not $result.UpdatedUnix.IsZero)}}
+								<span class="theme-code-result-meta">
+									{{if $result.Language}}
+										<span class="theme-code-result-language"><i class="color-icon" style="background-color: {{$result.Color}}"></i>{{$result.Language}}</span>
+									{{end}}
+									{{if not $result.UpdatedUnix.IsZero}}
+										<span>{{ctx.Locale.Tr "explore.code_last_indexed_at" (DateUtils.TimeSince $result.UpdatedUnix)}}</span>
+									{{end}}
+								</span>
+							{{end}}
+						</summary>
+						<div class="theme-code-result-body file-code code-view">
+							<ol class="theme-code-result-lines">
+								{{$expNum := 0}}
+								{{range $result.Lines}}
+									{{if and (gt $expNum 0) (ne .Num $expNum)}}
+										</ol>
+										<ol class="theme-code-result-lines">
+									{{end}}
+									<li value="{{.Num}}">
+										<a class="lines-num" href="{{$fileLink}}#L{{.Num}}">{{.Num}}</a>
+										<span class="lines-code chroma"><code class="code-inner">{{.FormattedContent}}</code></span>
+									</li>
+									{{$expNum = Eval .Num "+" 1}}
+								{{end}}
+							</ol>
+						</div>
+					</details>
+				{{end}}
+			</div>
+			{{template "base/paginate" .}}
+		{{else if .Keyword}}
+			<div class="theme-empty">
+				{{svg "octicon-search" 24}}
+				<h3>{{ctx.Locale.Tr "search.no_results"}}</h3>
+			</div>
+		{{end}}
+	</div>
+</div>

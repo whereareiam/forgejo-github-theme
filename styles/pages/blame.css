@@ -1,0 +1,175 @@
+/* GitHub's blame view: per hunk the commit's date, author and title on its first line, a reblame button, and an
+   age bar beside the line numbers from light (oldest commit in the file) to strong (newest), with the same scale as a
+   legend in the file header. blame-age.js sets each row's --theme-blame-age (19% to 100% of orange, so the oldest
+   step still shows on a dark background); without it the bar stays empty. */
+.theme-blame-legend {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-right: 16px;
+  color: var(--color-text-light-1);
+  font: 12px/20px var(--fonts-proportional);
+}
+
+.theme-blame-legend-scale {
+  display: flex;
+  gap: 2px;
+  & > span {
+    width: 6px;
+    height: 12px;
+    border-radius: 2px;
+    background: color-mix(in srgb, var(--color-orange) var(--theme-blame-age), transparent);
+  }
+  & > span:nth-child(1) {
+    --theme-blame-age: 19%;
+  }
+  & > span:nth-child(2) {
+    --theme-blame-age: 28%;
+  }
+  & > span:nth-child(3) {
+    --theme-blame-age: 37%;
+  }
+  & > span:nth-child(4) {
+    --theme-blame-age: 46%;
+  }
+  & > span:nth-child(5) {
+    --theme-blame-age: 55%;
+  }
+  & > span:nth-child(6) {
+    --theme-blame-age: 64%;
+  }
+  & > span:nth-child(7) {
+    --theme-blame-age: 73%;
+  }
+  & > span:nth-child(8) {
+    --theme-blame-age: 82%;
+  }
+  & > span:nth-child(9) {
+    --theme-blame-age: 91%;
+  }
+  & > span:nth-child(10) {
+    --theme-blame-age: 100%;
+  }
+}
+
+.theme-blame-history {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 4px;
+  margin-left: 8px !important;
+}
+
+.theme-blame .file-header-right > .btn-octicon {
+  margin-left: 4px;
+}
+
+.theme-blame .code-view table {
+  border-collapse: collapse;
+}
+
+.theme-blame .code-view tr {
+  --theme-blame-age-color: color-mix(in srgb, var(--color-orange) var(--theme-blame-age, 0%), transparent);
+}
+
+.theme-blame .code-view tr.top-line-blame > td {
+  border-top: 1px solid var(--color-light-border);
+}
+
+.theme-blame .code-view td.lines-commit {
+  width: 320px;
+  min-width: 320px;
+  max-width: 320px;
+  padding: 0 0 0 16px !important;
+  vertical-align: top;
+  background: var(--color-body);
+  & .blame-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: auto;
+    max-width: none;
+    height: 20px;
+    padding: 0;
+    font: 12px/20px var(--fonts-proportional);
+    user-select: none;
+  }
+  & .blame-time {
+    flex: none;
+    width: 88px;
+    overflow: hidden;
+    color: var(--color-text-light-1);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  & .blame-avatar {
+    display: flex;
+    flex: none;
+  }
+  & .blame-avatar .ui.avatar {
+    width: 16px;
+    height: 16px;
+    margin: 0;
+  }
+  & .blame-message {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    color: var(--color-text);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  & .blame-message:hover {
+    color: var(--github-fgColor-accent);
+  }
+}
+
+/* The reblame button and, on its right, the hunk's age bar. */
+.theme-blame .code-view td.lines-blame-btn {
+  display: table-cell;
+  width: 34px;
+  min-width: 34px;
+  padding: 0 6px 0 4px !important;
+  vertical-align: top;
+  background: var(--color-body);
+  box-shadow: inset -2px 0 0 var(--theme-blame-age-color);
+  & > a {
+    display: grid;
+    place-items: center;
+    width: 24px;
+    height: 20px;
+    border-radius: var(--border-radius);
+    color: var(--color-text-light-1);
+  }
+  & > a:hover {
+    background: var(--github-control-transparent-bgColor-hover);
+    color: var(--color-text);
+  }
+}
+
+.theme-blame .code-view td.lines-num {
+  padding-left: 8px;
+}
+
+/* Beside the file tree a 320px gutter leaves the code a few characters wide, so it narrows before phones. */
+@media (max-width: 1011.98px) {
+  .theme-blame-legend {
+    display: none;
+  }
+  .theme-blame .code-view td.lines-commit {
+    width: 240px;
+    min-width: 240px;
+    max-width: 240px;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .theme-blame .code-view td.lines-commit {
+    width: 136px;
+    min-width: 136px;
+    max-width: 136px;
+    padding-left: 8px !important;
+  }
+  .theme-blame .code-view td.lines-commit .blame-time {
+    display: none;
+  }
+}

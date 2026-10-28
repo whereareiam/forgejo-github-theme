@@ -1,0 +1,29 @@
+{{/* Code search for a repository, an owner and Explore: the branch beside the search field when git grep searches a
+repository, then GitHub's results from the shared code search component. */}}
+<div class="theme-code-search">
+	<div class="theme-code-search-bar">
+		{{if .CodeIndexerDisabled}}
+			{{$branchURLPrefix := printf "%s/search/branch/" $.RepoLink}}
+			{{$tagURLPrefix := printf "%s/search/tag/" $.RepoLink}}
+			{{$suffix := printf "?q=%s&mode=%s" (.Keyword|QueryEscape) .CodeSearchMode}}
+			{{template "repo/branch_dropdown" dict "root" . "ContainerClasses" "theme-code-search-branch" "branchURLPrefix" $branchURLPrefix "branchURLSuffix" $suffix "tagURLPrefix" $tagURLPrefix "tagURLSuffix" $suffix}}
+		{{end}}
+		<form class="ui form ignore-dirty theme-search-control">
+			<input type="hidden" name="path" value="{{.CodeSearchPath}}">
+			{{template "shared/search/combo_multi"
+				dict
+					"Value" .Keyword
+					"Disabled" .CodeIndexerUnavailable
+					"Placeholder" (ctx.Locale.Tr "search.code_kind")
+					"Selected" $.CodeSearchMode
+					"Options" $.CodeSearchOptions}}
+		</form>
+	</div>
+	{{if .CodeIndexerUnavailable}}
+		<div class="ui error message">
+			<p>{{ctx.Locale.Tr "search.code_search_unavailable"}}</p>
+		</div>
+	{{else}}
+		{{template "shared/search/code/results" .}}
+	{{end}}
+</div>

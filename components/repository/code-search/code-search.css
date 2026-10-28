@@ -1,0 +1,291 @@
+/* GitHub's code search: the field (with the branch when git grep searches a repository), the indexer's languages as a
+   nav list beside the results, the file count, and a box per file whose header carries its path and number of
+   matching lines over the lines themselves. */
+.theme-code-search {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.theme-code-search-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  & > .theme-code-search-branch {
+    flex: none;
+    max-width: 50%;
+  }
+  & > form {
+    flex: 1;
+    min-width: 0;
+    margin: 0;
+  }
+}
+
+.theme-code-search-layout.theme-code-search-has-filters {
+  display: grid;
+  grid-template-columns: 256px minmax(0, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+
+.theme-code-search-filters {
+  position: sticky;
+  top: 16px;
+  min-width: 0;
+  & > h2 {
+    margin: 0 0 4px;
+    padding: 0 8px;
+    color: var(--color-text-light-1);
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 20px;
+  }
+  /* Fomantic's vertical menu is a 15rem block; the list fills the column instead. */
+  & .ui.vertical.menu.theme-nav-list {
+    width: 100%;
+    margin: 0;
+  }
+  & .theme-nav-list > .item > .color-icon {
+    flex: none;
+    width: 12px;
+    height: 12px;
+    margin: 0;
+    border-radius: 50%;
+  }
+  & .theme-code-search-filter-name {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+.theme-code-search-main {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+
+.theme-code-search-path {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  font-size: 14px;
+  line-height: 20px;
+  overflow-wrap: anywhere;
+}
+
+.theme-code-search-count {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
+}
+
+.theme-code-search-results {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.theme-code-result {
+  border: 1px solid var(--color-light-border);
+  border-radius: var(--border-radius);
+  background: var(--color-body);
+  overflow: hidden;
+}
+
+.theme-code-result-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 8px;
+  min-height: 40px;
+  padding: 6px 16px 6px 8px;
+  background: var(--color-box-header);
+  font-size: 14px;
+  line-height: 20px;
+  list-style: none;
+  cursor: pointer;
+  &::-webkit-details-marker {
+    display: none;
+  }
+  &:focus-visible {
+    outline: 2px solid var(--github-fgColor-accent);
+    outline-offset: -2px;
+  }
+}
+
+.theme-code-result[open] > .theme-code-result-header {
+  border-bottom: 1px solid var(--color-light-border);
+}
+
+.theme-code-result-toggle {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--border-radius);
+  color: var(--color-text-light-1);
+  transition: transform 0.1s;
+}
+
+.theme-code-result-header:hover .theme-code-result-toggle {
+  background: var(--github-control-transparent-bgColor-hover);
+}
+
+.theme-code-result:not([open]) .theme-code-result-toggle {
+  transform: rotate(-90deg);
+}
+
+.theme-code-result-title {
+  display: flex;
+  flex: 1;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 8px;
+  min-width: 0;
+  & > .svg {
+    flex: none;
+    color: var(--color-text-light-1);
+  }
+  & > .ui.basic.label {
+    margin: 0;
+  }
+}
+
+.theme-code-result-repo {
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+.theme-code-result-separator {
+  color: var(--color-text-light-1);
+}
+
+.theme-code-result-path {
+  min-width: 0;
+  color: var(--color-text);
+  overflow-wrap: anywhere;
+}
+
+.theme-code-result-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 16px;
+  margin-left: auto;
+  color: var(--color-text-light-1);
+  font-size: 12px;
+  line-height: 20px;
+}
+
+.theme-code-result-language {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  & > .color-icon {
+    width: 12px;
+    height: 12px;
+    margin: 0;
+    border-radius: 50%;
+  }
+}
+
+.theme-code-result-body {
+  overflow-x: auto;
+  padding: 8px 0;
+}
+
+.theme-code-result-lines {
+  min-width: max-content;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  & + & {
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid var(--color-light-border);
+  }
+  & > li {
+    display: flex;
+    font: 12px/20px var(--fonts-monospace);
+  }
+  & .lines-num {
+    flex: none;
+    box-sizing: border-box;
+    min-width: 50px;
+    padding: 0 16px 0 10px;
+    color: var(--color-text-light-1);
+    text-align: right;
+    user-select: none;
+  }
+  & .lines-num:hover {
+    color: var(--color-text);
+    text-decoration: none;
+  }
+  & .lines-code {
+    flex: 1;
+    padding-right: 16px;
+    background: transparent;
+  }
+  & .code-inner {
+    font: inherit;
+    white-space: pre;
+  }
+  & .search-highlight {
+    border-radius: 2px;
+    background: var(--color-highlight-bg);
+    color: inherit;
+  }
+  & .search-highlight:empty {
+    display: none;
+  }
+}
+
+@media (max-width: 1011.98px) {
+  .theme-code-search-layout.theme-code-search-has-filters {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+  }
+  .theme-code-search-filters {
+    position: static;
+    & .ui.vertical.menu.theme-nav-list {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+    /* The shared list shows its bar with an !important display on a more specific selector; no content removes it. */
+    & .ui.vertical.menu.theme-nav-list > .item.active::before {
+      content: none !important;
+    }
+  }
+}
+
+@media (max-width: 767.98px) {
+  .theme-code-search-bar {
+    flex-wrap: wrap;
+    & > .theme-code-search-branch {
+      max-width: 100%;
+    }
+    & > form {
+      flex-basis: 100%;
+    }
+  }
+  .theme-code-result-header {
+    padding-right: 8px;
+  }
+  .theme-code-result-meta {
+    flex-basis: 100%;
+    box-sizing: border-box;
+    margin-left: 0;
+    padding-left: 36px;
+  }
+}
