@@ -403,6 +403,11 @@
       color: var(--color-text-light-1);
       text-decoration: none;
     }
+    /* "± N commits" beside the tag and commit, as GitHub's commits item in the release's meta row; the full "to main
+       since this release" is its tooltip. The count is not bold here. */
+    .github-release-ahead strong {
+      font-weight: inherit;
+    }
     .detail .markup.desc {
       margin-top: 16px;
     }

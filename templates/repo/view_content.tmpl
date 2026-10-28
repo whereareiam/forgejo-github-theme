@@ -10,6 +10,8 @@
 <div class="gitea-github-theme-templates repo-button-row">
 	<div class="repo-button-row-left">
 		{{if not .TreeNames}}{{template "repo/branch_dropdown" dict "root" .}}{{else}}<button type="button" class="theme-icon-button repo-source-show-tree" data-source-tree-toggle aria-label="Show file tree">{{svg "octicon-sidebar-expand" 16}}</button>{{end}}
+		{{/* Below the root the branch selector, and the compare button with it, sit in the file tree panel. */}}
+		{{if $isTreePathRoot}}{{template "components/repository/compare/compare" .}}{{end}}
 
 		{{if and $isTreePathRoot (.Permission.CanRead $.UnitTypeCode) (not .IsEmptyRepo)}}
 		<div class="repository-summary">

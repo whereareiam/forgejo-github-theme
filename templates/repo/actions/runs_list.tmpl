@@ -13,7 +13,7 @@
 			<div class="flex-item-main">
 				<div class="flex-item-title">
 					<a title="{{.Title}}" href="{{if .Link}}{{.Link}}{{else}}{{$.Link}}/{{.Index}}{{end}}#summary">
-						{{if .Title}}{{.Title}}{{else}}{{ctx.Locale.Tr "actions.runs.empty_commit_message"}}{{end}}
+						{{if .Title}}{{RenderCommitMessage ctx .Title ($.Repository.ComposeMetas ctx)}}{{else}}{{ctx.Locale.Tr "actions.runs.empty_commit_message"}}{{end}}
 					</a>
 					{{if .Prioritize}}<span class="ui label">{{ctx.Locale.Tr "actions.runs.prioritized_run"}}</span>{{end}}
 				</div>

@@ -567,6 +567,39 @@ describe("Forgejo 15 native integration", () => {
       expect(read(...page)).not.toContain('template "repo/header"');
   });
 
+  it("keeps the repository features Forgejo's own templates render", () => {
+    const read = (...parts: string[]) => fs.readFileSync(path.join(ROOT_DIR, ...parts), "utf-8");
+    const header = read("templates", "repo", "home_header.tmpl");
+    expect(header).toContain('commandfor="funding-modal"');
+    expect(header).toContain('{{template "shared/funding" .}}');
+    expect(header.indexOf("repo-header-donation")).toBeLessThan(header.indexOf('template "repo/watch_unwatch"'));
+
+    const compare = read("components", "repository", "compare", "compare.tmpl");
+    expect(compare).toContain("{{if and .CanCompareOrPull .IsViewBranch (not .Repository.IsArchived)}}");
+    expect(compare).toContain('href="{{.BaseRepo.Link}}/compare/');
+    for (const page of ["view_content.tmpl", "source_tree.tmpl"])
+      expect(read("templates", "repo", page)).toContain('{{template "components/repository/compare/compare" .}}');
+
+    const releases = read("templates", "repo", "release", "list.tmpl");
+    expect(releases).toContain('ctx.Locale.Tr "repo.release.ahead.commits" $release.NumCommitsBehind');
+    expect(releases).toContain('class="github-release-ref github-release-ahead"');
+    expect(releases).toContain('{{svg "octicon-diff" 16}}');
+    expect(releases).toContain("$release.ArchiveDownloadCount.Zip");
+    expect(releases).toContain("$release.ArchiveDownloadCount.TarGz");
+
+    expect(read("templates", "repo", "actions", "runs_list.tmpl")).toContain(
+      "{{RenderCommitMessage ctx .Title ($.Repository.ComposeMetas ctx)}}"
+    );
+
+    const settings = read("templates", "repo", "diff", "view_settings.tmpl");
+    for (const mode of ["show-all", "ignore-all", "ignore-change", "ignore-eol"])
+      expect(settings).toContain(`whitespace=${mode}&amp;`);
+
+    const file = read("templates", "repo", "view_file.tmpl");
+    expect(file).toContain("{{range .FileErrorDetails}}");
+    expect(file).not.toContain('tw-whitespace-pre"');
+  });
+
   it("lists labels and milestones in the issue sidebar layout with the shared box list", () => {
     const read = (...parts: string[]) => fs.readFileSync(path.join(ROOT_DIR, ...parts), "utf-8");
     const sidebar = read("templates", "repo", "issue", "sidebar.tmpl");
