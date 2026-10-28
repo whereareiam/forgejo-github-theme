@@ -69,15 +69,6 @@ export default css`
     &.files #diff-container.diff-file-tree-hidden > #diff-content-container {
       padding-left: 0;
     }
-    /* GitHub's pencil next to the pull request number. */
-    & .issue-title h1 .issue-title-edit-pencil {
-      display: inline-flex;
-      vertical-align: middle;
-      padding: 6px;
-      margin-left: 4px;
-      border-radius: ${otherThemeVars.border.radius};
-      color: ${themeVars.color.text.light.num1};
-    }
     /* The same header box on every tab, so switching tabs does not move the page. */
     & .issue-title-header {
       margin-bottom: 16px;

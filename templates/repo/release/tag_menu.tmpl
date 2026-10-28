@@ -1,0 +1,11 @@
+{{/* The release form's tag menu, as GitHub's "Choose a tag": Forgejo's tag name field filters the repository's tags
+and names a new one, the tags below pick an existing one, and the last row offers to create the typed tag.
+public/assets/js/repo-release-editor.js drives it; Forgejo's own handler on #tag-name still updates the helper text,
+the target and the title. */}}
+<div class="theme-release-tag-filter">
+	<input id="tag-name" name="tag_name" value="{{.tag_name}}" aria-label="{{ctx.Locale.Tr "repo.release.tag_name"}}" placeholder="{{ctx.Locale.Tr "repo.release.tag_name"}}" autofocus required maxlength="255" autocomplete="off" spellcheck="false">
+</div>
+{{range .Tags}}
+	<button type="button" class="theme-dropdown-action" data-tag="{{.}}">{{svg "octicon-tag" 16}}<span>{{.}}</span></button>
+{{end}}
+<button type="button" class="theme-dropdown-action theme-release-tag-create" data-template="{{ctx.Locale.Tr "repo.tag.create_tag" "%s"}}" hidden>{{svg "octicon-plus" 16}}<span></span></button>

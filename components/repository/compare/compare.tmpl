@@ -1,0 +1,13 @@
+{{- /* Forgejo's compare / new pull request button beside the branch selector, GitHub's "Contribute": the viewed branch
+against the base repository's default branch, shown under Forgejo's own condition. Takes the page context. */ -}}
+{{if and .CanCompareOrPull .IsViewBranch (not .Repository.IsArchived)}}
+	{{$cmpBranch := ""}}
+	{{if ne .Repository.ID .BaseRepo.ID}}
+		{{$cmpBranch = printf "%s/%s:" (.Repository.OwnerName|PathEscape) (.Repository.Name|PathEscape)}}
+	{{end}}
+	{{$cmpBranch = print $cmpBranch (.BranchName|PathEscapeSegments)}}
+	{{$label := ctx.Locale.Tr "action.compare_branch"}}{{if .PullRequestCtx.Allowed}}{{$label = ctx.Locale.Tr "repo.pulls.compare_changes"}}{{end}}
+	<a id="new-pull-request" class="theme-icon-button theme-icon-button-outlined" href="{{.BaseRepo.Link}}/compare/{{.BaseRepo.DefaultBranch|PathEscapeSegments}}...{{$cmpBranch}}" data-tooltip-content="{{$label}}" aria-label="{{$label}}">
+		{{svg "octicon-git-pull-request" 16}}
+	</a>
+{{end}}

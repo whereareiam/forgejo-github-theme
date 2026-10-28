@@ -349,7 +349,7 @@
   display: none;
 }
 .github-project-panel-backdrop {
-  background: var(--github-overlay-backdrop-bgColor, rgb(1 4 9 / 40%));
+  background: var(--color-overlay-backdrop);
   inset: 0;
   position: absolute;
 }
@@ -359,7 +359,7 @@
   background: var(--color-body);
   border: 1px solid var(--color-light-border);
   border-radius: 12px;
-  box-shadow: var(--github-shadow-floating-small, 0 8px 24px rgb(1 4 9 / 50%));
+  box-shadow: var(--github-shadow-floating-small);
   inset: 8px 8px 8px auto;
   max-width: calc(100vw - 16px);
   overflow: hidden;

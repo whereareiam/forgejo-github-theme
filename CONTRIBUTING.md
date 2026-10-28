@@ -242,7 +242,10 @@ permissions, and form values into the shared controls.
   `theme-sidebar`, `theme-sidebar-content`, and `theme-sidebar-main` for its children. Include
   `shared/theme/sidebar_toggle` inside the sidebar and a button with `data-theme-sidebar-toggle` and
   `data-theme-sidebar-expand` beside the page title. The controller preserves desktop collapse preferences and starts
-  collapsed on mobile. See `templates/repo/issue/sidebar.tmpl` and `templates/org/repository_nav.tmpl`.
+  collapsed on mobile. See `templates/repo/issue/sidebar.tmpl` and `templates/org/repository_nav.tmpl`. For links to
+  sections of a long page, like GitHub's "On this page", add a `nav` with `data-theme-sidebar-outline` holding a
+  `theme-sidebar-label` heading and `#id` links; the controller marks the section in view and, on a phone, closes the
+  sidebar when an entry is followed. See `templates/repo/release/sidebar.tmpl`.
 - **Search:** call `components/common/search/search` with `Value` and `Placeholder` inside the existing form; do not
   write a search input in a page template. `Kind` selects the variant: `submit` (default, trailing search button),
   `icon` (leading search icon, as on releases and Actions), or `plain`. `Name` defaults to `q`, `Label` overrides the
@@ -252,11 +255,12 @@ permissions, and form values into the shared controls.
   `theme-search-field` class directly. Forgejo's native query/mode/submit group (`shared/search/combo_multi`) opts in
   with `theme-search-control` on its form.
 - **Dropdowns:** call `components/common/dropdown/dropdown` with `Kind` (`single`, `multiple`, or `actions`), `Label`,
-  `Items` (the content template name), and `Data` (the page context). `Title`, `Icon`, `IconOnly`, `UpdateLabel`, and
-  `Quiet` customize the header and trigger. Use `components/common/dropdown/option` for radio or checkbox rows; action
-  rows are links or buttons with `theme-dropdown-action`. Single-choice menus use checkmarks, multiple-choice menus use
-  native checkboxes, and action menus omit selection indicators. The controller handles Escape, outside clicks, and
-  opening one menu at a time. See `components/repository/filter/filter`, `components/repository/sort/sort`, and
+  `Items` (the content template name), and `Data` (the page context). `Title`, `Icon`, `IconOnly`, `UpdateLabel`,
+  `Quiet`, and `Primary` (a green trigger, as on GitHub's Code menu) customize the header and trigger; `Class` adds a
+  page layout hook to the menu. Use `components/common/dropdown/option` for radio or checkbox rows; action rows are
+  links or buttons with `theme-dropdown-action`. Single-choice menus use checkmarks, multiple-choice menus use native
+  checkboxes, and action menus omit selection indicators. The controller handles Escape, outside clicks, and opening one
+  menu at a time. See `components/repository/filter/filter`, `components/repository/sort/sort`, and
   `org/action_menu_items`.
 - **Buttons:** keep Forgejo's native `ui button` classes on buttons Forgejo already renders; the theme styles those
   globally. For a button the theme adds, use `button theme-control` (32px, 12px inline padding) instead of sizing it in
@@ -266,8 +270,6 @@ permissions, and form values into the shared controls.
 - **Counter:** add `theme-counter` to a count pill next to a tab, heading, or filter, including ones a script creates.
   Add `theme-counter-tab` inside a tab, where GitHub's counter is 18px tall and semibold. Keep only layout (`margin`,
   `flex`) under the page's own class.
-- **Segmented switch:** use `<nav class="theme-switch">` with links and `active` on the current one, as on the releases
-  and tags pages.
 - **Empty state:** use `theme-empty` for a bordered "nothing here" box holding an icon, an `h2` or `h3`, and an optional
   paragraph. `templates/user/profile_empty.tmpl` renders one from `Icon`, `Title`, and `Description`. Add
   `theme-empty-compact` for the smaller, borderless block GitHub shows inside a list. Short inline messages inside a

@@ -257,4 +257,25 @@ const repositoryRows = css`
   }
 `;
 
-export default cssCombine(issueList, issueListMobile, issuePins, issueRows, repositoryRows);
+// GitHub flows a row's labels after its title, so each label follows the title's last line and wraps on its own, on
+// phones as on wide screens. Issues and pull requests alike, in every list of the shared template. The spaces between
+// the labels separate them, and a label that wraps starts flush with the title.
+const titleLabels = css`
+  .page-content.repository.issue-list:is(.github-issues, .github-pull-list) {
+    & #issue-list .flex-item-title {
+      display: block;
+    }
+    & #issue-list .flex-item-title > .labels-list {
+      display: inline;
+      margin-left: 0 !important;
+    }
+    & #issue-list .flex-item-title > .labels-list > a {
+      vertical-align: text-bottom;
+    }
+    & #issue-list .flex-item-title > .labels-list:not(:has(> a)) {
+      display: none;
+    }
+  }
+`;
+
+export default cssCombine(issueList, issueListMobile, issuePins, issueRows, repositoryRows, titleLabels);

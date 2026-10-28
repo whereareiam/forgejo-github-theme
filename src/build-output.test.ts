@@ -195,6 +195,30 @@ it("defines the colour variables Forgejo 17 only sets in its own themes", () => 
   }
 });
 
+it("colours the plain stylesheets with variables every theme defines", () => {
+  // The release page took GitHub's dark palette literally, so light, colorblind and catppuccin themes showed dark
+  // rows, and a --github-* variable no theme sets only ever shows its hard-coded dark fallback.
+  const stylesheets = ["styles", "components", "public"].flatMap(dir =>
+    fs
+      .readdirSync(path.join(ROOT_DIR, dir), { recursive: true })
+      .map(String)
+      .filter(file => file.endsWith(".css"))
+      .map(file => path.join(dir, file))
+  );
+  const themes = fs.readdirSync(DIST_DIR).filter(name => /^theme-.+\.css$/.test(name) && !name.endsWith("-auto.css"));
+  expect(themes.length).toBeGreaterThan(0);
+  const themeCss = themes.map(theme => [theme, fs.readFileSync(path.join(DIST_DIR, theme), "utf-8")] as const);
+  for (const file of stylesheets) {
+    const css = fs.readFileSync(path.join(ROOT_DIR, file), "utf-8");
+    for (const [, variable] of css.matchAll(/var\((--github-[\w-]+)/g)) {
+      for (const [theme, output] of themeCss)
+        expect(output, `${theme} defines ${variable} (${file})`).toContain(`${variable}:`);
+    }
+  }
+  const releases = fs.readFileSync(path.join(ROOT_DIR, "styles/pages/releases.css"), "utf-8");
+  expect(releases).not.toMatch(/#[\da-f]{3,8}\b|rgba?\(/i);
+});
+
 it("resets Fomantic's will-change on dropdown menus and modals", () => {
   // will-change keeps the element on its own GPU layer; at a fractional position its text renders blurry.
   for (const file of ["styles/public/dropdown/dropdown.ts", "styles/public/modal.ts"]) {
@@ -365,6 +389,15 @@ describe("Forgejo 15 native integration", () => {
     ".gitea-vscodium",
   ];
 
+  it("does not download release assets to show them", () => {
+    // Every fetch of an asset counts as a download in Forgejo and transfers the whole file.
+    const releases = fs.readFileSync(path.join(ROOT_DIR, "public", "assets", "js", "repo-releases.js"), "utf-8");
+    const list = fs.readFileSync(path.join(ROOT_DIR, "templates", "repo", "release", "list.tmpl"), "utf-8");
+    expect(releases).not.toContain("arrayBuffer");
+    expect(releases).not.toContain("crypto.subtle");
+    expect(list).not.toContain("data-digest-url");
+  });
+
   it("includes Forgejo-native rules in the standard theme output", () => {
     const css = fs.readFileSync(path.join(DIST_DIR, `${PREFIX}light.css`), "utf-8");
 
@@ -534,6 +567,61 @@ describe("Forgejo 15 native integration", () => {
       expect(read(...page)).not.toContain('template "repo/header"');
   });
 
+  it("keeps the repository features Forgejo's own templates render", () => {
+    const read = (...parts: string[]) => fs.readFileSync(path.join(ROOT_DIR, ...parts), "utf-8");
+    const header = read("templates", "repo", "home_header.tmpl");
+    expect(header).toContain('commandfor="funding-modal"');
+    expect(header).toContain('{{template "shared/funding" .}}');
+    expect(header.indexOf("repo-header-donation")).toBeLessThan(header.indexOf('template "repo/watch_unwatch"'));
+
+    const compare = read("components", "repository", "compare", "compare.tmpl");
+    expect(compare).toContain("{{if and .CanCompareOrPull .IsViewBranch (not .Repository.IsArchived)}}");
+    expect(compare).toContain('href="{{.BaseRepo.Link}}/compare/');
+    for (const page of ["view_content.tmpl", "source_tree.tmpl"])
+      expect(read("templates", "repo", page)).toContain('{{template "components/repository/compare/compare" .}}');
+
+    const releases = read("templates", "repo", "release", "list.tmpl");
+    expect(releases).toContain('ctx.Locale.Tr "repo.release.ahead.commits" $release.NumCommitsBehind');
+    expect(releases).toContain('class="github-release-ref github-release-ahead"');
+    expect(releases).toContain('{{svg "octicon-diff" 16}}');
+    expect(releases).toContain("$release.ArchiveDownloadCount.Zip");
+    expect(releases).toContain("$release.ArchiveDownloadCount.TarGz");
+
+    expect(read("templates", "repo", "actions", "runs_list.tmpl")).toContain(
+      "{{RenderCommitMessage ctx .Title ($.Repository.ComposeMetas ctx)}}"
+    );
+
+    const settings = read("templates", "repo", "diff", "view_settings.tmpl");
+    for (const mode of ["show-all", "ignore-all", "ignore-change", "ignore-eol"])
+      expect(settings).toContain(`whitespace=${mode}&amp;`);
+
+    const file = read("templates", "repo", "view_file.tmpl");
+    expect(file).toContain("{{range .FileErrorDetails}}");
+    expect(file).not.toContain('tw-whitespace-pre"');
+  });
+
+  it("lays out releases and tags in the shared sidebar, as GitHub's releases page does", () => {
+    const read = (...parts: string[]) => fs.readFileSync(path.join(ROOT_DIR, ...parts), "utf-8");
+    const sidebar = read("templates", "repo", "release", "sidebar.tmpl");
+    expect(sidebar).toContain('{{template "components/common/sidebar/toggle" .}}');
+    expect(sidebar).toContain("data-theme-sidebar-outline");
+    expect(sidebar).toContain('ctx.Locale.Tr "repo.releases"');
+    expect(sidebar).toContain('ctx.Locale.Tr "repo.tags"');
+    for (const page of [
+      ["templates", "repo", "release", "list.tmpl"],
+      ["templates", "repo", "tag", "list.tmpl"],
+    ]) {
+      const template = read(...page);
+      expect(template).toContain('{{template "repo/release/sidebar" .}}');
+      expect(template).toContain('data-theme-sidebar="releases_sidebar_collapsed"');
+      expect(template).toContain("data-theme-sidebar-expand");
+      expect(template).not.toContain("theme-switch");
+    }
+    // The sidebar controller marks the release in view; the page script no longer keeps its own list.
+    expect(read("public", "assets", "js", "repo-releases.js")).not.toMatch(/github-release-(toc|mobile-toc)/);
+    expect(read("styles", "pages", "releases.css")).not.toMatch(/github-release-(toc|mobile-toc|toolbar|content)\b/);
+  });
+
   it("lists labels and milestones in the issue sidebar layout with the shared box list", () => {
     const read = (...parts: string[]) => fs.readFileSync(path.join(ROOT_DIR, ...parts), "utf-8");
     const sidebar = read("templates", "repo", "issue", "sidebar.tmpl");
@@ -626,6 +714,10 @@ describe("Forgejo 15 native integration", () => {
     );
     expect(order).toEqual([...order].sort((a, b) => a - b));
     expect(tabs).toContain('{{svg "octicon-star"}} Stars');
+    // The profile's funding links open from a Sponsor-style button beside Follow.
+    const avatar = read("templates", "shared", "user", "profile_big_avatar.tmpl");
+    expect(avatar).toContain('command="show-modal" commandfor="funding-modal"');
+    expect(avatar).toContain('{{template "shared/funding" .}}');
     const search = read("templates", "user", "profile_repository_search.tmpl");
     expect(search).toContain('"Find a repository…"');
     expect(search).toContain('"Search starred repositories"');
@@ -665,6 +757,10 @@ describe("Forgejo 15 native integration", () => {
     expect(menu).toContain('<label class="theme-dropdown-action" for="new-avatar">Upload a photo…</label>');
     expect(menu).toContain('form="avatar-gravatar-form"');
     expect(menu).toContain("Remove photo");
+    // The Gravatar choice sends the address typed under the picture, not only the stored one.
+    expect(profile).toContain('<form id="avatar-gravatar-form" class="ui form theme-avatar-gravatar"');
+    expect(profile).toContain('<input id="gravatar" name="gravatar" value="{{.SignedUser.AvatarEmail}}"');
+    expect(profile).not.toContain('<input type="hidden" name="gravatar"');
     // Section titles sit inside their fieldset, not on its border, and the picture's title matches them.
     const settingsCss = read("components", "common", "settings", "settings.css");
     expect(settingsCss).toMatch(/fieldset > legend \{\s*float: left;\s*width: 100%;\s*border: 0;/);
@@ -708,6 +804,51 @@ describe("Forgejo 15 native integration", () => {
     expect(read("styles", "components", "newrepo.ts")).toContain(".page-content.repository.new.repo {");
   });
 
+  it("lays out the release editor as GitHub's New release page with Forgejo's fields and hooks", () => {
+    const read = (...parts: string[]) => fs.readFileSync(path.join(ROOT_DIR, ...parts), "utf-8");
+    const page = read("templates", "repo", "release", "new.tmpl");
+    const menu = read("templates", "repo", "release", "tag_menu.tmpl");
+    // The tag name field lives in GitHub's tag menu; the rest of Forgejo's form contract stays as it was.
+    expect(page).toContain('"Items" "repo/release/tag_menu"');
+    expect(menu).toContain('<input id="tag-name" name="tag_name"');
+    expect(menu).toContain("data-tag=");
+    expect(menu).toContain('ctx.Locale.Tr "repo.tag.create_tag" "%s"');
+    for (const hook of [
+      'class="page-content repository new release"',
+      'id="tag-name-editor"',
+      'id="tag-target-selector"',
+      'name="tag_target"',
+      'id="tag-helper"',
+      'id="release-title" name="title"',
+      '"TextareaName" "content"',
+      '"DropzoneParentContainer" "form"',
+      'name="attachment-edit-name-{{.UUID}}"',
+      'name="attachment-del-{{.UUID}}"',
+      'name="attachment-edit-exturl-{{.UUID}}"',
+      'id="attachment-template"',
+      'name="attachment-template-new-name"',
+      'name="attachment-template-new-exturl"',
+      'id="add-external-link"',
+      'class="ui mini red button remove-rel-attach" data-id="{{.ID}}" data-uuid="{{.UUID}}"',
+      '"Name" "add_tag_msg"',
+      '<input type="hidden" name="add_tag_msg" value="false">',
+      '"Name" "prerelease"',
+      '"Name" "hide_archive_links"',
+      'name="tag_only" value="1"',
+      'name="draft" value="1"',
+      'class="danger button delete-button" data-url="{{$.RepoLink}}/releases/delete" data-id="{{.ID}}" data-modal-id="delete-release"',
+      'id="delete-release"',
+      "/js/repo-release-editor.js",
+    ])
+      expect(page, hook).toContain(hook);
+    // Remove buttons read their ids from the click target, so they hold text only.
+    expect(page).not.toMatch(/remove-rel-attach[^>]*>\s*\{\{svg/);
+    const css = read("styles", "pages", "releases.css");
+    expect(css).toContain(".theme-release-tag-picker .theme-dropdown-panel {");
+    expect(css).toContain("flex-flow: row-reverse wrap-reverse;");
+    expect(css).not.toContain(".repository.new.release .target");
+  });
+
   it("shows the issue's branch as GitHub's Development section, last in both issue sidebars", () => {
     const read = (...parts: string[]) =>
       fs.readFileSync(path.join(ROOT_DIR, "templates", "repo", "issue", ...parts), "utf-8");
@@ -725,6 +866,47 @@ describe("Forgejo 15 native integration", () => {
     ].map(part => form.indexOf(part));
     expect(order.every(index => index > 0)).toBe(true);
     expect([...order].sort((a, b) => a - b)).toEqual(order);
+  });
+
+  it("lists labels right after the title for issues and pull requests alike", () => {
+    const list = fs.readFileSync(path.join(ROOT_DIR, "templates", "shared", "issuelist.tmpl"), "utf-8");
+    expect(list.match(/class="labels-list/g)).toHaveLength(1);
+    expect(list.indexOf('class="labels-list')).toBeGreaterThan(list.indexOf("issue-title"));
+    expect(list.indexOf('class="labels-list')).toBeLessThan(list.indexOf("flex-item-trailing"));
+    expect(list).not.toMatch(/themeList "issues"\)? *\.Labels|ne \$\.themeList "issues"/);
+    const css = fs.readFileSync(path.join(DIST_DIR, `${PREFIX}light.css`), "utf-8");
+    expect(css).not.toContain(".flex-item-main>.labels-list");
+    // Inline on phones too: the labels follow the title at every width.
+    const style = fs.readFileSync(path.join(ROOT_DIR, "styles", "components", "issues", "issue_list.ts"), "utf-8");
+    const titleLabels = style.slice(style.indexOf("const titleLabels"), style.indexOf("export default"));
+    expect(titleLabels).toContain("& #issue-list .flex-item-title > .labels-list {\n      display: inline;");
+    expect(titleLabels).not.toContain("@media");
+  });
+
+  it("gives a pull request's title row GitHub's Edit button and green Code menu", () => {
+    const read = (...parts: string[]) => fs.readFileSync(path.join(ROOT_DIR, ...parts), "utf-8");
+    const title = read("templates", "repo", "issue", "view_title.tmpl");
+    // Forgejo's title editor binds the button by id; issues and pull requests share it.
+    expect(title.match(/id="issue-title-edit-show"/g)).toHaveLength(1);
+    expect(title).toContain('<button id="issue-title-edit-show" class="ui small basic button">');
+    expect(title).not.toContain("issue-title-edit-pencil");
+    expect(title).toContain('"Primary" true "Class" "pull-code-menu" "Items" "repo/issue/view_title_code"');
+    expect(title).toContain(
+      "(not .Issue.PullRequest.HasMerged) (not .Issue.IsClosed) (.Permission.CanRead $.UnitTypeCode)"
+    );
+    const menu = read("templates", "repo", "issue", "view_title_code.tmpl");
+    for (const part of [
+      '{{template "repo/clone_buttons" .}}',
+      '{{template "repo/clone_script" .}}',
+      'ctx.Locale.Tr "repo.pulls.cmd_instruction_checkout_title"',
+      'data-clipboard-target="#pull-checkout-command"',
+      "+refs/pull/{{$pull.Index}}/head:{{$localBranch}}",
+      'git switch "{{$localBranch}}"',
+    ])
+      expect(menu).toContain(part);
+    const dropdown = read("components", "common", "dropdown", "dropdown.tmpl");
+    expect(dropdown).toContain("{{with .Class}} {{.}}{{end}}");
+    expect(dropdown).toContain("{{if .Primary}} primary{{end}}");
   });
 
   it("joins the file editor's tabs and find button to the editor as GitHub's box header", () => {
@@ -816,6 +998,26 @@ describe("Forgejo 15 native integration", () => {
     expect(sidebar).not.toContain("teal");
     expect(sidebar).toContain('class="ui button theme-control theme-team-settings"');
     expect(read("navbar.tmpl")).toContain('<span class="theme-counter theme-counter-tab">{{.Team.NumMembers}}</span>');
+  });
+
+  it("keeps Forgejo's organization blocks: team privacy, invitations, empty members and funding", () => {
+    const read = (...parts: string[]) => fs.readFileSync(path.join(ROOT_DIR, "templates", "org", ...parts), "utf-8");
+    // Only a team's members and the owners see who is in it; everyone else gets its description.
+    const teams = read("team", "teams.tmpl");
+    const gate = "{{if or (index $.DoerIsMember .ID) $.IsOrganizationOwner}}";
+    const members = teams.indexOf('{{template "shared/user/avatarlink" dict "user" .}}');
+    expect(members).toBeGreaterThan(teams.lastIndexOf(gate, members));
+    expect(teams.lastIndexOf(gate, members)).toBeGreaterThan(teams.indexOf('{{ctx.Locale.Tr "view"}}'));
+    expect(teams.slice(members)).toContain('{{ctx.Locale.Tr "org.teams.no_desc"}}');
+    const home = read("home.tmpl");
+    expect(home).toContain("{{if .Invite}}");
+    expect(home).toContain('href="{{AppSubUrl}}/org/invite/{{.Invite.Token}}">{{ctx.Locale.Tr "org.view_invite"}}</a>');
+    expect(read("member", "members.tmpl")).toMatch(
+      /\{\{else\}\}\s*<div class="theme-empty theme-empty-compact">[\s\S]*?org\.members\.no_public_members/
+    );
+    const header = read("header.tmpl");
+    expect(header).toContain('{{template "shared/donation_button" .}}');
+    expect(header).toContain('{{template "shared/funding" .}}');
   });
 
   it("lays out password recovery and activation like sign-in", () => {
@@ -984,6 +1186,44 @@ describe("Forgejo 15 native integration", () => {
     expect(commitPageStyle).not.toContain("repository-content-header");
     expect(diffBoxTemplate).toContain('template "repo/diff/file_header"');
     expect(commitPageTemplate).toContain('template "repo/diff/change_summary"');
+    // Forgejo's signature details, which commit_header shows below the commit, as a row of the card.
+    expect(commitPageTemplate).toContain('class="commit-signature-row {{$signClass}}"');
+    expect(commitPageTemplate).toContain('ctx.Locale.Tr "repo.commits.signed_by_untrusted_user_unmatched"');
+    expect(commitPageTemplate).toContain("{{.Verification.SigningKey.PaddedKeyID}}");
+    expect(commitPageTemplate).toContain("{{.Verification.SigningSSHKey.Fingerprint}}");
+    expect(commitPageStyle).toContain(".commit-signature-row.sign-warning .commit-signature-icon");
+  });
+
+  it("opens every show-modal target as a <dialog>, which Forgejo 17's show-modal calls showModal() on", () => {
+    // Targets a theme template triggers but Forgejo's own, unchanged templates render.
+    const upstreamDialogs = new Set(["push-mirror-edit-modal"]);
+    const templates = ["templates", "components"].flatMap(dir =>
+      fs
+        .readdirSync(path.join(ROOT_DIR, dir), { recursive: true })
+        .map(String)
+        .filter(file => file.endsWith(".tmpl"))
+        .map(file => fs.readFileSync(path.join(ROOT_DIR, dir, file), "utf-8"))
+    );
+    const source = templates.join("\n");
+    // Template ids such as "edit-project-column-modal-{{.ID}}" are compared up to their first action.
+    const idPrefix = (id: string) => id.split("{{")[0];
+    const dialogIds = [...source.matchAll(/<dialog\b[^>]*\bid="([^"]+)"/g)].map(match => idPrefix(match[1]));
+    const modalIds = [...source.matchAll(/<div\b[^>]*\bclass="[^"]*\bmodal\b[^"]*"[^>]*\bid="([^"]+)"/g)].map(match =>
+      idPrefix(match[1])
+    );
+    const targets = templates.flatMap(template =>
+      [...template.matchAll(/<[a-z]+\b[^>]*\bshow-modal\b[^>]*>/g)].flatMap(match =>
+        [...match[0].matchAll(/\bdata-modal="#([^"]+)"/g)].map(target => idPrefix(target[1]))
+      )
+    );
+
+    expect(targets).toContain("cherry-pick-modal");
+    expect(targets).toContain("delete-note-modal");
+    for (const target of new Set(targets)) {
+      if (upstreamDialogs.has(target)) continue;
+      expect(modalIds, `#${target} is a Fomantic modal`).not.toContain(target);
+      expect(dialogIds, `#${target} has no <dialog>`).toContain(target);
+    }
   });
 
   it("keeps the adapted repository and commit layouts bounded at phone breakpoints", () => {
@@ -1018,17 +1258,87 @@ describe("Forgejo 15 native integration", () => {
     expect(commitPageStyle).toContain("flex-direction: column;");
   });
 
+  it("keeps the issue list filters in a sideways scrolling row on phones, as GitHub does", () => {
+    const overviewStyle = fs.readFileSync(
+      path.join(ROOT_DIR, "styles", "components", "issues", "issue_overview.ts"),
+      "utf-8"
+    );
+    const phone = overviewStyle.slice(overviewStyle.indexOf("@media (max-width: 767.98px)"));
+    const filters = ["repo/issue/filters.tmpl", "user/dashboard/issues.tmpl"].map(template =>
+      fs.readFileSync(path.join(ROOT_DIR, "templates", template), "utf-8")
+    );
+
+    expect(phone).not.toMatch(/#issue-filters > \.issue-list-toolbar-right \{\s*display: none;/);
+    expect(phone).toMatch(
+      /#issue-filters > \.issue-list-toolbar-right \{[^}]*max-width: none;[^}]*overflow-x: auto;[^}]*scrollbar-width: none;/
+    );
+    expect(phone).toMatch(/#issue-filters > \.issue-list-toolbar-right > \.ui\.menu \{[^}]*flex-wrap: nowrap;/);
+    // A menu inside the scrolling row escapes its clipping as a sheet fixed to the screen.
+    expect(phone).toMatch(/\.issue-list-toolbar-right \.ui\.dropdown > \.menu \{[^}]*position: fixed;/);
+    for (const template of filters) {
+      expect(template).toContain('<div class="issue-list-toolbar-right">');
+      expect(template).not.toContain("issue-mobile-filter-toggle");
+    }
+  });
+
   it("keeps adapted templates in the standard template tree", () => {
     for (const template of requiredTemplates) {
       expect(fs.existsSync(path.join(ROOT_DIR, "templates", template)), `missing template: ${template}`).toBe(true);
     }
   });
 
-  it("keeps the native dated fallback for zero-contribution heatmap tooltips", () => {
+  it("passes the heatmap every locale string Forgejo's heatmap.js reads", () => {
     const heatmapTemplate = fs.readFileSync(path.join(ROOT_DIR, "templates", "user", "heatmap.tmpl"), "utf-8");
 
     expect(heatmapTemplate).toContain("data-heatmap-data");
-    expect(heatmapTemplate).not.toContain("data-locale-contributions-zero");
+    for (const key of [
+      "total-contributions",
+      "contributions-zero",
+      "contributions-format",
+      "contributions-one",
+      "contributions-few",
+      "more",
+      "less",
+    ])
+      expect(heatmapTemplate).toContain(`data-locale-${key}=`);
+  });
+
+  it("renders the navbar stopwatch as Forgejo's stopwatch.js expects", () => {
+    const read = (...parts: string[]) => fs.readFileSync(path.join(ROOT_DIR, "templates", ...parts), "utf-8");
+    const navbar = read("base", "head_navbar.tmpl");
+    const icons = read("base", "head_navbar_icons.tmpl");
+    const drawer = read("base", "navbar_drawer.tmpl");
+
+    // One trigger, rendered while no stopwatch runs so a stopwatch started in another tab can show it.
+    expect(navbar.match(/"Stopwatch" true/g)).toHaveLength(1);
+    expect(icons).toContain(
+      'class="item active-stopwatch-trigger {{$itemExtraClass}}{{if not $data.ActiveStopwatch}} tw-hidden{{end}}"'
+    );
+    // A tooltip on the trigger would replace the popup in its tippy, as upstream avoids too.
+    expect(icons).toContain('data-tippy-content="{{ctx.Locale.Tr "active_stopwatch"}}"');
+    expect(navbar).toContain("{{if and .IsSigned (not .HideNavbarLinks) EnableTimetracking}}");
+    for (const name of [
+      "active-stopwatch-popup",
+      "stopwatch-link",
+      "stopwatch-issue",
+      "stopwatch-commit",
+      "stopwatch-cancel",
+    ])
+      expect(navbar).toContain(`class="${name}`);
+    expect(navbar).toContain('stopwatch-time tw-m-0" data-seconds="{{.ActiveStopwatch.Seconds}}"');
+    expect(drawer).toContain('{{if and EnableTimetracking .ActiveStopwatch}}<a href="{{.ActiveStopwatch.IssueLink}}">');
+  });
+
+  it("links the documentation through AppDocsURL", () => {
+    const templates = ["templates", "components"].flatMap(dir =>
+      fs
+        .readdirSync(path.join(ROOT_DIR, dir), { recursive: true, encoding: "utf-8" })
+        .filter(file => file.endsWith(".tmpl"))
+        .map(file => path.join(ROOT_DIR, dir, file))
+    );
+
+    for (const file of templates)
+      expect(fs.readFileSync(file, "utf-8"), path.relative(ROOT_DIR, file)).not.toContain("forgejo.org/docs");
   });
 
   it("matches GitHub's sign-in form structure", () => {
@@ -1046,7 +1356,8 @@ describe("Forgejo 15 native integration", () => {
     expect(signInTemplate).toContain('role="heading" aria-level="1"');
     expect(signInTemplate).toContain("Sign in to {{AppDisplayName}}");
     expect(signInTemplate).not.toContain('class="required field');
-    expect(signInTemplate).not.toContain('name="remember"');
+    // Forgejo's Remember this device: the session outlives the browser only when it is checked.
+    expect(signInTemplate).toContain('<input name="remember" type="checkbox"> {{ctx.Locale.Tr "auth.remember_me"}}');
     expect(signInTemplate).toContain('href="{{AppSubUrl}}/user/forgot_password"');
     expect(oauthTemplate).toContain("Continue with {{$provider.DisplayName}}");
     expect(oauthTemplate).not.toContain("sign_in_with_provider");
@@ -1080,6 +1391,9 @@ describe("Forgejo 15 native integration", () => {
     expect(form).toContain('class="signin-logo"');
     expect(form).toContain('class="signin-footer"');
     expect(form).not.toContain("ui top attached header");
+    // A site-wide username prefix stays visible before the field, with Forgejo's note on it.
+    expect(form).toContain('<div class="ui label">{{.UsernamePrefix}}</div>');
+    expect(form).toContain('"auth.signup.username.prefix.info" .UsernamePrefix');
   });
 
   it("preserves Forgejo's native two-factor form contracts in the shared challenge layout", () => {

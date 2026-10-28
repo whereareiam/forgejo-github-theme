@@ -58,6 +58,33 @@ const modal = css`
   }
 `;
 
+/* Forgejo's <dialog><article> modals, which replace the Fomantic ones, in the same look. The navbar drawer is a
+   dialog without an article and keeps its own. */
+const dialog = css`
+  dialog:has(> article) {
+    ${animationDown};
+    background-color: ${themeVars.color.menu};
+    border: 1.5px solid ${themeVars.color.light.border};
+    border-radius: 12px;
+
+    > article > header {
+      border-bottom: 1.5px solid ${themeVars.color.light.border};
+      border-radius: 12px 12px 0 0;
+    }
+    .content,
+    .actions {
+      background-color: ${themeVars.color.menu};
+    }
+    .actions {
+      border-top: 1.5px solid ${themeVars.color.light.border};
+      border-radius: 0 0 12px 12px;
+    }
+    .actions > .ui.button {
+      padding: 8px 12px;
+    }
+  }
+`;
+
 const modalFix = css`
   /* 覆盖默认的动画 */
   .ui.modal.transition {
@@ -65,4 +92,4 @@ const modalFix = css`
   }
 `;
 
-export default cssCombine(modal, modalFix);
+export default cssCombine(modal, dialog, modalFix);
