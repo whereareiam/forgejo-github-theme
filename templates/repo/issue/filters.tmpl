@@ -14,7 +14,7 @@
 			</div>
 		{{end}}
 	</div>
-	<div class="issue-list-toolbar-right"{{if $.themeList}} id="issue-filter-controls"{{end}}>
+	<div class="issue-list-toolbar-right">
 		<div class="ui secondary filter menu">
 			{{if .PageIsMilestones}}
 				{{template "repo/issue/milestone/filter_list" .}}
@@ -23,5 +23,4 @@
 			{{end}}
 		</div>
 	</div>
-	{{if $.themeList}}<button type="button" class="theme-icon-button issue-mobile-filter-toggle" aria-label="{{ctx.Locale.Tr "filter"}}" aria-controls="issue-filter-controls" aria-expanded="false">…</button>{{end}}
 </div>
