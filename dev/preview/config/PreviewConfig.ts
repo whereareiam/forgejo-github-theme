@@ -16,6 +16,8 @@ export class PreviewConfig {
   public readonly themeTemplatesDirectory: string;
   public readonly generatedTemplatesDirectory: string;
   public readonly autoLoginTemplateFile: string;
+  public readonly themeAssetsDirectory: string;
+  public readonly generatedAssetsDirectory: string;
   public readonly fixturesDirectory: string;
   public readonly fixtureDatabaseFile: string;
   public readonly sourcePaths: readonly string[];
@@ -36,6 +38,8 @@ export class PreviewConfig {
     this.themeTemplatesDirectory = join(this.projectDirectory, "dist/forgejo/templates");
     this.generatedTemplatesDirectory = join(this.projectDirectory, "dev/.generated/templates");
     this.autoLoginTemplateFile = join(this.projectDirectory, AUTO_LOGIN.templateDirectory, AUTO_LOGIN.templateFile);
+    this.themeAssetsDirectory = join(this.projectDirectory, "dist/forgejo/public/assets");
+    this.generatedAssetsDirectory = join(this.projectDirectory, "dev/.generated/public/assets");
     this.fixturesDirectory = join(this.projectDirectory, FIXTURES.directory);
     this.fixtureDatabaseFile = join(this.projectDirectory, FIXTURES.localDatabaseFile);
     this.sourcePaths = SOURCE_PATHS.map(path => join(this.projectDirectory, path));

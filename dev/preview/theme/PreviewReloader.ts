@@ -12,14 +12,15 @@ export class PreviewReloader {
     this.config = config;
   }
 
+  /** Stamps the copy that ThemeSynchronizer staged, never the build in dist. */
   public prepare(): void {
     this.revision = randomUUID();
-    const dist = join(this.config.projectDirectory, "dist/forgejo/public/assets/css");
-    for (const name of readdirSync(dist).filter(name => name.endsWith("-auto.css"))) {
-      const file = join(dist, name);
+    const stylesheets = this.stylesheets();
+    for (const name of readdirSync(stylesheets).filter(name => name.endsWith("-auto.css"))) {
+      const file = join(stylesheets, name);
       const css = readFileSync(file, "utf8").replace(
-        /(theme-github-[^"?]+\.css)(?:\?preview=[^" ]*)?/g,
-        `$1?preview=${this.revision}`
+        /(@import ")(\.\/theme-[^"?]+\.css(?:\?[^"]*)?)"/g,
+        (_match, start: string, url: string) => `${start}${this.stamp(url)}"`
       );
       writeFileSync(file, css);
     }
@@ -30,9 +31,13 @@ export class PreviewReloader {
 
   /** Publish only after Forgejo has restarted with the new templates. */
   public publish(): void {
-    const file = join(this.config.projectDirectory, "dist/forgejo/public/assets/css", "preview-revision.json");
+    const file = join(this.stylesheets(), "preview-revision.json");
     writeFileSync(`${file}.tmp`, JSON.stringify({ revision: this.revision }));
     renameSync(`${file}.tmp`, file);
+  }
+
+  private stylesheets(): string {
+    return join(this.config.generatedAssetsDirectory, "css");
   }
 
   private versionTemplateAssets(directory: string): void {
@@ -45,12 +50,22 @@ export class PreviewReloader {
         writeFileSync(
           file,
           template.replace(
-            /((?:src="{{AssetUrlPrefix}}\/js\/[^"?]+\.js|href="{{AssetUrlPrefix}}\/css\/[^"?]+\.css))(?:\?preview=[^"]*)?/g,
-            `$1?preview=${this.revision}`
+            /((?:src|href)=")(\{\{AssetUrlPrefix\}\}\/(?:js\/[^"?]+\.js|css\/[^"?]+\.css)(?:\?[^"]*)?)"/g,
+            (_match, start: string, url: string) => `${start}${this.stamp(url)}"`
           )
         );
       }
     }
+  }
+
+  /** Sets the preview parameter beside the content version the bundle already appended, as one query. */
+  private stamp(url: string): string {
+    const [path, ...query] = url.split("?");
+    const parameters = query
+      .join("?")
+      .split("&")
+      .filter(parameter => parameter && !parameter.startsWith("preview="));
+    return `${path}?${[...parameters, `preview=${this.revision}`].join("&")}`;
   }
 
   private script(): string {

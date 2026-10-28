@@ -21,9 +21,10 @@ routes; `components/project` contains the project list shared by repository, org
 `templates/org`, `templates/user`, and `templates/repo`, while page-only CSS lives under `styles/pages`.
 
 The bundle step assembles this source tree into `dist/forgejo/templates` and `dist/forgejo/public/assets`, which are the
-installable Forgejo paths. The local preview mounts that assembled tree, so the same output is exercised during
-development and packaging. Every stylesheet in `styles/pages` ships as `css/components/pages/<name>.css`; a new one only
-needs its `<link>` in `templates/base/component_assets.tmpl`.
+installable Forgejo paths. The local preview mounts a copy of that assembled tree from `dev/.generated`, where it adds
+its sign-in and reload hooks, so the same output is exercised during development and packaging and `dist` stays as
+built. Every stylesheet in `styles/pages` ships as `css/components/pages/<name>.css`; a new one only needs its `<link>`
+in `templates/base/component_assets.tmpl`.
 
 ## Architecture Layers
 
