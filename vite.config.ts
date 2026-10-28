@@ -21,4 +21,5 @@ import { giteaGitHubTheme } from "@lutinglt/gitea-github-theme/vite-plugin";
 import { defineConfig } from "vite";
 import themeConfig from "./theme.config.ts";
 
-export default defineConfig({ plugins: [giteaGitHubTheme(themeConfig)] });
+// dist/ holds only the built themes; scripts/assembleForgejo.ts copies public/ into the Forgejo tree itself.
+export default defineConfig({ plugins: [giteaGitHubTheme(themeConfig)], publicDir: false });

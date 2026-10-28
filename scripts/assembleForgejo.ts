@@ -43,25 +43,8 @@ for (const directory of readdirSync(join(root, "components"))) {
   }
 }
 
-for (const file of [
-  "blame.css",
-  "commits.css",
-  "create.css",
-  "dashboard-home.css",
-  "dashboard-lists.css",
-  "find-file.css",
-  "insights.css",
-  "organization.css",
-  "profile-subpages.css",
-  "projects.css",
-  "pull-request.css",
-  "releases.css",
-  "settings.css",
-  "site.css",
-  "user-profile.css",
-  "wiki.css",
-]) {
-  cpSync(join(root, "styles", "pages", file), join(css, "components", "pages", file));
+for (const file of readdirSync(join(root, "styles", "pages"))) {
+  if (file.endsWith(".css")) cpSync(join(root, "styles", "pages", file), join(css, "components", "pages", file));
 }
 for (const file of readdirSync(join(root, "public"))) {
   if (file.endsWith(".css")) cpSync(join(root, "public", file), join(css, file));
@@ -89,9 +72,7 @@ for (const file of themeFiles) {
   );
   if (stamped !== source) writeFileSync(join(dist, file), stamped);
 }
-for (const file of readdirSync(dist)) {
-  if (file.endsWith(".css")) cpSync(join(dist, file), join(css, file));
-}
+for (const file of themeFiles) cpSync(join(dist, file), join(css, file));
 
 // Forgejo links the selected theme with its own release as the only version. The theme's head_style override
 // gets the version of all theme files appended, so an updated theme is fetched instead of served from cache.

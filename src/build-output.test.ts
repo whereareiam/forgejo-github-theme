@@ -110,8 +110,7 @@ describe("构建产物基本验证", () => {
   it("无多余主题文件", () => {
     const actualFiles = fs.readdirSync(DIST_DIR).filter(f => f.endsWith(".css"));
     const expectedSet = new Set(EXPECTED_THEME_FILES);
-    const pageStyles = new Set(fs.readdirSync(path.join(ROOT_DIR, "public")).filter(f => f.endsWith(".css")));
-    const extra = actualFiles.filter(f => !expectedSet.has(f) && !pageStyles.has(f));
+    const extra = actualFiles.filter(f => !expectedSet.has(f));
     expect(extra, `存在多余主题文件: ${extra.join(", ")}`).toEqual([]);
   });
 });
@@ -123,30 +122,40 @@ it("ships component stylesheets unchanged with valid CSS and a template referenc
     .filter(file => String(file).endsWith(".tmpl"))
     .map(file => fs.readFileSync(path.join(ROOT_DIR, "templates", String(file)), "utf-8"))
     .join("\n");
+  // [source in the repository, path under css/ in the Forgejo tree]
   const sources = [
     ...fs
       .readdirSync(path.join(ROOT_DIR, "public"))
       .filter(name => name.endsWith(".css"))
-      .map(name => [name, name]),
+      .map(name => [`public/${name}`, name]),
     ...fs
       .readdirSync(path.join(ROOT_DIR, "components"), { recursive: true })
       .filter(file => String(file).endsWith(".css"))
       .map(file => [`components/${String(file)}`, `components/${String(file)}`]),
-    ...["blame.css", "find-file.css", "organization.css", "profile-subpages.css", "user-profile.css", "wiki.css"].map(
-      name => [name, `components/pages/${name}`]
-    ),
+    ...fs
+      .readdirSync(path.join(ROOT_DIR, "styles", "pages"))
+      .filter(name => name.endsWith(".css"))
+      .map(name => [`styles/pages/${name}`, `components/pages/${name}`]),
   ];
   const output = path.join(DIST_DIR, "forgejo", "public", "assets", "css");
   for (const [source, asset] of sources) {
     const code = fs.readFileSync(path.join(output, asset));
-    const original = source.startsWith("components/")
-      ? fs.readFileSync(path.join(ROOT_DIR, source))
-      : /^(blame|find-file|organization|profile-|user-profile)/.test(source) || source === "wiki.css"
-        ? fs.readFileSync(path.join(ROOT_DIR, "styles/pages", source))
-        : fs.readFileSync(path.join(ROOT_DIR, "public", source));
+    const original = fs.readFileSync(path.join(ROOT_DIR, source));
     expect(code.equals(original), `changed component asset: ${asset}`).toBe(true);
     expect(() => transform({ code, filename: asset })).not.toThrow();
     expect(templates).toContain(`/css/${asset}`);
+  }
+});
+
+it("links every page stylesheet from the component assets", () => {
+  // The bundle ships every styles/pages stylesheet; this link is the only place a new one has to be added.
+  const assets = fs.readFileSync(path.join(ROOT_DIR, "templates", "base", "component_assets.tmpl"), "utf-8");
+  const pages = fs.readdirSync(path.join(ROOT_DIR, "styles", "pages")).filter(name => name.endsWith(".css"));
+  expect(pages.length).toBeGreaterThan(0);
+  for (const page of pages) {
+    expect(assets, `unlinked page stylesheet: ${page}`).toContain(
+      `<link rel="stylesheet" href="{{AssetUrlPrefix}}/css/components/pages/${page}">`
+    );
   }
 });
 
@@ -418,7 +427,7 @@ describe("Forgejo 15 native integration", () => {
     expect(css).toContain('--fonts-proportional:"Mona Sans VF", -apple-system, BlinkMacSystemFont');
     expect(css).toContain('--fonts-monospace:"Monaspace Neon", ui-monospace, SFMono-Regular');
     expect(css).not.toContain("@font-face");
-    expect(fs.existsSync(path.join(DIST_DIR, "assets", "fonts"))).toBe(false);
+    expect(fs.existsSync(path.join(DIST_DIR, "forgejo", "public", "assets", "fonts"))).toBe(false);
   });
 
   it("matches GitHub's measured repository navigation geometry", () => {
@@ -481,9 +490,12 @@ describe("Forgejo 15 native integration", () => {
     expect(navbar).not.toContain('id="navbar-expand-toggle"');
     expect(navbar).toContain('href="{{AssetUrlPrefix}}/css/navbar-drawer.css"');
     expect(navbar).toContain('src="{{AssetUrlPrefix}}/js/navbar-drawer.js"');
-    for (const asset of ["navbar-drawer.css", "assets/js/navbar-drawer.js"]) {
-      expect(fs.readFileSync(path.join(DIST_DIR, asset), "utf-8")).toBe(
-        fs.readFileSync(path.join(ROOT_DIR, "public", asset), "utf-8")
+    for (const [asset, source] of [
+      ["css/navbar-drawer.css", "navbar-drawer.css"],
+      ["js/navbar-drawer.js", "assets/js/navbar-drawer.js"],
+    ]) {
+      expect(fs.readFileSync(path.join(DIST_DIR, "forgejo", "public", "assets", asset), "utf-8")).toBe(
+        fs.readFileSync(path.join(ROOT_DIR, "public", source), "utf-8")
       );
     }
   });
@@ -708,7 +720,9 @@ describe("Forgejo 15 native integration", () => {
     expect(wiki("revision")).toContain('{{template "repo/commit_list_item" dict "Commit" . "Page" $}}');
     expect(read("components", "common", "editor", "editor.css")).toContain(".page-content.repository.wiki.new");
     expect(read("templates", "base", "component_assets.tmpl")).toContain("/css/components/pages/wiki.css");
-    expect(read("scripts", "assembleForgejo.ts")).toContain('"wiki.css"');
+    expect(
+      fs.existsSync(path.join(DIST_DIR, "forgejo", "public", "assets", "css", "components", "pages", "wiki.css"))
+    ).toBe(true);
   });
 
   it("lists branches in GitHub's branch tables with Forgejo's branch actions", () => {

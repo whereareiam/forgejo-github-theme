@@ -4,7 +4,6 @@
 .github/** linguist-vendored
 .vscode/** linguist-generated
 dist/** linguist-generated
-gitea/** linguist-generated
 primer/** linguist-generated
 primer/index.ts -linguist-generated
 src/**/__snapshots__/** linguist-generated
