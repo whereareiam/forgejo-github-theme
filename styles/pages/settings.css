@@ -1,0 +1,282 @@
+/* Settings sub-pages that need more than the shared settings layout (components/common/settings): two-factor
+   enrolment, access tokens, webhook deliveries and events, branch protection rules and repository units. */
+
+/* Two-factor enrolment: the QR code in a bordered box, the secret as inline code. */
+.page-content > .ui.container.flex-container.theme-settings > .flex-container-main .theme-settings-qr {
+  display: inline-flex;
+  margin: 0 0 16px;
+  padding: 8px;
+  border: 1px solid var(--color-light-border);
+  border-radius: var(--border-radius);
+  background: var(--color-box-body);
+  & > img {
+    display: block;
+    width: 184px;
+    height: 184px;
+  }
+}
+
+.page-content
+  > .ui.container.flex-container.theme-settings
+  > .flex-container-main
+  .theme-settings-twofa-enroll
+  .theme-settings-description
+  > code {
+  padding: 2px 6px;
+  border-radius: var(--border-radius);
+  background: var(--color-markup-code-inline);
+  font-family: var(--fonts-monospace);
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+
+/* Access tokens: the name opens the token's access and permissions beneath it, as a disclosure. */
+.page-content > .ui.container.flex-container.theme-settings > .flex-container-main .theme-settings-token-details {
+  & > summary {
+    display: inline;
+    cursor: pointer;
+    list-style: none;
+    &::-webkit-details-marker {
+      display: none;
+    }
+  }
+  & > summary:hover > .theme-settings-box-title {
+    color: var(--color-primary);
+    text-decoration: underline;
+  }
+  & > .theme-settings-box-meta {
+    margin: 4px 0 8px;
+    & p,
+    & ul {
+      margin: 0 0 4px;
+    }
+    & ul {
+      padding-left: 20px;
+    }
+    & code {
+      font-family: var(--fonts-monospace);
+      font-size: 12px;
+    }
+  }
+}
+
+/* GitHub's fine-grained token permissions: one row per category with its access select on the right. */
+.page-content
+  > .ui.container.flex-container.theme-settings
+  > .flex-container-main
+  .ui.form
+  .field.access-token-category {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 0;
+  padding: 8px 16px !important;
+  border: 1px solid var(--color-light-border);
+  background: var(--color-box-body);
+  & + .access-token-category {
+    border-top: 0;
+  }
+  &:first-of-type {
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
+  }
+  &:last-of-type {
+    margin-bottom: 16px;
+    border-radius: 0 0 var(--border-radius) var(--border-radius);
+  }
+  & > .category-label {
+    margin: 0;
+    font-weight: 600;
+  }
+  & select {
+    width: auto;
+    min-width: 140px;
+  }
+}
+
+/* Webhook form: the events to choose sit under their radio, GitHub's two columns of checkboxes. */
+.page-content.new.webhook
+  > .ui.container.flex-container.theme-settings
+  > .flex-container-main
+  .ui.form
+  fieldset.event.type {
+  & > .hide-unless-checked {
+    margin: 0;
+    padding-left: 20px;
+  }
+  & .simple-grid.grid-2 {
+    gap: 0 16px;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .page-content.new.webhook
+    > .ui.container.flex-container.theme-settings
+    > .flex-container-main
+    .ui.form
+    .simple-grid.grid-2 {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Recent deliveries: a row per delivery, its ID as a monospace link, the event, the time on the right. */
+.page-content
+  > .ui.container.flex-container.theme-settings
+  > .flex-container-main
+  .theme-settings-delivery
+  + .theme-settings-delivery {
+  border-top: 1px solid var(--color-light-border);
+}
+
+.page-content > .ui.container.flex-container.theme-settings > .flex-container-main .theme-settings-delivery-summary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  padding: 8px 16px;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.page-content > .ui.container.flex-container.theme-settings > .flex-container-main .theme-settings-delivery-status {
+  display: inline-flex;
+  flex: none;
+}
+
+.page-content > .ui.container.flex-container.theme-settings > .flex-container-main .theme-settings-delivery-id {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  color: var(--color-text);
+  & > .svg {
+    flex: none;
+    color: var(--color-text-light-1);
+  }
+  & > code {
+    overflow: hidden;
+    font-family: var(--fonts-monospace);
+    font-size: 12px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  &:hover > code {
+    color: var(--color-primary);
+    text-decoration: underline;
+  }
+}
+
+.page-content > .ui.container.flex-container.theme-settings > .flex-container-main .theme-settings-delivery-time {
+  flex: none;
+  margin-left: auto;
+  color: var(--color-text-light-1);
+  font-size: 12px;
+}
+
+/* The opened delivery: Request and Response as underlined tabs, Redeliver on the right, code in boxes. */
+.page-content > .ui.container.flex-container.theme-settings > .flex-container-main .theme-settings-delivery-info {
+  padding: 0 16px 16px;
+  & > .ui.tabular.menu {
+    display: flex;
+    align-items: center;
+    min-height: 40px;
+    margin: 0 0 16px;
+    border: 0;
+    border-bottom: 1px solid var(--color-light-border);
+    border-radius: 0;
+    background: transparent;
+    & > .item {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0 0 -1px;
+      /* Forgejo pads tabular items with !important. */
+      padding: 8px 12px !important;
+      border: 0;
+      border-bottom: 2px solid transparent;
+      border-radius: 0;
+      background: transparent;
+      color: var(--color-text);
+      font-size: 14px;
+      line-height: 20px;
+    }
+    & > .item.active {
+      border-bottom-color: var(--github-underlineNav-borderColor-active, var(--color-primary));
+      font-weight: 600;
+    }
+    & > .right.menu {
+      margin-left: auto;
+      & > form.item {
+        padding: 0 !important;
+        border: 0;
+      }
+      /* Redeliver is a 28px icon button, as GitHub's. */
+      & .ui.button {
+        min-height: 28px;
+        padding: 5px 8px;
+      }
+    }
+  }
+  & > .ui.tab.segment {
+    padding: 0;
+    & > h5 {
+      margin: 0 0 8px;
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 20px;
+    }
+    & > pre.webhook-info {
+      max-height: 400px;
+      margin: 0 0 16px;
+      padding: 16px;
+      overflow: auto;
+      border: 1px solid var(--color-light-border);
+      border-radius: var(--border-radius);
+      background: var(--color-markup-code-block);
+      font-family: var(--fonts-monospace);
+      font-size: 12px;
+      line-height: 20px;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+    & > pre.webhook-info:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+/* Branch protection rule: the number of approvals is a short field, and a matched status check says so in green. The
+   shared form's field width (components/common/form) counts as many classes as its dropdown branch, so this one names
+   the whole form. */
+.page-content
+  > .ui.container.flex-container.theme-settings
+  > .flex-container-main
+  .ui.form.attached.segment.theme-settings-branch-rule {
+  & fieldset > label > input[type="number"][name="required_approvals"] {
+    width: 96px;
+  }
+  & .status-check-matched-mark {
+    margin-left: 8px;
+    color: var(--github-fgColor-success, var(--color-green));
+    font-size: 12px;
+    font-weight: 500;
+  }
+}
+
+/* Repository units: what a unit's checkbox enables sits under its title, and the choices under a radio under that.
+   Forgejo indents the inner choices by 16px with !important utilities; GitHub's step is the checkbox gutter. */
+.page-content
+  > .ui.container.flex-container.theme-settings
+  > .flex-container-main
+  .ui.form
+  .field:is(#issue_box, #pull_box, #wiki_box) {
+  padding-left: 20px;
+}
+
+.page-content
+  > .ui.container.flex-container.theme-settings
+  > .flex-container-main
+  .ui.form
+  :is(#internal_issue_box, #external_issue_box, #external_wiki_box, #globally_writeable_checkbox > .field) {
+  padding-left: 20px !important;
+}

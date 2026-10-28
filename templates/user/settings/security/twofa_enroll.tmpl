@@ -1,0 +1,29 @@
+{{/* GitHub's two-factor setup: the QR code in a bordered box, the secret as code for apps that cannot scan, and the
+	passcode beside its Verify button. */}}
+{{template "user/settings/layout_head" (dict "ctxData" . "pageClass" "user settings twofa" "HideNavbarLinks" .HideNavbarLinks)}}
+	<div class="user-setting-content">
+		<h4 class="ui top attached header">
+			{{if .ReenrollTwofa}}
+				{{ctx.Locale.Tr "settings.twofa_reenroll"}}
+			{{else}}
+				{{ctx.Locale.Tr "settings.twofa_enroll"}}
+			{{end}}
+		</h4>
+		<div class="ui attached segment theme-settings-twofa-enroll">
+			<p class="theme-settings-description">{{ctx.Locale.Tr "settings.scan_this_image"}}</p>
+			<div class="theme-settings-qr">
+				<img src="{{.QrUri}}" alt="{{.TwofaSecret}}">
+			</div>
+			<p class="theme-settings-description">{{ctx.Locale.Tr "settings.or_enter_secret" (HTMLFormat "<code>%s</code>" .TwofaSecret)}}</p>
+			<p class="theme-settings-description">{{ctx.Locale.Tr "settings.then_enter_passcode"}}</p>
+			<form class="ui form theme-settings-field-row" action="{{.Link}}" method="post">
+				<div class="required field {{if .Err_Passcode}}error{{end}}">
+					<label for="passcode">{{ctx.Locale.Tr "passcode"}}</label>
+					<input id="passcode" name="passcode" autofocus required>
+				</div>
+				<button class="ui primary button">{{ctx.Locale.Tr "auth.verify"}}</button>
+			</form>
+		</div>
+	</div>
+
+{{template "user/settings/layout_footer" .}}

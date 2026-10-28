@@ -54,6 +54,7 @@ for (const file of [
   "projects.css",
   "pull-request.css",
   "releases.css",
+  "settings.css",
   "user-profile.css",
   "wiki.css",
 ]) {

@@ -76,17 +76,6 @@
   max-width: 980px !important;
 }
 
-/* GitHub's Add beside the new email address is a secondary button; the form's own button is the green primary. */
-.page-content.user.settings.account form:has(> .field > input[name="email"]) > .ui.primary.button {
-  border-color: var(--color-light-border);
-  background: var(--color-button);
-  color: var(--color-text);
-}
-
-.page-content.user.settings.account form:has(> .field > input[name="email"]) > .ui.primary.button:hover {
-  background: var(--color-hover);
-}
-
 /* Nav column: 256px, holding the shared nav list (components/common/nav-list). */
 .theme-settings > .flex-container-nav {
   width: 256px;
@@ -215,16 +204,9 @@
       border-top-right-radius: var(--border-radius);
     }
   }
-  /* Fomantic lists (emails, personal repositories, git hooks) get the same box rows; what is not an item, such as the
-     emails' description, stays a flat paragraph above. A list wrapping a form (the theme picker) is no list. */
-  & .ui.attached.segment > .ui.list:has(> form) {
-    margin: 0;
-    & > .item {
-      margin: 0 0 16px;
-      padding: 0;
-    }
-  }
-  & .ui.attached.segment:not(.error) > .ui.list:not(:has(> form)) {
+  /* Fomantic lists (personal repositories, git hooks) get the same box rows; what is not an item, such as a
+     description, stays a flat paragraph above. */
+  & .ui.attached.segment:not(.error) > .ui.list {
     margin: 0;
     padding: 0;
     & > :not(.item) {
@@ -338,9 +320,16 @@
       width: 320px;
       max-width: 100%;
     }
+    /* Followed by a box (the email notification preference above the emails), it keeps the box's 16px off. */
+    &:not(:last-child) {
+      margin-bottom: 16px;
+    }
   }
 
-  /* A form of one field and its button (adding an email) puts the button beside the input, as on GitHub. */
+  /* A form of one field and its button (adding an email, a security key or an OpenID) puts the button beside the
+     input, as on GitHub. Overridden templates mark it with .theme-settings-field-row; Forgejo's own are recognised by
+     their structure. */
+  & .ui.form.theme-settings-field-row,
   & form.ui.form:has(> .field:first-child + .ui.button:last-child) {
     display: flex;
     flex-wrap: wrap;
@@ -480,7 +469,7 @@
   }
 
   /* An empty state with an illustration icon is GitHub's spacious one: a larger title and an action below. */
-  & .theme-settings-blankslate:has(> .svg) {
+  & .theme-settings-blankslate-spacious {
     & > .svg {
       color: var(--color-primary);
     }
@@ -489,6 +478,142 @@
       font-size: 20px;
       line-height: 30px;
     }
+    & > h3 + p {
+      max-width: 560px;
+      margin: -8px auto 16px;
+    }
+  }
+  & .theme-settings-blankslate-action {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  /* GitHub's Box list (emails, security keys, tokens, OAuth2 applications, webhook deliveries): rows 16px in with a
+     border between them, an icon on the left, a semibold title over muted 12px details, actions on the right. */
+  & .theme-settings-box {
+    margin: 0 0 16px;
+    padding: 0;
+    border: 1px solid var(--color-light-border);
+    border-radius: var(--border-radius);
+    background: var(--color-box-body);
+    list-style: none;
+  }
+  & .theme-settings-box-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    min-width: 0;
+    margin: 0;
+    padding: 16px;
+    & + .theme-settings-box-row {
+      border-top: 1px solid var(--color-light-border);
+    }
+  }
+  & .theme-settings-box-icon {
+    display: inline-flex;
+    flex: none;
+    align-self: flex-start;
+    color: var(--color-text-light-1);
+  }
+  & .theme-settings-box-main {
+    flex: 1;
+    min-width: 0;
+    font-size: 14px;
+    line-height: 20px;
+    overflow-wrap: anywhere;
+    & > .ui.label {
+      margin: 0 0 0 4px;
+    }
+  }
+  & .theme-settings-box-title {
+    color: var(--color-text);
+    font-weight: 600;
+  }
+  & .theme-settings-box-meta {
+    margin: 4px 0 0;
+    color: var(--color-text-light-1);
+    font-size: 12px;
+    line-height: 18px;
+    & .svg {
+      vertical-align: text-bottom;
+    }
+  }
+  & .theme-settings-box-actions {
+    display: flex;
+    flex: none;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+    & > form {
+      display: contents;
+    }
+  }
+  /* A form's button with a link beside it (Update password, Forgot password?). */
+  & .theme-settings-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 16px;
+  }
+  /* A subhead title with a state label beside it (two-factor authentication, Enabled). */
+  & .theme-settings-title-with-label {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+  }
+  /* Options that depend on the one above them (a protected branch's allowlists) sit under its title, in the
+     checkbox gutter, as GitHub nests them. */
+  & .theme-settings-nested {
+    margin: 0 0 15px;
+    padding: 0 0 0 20px;
+    & > .field:last-child {
+      margin-bottom: 0;
+    }
+  }
+  /* A table inside a form (the status checks seen recently) is a Box with a header row. */
+  & table.theme-settings-table {
+    width: 100%;
+    max-width: 440px;
+    margin: 8px 0 0;
+    border: 1px solid var(--color-light-border);
+    border-radius: var(--border-radius);
+    background: var(--color-box-body);
+    border-collapse: separate;
+    border-spacing: 0;
+    overflow: hidden;
+    & th,
+    & td {
+      padding: 8px 16px;
+      border: 0;
+      font-size: 14px;
+      line-height: 20px;
+    }
+    & th {
+      border-bottom: 1px solid var(--color-light-border);
+      background: var(--color-box-header);
+      font-weight: 600;
+    }
+    & tr + tr > td {
+      border-top: 1px solid var(--color-light-border);
+    }
+  }
+  /* A danger row (disabling two-factor authentication) has GitHub's red title. */
+  & .theme-settings-box-row-danger .theme-settings-box-title {
+    color: var(--color-red);
+  }
+
+  /* GitHub's small row buttons: 28px with 12px labels, for actions inside a box row. */
+  & .theme-settings-box-row > .theme-settings-box-actions :is(.ui.button, .button:not(.ui)) {
+    min-height: 28px;
+    margin: 0;
+    padding: 3px 12px;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 20px;
   }
 
   /* GitHub's two columns (public profile): the form, and a 200px column on the right for the picture. */
@@ -573,6 +698,8 @@
     float: left;
     width: 100%;
     border: 0;
+    /* In a fieldset laid out as a grid (a webhook's events) the legend spans the columns above the choices. */
+    grid-column: 1 / -1;
     & + * {
       clear: both;
     }
@@ -644,5 +771,17 @@
 
   .theme-settings-context {
     flex-wrap: wrap;
+  }
+
+  /* On a phone a box row's actions take their own line under the details, aligned with them. */
+  .page-content > .ui.container.flex-container.theme-settings > .flex-container-main .theme-settings-box-row {
+    flex-wrap: wrap;
+    & > .theme-settings-box-actions {
+      flex-basis: 100%;
+      justify-content: flex-start;
+    }
+    & > .theme-settings-box-icon + .theme-settings-box-main + .theme-settings-box-actions {
+      padding-left: 32px;
+    }
   }
 }
