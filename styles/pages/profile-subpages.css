@@ -165,13 +165,13 @@
   background: var(--color-hover);
 }
 
-:is(.github-profile, .github-org) .profile-person-list {
+:is(.github-profile, .github-org, .theme-people) .profile-person-list {
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-:is(.github-profile, .github-org) .profile-person {
+:is(.github-profile, .github-org, .theme-people) .profile-person {
   display: grid;
   grid-template-columns: 50px minmax(0, 1fr);
   gap: 16px;
@@ -179,32 +179,32 @@
   border-bottom: 1px solid var(--color-secondary);
 }
 
-:is(.github-profile, .github-org) .profile-person-avatar img {
+:is(.github-profile, .github-org, .theme-people) .profile-person-avatar img {
   width: 50px;
   height: 50px;
   border-radius: 50%;
 }
 
-:is(.github-profile, .github-org) .profile-person-content {
+:is(.github-profile, .github-org, .theme-people) .profile-person-content {
   min-width: 0;
   overflow-wrap: anywhere;
 }
 
-:is(.github-profile, .github-org) .profile-person h3 {
+:is(.github-profile, .github-org, .theme-people) .profile-person h3 {
   margin: 0 0 4px;
   font-size: 16px;
   line-height: 24px;
 }
 
-:is(.github-profile, .github-org) .profile-person h3 a {
+:is(.github-profile, .github-org, .theme-people) .profile-person h3 a {
   color: var(--color-text);
 }
 
-:is(.github-profile, .github-org) .profile-person h3 a:hover {
+:is(.github-profile, .github-org, .theme-people) .profile-person h3 a:hover {
   color: var(--color-primary);
 }
 
-:is(.github-profile, .github-org) .profile-person-username {
+:is(.github-profile, .github-org, .theme-people) .profile-person-username {
   margin-left: 8px;
   color: var(--color-text-light-1);
   font-size: 14px;
@@ -221,7 +221,7 @@
   margin-bottom: 0;
 }
 
-:is(.github-profile, .github-org) .profile-row-meta {
+:is(.github-profile, .github-org, .theme-people) .profile-row-meta {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -231,7 +231,7 @@
   line-height: 18px;
 }
 
-:is(.github-profile, .github-org) .profile-row-meta a {
+:is(.github-profile, .github-org, .theme-people) .profile-row-meta a {
   color: inherit;
 }
 
@@ -278,7 +278,7 @@
   box-shadow: none;
 }
 
-:is(.github-profile, .github-org) .profile-content .page.buttons {
+:is(.github-profile .profile-content, .github-org .profile-content, .theme-people) .page.buttons {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -327,4 +327,35 @@
 
 :is(.github-profile, .github-org) .profile-person-bio > p:not(:last-child) {
   margin-bottom: 4px;
+}
+
+/* A repository's stargazers and watchers (repo/user_cards) share the people rows above, in GitHub's grid: three
+   columns of 75px round avatars beside the name and one line about the person, one column on phones. */
+.theme-people .profile-person-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.theme-people .profile-person {
+  grid-template-columns: 75px minmax(0, 1fr);
+  align-items: center;
+  padding: 0;
+  border: 0;
+}
+
+.theme-people .profile-person-avatar img {
+  width: 75px;
+  height: 75px;
+}
+
+/* Forgejo's container leaves 8px on phones; GitHub's gutter there is 16px, as the repository header's. */
+@media (max-width: 767.98px) {
+  .theme-people {
+    padding-inline: 8px;
+  }
+
+  .theme-people .profile-person-list {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }

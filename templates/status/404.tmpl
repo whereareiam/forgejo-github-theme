@@ -1,0 +1,24 @@
+{{/* GitHub's not-found page without its illustration: the status code and a heading in the middle of the page, the
+reason below, a repository search and the site's links. A missing page inside a repository keeps the repository header,
+as in Forgejo. */}}
+{{template "base/head" .}}
+<div role="main" aria-label="{{.Title}}" class="page-content ui {{if .IsRepo}}repository{{end}}">
+	{{if .IsRepo}}{{template "repo/header" .}}{{end}}
+	<section class="theme-status">
+		<p class="error-code">404</p>
+		<h1>{{ctx.Locale.Tr "error.not_found.title"}}</h1>
+		<p class="theme-status-text">{{if .NotFoundPrompt}}{{.NotFoundPrompt}}{{else}}{{ctx.Locale.Tr "error404"}}{{end}}</p>
+		{{if .NotFoundGoBackURL}}<a class="ui primary button" href="{{.NotFoundGoBackURL}}">{{ctx.Locale.Tr "go_back"}}</a>{{end}}
+		<form class="theme-status-search" action="{{AppSubUrl}}/explore/repos" method="get" role="search">
+			{{template "components/common/search/search" dict "Kind" "plain" "Placeholder" (ctx.Locale.Tr "search.repo_kind")}}
+			<button class="ui button theme-control" type="submit">{{ctx.Locale.Tr "search.verb"}}</button>
+		</form>
+		<div class="theme-status-links">
+			<a href="{{AppSubUrl}}/">{{ctx.Locale.Tr "home"}}</a>
+			<a href="{{AppSubUrl}}/explore/repos">{{ctx.Locale.Tr "explore"}}</a>
+			<a href="{{AppDocsURL "/"}}" target="_blank" rel="noopener noreferrer">{{ctx.Locale.Tr "help"}}</a>
+		</div>
+		{{if .ShowFooterVersion}}<p class="theme-status-version">{{ctx.Locale.Tr "admin.config.app_ver"}}: {{AppVerNoMetadata}}</p>{{end}}
+	</section>
+</div>
+{{template "base/footer" .}}

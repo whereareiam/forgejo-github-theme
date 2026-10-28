@@ -1,0 +1,42 @@
+{{/* GitHub's OAuth authorization page in the sign-in page's centred column: the site's logo beside the signed-in
+account, the question as the heading, what the application gets in a box, the two choices side by side and where
+authorizing leads below them. The form posts the same fields to /login/oauth/grant. */}}
+{{template "base/head" .}}
+<div role="main" aria-label="{{.Title}}" class="page-content oauth2-authorize-application-box">
+	<div class="theme-auth-card">
+		<div class="signin-branding">
+			<div class="theme-auth-card-parties">
+				<img class="signin-logo" width="48" height="48" src="{{AssetUrlPrefix}}/img/logo.svg" alt="{{ctx.Locale.Tr "logo"}}">
+				<span class="theme-auth-card-link" aria-hidden="true"></span>
+				{{ctx.AvatarUtils.Avatar .SignedUser 48}}
+			</div>
+			<h1 class="signin-title">{{ctx.Locale.Tr "auth.authorize_title" .Application.Name}}</h1>
+		</div>
+		{{template "base/alert" .}}
+		<div class="theme-auth-card-box">
+			<div class="theme-auth-card-row">
+				{{svg "octicon-person" 16}}
+				<p><strong>{{ctx.Locale.Tr "auth.authorize_application_description"}}</strong></p>
+			</div>
+			<div class="theme-auth-card-row">
+				{{svg "octicon-apps" 16}}
+				<p>{{ctx.Locale.Tr "auth.authorize_application_created_by" .ApplicationCreatorLinkHTML}}</p>
+			</div>
+			<div class="theme-auth-card-row">
+				{{svg "octicon-key" 16}}
+				<p>With scopes: {{.Scope}}.</p>
+			</div>
+		</div>
+		<form class="theme-auth-card-actions" method="post" action="{{AppSubUrl}}/login/oauth/grant">
+			<input type="hidden" name="client_id" value="{{.Application.ClientID}}">
+			<input type="hidden" name="state" value="{{.State}}">
+			<input type="hidden" name="scope" value="{{.Scope}}">
+			<input type="hidden" name="nonce" value="{{.Nonce}}">
+			<input type="hidden" name="redirect_uri" value="{{.RedirectURI}}">
+			<button type="submit" name="granted" value="false" class="ui button">{{ctx.Locale.Tr "cancel"}}</button>
+			<button type="submit" id="authorize-app" name="granted" value="true" class="ui primary button">{{ctx.Locale.Tr "auth.authorize_application"}}</button>
+		</form>
+		<p class="theme-auth-card-note">{{ctx.Locale.Tr "auth.authorize_redirect_notice" .ApplicationRedirectDomainHTML}}</p>
+	</div>
+</div>
+{{template "base/footer" .}}

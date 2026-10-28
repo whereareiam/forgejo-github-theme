@@ -1,0 +1,29 @@
+{{/* Linking an external account, in the sign-in page's centred column: the logo once, then a segmented switch between
+registering a new account and linking an existing one over the chosen form. The switch keeps Forgejo's tab contract
+(.tabular.menu, .item[data-tab] and .tab[data-tab]) that common-global.js toggles. */}}
+{{template "base/head" .}}
+<div role="main" aria-label="{{.Title}}" class="page-content user link-account">
+	<div class="theme-link-account">
+		<img class="signin-logo" width="48" height="48" src="{{AssetUrlPrefix}}/img/logo.svg" alt="{{ctx.Locale.Tr "logo"}}">
+		<div class="tabular menu theme-switch">
+			<!-- TODO handle .ShowRegistrationButton once other login bugs are fixed -->
+			{{if not .AllowOnlyInternalRegistration}}
+				<a class="item {{if not .user_exists}}active{{end}}" data-tab="auth-link-signup-tab">
+					{{ctx.Locale.Tr "auth.oauth_signup_tab"}}
+				</a>
+			{{end}}
+			<a class="item {{if .user_exists}}active{{end}}" data-tab="auth-link-signin-tab">
+				{{ctx.Locale.Tr "auth.oauth_signin_tab"}}
+			</a>
+		</div>
+		<div class="ui tab {{if not .user_exists}}active{{end}}" data-tab="auth-link-signup-tab">
+			{{template "user/auth/signup_inner" .}}
+		</div>
+		<div class="ui tab {{if .user_exists}}active{{end}}" data-tab="auth-link-signin-tab">
+			<div class="registration-panel">
+				{{template "user/auth/signin_inner" .}}
+			</div>
+		</div>
+	</div>
+</div>
+{{template "base/footer" .}}

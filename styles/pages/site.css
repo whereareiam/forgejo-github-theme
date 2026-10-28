@@ -1,0 +1,376 @@
+/* Site pages outside repositories and accounts: the error pages, the signed-out home, the abuse report and a team
+   invitation. Kept as a page stylesheet, outside the size-limited theme files; the 500 page links it itself. */
+
+/* Error pages (404, 413, 500): GitHub's not-found page without its illustration. The code and the heading centred
+   in a narrow column, the reason muted below, then a repository search and the site's links. */
+.theme-status {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 80px 16px 64px;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+.theme-status > .error-code {
+  margin: 0;
+  color: var(--color-text-light-1);
+  font: 600 32px/40px var(--fonts-monospace);
+}
+
+.theme-status > h1 {
+  margin: -8px 0 0;
+  color: var(--color-text);
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 32px;
+}
+
+.theme-status-text {
+  margin: 0;
+  color: var(--color-text-light-1);
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.theme-status-search {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+  max-width: 440px;
+  margin-top: 8px;
+}
+
+.theme-status-search > .theme-search-field {
+  flex: 1;
+  min-width: 0;
+}
+
+.theme-status-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px 16px;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.theme-status-links a {
+  color: var(--color-text-light-1);
+}
+
+.theme-status-links a:hover {
+  color: var(--color-primary);
+}
+
+.theme-status-version {
+  margin: 0;
+  color: var(--color-text-light-1);
+  font-size: 12px;
+  line-height: 18px;
+}
+
+/* The 500 page's error in a box, as GitHub shows details. */
+.theme-status-error {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 16px;
+  border: 1px solid var(--color-secondary);
+  border-radius: var(--border-radius);
+  background: var(--color-box-body);
+  text-align: left;
+}
+
+.theme-status-error p {
+  margin: 0 0 8px;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+}
+
+.theme-status-error pre {
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-all;
+  font: 12px/20px var(--fonts-monospace);
+}
+
+/* Signed-out home: a centred hero over Forgejo's feature blocks, which become a grid of cards. */
+.page-content.home {
+  padding-bottom: 48px;
+}
+
+.theme-home-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 64px 16px 48px;
+  border-bottom: 1px solid var(--color-secondary);
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+.theme-home-hero > .logo {
+  width: 64px;
+  height: 64px;
+}
+
+.theme-home-hero > h1 {
+  margin: 0;
+  color: var(--color-text);
+  font-size: 32px;
+  font-weight: 600;
+  line-height: 40px;
+}
+
+.theme-home-hero > p {
+  max-width: 640px;
+  margin: 0;
+  color: var(--color-text-light-1);
+  font-size: 20px;
+  line-height: 30px;
+}
+
+.theme-home-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.theme-home-actions > .button.theme-control {
+  height: 40px;
+  min-height: 40px;
+}
+
+.page-content.home > .ui.page.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 1012px;
+  margin: 16px auto 0;
+  padding: 0 16px;
+}
+
+.page-content.home > .theme-home-hero + .ui.page.grid {
+  margin-top: 48px;
+}
+
+.page-content.home > .ui.page.grid::before,
+.page-content.home > .ui.page.grid::after {
+  display: none;
+}
+
+.page-content.home > .ui.page.grid > .column {
+  width: auto !important;
+  margin: 0;
+  padding: 24px !important;
+  border: 1px solid var(--color-secondary);
+  border-radius: var(--border-radius);
+  background: var(--color-box-body);
+  text-align: left;
+}
+
+.page-content.home > .ui.page.grid > .column > .hero.header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 8px;
+  color: var(--color-text);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
+}
+
+.page-content.home > .ui.page.grid > .column > .hero.header > .svg {
+  flex: none;
+  width: 24px;
+  height: 24px;
+  margin: 0;
+  color: var(--color-text-light-1);
+}
+
+.page-content.home > .ui.page.grid > .column > p.large {
+  margin: 0;
+  color: var(--color-text-light-1);
+  font-size: 14px;
+  line-height: 21px;
+}
+
+@media (max-width: 767.98px) {
+  .theme-home-hero {
+    padding: 40px 16px 32px;
+  }
+
+  .page-content.home > .ui.page.grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .page-content.home > .theme-home-hero + .ui.page.grid {
+    margin-top: 32px;
+  }
+}
+
+/* Abuse report: GitHub's form page, a 768px column with the title over a divider. The fields use the shared form
+   groups (components/common/form); the remarks take the column's width. */
+.theme-report {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 768px;
+  margin: 0 auto;
+  padding: 32px 16px;
+}
+
+.page-content.moderation.new-report .theme-report > form {
+  width: auto !important;
+  margin: 0;
+}
+
+.theme-report-title {
+  margin: 0 0 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--color-secondary);
+  color: var(--color-text);
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 36px;
+}
+
+.theme-report-details {
+  margin: 0 0 16px;
+  color: var(--color-text-light-1);
+  font-size: 14px;
+  line-height: 21px;
+}
+
+.theme-report fieldset {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.theme-report .theme-select-wrap {
+  display: flex;
+  max-width: 440px;
+  margin-top: 6px;
+}
+
+.theme-report .theme-select-wrap > .theme-select {
+  width: 100%;
+}
+
+/* The shared form groups cap controls at 440px with a selector the id outranks. */
+.page-content.moderation.new-report #remarks {
+  max-width: none;
+  min-height: 120px;
+}
+
+.theme-report-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+  padding-top: 16px;
+  border-top: 1px solid var(--color-secondary);
+}
+
+/* Forgejo's .ui.form .ui.button sets a normal weight; GitHub's buttons are medium. */
+.page-content.moderation.new-report .theme-report-actions > .ui.button {
+  margin: 0;
+  font-weight: 500;
+}
+
+/* Team invitation: GitHub's invitation, the organization's avatar and the invitation in a narrow centred column, the
+   membership choice in a box, then the two answers. */
+.page-content.organization.invite .invite-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  box-sizing: border-box;
+  max-width: 472px;
+  margin: 48px auto;
+  padding: 0 16px;
+}
+
+.page-content.organization.invite .invite-content hgroup {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  margin: 0;
+}
+
+.page-content.organization.invite .invite-content hgroup img {
+  width: 64px;
+  height: 64px;
+  border-radius: var(--border-radius);
+}
+
+.page-content.organization.invite .invite-content h2 {
+  margin: 0;
+  color: var(--color-text);
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 28px;
+}
+
+.page-content.organization.invite .invite-content > p {
+  margin: -8px 0 0;
+  color: var(--color-text-light-1);
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.page-content.organization.invite .invite-content > .ui.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+/* The two answer forms are empty; the buttons reach them through their form attribute. */
+.page-content.organization.invite .invite-content > .ui.form > form:empty {
+  display: none;
+}
+
+.page-content.organization.invite .invite-content fieldset {
+  margin: 0;
+  padding: 16px;
+  border: 1px solid var(--color-secondary);
+  border-radius: var(--border-radius);
+  text-align: left;
+}
+
+.page-content.organization.invite .invite-content fieldset > label {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 0;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.page-content.organization.invite .invite-content fieldset input[type="checkbox"] {
+  flex: none;
+  margin: 3px 0 0;
+}
+
+.page-content.organization.invite .invite-content .button-sequence {
+  display: flex;
+  gap: 8px;
+}
+
+.page-content.organization.invite .invite-content .button-sequence > .button {
+  flex: 1;
+  margin: 0;
+}
