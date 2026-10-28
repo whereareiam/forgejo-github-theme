@@ -55,7 +55,7 @@ is written for the people who install the theme, so the title and the label deci
 
 Areas: `Actions`, `Auth`, `Branches`, `Code`, `Commits`, `Dashboard`, `Editor`, `Explore`, `Forks`, `Forms`, `Insights`,
 `Issues`, `Labels`, `Milestones`, `Navbar`, `Notifications`, `Organizations`, `Packages`, `Profile`, `Projects`,
-`Pull requests`, `Releases`, `Repository`, `Settings`, `Teams`, `Templates`, `Themes`.
+`Pull requests`, `Releases`, `Repository`, `Settings`, `Teams`, `Templates`, `Themes`, `Wiki`.
 
 Reuse an existing area whenever one fits; add a new area only for a page people recognise by that name, and add it to
 this list in the same pull request. Never use file, component or style names as an area.
@@ -250,10 +250,11 @@ permissions, and form values into the shared controls.
   write a search input in a page template. `Kind` selects the variant: `submit` (default, trailing search button),
   `icon` (leading search icon, as on releases and Actions), or `plain`. `Name` defaults to `q`, `Label` overrides the
   accessible name, and `Class` adds a page layout hook to the field. For a client-side filter that is never submitted,
-  pass `Local` with an `ID` for its controller. Keep hidden filter inputs in the form and size the field from the page
-  stylesheet through its `Class` or parent; an unconstrained wrapper can shrink it. A control built by a script uses the
-  `theme-search-field` class directly. Forgejo's native query/mode/submit group (`shared/search/combo_multi`) opts in
-  with `theme-search-control` on its form.
+  pass `Local` with an `ID` for its controller. For results that htmx loads while typing, pass `Live` (the URL) and
+  `LiveTarget` (the results' selector), as the wiki search does. Keep hidden filter inputs in the form and size the
+  field from the page stylesheet through its `Class` or parent; an unconstrained wrapper can shrink it. A control built
+  by a script uses the `theme-search-field` class directly. Forgejo's native query/mode/submit group
+  (`shared/search/combo_multi`) opts in with `theme-search-control` on its form.
 - **Dropdowns:** call `components/common/dropdown/dropdown` with `Kind` (`single`, `multiple`, or `actions`), `Label`,
   `Items` (the content template name), and `Data` (the page context). `Title`, `Icon`, `IconOnly`, `UpdateLabel`,
   `Quiet`, and `Primary` (a green trigger, as on GitHub's Code menu) customize the header and trigger; `Class` adds a
