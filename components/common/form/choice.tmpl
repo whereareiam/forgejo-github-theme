@@ -1,0 +1,11 @@
+{{/* GitHub's radio choice with an icon, as the visibility choices of a new repository: the radio, a 24px muted
+	octicon, a semibold title and a muted note beneath it. Name, Value, Checked and Disabled describe the input and
+	Class adds the classes Forgejo's scripts look for; Icon is an octicon name, Title and Note are text. */}}
+<label class="theme-form-choice">
+	<input type="radio"{{if .Class}} class="{{.Class}}"{{end}}{{if .Name}} name="{{.Name}}"{{end}} value="{{.Value}}"{{if .Checked}} checked{{end}}{{if .Disabled}} disabled{{end}}>
+	{{svg .Icon 24 "theme-form-choice-icon"}}
+	<span class="theme-form-choice-text">
+		<span class="theme-form-choice-title">{{.Title}}</span>
+		{{if .Note}}<span class="theme-form-choice-note">{{.Note}}</span>{{end}}
+	</span>
+</label>

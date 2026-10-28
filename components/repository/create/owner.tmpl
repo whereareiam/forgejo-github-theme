@@ -1,0 +1,36 @@
+{{/* GitHub's Owner / Repository name row on the forms that create a repository. Owner is the account selected first,
+	Personal the signed-in user when they may own the repository (nil when not), Orgs the organizations offered;
+	Name, ErrOwner and ErrName are the form's value and errors. Forgejo's scripts read #uid (the template search and
+	the owner menu) and #repo_name (filled in from a migration's clone address). */}}
+<div class="theme-create-owner-name">
+	<div class="required field theme-create-owner{{if .ErrOwner}} error{{end}}">
+		<label id="repo_owner_label">{{ctx.Locale.Tr "repo.owner"}}</label>
+		<div class="ui selection owner dropdown" aria-labelledby="repo_owner_label">
+			<input type="hidden" id="uid" name="uid" value="{{.Owner.ID}}" required>
+			<span class="text truncated-item-container" title="{{.Owner.Name}}">
+				{{ctx.AvatarUtils.Avatar .Owner 20 "mini"}}
+				<span class="truncated-item-name">{{.Owner.ShortName 40}}</span>
+			</span>
+			{{svg "octicon-triangle-down" 14 "dropdown icon"}}
+			<div class="menu">
+				{{if .Personal}}
+					<div class="item truncated-item-container" data-value="{{.Personal.ID}}" title="{{.Personal.Name}}">
+						{{ctx.AvatarUtils.Avatar .Personal 20 "mini"}}
+						<span class="truncated-item-name">{{.Personal.ShortName 40}}</span>
+					</div>
+				{{end}}
+				{{range .Orgs}}
+					<div class="item truncated-item-container" data-value="{{.ID}}" title="{{.Name}}">
+						{{ctx.AvatarUtils.Avatar . 20 "mini"}}
+						<span class="truncated-item-name">{{.ShortName 40}}</span>
+					</div>
+				{{end}}
+			</div>
+		</div>
+	</div>
+	<span class="theme-create-slash" aria-hidden="true">/</span>
+	<div class="required field theme-create-name{{if .ErrName}} error{{end}}">
+		<label for="repo_name">{{ctx.Locale.Tr "repo.repo_name"}}</label>
+		<input id="repo_name" name="repo_name" value="{{.Name}}" required maxlength="100" autocorrect="off" autocapitalize="none" spellcheck="false">
+	</div>
+</div>

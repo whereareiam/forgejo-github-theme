@@ -1,0 +1,52 @@
+{{template "base/head" .}}
+<div role="main" aria-label="{{.Title}}" class="page-content repository new repo">
+	<div class="ui middle very relaxed page one column grid">
+		<div class="column">
+			<form class="ui form" action="{{.Link}}" method="post">
+				{{$lead := ""}}
+				{{if not $.DisableMigrations}}{{$lead = ctx.Locale.Tr "repo.new_repo_helper" (print AppSubUrl "/repo/migrate")}}{{end}}
+				{{template "components/common/form/header" dict "Title" (ctx.Locale.Tr "new_repo.title") "Lead" $lead}}
+				<div class="ui attached segment">
+					{{if or .CanCreateRepo .Orgs}}
+						{{template "base/alert" .}}
+
+						{{if and (not .CanCreateRepo) (ne .MaxCreationLimit 0)}}
+							<div class="ui negative message">
+								<p>{{ctx.Locale.TrN .MaxCreationLimit "repo.form.reach_limit_of_creation_1" "repo.form.reach_limit_of_creation_n" .MaxCreationLimit}}</p>
+							</div>
+						{{end}}
+						{{template "repo/create_basic" .}}
+
+						{{/* GitHub's configuration box: a row per choice. Forgejo's script hides #non_template once a
+							template is chosen and shows the template's items instead. */}}
+						<div class="theme-create-box">
+							{{template "repo/create_from_template" .}}
+							<div id="non_template">
+								{{template "repo/create_init" .}}
+								<details class="theme-create-advanced">
+									<summary class="theme-create-row">
+										<span class="theme-create-row-text">
+											<span class="theme-create-row-title">{{ctx.Locale.Tr "repo.new_advanced"}}</span>
+										</span>
+										{{svg "octicon-chevron-down" 16 "theme-create-advanced-icon"}}
+									</summary>
+									{{template "repo/create_advanced" .}}
+								</details>
+							</div>
+						</div>
+						<div class="theme-create-footer">
+							<button class="ui primary button">
+								{{ctx.Locale.Tr "repo.create_repo"}}
+							</button>
+						</div>
+					{{else}}
+						<div class="ui negative message">
+							{{ctx.Locale.Tr "repo.form.cannot_create"}}
+						</div>
+					{{end}}
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+{{template "base/footer" .}}

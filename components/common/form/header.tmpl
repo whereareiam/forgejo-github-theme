@@ -1,0 +1,6 @@
+{{/* GitHub's header over a create form (new repository, fork, migration, organization): Title as the page's 24px
+	heading and Lead, rendered HTML such as a sentence with a link, beneath it, over a divider. */}}
+<div class="theme-form-header">
+	<h1>{{.Title}}</h1>
+	{{if .Lead}}<p>{{.Lead}}</p>{{end}}
+</div>

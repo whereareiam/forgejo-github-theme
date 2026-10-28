@@ -832,7 +832,7 @@ describe("Forgejo 15 native integration", () => {
     ])
       expect(css).toContain(hook);
     expect(read("components", "common", "form", "form.css")).toContain(
-      '& label:has(> input:is([type="checkbox"], [type="radio"])) {'
+      '& label:not(.theme-form-choice):has(> input:is([type="checkbox"], [type="radio"])) {'
     );
     // Rules that lose to Forgejo's or the shared form's specificity unless they say more: the approvals field, the
     // empty multiple dropdown's search input and the deliveries' tabs.
@@ -912,8 +912,22 @@ describe("Forgejo 15 native integration", () => {
     expect(form).toContain(".inline.field > label:first-child:empty");
     expect(read("components", "common", "settings", "settings.css")).not.toContain("& .ui.checkbox {");
     const create = read("styles", "pages", "create.css");
-    expect(create).toContain(".page-content.new:is(.repo, .org, .migrate, .fork) .ui.form > .ui.top.attached.header");
+    expect(create).toContain(".page-content.new:is(.repo, .org, .migrate, .fork) .ui.form > .ui.attached.segment");
+    expect(create).toContain(".page-content.new.repo .theme-create-box");
     expect(create).toContain(".page-content.repository.new.migrate .migrate-entries");
+    expect(create).toContain("grid-template-columns: repeat(2, minmax(0, 1fr));");
+    expect(form).toContain('input[type="checkbox"].theme-toggle-switch');
+    expect(form).toContain(".theme-form-choice {");
+    // The settings pages' browser radios and their label grid leave the create forms' icon choices alone.
+    expect(form).toContain('& input[type="radio"]:not(.theme-form-choice > input) {');
+    expect(
+      fs.existsSync(
+        path.join(DIST_DIR, "forgejo", "public", "assets", "css", "components", "repository", "create", "create.css")
+      )
+    ).toBe(true);
+    expect(read("templates", "base", "component_assets.tmpl")).toContain(
+      "/css/components/repository/create/create.css"
+    );
     // The theme's boxed create pages are gone, and its rules use Forgejo's classes, not Gitea's new-repo.
     expect(read("styles", "public", "attached.ts")).not.toContain("new.migrate");
     expect(read("styles", "components", "newrepo.ts")).toContain(".page-content.repository.new.repo {");
