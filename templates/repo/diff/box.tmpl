@@ -45,10 +45,10 @@
 		{{end}}
 		{{if and $isCompare (not .DiffNotAvailable)}}
 			<div class="diff-compare-stats">
-				<span>{{svg "octicon-file-diff" 16}}Showing {{ctx.Locale.Tr "repo.diff.stats_desc" .DiffMetadata.TotalNumberOfFiles .Diff.TotalAddition .Diff.TotalDeletion}}.</span>
+				<span>{{svg "octicon-file-diff" 16}}{{ctx.Locale.Tr "repo.diff.stats_desc" .DiffMetadata.TotalNumberOfFiles .Diff.TotalAddition .Diff.TotalDeletion}}</span>
 				<div class="diff-compare-style">
-					<a class="{{if .IsSplitStyle}}active{{end}}" href="?style=split&amp;whitespace={{.WhitespaceBehavior}}">Split</a>
-					<a class="{{if not .IsSplitStyle}}active{{end}}" href="?style=unified&amp;whitespace={{.WhitespaceBehavior}}">Unified</a>
+					<a class="{{if .IsSplitStyle}}active{{end}}" href="?style=split&amp;whitespace={{.WhitespaceBehavior}}">{{ctx.Locale.Tr "repo.diff.show_split_view"}}</a>
+					<a class="{{if not .IsSplitStyle}}active{{end}}" href="?style=unified&amp;whitespace={{.WhitespaceBehavior}}">{{ctx.Locale.Tr "repo.diff.show_unified_view"}}</a>
 				</div>
 			</div>
 		{{end}}

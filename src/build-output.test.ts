@@ -1034,6 +1034,50 @@ describe("Forgejo 15 native integration", () => {
     expect(dropdown).toContain("{{if .Primary}} primary{{end}}");
   });
 
+  it("shares GitHub's create form between new issues and pull requests, with the chooser and compare page", () => {
+    const read = (...parts: string[]) => fs.readFileSync(path.join(ROOT_DIR, ...parts), "utf-8");
+    const form = read("templates", "repo", "issue", "new_form.tmpl");
+    expect(form).toContain('class="issue-content ui comment form form-fetch-action theme-issue-form" id="new-issue"');
+    expect(form).toContain('<label for="issue_title">{{ctx.Locale.Tr "repo.milestones.title"}}');
+    expect(form).toContain('{{ctx.Locale.Tr "form.Description"}}');
+    expect(form).toContain('href="{{.RepoLink}}/issues">{{ctx.Locale.Tr "cancel"}}</a>');
+    expect(form).not.toContain("AvatarUtils.Avatar");
+    // The editor, the attach line and the 32px buttons follow the form on both pages, not one page class.
+    expect(read("components", "common", "editor", "editor.css")).toContain(".ui.form.theme-issue-form");
+    expect(read("components", "common", "button", "button.css")).toContain(
+      ".theme-issue-form-actions > .ui.ui.ui.button"
+    );
+    const issues = read("styles", "components", "issues", "index.ts");
+    expect(issues.indexOf("  issueNew,")).toBeGreaterThan(issues.indexOf("  issueSidebar,"));
+    // A template's fields share the title's 32px input and GitHub's muted caption.
+    const issueNew = read("styles", "components", "issues", "issue_new.ts");
+    expect(issueNew).toContain('& > .issue-content-left > .field > input:is([type="text"], [type="number"])');
+    expect(issueNew).toContain("& > .issue-content-left > .field > .help {");
+
+    const choose = read("templates", "repo", "issue", "choose.tmpl");
+    expect(choose).toContain('<ul class="theme-box-list theme-box-list-rows theme-issue-choose-list">');
+    expect(choose).toContain('{{ctx.Locale.Tr "repo.issues.choose.get_started"}}');
+    expect(choose).toContain('{{ctx.Locale.Tr "repo.issues.choose.open_external_link"}}');
+
+    const compare = read("templates", "repo", "diff", "compare.tmpl");
+    expect(compare).toContain('<div class="theme-compare-header">');
+    expect(compare).toContain('"repo.pulls.title_desc" .CommitCount $headRef $baseRef');
+    expect(compare).toContain('<div class="theme-compare-existing">');
+    expect(compare).toContain('<div class="theme-empty theme-compare-empty">');
+    // Forgejo's script reveals the form from the create box's button and hides the box, its parent.
+    expect(compare).toContain('<button class="ui button primary show-form">');
+    // Every string comes from Forgejo's locale.
+    for (const text of ["Discuss and review", "contributor", "files changed", "Learn about"])
+      expect(compare).not.toContain(text);
+    const box = read("templates", "repo", "diff", "box.tmpl");
+    expect(box).toContain('{{ctx.Locale.Tr "repo.diff.show_split_view"}}');
+    expect(box).not.toContain("Showing {{");
+    // "Split view" and "Unified view" stay on one line on phones; the row wraps instead.
+    const pullRequest = read("styles", "pages", "pull-request.css");
+    expect(pullRequest).toMatch(/\.diff-compare-style \{[^}]*white-space: nowrap;/);
+    expect(pullRequest).not.toContain(".page-content.github-compare > .ui.container:first-of-type");
+  });
+
   it("joins the file editor's tabs and find button to the editor as GitHub's box header", () => {
     const style = fs.readFileSync(path.join(ROOT_DIR, "styles", "components", "repo", "repo_file_view.ts"), "utf-8");
     expect(style).toContain("#editor-bar ~ .ui.bottom.tab.segment {");

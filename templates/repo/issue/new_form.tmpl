@@ -1,49 +1,52 @@
-{{/* Forgejo 17's new issue and pull request form with the sidebar in GitHub's order, as on an issue: assignees,
-labels, projects, milestone, then Development (the branch or tag). */}}
+{{/* Forgejo 17's new issue and pull request form, laid out as GitHub's "Create new issue": labelled title and
+description fields without the author's avatar beside them, Cancel next to the create button, and the sidebar in
+GitHub's order, as on an issue: assignees, labels, projects, milestone, then Development (the branch or tag). The
+compare page renders the same form for a pull request, so both pages share the theme-issue-form styles. */}}
 {{if .Flash}}
 {{template "base/alert" .}}
 {{end}}
-<form class="issue-content ui comment form form-fetch-action" id="new-issue" action="{{.Link}}" method="post">
+<form class="issue-content ui comment form form-fetch-action theme-issue-form" id="new-issue" action="{{.Link}}" method="post">
 	<div class="issue-content-left">
-		<div class="ui comments">
-			<div class="comment">
-				{{ctx.AvatarUtils.Avatar .SignedUser 40}}
-				<div class="ui segment content tw-my-0">
-					<div class="field">
-						<input name="title" class="js-autofocus-end" id="issue_title" placeholder="{{ctx.Locale.Tr "repo.milestones.title"}}" value="{{if .TitleQuery}}{{.TitleQuery}}{{else if .IssueTemplateTitle}}{{.IssueTemplateTitle}}{{else}}{{.title}}{{end}}" required maxlength="255" autocomplete="off">
-						{{if .PageIsComparePull}}
-							<div class="title_wip_desc" data-wip-prefixes="{{JsonUtils.EncodeToString .PullRequestWorkInProgressPrefixes}}">{{ctx.Locale.Tr "repo.pulls.title_wip_desc" (index .PullRequestWorkInProgressPrefixes 0)}}</div>
-						{{end}}
-					</div>
-					{{if .Fields}}
-						<input type="hidden" name="template-file" value="{{.TemplateFile}}">
-						{{range .Fields}}
-							{{if eq .Type "input"}}
-								{{template "repo/issue/fields/input" dict "Context" $.Context "item" .}}
-							{{else if eq .Type "markdown"}}
-								{{template "repo/issue/fields/markdown" dict "Context" $.Context "item" .}}
-							{{else if eq .Type "textarea"}}
-								{{template "repo/issue/fields/textarea" dict "Context" $.Context "item" . "root" $}}
-							{{else if eq .Type "dropdown"}}
-								{{template "repo/issue/fields/dropdown" dict "Context" $.Context "item" .}}
-							{{else if eq .Type "checkboxes"}}
-								{{template "repo/issue/fields/checkboxes" dict "Context" $.Context "item" .}}
-							{{end}}
-						{{end}}
-					{{else}}
-						{{template "repo/issue/comment_tab" .}}
-					{{end}}
-					<div class="text right">
-						<button class="ui primary button">
-							{{if .PageIsComparePull}}
-								{{ctx.Locale.Tr "repo.pulls.create"}}
-							{{else}}
-								{{ctx.Locale.Tr "repo.issues.create"}}
-							{{end}}
-						</button>
-					</div>
-				</div>
+		<div class="field theme-issue-form-title">
+			<label for="issue_title">{{ctx.Locale.Tr "repo.milestones.title"}} <span class="theme-issue-form-required" aria-hidden="true">*</span></label>
+			<input name="title" class="js-autofocus-end" id="issue_title" placeholder="{{ctx.Locale.Tr "repo.milestones.title"}}" value="{{if .TitleQuery}}{{.TitleQuery}}{{else if .IssueTemplateTitle}}{{.IssueTemplateTitle}}{{else}}{{.title}}{{end}}" required maxlength="255" autocomplete="off">
+			{{if .PageIsComparePull}}
+				<div class="title_wip_desc" data-wip-prefixes="{{JsonUtils.EncodeToString .PullRequestWorkInProgressPrefixes}}">{{ctx.Locale.Tr "repo.pulls.title_wip_desc" (index .PullRequestWorkInProgressPrefixes 0)}}</div>
+			{{end}}
+		</div>
+		{{if .Fields}}
+			<input type="hidden" name="template-file" value="{{.TemplateFile}}">
+			{{range .Fields}}
+				{{if eq .Type "input"}}
+					{{template "repo/issue/fields/input" dict "Context" $.Context "item" .}}
+				{{else if eq .Type "markdown"}}
+					{{template "repo/issue/fields/markdown" dict "Context" $.Context "item" .}}
+				{{else if eq .Type "textarea"}}
+					{{template "repo/issue/fields/textarea" dict "Context" $.Context "item" . "root" $}}
+				{{else if eq .Type "dropdown"}}
+					{{template "repo/issue/fields/dropdown" dict "Context" $.Context "item" .}}
+				{{else if eq .Type "checkboxes"}}
+					{{template "repo/issue/fields/checkboxes" dict "Context" $.Context "item" .}}
+				{{end}}
+			{{end}}
+		{{else}}
+			<div class="theme-issue-form-description" role="group" aria-labelledby="issue-description-label">
+				<h2 class="theme-issue-form-label" id="issue-description-label">{{ctx.Locale.Tr "form.Description"}}</h2>
+				{{template "repo/issue/comment_tab" .}}
 			</div>
+		{{end}}
+		{{/* GitHub's "Create more" is left out: Forgejo always opens the new issue (or returns to its project). */}}
+		<div class="theme-issue-form-actions">
+			{{if not .PageIsComparePull}}
+				<a class="ui button" href="{{.RepoLink}}/issues">{{ctx.Locale.Tr "cancel"}}</a>
+			{{end}}
+			<button class="ui primary button">
+				{{if .PageIsComparePull}}
+					{{ctx.Locale.Tr "repo.pulls.create"}}
+				{{else}}
+					{{ctx.Locale.Tr "repo.issues.create"}}
+				{{end}}
+			</button>
 		</div>
 	</div>
 

@@ -35,9 +35,10 @@ export default cssCombine(
   issueList,
   issueOverview,
   issueConversation,
-  issueNew,
   pullReview,
   pullFilesReview,
   issueSidebar,
+  // After issueSidebar: the new issue form replaces its padded sidebar rows with the issue page's.
+  issueNew,
   issueTimeline
 );

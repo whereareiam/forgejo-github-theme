@@ -57,106 +57,6 @@
 }
 
 /*
- * "Compare changes" / new pull request (repo/diff/compare.tmpl), like GitHub's: a title over a divider, a compact branch
- * bar, then a notice with its text on the left and the button on the right.
- */
-.page-content.github-compare > .ui.container > h2.ui.header {
-  margin: 24px 0 16px;
-  padding-bottom: 8px;
-  border-bottom: 1px solid var(--color-light-border);
-  font-size: 24px;
-  font-weight: 400;
-  line-height: 36px;
-}
-
-.page-content.github-compare > .ui.container > h2.ui.header > .sub.header {
-  margin-top: 0;
-  color: var(--color-text-light-1);
-  font-size: 14px;
-  line-height: 21px;
-}
-
-.page-content.github-compare .ui.segment.choose.branch {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px;
-  margin: 0 0 16px;
-  padding: 12px 16px;
-  border-radius: var(--border-radius);
-  background: var(--color-box-header);
-}
-
-.page-content.github-compare .ui.segment.choose.branch .ui.basic.small.button {
-  height: 28px;
-  min-height: 28px;
-  margin: 0;
-  padding: 0 8px;
-  font-size: 12px;
-  line-height: 18px;
-}
-
-.page-content.github-compare .github-compare-notice {
-  display: flex !important;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  margin: 0 0 16px;
-  padding: 20px 16px;
-  border-radius: var(--border-radius);
-  color: var(--color-text);
-  font-size: 14px;
-  line-height: 21px;
-}
-
-.page-content.github-compare .github-compare-notice.tw-hidden {
-  display: none !important;
-}
-
-.page-content.github-compare .github-compare-notice.warning {
-  border: 1px solid var(--color-warning-border);
-  background: var(--color-warning-bg);
-}
-
-.page-content.github-compare .github-compare-notice.info {
-  border: 1px solid var(--color-info-border);
-  background: var(--color-info-bg);
-}
-
-.page-content.github-compare .github-compare-notice a {
-  color: var(--color-primary);
-  text-decoration: underline;
-}
-
-.page-content.github-compare .github-compare-notice > .button {
-  flex: none;
-  margin: 0;
-}
-
-/* An open pull request for this comparison: a card with its title and "View pull request". */
-.page-content.github-compare .ui.segment.grid.title {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  margin: 0 0 16px;
-  padding: 16px;
-  border-radius: var(--border-radius);
-}
-
-.page-content.github-compare .ui.segment.grid.title > .column {
-  width: auto !important;
-  padding: 0 !important;
-}
-
-.page-content.github-compare .ui.segment.grid.title h1 {
-  margin: 4px 0 0;
-  font-size: 16px;
-  font-weight: 600;
-  line-height: 24px;
-}
-
-/*
  * "Close pull request" uses Forgejo's closed-issue icon, which the theme colours as done (purple). GitHub shows a red
  * closed pull request icon; issues keep theirs.
  */
@@ -171,36 +71,241 @@
   visibility: hidden;
 }
 
-/* "base:" and "compare:" are muted in GitHub's branch buttons. */
-.page-content.github-compare .compare-ref-label {
-  color: var(--color-text-light-1);
+/*
+ * "Comparing changes" / new pull request (repo/diff/compare.tmpl), like GitHub's: the Subhead, the range editor, the
+ * create box with its text on the left and the button on the right, then the summary, commits and files.
+ */
+.page-content.github-compare .theme-compare-header {
+  margin: 0 0 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--color-light-border);
 }
 
-/* "N commits · N files changed · N contributors" over the commits. */
-.page-content.github-compare .github-compare-summary {
+.page-content.github-compare .theme-compare-header > h1 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 32px;
+}
+
+.page-content.github-compare .theme-compare-header > p {
+  margin: 0;
+  color: var(--color-text-light-1);
+  font-size: 14px;
+  line-height: 20px;
+}
+
+/* The range editor: a muted box with the compare icon, the base and compare pickers and the comparison arrow. */
+.page-content.github-compare .ui.segment.choose.branch {
   display: flex;
-  justify-content: space-around;
-  gap: 16px;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
   margin: 0 0 16px;
   padding: 8px 16px;
   border: 1px solid var(--color-light-border);
   border-radius: var(--border-radius);
+  background: var(--color-box-header);
+  box-shadow: none;
   color: var(--color-text-light-1);
-  font-size: 14px;
-  line-height: 21px;
 }
 
-.page-content.github-compare .github-compare-summary > span > svg,
-.page-content.github-compare .diff-compare-stats > span > svg {
-  margin-right: 6px;
+.page-content.github-compare .ui.segment.choose.branch > a {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 4px !important;
+  color: var(--color-text-light-1);
+  line-height: 12px;
+}
+
+.page-content.github-compare .ui.segment.choose.branch > a:hover {
+  color: var(--color-primary);
+}
+
+/* The comparison type ("..." or "..") under the arrow, as GitHub writes it. */
+.page-content.github-compare .ui.segment.choose.branch .compare-separator {
+  margin: 0;
+  font-size: 12px;
+  line-height: 12px;
+}
+
+.page-content.github-compare .ui.segment.choose.branch .ui.basic.small.button {
+  height: 28px;
+  min-height: 28px;
+  max-width: 100%;
+  margin: 0;
+  padding: 0 8px;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 20px;
+}
+
+.page-content.github-compare .ui.segment.choose.branch .ui.basic.small.button > .text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* "base:" and "compare:" are muted and bold in GitHub's branch buttons. */
+.page-content.github-compare .compare-ref-label {
+  color: var(--color-text-light-1);
+  font-weight: 600;
+}
+
+/* The create box: what the pull request would merge, and the button that shows the form. */
+.page-content.github-compare .theme-compare-create:not(.tw-hidden) {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 0 0 16px;
+  padding: 16px;
+  border: 1px solid var(--color-info-border);
+  border-radius: var(--border-radius);
+  background: var(--color-info-bg);
+  box-shadow: none;
+  color: var(--color-text);
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.page-content.github-compare .theme-compare-create code {
+  padding: 0 4px;
+  border-radius: var(--border-radius);
+  background: var(--github-bgColor-accent-muted);
+  color: var(--github-fgColor-accent);
+  font-size: 12px;
+}
+
+.page-content.github-compare .theme-compare-create > .button {
+  flex: none;
+  margin: 0;
+}
+
+.page-content.github-compare .pullrequest-form {
+  margin: 0 0 24px;
+}
+
+/* GitHub's row for the open pull request of these branches. */
+.page-content.github-compare .theme-compare-existing {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 0 0 16px;
+  padding: 16px;
+  border: 1px solid var(--color-light-border);
+  border-radius: var(--border-radius);
+}
+
+.page-content.github-compare .theme-compare-existing-main {
+  min-width: 0;
+}
+
+.page-content.github-compare .theme-compare-existing h2 {
+  margin: 0 0 4px;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
+  overflow-wrap: anywhere;
+}
+
+.page-content.github-compare .theme-compare-existing h2 > svg {
+  margin-right: 4px;
   vertical-align: text-bottom;
 }
 
-.page-content.github-compare .github-compare-summary strong {
+.page-content.github-compare .theme-compare-existing h2 > a {
   color: var(--color-text);
 }
 
-/* The diff: GitHub's "Showing N changed files..." row with Split/Unified, no review toolbar or file tree. The toolbar
+.page-content.github-compare .theme-compare-existing h2 > a:hover {
+  color: var(--color-primary);
+}
+
+.page-content.github-compare .theme-compare-existing h2 > .index {
+  color: var(--color-text-light-1);
+  font-weight: 400;
+}
+
+.page-content.github-compare .theme-compare-existing-open {
+  color: var(--github-fgColor-success);
+}
+
+.page-content.github-compare .theme-compare-existing-merged {
+  color: var(--github-fgColor-done);
+}
+
+.page-content.github-compare .theme-compare-existing-closed {
+  color: var(--color-red);
+}
+
+.page-content.github-compare .theme-compare-existing p {
+  margin: 0 0 0 20px;
+  color: var(--color-text-light-1);
+  font-size: 12px;
+  line-height: 20px;
+}
+
+.page-content.github-compare .theme-compare-existing > .button {
+  flex: none;
+  margin: 0;
+}
+
+.page-content.github-compare .theme-compare-empty {
+  margin: 0 0 16px;
+}
+
+/* "N commits · N files · N authors" over the commits, as GitHub's summary box. */
+.page-content.github-compare .theme-compare-summary {
+  display: flex;
+  margin: 0 0 16px;
+  padding: 0 8px;
+  border: 1px solid var(--color-light-border);
+  border-radius: var(--border-radius);
+  list-style: none;
+}
+
+.page-content.github-compare .theme-compare-summary > li {
+  flex: 1;
+  margin: 8px 0;
+  color: var(--color-text);
+  font-size: 14px;
+  line-height: 20px;
+  text-align: center;
+}
+
+.page-content.github-compare .theme-compare-summary > li > svg,
+.page-content.github-compare .diff-compare-stats > span > svg {
+  margin-right: 8px;
+  color: var(--color-text-light-1);
+  vertical-align: text-bottom;
+}
+
+@media (max-width: 767.98px) {
+  .page-content.github-compare > .ui.container {
+    width: auto !important;
+    margin-right: 16px !important;
+    margin-left: 16px !important;
+  }
+
+  .page-content.github-compare .theme-compare-create:not(.tw-hidden),
+  .page-content.github-compare .theme-compare-existing {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .page-content.github-compare .theme-compare-summary {
+    display: block;
+  }
+
+  .page-content.github-compare .theme-compare-summary > li {
+    text-align: left;
+  }
+}
+
+/* The diff: the "N changed files with..." row with Split/Unified, no review toolbar or file tree. The toolbar
    stays in the page, hidden, as diff-view.js reads its search field and settings. */
 .page-content.github-compare #diff-container > .diff-content-controls {
   display: none;
@@ -212,12 +317,13 @@
 
 .page-content.github-compare .diff-compare-stats {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
   margin: 8px 0 16px;
   font-size: 14px;
-  line-height: 21px;
+  line-height: 20px;
 }
 
 .page-content.github-compare .diff-compare-stats > span > strong:first-of-type {
@@ -226,6 +332,8 @@
 
 .page-content.github-compare .diff-compare-style {
   display: inline-flex;
+  flex: none;
+  white-space: nowrap;
   padding: 2px;
   border-radius: var(--border-radius);
   background: var(--color-box-header);

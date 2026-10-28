@@ -6,7 +6,7 @@
  */
 :is(
     .page-content.repository.view.issue.github-conversation .comment.form,
-    .page-content.repository.new.issue.github-issue-new,
+    .ui.form.theme-issue-form,
     .review-box-panel,
     .comment-code-cloud,
     .page-content.repository.new.release,
@@ -114,7 +114,7 @@
 }
 :is(
     .page-content.repository.view.issue.github-conversation .comment.form,
-    .page-content.repository.new.issue.github-issue-new,
+    .ui.form.theme-issue-form,
     .review-box-panel,
     .comment-code-cloud
   )
@@ -148,7 +148,8 @@
 }
 
 /* GitHub's attach control leads with a paperclip; Dropzone renders the button, so draw it in CSS. */
-.page-content.repository.view.issue.github-conversation .comment.form .ui.dropzone .dz-button::before {
+.page-content.repository.view.issue.github-conversation .comment.form .ui.dropzone .dz-button::before,
+.ui.form.theme-issue-form .ui.dropzone .dz-button::before {
   content: "";
   flex-shrink: 0;
   width: 16px;
