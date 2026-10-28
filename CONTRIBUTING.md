@@ -2,34 +2,41 @@
 
 ## Directory Structure
 
-| Directory         | Description                                                       |
-| ----------------- | ----------------------------------------------------------------- |
-| src               | Theme generation framework and utilities                          |
-| src/core          | Theme generation framework (CSS vars, syntax highlighting styles) |
-| src/functions     | Theme utilities (color calculations, etc.)                        |
-| src/palette       | Theme palettes (GitHub / Gitea / Catppuccin)                      |
-| src/types         | Theme color variable type definitions                             |
-| src/vite-plugin   | Theme Vite build plugin                                           |
-| styles            | Theme style overrides                                             |
-| styles/common     | Reusable CSS style fragments                                      |
-| styles/public     | Base element or cross-page element styles                         |
-| styles/components | Page-specific styles                                              |
-| styles/templates  | Template-specific styles                                          |
-| themes            | Color theme definitions                                           |
-| primer            | Auto-generated Primer design tokens                               |
-| scripts           | Build and utility scripts                                         |
-| templates         | Gitea template overrides (optional)                               |
-| screenshots       | Theme screenshots                                                 |
+| Directory                  | Description                                                           |
+| -------------------------- | --------------------------------------------------------------------- |
+| src                        | Theme generation framework and utilities                              |
+| src/core                   | Theme generation framework (CSS vars, syntax highlighting styles)     |
+| src/functions              | Theme utilities (color calculations, etc.)                            |
+| src/palette                | Theme palettes (GitHub / Gitea / Catppuccin)                          |
+| src/types                  | Theme color variable type definitions                                 |
+| src/vite-plugin            | Theme Vite build plugin                                               |
+| styles                     | Theme-wide overrides in TypeScript, built into every theme stylesheet |
+| styles/common              | Reusable CSS style fragments                                          |
+| styles/public              | Base element or cross-page element styles                             |
+| styles/components          | Overrides of Forgejo pages by Forgejo's own markup                    |
+| styles/templates           | Styles for markup only the theme's older repository templates render  |
+| styles/pages               | Page-only CSS for the theme's templates                               |
+| components                 | Reusable UI: template partials, stylesheet, browser script and tests  |
+| templates                  | Forgejo template overrides (optional)                                 |
+| public                     | Stylesheets and scripts that one page loads from its template         |
+| themes                     | Color theme definitions                                               |
+| primer                     | Auto-generated Primer design tokens                                   |
+| scripts                    | Build and utility scripts, including the template pack assembly       |
+| dev                        | Local Forgejo preview and its fixtures                                |
+| .github/assets/screenshots | Theme screenshots                                                     |
+
+[ARCHITECTURE.md](ARCHITECTURE.md) explains how these parts are built into the theme stylesheets and the template pack.
 
 ## Contribution Notes
 
-Style contributions are not recommended, as Gitea themes are ultimately delivered as a single CSS file, which introduces
-issues like ordering/override conflicts and broad-reaching style impacts.
+Style contributions are not recommended, as the theme-wide overrides are built into every theme stylesheet and the
+shared components load on every page, which introduces issues like ordering/override conflicts and broad-reaching style
+impacts.
 
 Each developer has their own approach, making it difficult for review to catch these issues, greatly increasing
 maintenance difficulty.
 
-If you have confirmed understanding of Gitea's style layout and the project's approach, please first file an Issue to
+If you have confirmed understanding of Forgejo's markup and the project's approach, please first file an Issue to
 confirm scope and expected results, then develop and submit a PR.
 
 If you believe you have a better approach, feel free to submit an Issue.
@@ -112,10 +119,11 @@ Environment variables are used to send compiled themes to a server for quick pre
 
 ### Compile Themes
 
-Compile and sync to remote server for preview:
+To check changes in a running Forgejo, use the local preview described in [README.md](README.md#local-forgejo-preview).
+To compile and sync to a remote server instead:
 
 ```bash
-bun bundle:dev
+bun dev
 ```
 
 Compile all themes:
@@ -233,8 +241,8 @@ export default defineTheme({ colorType: "gitea", themeColor: giteaColor, syntaxC
 ```
 
 After completing theme color development, register the theme series in `theme.config.ts`, compile it, and take
-screenshots in a Gitea instance. Place them in the `screenshots` directory with filenames matching the theme names.
-(Cloning the repository is recommended to avoid leaking personal information.)
+screenshots in a Forgejo instance. Place them in the `.github/assets/screenshots` directory with filenames matching the
+theme names. (Cloning the repository is recommended to avoid leaking personal information.)
 
 Then add screenshot information to `README.md`.
 
@@ -242,22 +250,60 @@ For color reuse patterns, see the colorblind theme implementation in `themes/git
 
 ## Theme Style Contributions
 
-Theme styles use the `css()` template string for development. Strings are processed by LightningCSS and support CSS
-nesting syntax. Do not use SCSS functions; for complex processing, use TypeScript libraries such as the bundled
-`color2k` library.
+The TypeScript styles in `styles/` use the `css()` template string for development. Strings are processed by
+LightningCSS and support CSS nesting syntax. Do not use SCSS functions; for complex processing, use TypeScript libraries
+such as the bundled `color2k` library.
 
 For complex logic, it is recommended to extract it into functions under the `src/functions` directory.
+
+### Where new styles go
+
+Choose the place by the markup a rule styles and the pages that need it:
+
+- **Forgejo's own markup, on any page:** a `css` fragment in `styles/`, under `styles/public` for base elements or
+  `styles/components` for one area of Forgejo. It is built into every theme stylesheet, so installs without the
+  templates get it too.
+- **Reusable UI:** a directory under `components/<group>/<name>/` with its template partials, stylesheet, script and
+  tests. Link its stylesheet and script in `templates/base/component_assets.tmpl`; `bun bundle` copies the files.
+- **Layout of one page or a family of pages:** plain CSS in `styles/pages/<page>.css`. Add the file to the list in
+  `scripts/assembleForgejo.ts` and link it in `templates/base/component_assets.tmpl`.
+- **An asset that one page template loads:** `public/<page>.css` or `public/assets/js/<page>.js`, linked from that
+  template. Styles that several pages share belong in a component.
+
+Link assets as `{{AssetUrlPrefix}}/css/...` or `{{AssetUrlPrefix}}/js/...` without a version; the build adds the content
+hash.
+
+### Name classes by scope
+
+Name the classes the theme adds by their scope:
+
+- `theme-*` for shared components, such as `theme-search-field` and `theme-counter`, with `data-theme-*` attributes as
+  script hooks.
+- `github-*` for layout and state hooks on overridden templates, such as `github-issues` or `github-embedded`.
+- A page prefix such as `profile-`, `org-` or `actions-` for page-only CSS, such as `profile-avatar-card`.
+
+### Keep the stacking order
+
+Keep stacked layers within the scale in `components/common/motion/motion.css`:
+
+| Layer                                   | `z-index`   |
+| --------------------------------------- | ----------- |
+| Popovers and positioned page content    | up to 100   |
+| Repository tabs (`.repository-tab-nav`) | 199         |
+| Navbar (`#navbar`)                      | 200         |
+| Toasts                                  | 500         |
+| Dimmers and modals                      | 1000 and up |
 
 ### Reuse shared page controls
 
 Use `components/common/*/*.css` for sidebars, search fields, selects, counters, switches, empty states, and compact
-buttons, and `components/common/dropdown/*` for dropdown variants. `templates/base/head_navbar.tmpl` loads the shared
-styles and controllers for all pages. Keep page layout rules in the page stylesheet and pass the page's existing routes,
-permissions, and form values into the shared controls.
+buttons, and `components/common/dropdown/*` for dropdown variants. `templates/base/component_assets.tmpl`, included from
+`templates/base/head_navbar.tmpl`, loads the shared styles and controllers for all pages. Keep page layout rules in the
+page stylesheet and pass the page's existing routes, permissions, and form values into the shared controls.
 
 - **Sidebar:** add `theme-sidebar-layout` and a unique `data-theme-sidebar` storage key to the page, then use
   `theme-sidebar`, `theme-sidebar-content`, and `theme-sidebar-main` for its children. Include
-  `shared/theme/sidebar_toggle` inside the sidebar and a button with `data-theme-sidebar-toggle` and
+  `components/common/sidebar/toggle` inside the sidebar and a button with `data-theme-sidebar-toggle` and
   `data-theme-sidebar-expand` beside the page title. The controller preserves desktop collapse preferences and starts
   collapsed on mobile. See `templates/repo/issue/sidebar.tmpl` and `templates/org/repository_nav.tmpl`. For links to
   sections of a long page, like GitHub's "On this page", add a `nav` with `data-theme-sidebar-outline` holding a
@@ -295,10 +341,10 @@ permissions, and form values into the shared controls.
 - **Label:** use Forgejo's native `ui basic label` for outline labels such as visibility or package type; do not build a
   page-specific pill.
 - **Select:** wrap a native `<select class="theme-select">` in `<span class="theme-select-wrap">`. The options stay in
-  the page template. See `templates/user/profile_packages.tmpl`.
+  the page template. See `templates/user/profile_package_versions.tmpl`.
 
 For repository filtering, add `data-theme-repository-search` to the form and render
-`components/repository/results/results` after it. `repository-search.js` updates that result fragment through the same
+`components/repository/results/results` after it. Its `results.js` updates that result fragment through the same
 server-rendered GET route, preserves search and sort values, and cancels obsolete requests. Checkbox criteria combine,
 while opposing values of one criterion are exclusive. Clear filters is an action, not a selectable option. Keep
 `tab=overview` or `tab=repositories` in the organization form; query parameters alone do not determine the page layout.
