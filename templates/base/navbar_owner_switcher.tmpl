@@ -1,0 +1,5 @@
+{{- /* GitHub's context switcher beside the navbar's owner (a repository's owner, an organization or a profile): a caret
+opening the signed-in user's account and organizations. Owner is the owner shown; Data is the page context. */ -}}
+<span class="repository-navbar-switcher navbar-owner-switcher not-mobile">
+	{{template "components/common/dropdown/dropdown" dict "Kind" "actions" "Icon" "octicon-triangle-down" "IconOnly" true "Quiet" true "Small" true "Label" (ctx.Locale.Tr "home.my_orgs") "Title" (ctx.Locale.Tr "home.my_orgs") "Items" "components/dashboard/context/owners" "Data" (dict "Context" ctx "Current" .Owner.HomeLink "SignedUser" .Data.SignedUser)}}
+</span>

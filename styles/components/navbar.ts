@@ -52,6 +52,14 @@ const navbarRight = css`
       white-space: nowrap;
       font-weight: 600;
     }
+    /* The owner switcher's caret sits 2px after the name, as it does after a repository's owner. Admins hide it with
+       --custom-owner-switcher: none. */
+    .repository-navbar-switcher.navbar-owner-switcher {
+      display: ${fallbackVar(customThemeVars.ownerSwitcher, "flex")};
+    }
+    .navbar-left > .navbar-context-title + .navbar-owner-switcher {
+      margin-left: -6px;
+    }
     /* GitHub's header search: a 197px field first on the right from 1012px, a search button below that. */
     .navbar-search {
       width: 197px;

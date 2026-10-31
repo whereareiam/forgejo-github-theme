@@ -81,3 +81,12 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+/* The navbar's owner switcher: rows owners.js adds before this list; it only shows a failed load. */
+.theme-owner-switcher-message {
+  margin: 0;
+  padding: 6px 8px;
+  color: var(--color-text-light-1);
+  font-size: 12px;
+  line-height: 18px;
+}
