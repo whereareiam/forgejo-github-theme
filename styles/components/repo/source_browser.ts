@@ -76,6 +76,11 @@ export default css`
     max-height: calc(100dvh - 168px);
     overflow: auto;
   }
+  /* A folder opening in place: dim the old one only when the fetch is not instant. */
+  #repo-source-browser[aria-busy="true"] > .repo-source-main {
+    opacity: 0.6;
+    transition: opacity 0.2s 0.15s;
+  }
   .repo-source-tree-status {
     font-size: 14px;
     padding: 8px;
