@@ -63,6 +63,15 @@
 	{{end}}
 	</div>
 	</section>
+	{{/* GitHub's popular repositories below the README. Forgejo loads no repositories for this tab, so
+	profile-overview.js takes the first six of the Repositories tab sorted by stars (public ones only, as visitors
+	see them). The section stays hidden until it has cards. */}}
+	<section class="profile-popular" data-theme-profile-popular="{{.ContextUser.HomeLink}}?tab=repositories&sort=moststars&private=false" hidden>
+		<h2 class="profile-popular-title">{{ctx.Locale.Tr "user.repositories"}}</h2>
+		<template data-theme-profile-popular-icon>{{svg "octicon-repo" 16}}</template>
+		<ol class="profile-popular-list" data-theme-profile-popular-list></ol>
+	</section>
+	<script src="{{AssetUrlPrefix}}/js/profile-overview.js" defer></script>
 {{else if and FederationEnabled (eq .TabName "feed")}}
 	<section class="profile-federation">
 	<h2 class="profile-subpage-title">{{ctx.Locale.Tr "user.activitypub_feed.feed"}}</h2>
