@@ -1,5 +1,5 @@
 <div class="repo-latest-commit-row">
-			<h2 class="sr-only">Latest commit</h2>
+			<h2 class="sr-only">{{ctx.Locale.Tr "repo.files.last_commit_message"}}</h2>
 			{{if not .LatestCommit}}
 				<div class="repo-latest-commit-loading ui active tiny slow centered inline">…</div>
 			{{else}}
@@ -27,7 +27,7 @@
 									{{ctx.AvatarUtils.AvatarByEmail .LatestCommit.Author.Email $latestCommitAuthorDisplay 20}}
 								{{end}}
 							</span>
-							<a class="repo-latest-commit-author" title="{{$latestCommitAuthorDisplay}}" href="{{$latestCommitAuthorSearch}}" aria-label="Commits by {{$latestCommitAuthorDisplay}}" aria-describedby="repo-latest-commit-author-card"><strong>{{$latestCommitAuthorDisplay}}</strong></a>
+							<a class="repo-latest-commit-author" title="{{$latestCommitAuthorDisplay}}" href="{{$latestCommitAuthorSearch}}" aria-describedby="repo-latest-commit-author-card"><strong>{{$latestCommitAuthorDisplay}}</strong></a>
 							<div class="repo-latest-commit-author-card" id="repo-latest-commit-author-card" role="tooltip">
 								<div class="repo-latest-commit-author-card-profile">
 									{{if .LatestCommitUser}}
@@ -58,10 +58,10 @@
 							"Metas" ($.Repository.ComposeMetas ctx)
 						}}</span>
 						{{if IsMultilineCommitMessage .LatestCommit.Message}}
-							<button class="btn interact-fg repo-latest-commit-details" aria-expanded="false" aria-controls="repo-latest-commit-body" aria-label="Show commit details" data-tooltip-content="Show commit details">{{svg "octicon-kebab-horizontal" 16}}</button>
+							<button class="btn interact-fg repo-latest-commit-details" aria-expanded="false" aria-controls="repo-latest-commit-body" aria-label="{{ctx.Locale.Tr "repo.commits.message"}}" data-tooltip-content="{{ctx.Locale.Tr "repo.commits.message"}}">{{svg "octicon-kebab-horizontal" 16}}</button>
 						{{end}}
 						{{if and .LatestCommit.Signature .LatestCommitVerification .LatestCommitVerification.Verified}}
-							<a class="repo-latest-commit-signature" href="{{$latestCommitLink}}" rel="nofollow" aria-label="Commit signature">
+							<a class="repo-latest-commit-signature" href="{{$latestCommitLink}}" rel="nofollow" aria-label="{{ctx.Locale.Tr "repo.commits.signed_by"}}">
 								{{template "repo/shabox_badge" dict "verification" .LatestCommitVerification}}
 							</a>
 						{{end}}

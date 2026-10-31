@@ -1,10 +1,10 @@
 {{/* GitHub-style repository overview sidebar adapted to Forgejo 15 data and endpoints. */}}
-<aside class="repo-home-sidebar-top" aria-label="About">
+<aside class="repo-home-sidebar-top" aria-label="{{ctx.Locale.Tr "packages.common.repository"}}">
 	<div id="repo-topics" class="repo-about-block flex-relaxed-list">
 		<div class="repo-home-sidebar-header repo-about-heading">
-			<span>About</span>
+			<span>{{ctx.Locale.Tr "packages.common.repository"}}</span>
 			{{if and .Permission.IsAdmin (not .Repository.IsArchived)}}
-				<button id="github_theme_repo_about_manage" type="button" class="btn repo-about-settings" aria-label="Edit repository metadata" data-tooltip-content="Edit repository metadata">
+				<button id="github_theme_repo_about_manage" type="button" class="btn repo-about-settings" aria-label="{{ctx.Locale.Tr "edit"}}" data-tooltip-content="{{ctx.Locale.Tr "edit"}}">
 					{{svg "octicon-gear" 16}}
 				</button>
 			{{end}}
@@ -14,7 +14,7 @@
 		{{if $description}}
 			<div class="repo-description tw-break-anywhere"><span class="description">{{$description | RenderCodeBlock}}</span></div>
 		{{else}}
-			<div class="repo-description no-description tw-break-anywhere">No description, website, or topics provided.</div>
+			<div class="repo-description no-description tw-break-anywhere">{{ctx.Locale.Tr "repo.no_desc"}}</div>
 		{{end}}
 
 		{{if .Repository.Website}}
@@ -54,10 +54,10 @@
 					</a>
 				{{end}}
                 <div class="repo-mobile-summary only-mobile">
-                    <a class="flex-text-block muted" href="{{.RepoLink}}/branches">{{svg "octicon-git-branch" 16}}{{.BranchesCount}} {{if eq .BranchesCount 1}}branch{{else}}branches{{end}}</a>
-                    <a class="flex-text-block muted" href="{{.RepoLink}}/tags">{{svg "octicon-tag" 16}}{{.NumTags}} {{if eq .NumTags 1}}tag{{else}}tags{{end}}</a>
+                    <a class="flex-text-block muted" href="{{.RepoLink}}/branches">{{svg "octicon-git-branch" 16}}{{ctx.Locale.TrPluralString .BranchesCount "counters.n_branches" (CountFmt .BranchesCount)}}</a>
+                    <a class="flex-text-block muted" href="{{.RepoLink}}/tags">{{svg "octicon-tag" 16}}{{ctx.Locale.TrPluralString .NumTags "counters.n_tags" (CountFmt .NumTags)}}</a>
                 </div>
-                <div class="repo-mobile-visibility only-mobile">{{if .Repository.IsPrivate}}{{svg "octicon-lock" 16}}{{else}}{{svg "octicon-globe" 16}}{{end}}{{if .Repository.IsPrivate}}Private{{else if .Repository.Owner.Visibility.IsPrivate}}Internal{{else}}Public{{end}} repository</div>
+                <div class="repo-mobile-visibility only-mobile">{{if .Repository.IsPrivate}}{{svg "octicon-lock" 16}}{{else}}{{svg "octicon-globe" 16}}{{end}}{{if .Repository.IsPrivate}}{{ctx.Locale.Tr "repo.desc.private"}}{{else if .Repository.Owner.Visibility.IsPrivate}}{{ctx.Locale.Tr "repo.desc.internal"}}{{else}}{{ctx.Locale.Tr "org.settings.visibility.public"}}{{end}}</div>
 			</div>
 		{{end}}
 	</div>
@@ -71,8 +71,8 @@
 				{{if .Repository.IsTemplate}}<input type="hidden" name="template" value="true">{{end}}
 
 				<div class="repo-about-modal-header">
-					<strong id="repo-about-modal-title">Edit repository details</strong>
-					<button type="button" class="btn interact-fg repo-about-modal-close" aria-label="Close">
+					<strong id="repo-about-modal-title">{{ctx.Locale.Tr "packages.common.repository"}}</strong>
+					<button type="button" class="btn interact-fg repo-about-modal-close" aria-label="{{ctx.Locale.Tr "modal.close"}}">
 						{{svg "octicon-x" 16}}
 					</button>
 				</div>
@@ -89,17 +89,17 @@
 					</div>
 
 					<div class="field">
-						<label for="repo-about-topics">Topics</label>
+						<label for="repo-about-topics">{{ctx.Locale.Tr "repo.template.topics"}}</label>
 						{{/* Forgejo 17 passes topics as plain strings; the save handler posts this comma-separated value. */}}
 						<input id="repo-about-topics" class="repo-about-topics-input" name="topics" type="text" value="{{StringUtils.Join .Topics ","}}" placeholder="topic-one, topic-two">
 					</div>
 
-					<div class="repo-about-error tw-hidden" role="alert"></div>
+					<div class="repo-about-error tw-hidden" role="alert" data-message="{{ctx.Locale.Tr "error.occurred"}}" data-saving="{{ctx.Locale.Tr "loading"}}"></div>
 				</div>
 
 				<div class="repo-about-modal-footer">
 					<button type="button" class="ui basic button" id="github_theme_repo_about_cancel">{{ctx.Locale.Tr "cancel"}}</button>
-					<button type="button" class="ui primary button" id="github_theme_repo_about_save" data-link="{{.RepoLink}}/topics">Save changes</button>
+					<button type="button" class="ui primary button" id="github_theme_repo_about_save" data-link="{{.RepoLink}}/topics">{{ctx.Locale.Tr "repo.settings.update_settings"}}</button>
 				</div>
 			</form>
 		</div>
@@ -157,7 +157,7 @@
 
 						const originalText = save.textContent;
 						save.disabled = true;
-						save.textContent = 'Saving…';
+						save.textContent = error.dataset.saving;
 						try {
 							const topics = form.querySelector('input[name="topics"]').value;
 							const topicData = new FormData();
@@ -169,7 +169,7 @@
 							});
 							const topicResult = await topicResponse.json().catch(() => ({}));
 							if (!topicResponse.ok || topicResult.status !== 'ok') {
-								throw new Error(topicResult.message || 'Could not update repository topics.');
+								throw new Error(topicResult.message || error.dataset.message);
 							}
 
 							const settingsData = new FormData(form);
@@ -182,11 +182,11 @@
 							});
 							const expectedPath = settingsURL.pathname;
 							if (!settingsResponse.ok || !settingsResponse.redirected || new URL(settingsResponse.url).pathname !== expectedPath) {
-								throw new Error('Could not update repository details. Check the fields and try again.');
+								throw new Error(error.dataset.message);
 							}
 							window.location.reload();
 						} catch (saveError) {
-							showError(saveError instanceof Error ? saveError.message : 'Could not update repository details.');
+							showError(saveError instanceof Error ? saveError.message : error.dataset.message);
 							save.disabled = false;
 							save.textContent = originalText;
 						}

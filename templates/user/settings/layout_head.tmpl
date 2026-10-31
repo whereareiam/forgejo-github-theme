@@ -2,7 +2,7 @@
 <div role="main" aria-label="{{.ctxData.Title}}" class="page-content {{.pageClass}}">
 	{{if not .ctxData.HideNavbarLinks}}
 	<div class="ui container theme-settings-context-container">
-		{{template "components/common/settings/context" dict "Avatar" (ctx.AvatarUtils.Avatar .ctxData.SignedUser 48) "Title" (.ctxData.SignedUser.DisplayName) "Login" .ctxData.SignedUser.Name "Subtitle" "Your personal account" "Link" .ctxData.SignedUser.HomeLink "LinkIcon" "octicon-person" "LinkLabel" "Go to your personal profile"}}
+		{{template "components/common/settings/context" dict "Avatar" (ctx.AvatarUtils.Avatar .ctxData.SignedUser 48) "Title" (.ctxData.SignedUser.DisplayName) "Login" .ctxData.SignedUser.Name "Subtitle" (ctx.Locale.Tr "concept_user_individual") "Link" .ctxData.SignedUser.HomeLink "LinkIcon" "octicon-person" "LinkLabel" (ctx.Locale.Tr "your_profile")}}
 	</div>
 	{{end}}
 	<div class="ui container flex-container theme-settings">

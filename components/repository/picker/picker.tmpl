@@ -11,7 +11,7 @@ to open, then shows the field. */ -}}
 	</div>
 	<ul class="theme-repo-picker-list" data-theme-repo-picker-list aria-label="{{.Label}}" aria-busy="true"></ul>
 	<p class="theme-repo-picker-message" data-theme-repo-picker-message role="status" hidden></p>
-	{{if .More}}<button type="button" class="theme-repo-picker-more" data-theme-repo-picker-more hidden>Show more</button>{{end}}
+	{{if .More}}<button type="button" class="theme-repo-picker-more" data-theme-repo-picker-more hidden>{{ctx.Locale.Tr "repo.diff.show_more"}}</button>{{end}}
 	<template data-theme-repo-picker-icons>
 		<span data-icon="repo">{{svg "octicon-repo" 16}}</span>
 		<span data-icon="private">{{svg "octicon-lock" 16}}</span>
@@ -20,5 +20,5 @@ to open, then shows the field. */ -}}
 		<span data-icon="template">{{svg "octicon-repo-template" 16}}</span>
 		<span data-icon="check">{{svg "octicon-check" 16}}</span>
 	</template>
-	<template data-theme-repo-picker-text data-empty="{{ctx.Locale.Tr "search.no_results"}}" data-error="Repositories could not be loaded. Try again."></template>
+	<template data-theme-repo-picker-text data-empty="{{ctx.Locale.Tr "search.no_results"}}" data-error="{{ctx.Locale.Tr "error.network_error"}}"></template>
 </div>

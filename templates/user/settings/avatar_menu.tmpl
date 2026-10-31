@@ -1,10 +1,10 @@
 {{- /* The Edit menu over the profile picture: upload a new one, switch back to Gravatar where it is allowed, or remove
 the custom picture. Data carries Link (the settings page), Gravatar and Custom; the Gravatar choice sends the form below the
 picture, with the address typed there. */ -}}
-<label class="theme-dropdown-action" for="new-avatar">Upload a photo…</label>
+<label class="theme-dropdown-action" for="new-avatar">{{ctx.Locale.Tr "settings.choose_new_avatar"}}</label>
 {{if .Gravatar}}
 	<button type="submit" form="avatar-gravatar-form" class="theme-dropdown-action">{{ctx.Locale.Tr "settings.lookup_avatar_by_mail"}}</button>
 {{end}}
 {{if .Custom}}
-	<button type="button" class="theme-dropdown-action theme-dropdown-danger link-action" data-url="{{.Link}}/avatar/delete">Remove photo</button>
+	<button type="button" class="theme-dropdown-action theme-dropdown-danger link-action" data-url="{{.Link}}/avatar/delete">{{ctx.Locale.Tr "settings.delete_current_avatar"}}</button>
 {{end}}

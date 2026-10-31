@@ -11,12 +11,12 @@ headed by the package count with a row per package, or the empty state. Called w
 			{{end}}
 		</select></span>
 		{{template "components/common/search/search" dict "Kind" "plain" "Value" .Query "Placeholder" (ctx.Locale.Tr "search.package_kind")}}
-		<button class="secondary button theme-control theme-control-wide" type="submit">Search</button>
+		<button class="secondary button theme-control theme-control-wide" type="submit">{{ctx.Locale.Tr "search.verb"}}</button>
 	</div>
 </form>
 {{end}}
 <div class="theme-package-list">
-	{{if .PackageDescriptors}}<div class="theme-package-list-header">{{svg "octicon-package" 16}}{{.Total}} {{if eq .Total 1}}package{{else}}packages{{end}}</div>{{end}}
+	{{if .PackageDescriptors}}<div class="theme-package-list-header" title="{{ctx.Locale.Tr "packages.title"}}">{{svg "octicon-package" 16}}{{.Total}}</div>{{end}}
 	{{range .PackageDescriptors}}
 	<div class="theme-package-row">
 		<div class="flex-item">

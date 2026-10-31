@@ -1,29 +1,27 @@
 (() => {
   const DAY = 86400000;
 
-  // Today and Yesterday follow the visitor's calendar; This week, Last week and Earlier the time elapsed, as the rows'
-  // own "3 days ago" and "last week" do.
+  // Today and Yesterday follow the visitor's calendar; this week, last week and older weeks the time elapsed, as the
+  // rows' own "3 days ago" and "last week" do. The browser words them in the page's language, as Forgejo has no keys.
   const bucket = (time, now) => {
     const start = new Date(now);
     start.setHours(0, 0, 0, 0);
     const calendar = Math.floor((start.getTime() - new Date(time).setHours(0, 0, 0, 0)) / DAY);
-    if (calendar <= 0) return "today";
-    if (calendar === 1) return "yesterday";
+    if (calendar <= 0) return [0, "day"];
+    if (calendar === 1) return [-1, "day"];
     const elapsed = (now - time) / DAY;
-    if (elapsed < 7) return "week";
-    if (elapsed < 14) return "last-week";
-    return "earlier";
+    if (elapsed < 7) return [0, "week"];
+    return [-Math.floor(elapsed / 7), "week"];
   };
 
   const setup = feed => {
     const list = feed.querySelector("[data-theme-feed-list]");
     const text = feed.querySelector("[data-theme-feed-text]")?.dataset ?? {};
-    const labels = {
-      today: text.today,
-      yesterday: text.yesterday,
-      week: text.week,
-      "last-week": text.lastWeek,
-      earlier: text.earlier,
+    const lang = document.documentElement.lang || undefined;
+    const relative = new Intl.RelativeTimeFormat(lang, { numeric: "auto" });
+    const label = ([value, unit]) => {
+      const words = relative.format(value, unit);
+      return words.charAt(0).toLocaleUpperCase(lang) + words.slice(1);
     };
 
     // Rows carry their Unix time; a heading goes before the first row of each day group.
@@ -32,18 +30,19 @@
       const now = Date.now();
       let last;
       for (const item of list.querySelectorAll(".theme-feed-item")) {
-        const key = bucket(Number(item.dataset.time) * 1000, now);
+        const when = bucket(Number(item.dataset.time) * 1000, now);
+        const key = when.join(" ");
         if (key === last) continue;
         last = key;
         const heading = document.createElement("li");
         heading.className = "theme-feed-day";
         heading.setAttribute("role", "presentation");
-        heading.textContent = labels[key] ?? "";
+        heading.textContent = label(when);
         item.before(heading);
       }
     };
 
-    // "Load older activity" appends the next page's rows instead of leaving Home.
+    // The link to older activity appends the next page's rows instead of leaving Home.
     feed.addEventListener("click", async event => {
       const older = event.target.closest?.("[data-theme-feed-older]");
       if (!older || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey) return;

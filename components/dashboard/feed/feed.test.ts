@@ -47,7 +47,7 @@ function fixture(ages: number[], nextAges: number[] = []) {
     },
   };
   let click: ((event: unknown) => Promise<void>) | undefined;
-  const text = { today: "Today", yesterday: "Yesterday", week: "This week", lastWeek: "Last week", earlier: "Earlier" };
+  const text = { error: "Network error" };
   const feed = {
     querySelector: (selector: string) =>
       ({ "[data-theme-feed-list]": list, "[data-theme-feed-text]": { dataset: text } })[selector],
@@ -63,6 +63,7 @@ function fixture(ages: number[], nextAges: number[] = []) {
   const fetch = vi.fn(async () => ({ ok: true, text: async () => "" }));
   runInNewContext(script, {
     document: {
+      documentElement: { lang: "en-US" },
       querySelectorAll: () => [feed],
       createElement: () => ({ className: "", textContent: "", dataset: {}, setAttribute() {} }),
     },
@@ -76,6 +77,7 @@ function fixture(ages: number[], nextAges: number[] = []) {
     Date,
     Number,
     Math,
+    Intl,
   });
   const headings = () => nodes.filter(node => node.className === "theme-feed-day").map(node => node.textContent);
   const loadOlder = () =>
@@ -84,9 +86,9 @@ function fixture(ages: number[], nextAges: number[] = []) {
 }
 
 describe("Home's activity feed", () => {
-  it("puts a heading before each day group: today, this week, last week and earlier", () => {
+  it("puts a heading before each day group: today, this week, last week and older weeks, worded in the page language", () => {
     const f = fixture([1000, 3 * DAY, 4 * DAY, 9 * DAY, 30 * DAY]);
-    expect(f.headings()).toEqual(["Today", "This week", "Last week", "Earlier"]);
+    expect(f.headings()).toEqual(["Today", "This week", "Last week", "4 weeks ago"]);
     expect(f.nodes.map(node => node.className)).toEqual([
       "theme-feed-day",
       "theme-feed-item",
@@ -104,7 +106,7 @@ describe("Home's activity feed", () => {
     const f = fixture([3 * DAY], [9 * DAY, 30 * DAY]);
     await f.loadOlder();
     expect(f.fetch).toHaveBeenCalledWith("/?page=2", expect.anything());
-    expect(f.headings()).toEqual(["This week", "Last week", "Earlier"]);
+    expect(f.headings()).toEqual(["This week", "Last week", "4 weeks ago"]);
     expect(f.older.removed).toBe(true);
   });
 });

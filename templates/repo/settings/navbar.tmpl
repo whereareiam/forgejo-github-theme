@@ -1,5 +1,5 @@
-{{/* GitHub's repository settings nav: an icon per page, grouped under Access, Code and automation, and Security.
-	Forgejo has no strings for the group names. */}}
+{{/* GitHub's repository settings nav: an icon per page in groups. Forgejo has strings only for Security, so the
+	other groups are set apart by a separator instead of an English name. */}}
 <div class="flex-container-nav">
 	<div class="ui fluid vertical menu theme-nav-list">
 		<a class="{{if .PageIsSettingsOptions}}active {{end}}item" href="{{.RepoLink}}/settings">
@@ -22,11 +22,11 @@
 				</a>
 			</div>
 		</details>
-		<div class="theme-settings-group">Access</div>
+		<div class="theme-settings-separator" role="separator"></div>
 		<a class="{{if .PageIsSettingsCollaboration}}active {{end}}item" href="{{.RepoLink}}/settings/collaboration">
 			{{svg "octicon-people" 16}}{{ctx.Locale.Tr "repo.settings.collaboration"}}
 		</a>
-		<div class="theme-settings-group">Code and automation</div>
+		<div class="theme-settings-separator" role="separator"></div>
 		{{if .Repository.UnitEnabled $.Context $.UnitTypeCode}}
 			{{if not .Repository.IsEmpty}}
 				<a class="{{if .PageIsSettingsBranches}}active {{end}}item" href="{{.RepoLink}}/settings/branches">
@@ -80,7 +80,7 @@
 					</div>
 				</details>
 			{{end}}
-			<div class="theme-settings-group">Security</div>
+			<div class="theme-settings-group">{{ctx.Locale.Tr "settings.security"}}</div>
 			<a class="{{if .PageIsSettingsKeys}}active {{end}}item" href="{{.RepoLink}}/settings/keys">
 				{{svg "octicon-key" 16}}{{ctx.Locale.Tr "repo.settings.deploy_keys"}}
 			</a>

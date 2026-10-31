@@ -139,18 +139,20 @@
     if (title && !title.querySelector(".actions-run-index"))
       title.append(make("span", "actions-run-index", " #" + mount.dataset.runIndex));
     if (!sidebar.querySelector(".actions-summary-link")) {
-      const summary = make("a", "actions-summary-link", "Summary");
+      const summary = make("a", "actions-summary-link", mount.dataset.themeSummary);
       summary.href = run.link + "#summary";
       const homeIcon = document.querySelector("#actions-nav-icons")?.content.querySelector('[data-icon="home"] svg');
       if (homeIcon) summary.prepend(homeIcon.cloneNode(true));
       sidebar.prepend(summary);
-      const jobs = make("h3", "actions-jobs-heading", "All jobs");
+      // GitHub heads the jobs "All jobs"; Forgejo has no string for it, so a rule sets them apart.
+      const jobs = make("div", "actions-jobs-heading");
+      jobs.setAttribute("role", "separator");
       summary.after(jobs);
-      const source = make("a", "actions-workflow-source", "Workflow file");
+      const source = make("a", "actions-workflow-source", mount.dataset.themeWorkflow);
       source.href = mount.dataset.workflowSourceUrl;
       const fileIcon = document.querySelector("#actions-nav-icons")?.content.querySelector('[data-icon="file"] svg');
       if (fileIcon) source.prepend(fileIcon.cloneNode(true));
-      sidebar.append(make("h3", "actions-details-heading", "Run details"), source);
+      sidebar.append(make("h3", "actions-details-heading", mount.dataset.themeDetails), source);
     }
     sidebar.querySelector(".actions-summary-link").setAttribute("aria-current", isSummary ? "page" : "false");
     // GitHub keeps Delete in the run's "…" menu beside the re-run buttons; the menu drives Forgejo's own button.
@@ -159,14 +161,14 @@
       const menu = make("details", "theme-dropdown actions-run-menu");
       menu.dataset.themeDropdown = "actions";
       const summary = make("summary", "theme-control button");
-      summary.setAttribute("aria-label", "More actions");
+      summary.setAttribute("aria-label", mount.dataset.themeMore);
       const kebab = document.querySelector("#actions-nav-icons")?.content.querySelector('[data-icon="kebab"] svg');
       if (kebab) summary.append(kebab.cloneNode(true));
       const panel = make("div", "theme-dropdown-panel");
       // Forgejo renders Delete only once it knows the permissions, so the items are built when the menu opens.
       menu.addEventListener("toggle", () => {
         if (!menu.open) return;
-        const source = make("a", "theme-dropdown-action", "Workflow file");
+        const source = make("a", "theme-dropdown-action", mount.dataset.themeWorkflow);
         source.href = mount.dataset.workflowSourceUrl;
         panel.replaceChildren(source);
         const remove = mount.querySelector("#delete-run");
@@ -186,8 +188,8 @@
       const field = make("div", "theme-search-field");
       const input = make("input", "");
       input.type = "search";
-      input.placeholder = "Search loaded logs";
-      input.setAttribute("aria-label", "Search loaded logs");
+      input.placeholder = mount.dataset.themeSearch;
+      input.setAttribute("aria-label", mount.dataset.themeSearch);
       const result = make("span", "");
       result.setAttribute("aria-live", "polite");
       field.append(input);
@@ -221,10 +223,10 @@
     }
     fingerprint = next;
     const overview = make("section", "actions-run-overview");
-    overview.setAttribute("aria-label", "Run summary");
+    overview.setAttribute("aria-label", mount.dataset.themeSummary);
     const facts = make("div", "actions-run-facts");
     const triggered = make("div", "actions-run-trigger");
-    triggered.append(make("span", "actions-fact-label", "Triggered by"));
+    triggered.append(make("span", "actions-fact-label", mount.dataset.themeActor));
     const author = make("a", "", run.commit.pusher.displayName);
     author.href = run.commit.pusher.link;
     triggered.append(author);
@@ -238,8 +240,8 @@
     }
     facts.append(triggered);
     for (const [name, value] of [
-      ["Status", status],
-      ["Artifacts", artifacts.length ? String(artifacts.length) : "–"],
+      [mount.dataset.themeStatus, status],
+      [mount.dataset.localeArtifactsTitle, artifacts.length ? String(artifacts.length) : "–"],
     ]) {
       const fact = make("div", "actions-run-fact");
       fact.append(make("span", "actions-fact-label", name), make("strong", "", value));

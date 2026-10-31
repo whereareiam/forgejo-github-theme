@@ -47,11 +47,11 @@
           link.append(icon.cloneNode(true), repository.full_name);
           menu.append(link);
         }
-        status.textContent = "No repositories with issues";
+        status.textContent = status.dataset.empty;
         status.hidden = repositories.length > 0;
       } catch {
         if (current !== request) return;
-        status.textContent = "Repositories could not be loaded";
+        status.textContent = status.dataset.error;
         status.hidden = false;
       }
     };

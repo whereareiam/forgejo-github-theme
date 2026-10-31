@@ -1,7 +1,7 @@
 {{/* GitHub's "Collaborators and teams": the repository's visibility, a summary of direct access, then "Manage access"
 	with the people (and, for organization repositories, the teams) in a box or an empty state, added through a dialog.
-	Forgejo has no strings for the visibility sentences, "Direct access" and "Manage access". Forgejo's hooks stay: the
-	search box ids, the access-mode menu and the delete modal. */}}
+	Forgejo has no strings for GitHub's sentences there, so the visibility and access summary use Forgejo's nearest
+	words and counts. Forgejo's hooks stay: the search box ids, the access-mode menu and the delete modal. */}}
 {{template "repo/settings/layout_head" (dict "ctxData" . "pageClass" "repository settings collaboration")}}
 	<div class="repo-setting-content">
 		<h4 class="ui top attached header">
@@ -11,19 +11,19 @@
 			<div class="theme-settings-summary">
 				<span class="theme-settings-summary-icon">{{if .Repository.IsPrivate}}{{svg "octicon-lock" 16}}{{else}}{{svg "octicon-eye" 16}}{{end}}</span>
 				<div class="theme-settings-summary-main">
-					<strong>{{if .Repository.IsPrivate}}Private repository{{else}}Public repository{{end}}</strong>
-					<span>{{if .Repository.IsPrivate}}{{ctx.Locale.Tr "repo.visibility_description"}}{{else}}This repository is public and visible to anyone.{{end}}</span>
+					<strong>{{if .Repository.IsPrivate}}{{ctx.Locale.Tr "repo.desc.private"}}{{else}}{{ctx.Locale.Tr "org.settings.visibility.public"}}{{end}}</strong>
+					<span>{{if .Repository.IsPrivate}}{{ctx.Locale.Tr "repo.visibility_description"}}{{else}}{{ctx.Locale.Tr "user.visibility.public.tooltip"}}{{end}}</span>
 				</div>
-				<a class="ui button" href="{{.RepoLink}}/settings#repo-private">Manage visibility</a>
+				<a class="ui button" href="{{.RepoLink}}/settings#repo-private">{{ctx.Locale.Tr "repo.visibility"}}</a>
 			</div>
 
 			<div class="theme-settings-panel">
-				<div class="theme-settings-panel-title">Direct access {{svg "octicon-people" 16}}</div>
-				<p><strong>{{len .Collaborators}}</strong> {{if eq (len .Collaborators) 1}}collaborator has{{else}}collaborators have{{end}} access to this repository.{{if .RepoOwnerIsOrganization}} <strong>{{len .Teams}}</strong> {{if eq (len .Teams) 1}}team has{{else}}teams have{{end}} access too.{{end}}</p>
+				<div class="theme-settings-panel-title">{{ctx.Locale.Tr "settings.specific_repo_access"}} {{svg "octicon-people" 16}}</div>
+				<p><strong>{{len .Collaborators}}</strong> {{ctx.Locale.Tr "repo.settings.collaboration"}}{{if .RepoOwnerIsOrganization}} · <strong>{{len .Teams}}</strong> {{ctx.Locale.Tr "repo.settings.teams"}}{{end}}</p>
 			</div>
 
 			<div class="theme-settings-subsection">
-				<h3>Manage access</h3>
+				<h3>{{ctx.Locale.Tr "repo.settings.collaboration"}}</h3>
 				{{if .Collaborators}}<button type="button" class="ui primary button show-modal" data-modal="#add-collaborator-modal">{{ctx.Locale.Tr "repo.settings.add_collaborator"}}</button>{{end}}
 			</div>
 			{{if .Collaborators}}
@@ -112,7 +112,7 @@
 			{{else}}
 				<div class="theme-settings-blankslate theme-settings-blankslate-spacious">
 					{{svg "octicon-people" 32}}
-					<h3>No teams have access to this repository.</h3>
+					<h3>{{ctx.Locale.Tr "org.teams.none_access"}}</h3>
 					{{if $allowedToChangeTeams}}<button type="button" class="ui button show-modal" data-modal="#add-team-modal">{{ctx.Locale.Tr "repo.settings.add_team"}}</button>{{end}}
 				</div>
 			{{end}}

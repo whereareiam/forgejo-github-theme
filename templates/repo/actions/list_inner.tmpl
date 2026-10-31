@@ -2,20 +2,19 @@
 <div class="actions-layout">
 	<main class="actions-main">
 <div class="theme-list-heading actions-heading">
-			<div class="theme-list-title"><button type="button" class="theme-icon-button" data-theme-sidebar-toggle data-theme-sidebar-expand aria-expanded="false" aria-label="Expand sidebar">{{svg "octicon-sidebar-expand" 16}}</button><h1>{{if .CurWorkflow}}{{.CurWorkflow}}{{else}}{{ctx.Locale.Tr "actions.runs.all_workflows"}}{{end}}</h1></div>
-			{{if and .CanWriteCode .CanWriteActions}}<a class="ui button theme-control" href="{{.RepoLink}}/_new/{{.Repository.DefaultBranch | PathEscapeSegments}}/.forgejo/workflows/">New workflow</a>{{end}}
+			<div class="theme-list-title"><button type="button" class="theme-icon-button" data-theme-sidebar-toggle data-theme-sidebar-expand aria-expanded="false" aria-label="{{ctx.Locale.Tr "toggle_menu"}}">{{svg "octicon-sidebar-expand" 16}}</button><h1>{{if .CurWorkflow}}{{.CurWorkflow}}{{else}}{{ctx.Locale.Tr "actions.runs.all_workflows"}}{{end}}</h1></div>
+			{{if and .CanWriteCode .CanWriteActions}}<a class="ui button theme-control" href="{{.RepoLink}}/_new/{{.Repository.DefaultBranch | PathEscapeSegments}}/.forgejo/workflows/">{{ctx.Locale.Tr "file_editor.new_file"}}</a>{{end}}
 		</div>
-		<p class="actions-subtitle">{{if .CurWorkflow}}Workflow runs{{else}}Showing runs from all workflows{{end}}</p>
-		{{template "components/common/search/search" dict "Kind" "icon" "Local" true "ID" "actions-run-filter" "Class" "actions-search" "Placeholder" "Filter runs on this page"}}
-		<div class="ui secondary filter menu actions-filters"><strong class="actions-run-count">{{.Page.Paginater.Total}} workflow {{if eq .Page.Paginater.Total 1}}run{{else}}runs{{end}}</strong>
+		{{template "components/common/search/search" dict "Kind" "icon" "Local" true "ID" "actions-run-filter" "Class" "actions-search" "Placeholder" (ctx.Locale.Tr "filter")}}
+		<div class="ui secondary filter menu actions-filters"><strong class="actions-run-count">{{svg "octicon-play" 16}}{{.Page.Paginater.Total}}</strong>
 			<div id="reloading-indicator" class="htmx-indicator"></div>
 
             <div id="workflow_dropdown" class="ui dropdown jump item actions-workflow-filter">
-              <span class="text">Workflow</span>{{svg "octicon-triangle-down" 14 "dropdown icon"}}
+              <span class="text">{{ctx.Locale.Tr "actions.runs.workflow"}}</span>{{svg "octicon-triangle-down" 14 "dropdown icon"}}
               <div class="menu">
-                <div class="header">Filter by workflow</div>
-                <div class="ui left icon search input"><i class="icon">{{svg "octicon-search" 16}}</i><input type="text" placeholder="Find a workflow" aria-label="Find a workflow"></div>
-                <a class="item{{if not .CurWorkflow}} active{{end}}" href="?actor={{.CurActor}}&amp;status={{.CurStatus}}">{{svg "octicon-check" 16 "actions-filter-check"}}All workflows</a>
+                <div class="header">{{ctx.Locale.Tr "actions.runs.workflow"}}</div>
+                <div class="ui left icon search input"><i class="icon">{{svg "octicon-search" 16}}</i><input type="text" placeholder="{{ctx.Locale.Tr "actions.runs.workflow"}}" aria-label="{{ctx.Locale.Tr "actions.runs.workflow"}}"></div>
+                <a class="item{{if not .CurWorkflow}} active{{end}}" href="?actor={{.CurActor}}&amp;status={{.CurStatus}}">{{svg "octicon-check" 16 "actions-filter-check"}}{{ctx.Locale.Tr "actions.runs.all_workflows"}}</a>
                 {{range .workflows}}<a class="item{{if eq .Entry.Name $.CurWorkflow}} active{{end}}" href="?workflow={{.Entry.Name}}&amp;actor={{$.CurActor}}&amp;status={{$.CurStatus}}">{{svg "octicon-check" 16 "actions-filter-check"}}{{.Entry.Name}}</a>{{end}}
               </div>
             </div>
@@ -24,7 +23,7 @@
 				<span class="text">{{ctx.Locale.Tr "actions.runs.actor"}}</span>
 				{{svg "octicon-triangle-down" 14 "dropdown icon"}}
 				<div class="menu">
-                    <div class="header">Filter by actor</div>
+                    <div class="header">{{ctx.Locale.Tr "actions.runs.actor"}}</div>
 					<div class="ui left icon search input">
 						<i class="icon">{{svg "octicon-search"}}</i>
 						<input type="text" placeholder="{{ctx.Locale.Tr "actions.runs.actor"}}">
@@ -44,7 +43,7 @@
 				<span class="text">{{ctx.Locale.Tr "actions.runs.status"}}</span>
 				{{svg "octicon-triangle-down" 14 "dropdown icon"}}
 				<div class="menu">
-                    <div class="header">Filter by status</div>
+                    <div class="header">{{ctx.Locale.Tr "actions.runs.status"}}</div>
 					<div class="ui left icon search input">
 						<i class="icon">{{svg "octicon-search"}}</i>
 						<input type="text" placeholder="{{ctx.Locale.Tr "actions.runs.status"}}">
@@ -87,7 +86,7 @@
 		{{end}}
 
 		{{template "repo/actions/runs_list" .}}
-<p class="actions-search-empty" hidden>No runs on this page match your filter.</p>
+<p class="actions-search-empty" hidden>{{ctx.Locale.Tr "actions.runs.no_results"}}</p>
 	</main>
 </div>
 {{else}}

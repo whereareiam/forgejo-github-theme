@@ -1,7 +1,7 @@
 {{$total := Eval .Addition "+" .Deletion}}
 {{$added := .Addition}}{{$deleted := .Deletion}}
 {{if gt $total 5}}{{$added = Eval .Addition "*" 5 "/" $total}}{{$deleted = Eval .Deletion "*" 5 "/" $total}}{{end}}
-<span class="diff-change-summary" aria-label="{{.Addition}} additions and {{.Deletion}} deletions">
+<span class="diff-change-summary" aria-label="{{ctx.Locale.Tr "repo.diff.stats_desc_file" $total .Addition .Deletion}}">
 	{{if gt .Addition 0}}<span class="diff-additions">+{{.Addition}}</span>{{end}}
 	{{if gt .Deletion 0}}<span class="diff-deletions">-{{.Deletion}}</span>{{end}}
 	<span class="diff-change-bar" aria-hidden="true">

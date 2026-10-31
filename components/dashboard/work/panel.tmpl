@@ -7,5 +7,5 @@ Link opens the full list. */ -}}
 		<span class="theme-counter" data-theme-work-count></span>
 	</div>
 	<ul class="theme-work-rows" data-theme-work-rows></ul>
-	{{if .Link}}<a class="theme-work-all" href="{{.Link}}">View all</a>{{end}}
+	{{if .Link}}<a class="theme-work-all" href="{{.Link}}">{{ctx.Locale.Tr "packages.versions.view_all"}}</a>{{end}}
 </section>

@@ -1,4 +1,4 @@
-{{/* Forgejo 17's branch and tag selector as GitHub's Development section: a heading with the gear like the other
+{{/* Forgejo 17's branch and tag selector as GitHub's Development section (headed Reference, Forgejo's word for it): a heading with the gear like the other
 sidebar sections, then the linked branch or tag. The menu and its scripts are Forgejo's; the caller places the
 dividers. */}}
 {{if and (not .Issue.IsPull) (not .PageIsComparePull)}}
@@ -10,7 +10,7 @@ dividers. */}}
 {{/* TODO: share this branch selector dropdown with the same in repo page */}}
 <div class="ui {{if not $hasIssuesOrPullsWritePermission}}disabled{{end}} floating filter select-branch dropdown tw-max-w-full theme-issue-development" data-no-results="{{ctx.Locale.Tr "repo.pulls.no_results"}}">
 	<a class="text muted flex-text-block">
-		<strong>Development</strong>
+		<strong>{{ctx.Locale.Tr "discussion.sidebar.reference"}}</strong>
 		{{if $hasIssuesOrPullsWritePermission}}{{svg "octicon-gear" 16 "tw-ml-1"}}{{end}}
 	</a>
 	{{/* Forgejo's script writes the chosen branch or tag into .branch-name inside a .ui element of this dropdown. */}}

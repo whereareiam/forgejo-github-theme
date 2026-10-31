@@ -6,15 +6,10 @@
     min-width: 0;
   }
   .actions-heading {
-    margin-bottom: 0;
+    margin-bottom: 8px;
   }
   .actions-heading h1 {
     overflow-wrap: anywhere;
-  }
-  .actions-subtitle {
-    margin: 0 0 8px;
-    font-size: 14px;
-    line-height: 21px;
   }
   .actions-search {
     width: 100%;
@@ -40,6 +35,9 @@
     background: var(--color-box-header);
   }
   .actions-run-count {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
     margin-right: auto;
     color: var(--color-text-light-1);
     font-size: 14px;

@@ -14,7 +14,7 @@ function element(...initial: string[]) {
     classes,
     attributes,
     children: [],
-    dataset: { showText: "Show file tree", hideText: "Hide file tree" },
+    dataset: { showText: "Show file tree", hideText: "Hide file tree", label: "Files changed" },
     classList: {
       add: (name: string) => classes.add(name),
       remove: (name: string) => classes.delete(name),

@@ -1,7 +1,7 @@
 <dialog id="navbar-drawer" class="navbar-drawer" aria-label="{{ctx.Locale.Tr "aria.navbar"}}">
 	<div class="navbar-drawer-header">
 		<a href="{{AppSubUrl}}/" aria-label="{{ctx.Locale.Tr "home"}}"><img src="{{AssetUrlPrefix}}/img/logo.svg" width="32" height="32" alt="{{ctx.Locale.Tr "logo"}}"></a>
-		<button type="button" class="navbar-drawer-close" aria-label="Close menu" autofocus>{{svg "octicon-x" 16}}</button>
+		<button type="button" class="navbar-drawer-close" aria-label="{{ctx.Locale.Tr "modal.close"}}" autofocus>{{svg "octicon-x" 16}}</button>
 	</div>
 	<nav class="navbar-drawer-content" aria-label="{{ctx.Locale.Tr "aria.navbar"}}">
 		{{if not (and .IsSigned .HideNavbarLinks)}}

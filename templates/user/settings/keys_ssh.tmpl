@@ -1,10 +1,10 @@
-{{/* GitHub's heading button (New SSH key) and its plain line when no SSH keys are added; Forgejo has no strings for
-them. */}}
+{{/* GitHub's heading button and its plain line when no SSH keys are added, in Forgejo's words for adding a key and
+for what the keys are. */}}
 <h4 class="ui top attached header">
 	{{ctx.Locale.Tr "settings.manage_ssh_keys"}}
 	<div class="ui right">
 		<button id="add-ssh-button" class="ui primary tiny show-panel toggle button" data-panel="#add-ssh-key-panel">
-			New SSH key
+			{{ctx.Locale.Tr "settings.add_key"}}
 		</button>
 	</div>
 </h4>
@@ -114,7 +114,7 @@ them. */}}
 		{{end}}
 	</div>
 	{{if not .Keys}}
-		{{template "components/common/settings/blankslate" dict "Title" "There are no SSH keys associated with your account." "Plain" true}}
+		{{template "components/common/settings/blankslate" dict "Title" (ctx.Locale.Tr "settings.ssh_desc") "Plain" true}}
 	{{end}}
 	<div class="ui g-modal-confirm delete modal" id="delete-ssh">
 		<div class="header">

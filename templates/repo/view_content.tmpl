@@ -9,7 +9,7 @@
 
 <div class="gitea-github-theme-templates repo-button-row">
 	<div class="repo-button-row-left">
-		{{if not .TreeNames}}{{template "repo/branch_dropdown" dict "root" .}}{{else}}<button type="button" class="theme-icon-button repo-source-show-tree" data-source-tree-toggle aria-label="Show file tree">{{svg "octicon-sidebar-expand" 16}}</button>{{end}}
+		{{if not .TreeNames}}{{template "repo/branch_dropdown" dict "root" .}}{{else}}<button type="button" class="theme-icon-button repo-source-show-tree" data-source-tree-toggle data-hide-label="{{ctx.Locale.Tr "repo.diff.hide_file_tree"}}" data-show-label="{{ctx.Locale.Tr "repo.diff.show_file_tree"}}" aria-label="{{ctx.Locale.Tr "repo.diff.show_file_tree"}}">{{svg "octicon-sidebar-expand" 16}}</button>{{end}}
 		{{/* Below the root the branch selector, and the compare button with it, sit in the file tree panel. */}}
 		{{if $isTreePathRoot}}{{template "components/repository/compare/compare" .}}{{end}}
 
@@ -69,9 +69,9 @@
 		{{end}}
 
         <details class="theme-menu repo-mobile-actions only-mobile">
-            <summary class="theme-icon-button theme-icon-button-outlined" aria-label="More file actions">{{svg "octicon-kebab-horizontal" 16}}</summary>
+            <summary class="theme-icon-button theme-icon-button-outlined" aria-label="{{ctx.Locale.Tr "profile.actions.tooltip"}}">{{svg "octicon-kebab-horizontal" 16}}</summary>
             <div class="theme-menu-popover">
-                <a href="{{.Repository.Link}}/find/{{.BranchNameSubURL}}">{{svg "octicon-search" 16}}Go to file</a>
+                <a href="{{.Repository.Link}}/find/{{.BranchNameSubURL}}">{{svg "octicon-search" 16}}{{ctx.Locale.Tr "repo.find_file.go_to_file"}}</a>
                 {{if and .CanWriteCode .IsViewBranch (not .Repository.IsMirror) (not .Repository.IsArchived) (not .IsViewFile)}}
                     <a href="{{.RepoLink}}/_new/{{.BranchName | PathEscapeSegments}}/{{.TreePath | PathEscapeSegments}}">{{svg "octicon-plus" 16}}{{ctx.Locale.Tr "file_editor.new_file"}}</a>
                     {{if .RepositoryUploadEnabled}}<a href="{{.RepoLink}}/_upload/{{.BranchName | PathEscapeSegments}}/{{.TreePath | PathEscapeSegments}}">{{svg "octicon-upload" 16}}{{ctx.Locale.Tr "file_editor.upload_file"}}</a>{{end}}
@@ -87,7 +87,7 @@
 
 		{{if $isTreePathRoot}}
 			<details class="dropdown repo-code-dropdown">
-				<summary class="ui primary compact button" aria-label="Code">
+				<summary class="ui primary compact button" aria-label="{{ctx.Locale.Tr "repo.code"}}">
 					{{svg "octicon-code" 16}}
 					<span>{{ctx.Locale.Tr "repo.code"}}</span>
 					{{svg "octicon-triangle-down" 16 "dropdown icon"}}
@@ -105,12 +105,12 @@
 							<div class="clone-panel ui action tiny input">
 								{{template "repo/clone_buttons" .}}
 								<button class="ui small basic button" id="repo-clone-fj" type="button" data-fj-repo="{{.Repository.OwnerName}}/{{.Repository.Name}}">Forgejo CLI</button>
-								<p class="repo-clone-hint" id="repo-clone-fj-hint" hidden>Work fast with the Forgejo CLI. <a href="https://codeberg.org/forgejo-contrib/forgejo-cli" target="_blank" rel="noopener noreferrer">Learn more</a></p>
+								<p class="repo-clone-hint" id="repo-clone-fj-hint" hidden><a href="https://codeberg.org/forgejo-contrib/forgejo-cli" target="_blank" rel="noopener noreferrer">forgejo-cli</a></p>
 							</div>
 						</div>
                         {{if and (not (StringUtils.HasPrefix .BranchNameSubURL "commit")) (or .CodeIndexerDisabled (and (not .TagName) (eq .Repository.DefaultBranch .BranchName)))}}
                             <details class="repo-code-search">
-                                <summary>{{svg "octicon-search" 16}}Search code</summary>
+                                <summary>{{svg "octicon-search" 16}}{{ctx.Locale.Tr "search.code_kind"}}</summary>
                                 <form class="ui form ignore-dirty theme-search-control" action="{{.RepoLink}}/search/{{if .CodeIndexerDisabled}}{{.BranchNameSubURL}}{{end}}" method="get" data-test-tag="codesearch">
 				<input type="hidden" name="path" value="{{.TreePath | PathEscapeSegments}}">
 				{{template "shared/search/combo_multi"

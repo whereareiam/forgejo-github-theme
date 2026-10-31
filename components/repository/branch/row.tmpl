@@ -32,7 +32,7 @@ and ahead of the default branch, its pull request, then delete or restore and a 
 	<td class="theme-branch-divergence">
 		{{if and (not .IsDefault) (not $db.IsDeleted) $page.DefaultBranchBranch}}
 			{{$total := Eval $branch.CommitsBehind "+" $branch.CommitsAhead}}
-			<div class="theme-branch-divergence-graph" data-tooltip-content="{{$branch.CommitsAhead}} ahead, {{$branch.CommitsBehind}} behind {{$page.DefaultBranchBranch.DBBranch.Name}}">
+			<div class="theme-branch-divergence-graph" data-tooltip-content="{{ctx.Locale.TrPluralString $branch.CommitsBehind "sync_fork.branch_behind" $branch.CommitsBehind $page.DefaultBranchBranch.DBBranch.Name}}">
 				<span class="theme-branch-behind"><span class="theme-branch-count">{{$branch.CommitsBehind}}</span><span class="theme-branch-bar"{{if $total}} style="width: {{Eval 100 "*" $branch.CommitsBehind "/" $total}}%"{{end}}></span></span>
 				<span class="theme-branch-ahead"><span class="theme-branch-count">{{$branch.CommitsAhead}}</span><span class="theme-branch-bar"{{if $total}} style="width: {{Eval 100 "*" $branch.CommitsAhead "/" $total}}%"{{end}}></span></span>
 			</div>

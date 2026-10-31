@@ -136,7 +136,7 @@
 				<a rel="nofollow" class="{{if eq .ViewType "reviewed_by"}}active {{end}}item" href="?q={{$.Keyword}}&type=reviewed_by&sort={{$.SortType}}&state={{$.State}}&labels={{.SelectLabels}}&milestone={{$.MilestoneID}}&project={{$.ProjectID}}&assignee={{$.AssigneeID}}&poster={{$.PosterID}}{{if $.ShowArchivedLabels}}&archived=true{{end}}">{{ctx.Locale.Tr "repo.issues.filter_type.reviewed_by_you"}}</a>
 			{{end}}
 			<a rel="nofollow" class="{{if eq .ViewType "mentioned"}}active {{end}}item" href="?q={{$.Keyword}}&type=mentioned&sort={{$.SortType}}&state={{$.State}}&labels={{.SelectLabels}}&milestone={{$.MilestoneID}}&project={{$.ProjectID}}&assignee={{$.AssigneeID}}&poster={{$.PosterID}}{{if $.ShowArchivedLabels}}&archived=true{{end}}">{{ctx.Locale.Tr "repo.issues.filter_type.mentioning_you"}}</a>
-			{{if $.themeList}}<a class="item" href="{{$.AllStatesLink}}">All states</a>{{end}}
+			{{if $.themeList}}<a class="item" href="{{$.AllStatesLink}}">{{ctx.Locale.Tr "repo.issues.all_title"}}</a>{{end}}
 		</div>
 	</div>
 {{end}}

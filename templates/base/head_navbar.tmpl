@@ -35,7 +35,7 @@
 				<a class="repository-navbar-name" href="{{$.RepoLink}}">{{svg $repoIcon 16}}<span>{{.Name}}</span></a>
 				{{/* GitHub's repository switcher: the owner's repositories, loaded when the menu opens. */}}
 				<span class="repository-navbar-switcher">
-					{{template "components/common/dropdown/dropdown" dict "Kind" "actions" "Icon" "octicon-triangle-down" "IconOnly" true "Quiet" true "Small" true "Label" "Switch repository" "Title" "Switch repository" "Items" "base/navbar_repository_switcher" "Data" (dict "Context" ctx "Repository" .)}}
+					{{template "components/common/dropdown/dropdown" dict "Kind" "actions" "Icon" "octicon-triangle-down" "IconOnly" true "Quiet" true "Small" true "Label" (ctx.Locale.Tr "user.repositories") "Title" (ctx.Locale.Tr "user.repositories") "Items" "base/navbar_repository_switcher" "Data" (dict "Context" ctx "Repository" .)}}
 				</span>
 			</div>
 			{{end}}

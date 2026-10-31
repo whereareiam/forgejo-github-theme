@@ -19,7 +19,7 @@
     container.classList.toggle("repo-source-tree-hidden", !show);
     for (const toggle of container.querySelectorAll("[data-source-tree-toggle]")) {
       toggle.setAttribute("aria-expanded", show);
-      toggle.setAttribute("aria-label", show ? "Hide file tree" : "Show file tree");
+      toggle.setAttribute("aria-label", show ? toggle.dataset.hideLabel : toggle.dataset.showLabel);
     }
   }
   function preference() {
@@ -123,7 +123,7 @@
       if (selected) selected.tabIndex = 0;
       status.hidden = true;
     } catch {
-      status.textContent = "Could not load the file tree. Reload to try again.";
+      status.textContent = status.dataset.error;
     }
   }
   load();

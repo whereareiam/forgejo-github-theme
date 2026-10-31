@@ -38,7 +38,6 @@
 						{{ctx.AvatarUtils.AvatarByEmail $commit.Author.Email $commit.Author.Name 20}}
 						<span class="author-wrapper">{{$userName}}</span>
 					{{end}}
-					{{if $page.PageIsPullCommits}}<span>committed</span>{{end}}
 					{{if $commit.Committer}}
 						{{DateUtils.TimeSince $commit.Committer.When}}
 					{{else}}

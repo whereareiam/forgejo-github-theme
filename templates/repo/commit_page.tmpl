@@ -4,11 +4,11 @@
 	<div class="ui container fluid padded commit-page-container">
 		<section class="commit-page-header" aria-labelledby="commit-title">
 			<div class="commit-title-row">
-				<h1 class="commit-title" id="commit-title">Commit <code>{{printf "%.7s" .CommitID}}</code></h1>
+				<h1 class="commit-title" id="commit-title">{{ctx.Locale.Tr "repo.commit"}} <code>{{printf "%.7s" .CommitID}}</code></h1>
 				<div class="commit-page-actions">
-					<a class="ui button" href="{{.SourcePath}}" aria-label="Browse files">
+					<a class="ui button" href="{{.SourcePath}}" aria-label="{{ctx.Locale.Tr "repo.diff.browse_source"}}">
 						{{svg "octicon-file-code" 16}}
-						<span>Browse files</span>
+						<span>{{ctx.Locale.Tr "repo.diff.browse_source"}}</span>
 					</a>
 					{{if and ($.Permission.CanWrite $.UnitTypeCode) (not $.Repository.IsArchived) (not .IsDeleted)}}{{- /* */ -}}
 						<div class="ui dropdown button commit-operations" data-tooltip-content="{{ctx.Locale.Tr "repo.commit.operations"}}">
@@ -128,7 +128,7 @@
 				{{else}}
 					<strong>{{.Commit.Author.Name}}</strong>
 				{{end}}
-				<span>{{if or (ne .Commit.Committer.Name .Commit.Author.Name) (ne .Commit.Committer.Email .Commit.Author.Email)}}authored{{else}}committed{{end}} {{DateUtils.TimeSince .Commit.Author.When}}</span>
+				<span>{{DateUtils.TimeSince .Commit.Author.When}}</span>
 				{{if or (ne .Commit.Committer.Name .Commit.Author.Name) (ne .Commit.Committer.Email .Commit.Author.Email)}}
 					<span class="commit-attribution-separator">·</span>
 					<span>{{ctx.Locale.Tr "repo.diff.committed_by"}}</span>
@@ -143,7 +143,6 @@
 					<span class="commit-attribution-separator">·</span>
 					<span class="commit-verification" data-tooltip-content="{{.Verification.Reason}}">
 						{{svg "octicon-verified" 14}}
-						Verified
 					</span>
 				{{end}}
 			</div>
@@ -158,7 +157,7 @@
 				<div class="commit-meta-row">
 					{{template "repo/commit_load_branches_and_tags" .}}
 					<div class="commit-identifiers">
-                        <a href="{{.Link}}.patch">patch</a><a href="{{.Link}}.diff">diff</a><span>·</span>
+                        <a href="{{.Link}}.patch" data-tooltip-content="{{ctx.Locale.Tr "repo.diff.download_patch"}}">patch</a><a href="{{.Link}}.diff" data-tooltip-content="{{ctx.Locale.Tr "repo.diff.download_diff"}}">diff</a><span>·</span>
 						{{if .Parents}}
 							<span class="commit-identifier">
 								<span>{{len .Parents}} {{ctx.Locale.Tr "repo.diff.parent"}}</span>
@@ -239,7 +238,7 @@
 				{{end}}
 				{{if not .DiffNotAvailable}}
 					<div class="commit-stats-row">
-						<div class="commit-files-changed">{{.DiffMetadata.TotalNumberOfFiles}} {{if eq .DiffMetadata.TotalNumberOfFiles 1}}file{{else}}files{{end}} changed</div>
+						<div class="commit-files-changed" data-tooltip-content="{{ctx.Locale.Tr "repo.pulls.tab_files"}}">{{svg "octicon-file-diff" 16}}{{.DiffMetadata.TotalNumberOfFiles}}</div>
 						{{template "repo/diff/change_summary" dict "Addition" .Diff.TotalAddition "Deletion" .Diff.TotalDeletion}}
 					</div>
 				{{end}}

@@ -98,7 +98,7 @@
 				</div>
 			{{else if .IsSigned}}
 				<div class="timeline-item comment form">
-					<h2 class="comment-editor-heading">Add a comment</h2>
+					<h2 class="comment-editor-heading">{{ctx.Locale.Tr "repo.diff.comment.add_review_comment"}}</h2>
 					<a class="timeline-avatar" href="{{.SignedUser.HomeLink}}">
 						{{ctx.AvatarUtils.Avatar .SignedUser 40}}
 					</a>

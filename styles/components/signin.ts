@@ -206,11 +206,6 @@ const twoFactor = css`
       white-space: normal;
       overflow-wrap: anywhere;
     }
-    .twofa-description {
-      margin: 0;
-      font-size: 14px;
-      line-height: 1.5;
-    }
     .ui.attached.segment .field:not(.inline) {
       margin-bottom: 24px;
       input {

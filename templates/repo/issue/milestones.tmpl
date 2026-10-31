@@ -8,7 +8,7 @@ then the milestone box. */}}
 		{{template "base/alert" .}}
 		<section class="theme-box-list-page">
 			<div class="theme-list-heading">
-				<div class="theme-list-title"><button type="button" class="theme-icon-button" data-theme-sidebar-toggle data-theme-sidebar-expand aria-expanded="false" aria-label="Expand sidebar">{{svg "octicon-sidebar-expand" 16}}</button><h1>{{ctx.Locale.Tr "repo.milestones"}}</h1></div>
+				<div class="theme-list-title"><button type="button" class="theme-icon-button" data-theme-sidebar-toggle data-theme-sidebar-expand aria-expanded="false" aria-label="{{ctx.Locale.Tr "toggle_menu"}}">{{svg "octicon-sidebar-expand" 16}}</button><h1>{{ctx.Locale.Tr "repo.milestones"}}</h1></div>
 				{{if $canWrite}}<a class="primary button theme-control" href="{{$.Link}}/new">{{ctx.Locale.Tr "repo.milestones.new"}}</a>{{end}}
 			</div>
 			<div class="theme-box-list-toolbar">

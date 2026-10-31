@@ -13,11 +13,11 @@ organization's pages in the sidebar. */}}
 			<hr>
 			<section class="github-home-repositories" aria-labelledby="github-home-repositories-title">
 				<div class="github-home-repositories-heading">
-					<h2 id="github-home-repositories-title">Top repositories</h2>
+					<h2 id="github-home-repositories-title">{{ctx.Locale.Tr "home.my_repos"}}</h2>
 					<button type="button" class="theme-icon-button" data-theme-repo-picker-toggle aria-controls="github-home-repositories" aria-label="{{ctx.Locale.Tr "search.repo_kind"}}" data-tooltip-content="{{ctx.Locale.Tr "search.repo_kind"}}">{{svg "octicon-search" 16}}</button>
 				</div>
 				{{$teamID := 0}}{{if .Team}}{{$teamID = .Team.ID}}{{end}}
-				{{template "components/repository/picker/picker" dict "ID" "github-home-repositories" "UID" $user.ID "Team" $teamID "FullName" true "Limit" 10 "More" true "Label" "Top repositories"}}
+				{{template "components/repository/picker/picker" dict "ID" "github-home-repositories" "UID" $user.ID "Team" $teamID "FullName" true "Limit" 10 "More" true "Label" (ctx.Locale.Tr "home.my_repos")}}
 			</section>
 		</div>
 		{{template "components/common/sidebar/toggle" .}}
@@ -26,15 +26,10 @@ organization's pages in the sidebar. */}}
 		{{template "base/alert" .}}
 		<div class="theme-list-heading">
 			<div class="theme-list-title">
-				<button type="button" class="theme-icon-button" data-theme-sidebar-toggle data-theme-sidebar-expand aria-expanded="false" aria-label="Expand sidebar">{{svg "octicon-sidebar-expand" 16}}</button>
-				{{if $isOrg}}
-					<h1>{{$user.DisplayName}}</h1>
-				{{else}}
-					{{/* The script turns this into GitHub's greeting for the visitor's time of day. It runs as the heading is
-					parsed, before the page's first paint, so "Hello" never shows first. */}}
-					<h1 data-theme-greeting data-name="{{$user.Name}}">Hello, {{$user.Name}}!</h1>
-					<script src="{{AssetUrlPrefix}}/js/dashboard-greeting.js"></script>
-				{{end}}
+				<button type="button" class="theme-icon-button" data-theme-sidebar-toggle data-theme-sidebar-expand aria-expanded="false" aria-label="{{ctx.Locale.Tr "toggle_menu"}}">{{svg "octicon-sidebar-expand" 16}}</button>
+				{{/* GitHub greets the visitor by time of day; Forgejo has no strings for a greeting, so Home is headed by the
+				account name. */}}
+				<h1>{{$user.DisplayName}}</h1>
 			</div>
 		</div>
 		<div class="github-home-columns">
