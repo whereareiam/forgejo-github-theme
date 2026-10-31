@@ -1,0 +1,19 @@
+{
+  "defaultBranch": "main",
+  "commits": [
+    {
+      "id": "01-initial",
+      "branch": "main",
+      "author": "alex",
+      "daysAgo": 20,
+      "time": "16:30",
+      "message": "Add the edge cases",
+      "generated": [
+        { "files": "lib/deep dir/a&b <c>.txt", "content": "A name with spaces, an ampersand and angle brackets.\n" },
+        { "symlink": "linked-lib", "target": "lib" },
+        { "submodule": "vendor/docs", "commit": "0123456789abcdef0123456789abcdef01234567" }
+      ]
+    }
+  ],
+  "tags": []
+}

@@ -9,6 +9,7 @@ import { FixtureRepositoryDirectory } from "../FixtureRepositoryDirectory.ts";
 import type { FixtureUser } from "../model/FixtureOwners.ts";
 import { BuiltHistory } from "./BuiltHistory.ts";
 import type { BuiltCommit } from "./BuiltHistory.ts";
+import { writeGeneratedEntries } from "./FixtureGeneratedEntries.ts";
 
 /** Replays a fixture's commit folders into a temporary Git repository and pushes it to the preview. */
 export class FixtureHistoryBuilder {
@@ -50,6 +51,7 @@ export class FixtureHistoryBuilder {
       if (!author) throw new Error(`Fixture ${fixture.name} commit ${commit.id} has unknown author ${commit.author}.`);
       if (commits.length > 0) this.checkout(checkout, commit.branch, branches, source.defaultBranch);
       cpSync(fixture.commitDirectory(commit.id), checkout, { recursive: true });
+      const submodules = writeGeneratedEntries(checkout, commit.generated ?? []);
       const date = this.clock.at(commit.daysAgo, commit.time);
       const identity = {
         GIT_AUTHOR_NAME: author.fullName,
@@ -60,6 +62,8 @@ export class FixtureHistoryBuilder {
         GIT_COMMITTER_DATE: date.toISOString(),
       };
       this.git(checkout, ["add", "--all"]);
+      for (const submodule of submodules)
+        this.git(checkout, ["update-index", "--add", "--cacheinfo", `160000,${submodule.commit},${submodule.path}`]);
       this.git(checkout, ["commit", "--quiet", "--no-gpg-sign", "--message", commit.message], identity);
       const sha = this.git(checkout, ["rev-parse", "HEAD"]).trim();
       commits.push({ id: commit.id, sha, branch: commit.branch, author: commit.author, message: commit.message, date });

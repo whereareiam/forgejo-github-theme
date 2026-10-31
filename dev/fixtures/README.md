@@ -60,6 +60,18 @@ working tree, so a commit only contains what it adds or changes. Commits are app
 the first time starts at the default branch's tip at that point in the list; later commits on the same branch continue
 it. Tags name a commit `id`.
 
+A commit can also list `generated` entries, which the seeder writes after copying the commit's folder. Use them for what
+the theme's own checkout should not hold:
+
+- `{ "files": "pkg-{00..39}/file_{000..049}.ts", "content": "..." }` writes one file per path. Each `{first..last}`
+  range is padded to the width of `first`. `alex-big-monorepo` uses this for 50,000 files, to check how fast the code
+  view's file tree loads.
+- `{ "symlink": "linked-lib", "target": "lib" }` adds a symlink.
+- `{ "submodule": "vendor/docs", "commit": "<40 hex digits>" }` adds a submodule entry. Nothing is cloned; add a
+  `.gitmodules` to the commit's folder for its URL.
+
+`alex-tree-edge-cases` shows every kind, plus dotfiles and a file name with spaces, `&` and `<>`.
+
 Commit hashes differ between seeds because the dates do. Refer to commits by `id`, never by hash.
 
 ## Issues, pull requests and releases

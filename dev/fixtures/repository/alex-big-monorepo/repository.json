@@ -1,0 +1,15 @@
+{
+  "owner": "alex",
+  "name": "big-monorepo",
+  "description": "50,000 generated files, for checking how fast the code view's file tree loads.",
+  "website": "",
+  "topics": [],
+  "createdDaysAgo": 30,
+  "stars": [],
+  "labels": [],
+  "milestones": [],
+  "issues": [],
+  "pulls": [],
+  "releases": [],
+  "packages": []
+}

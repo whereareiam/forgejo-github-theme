@@ -1,0 +1,3 @@
+[submodule "vendor/docs"]
+	path = vendor/docs
+	url = https://example.com/acme/docs.git

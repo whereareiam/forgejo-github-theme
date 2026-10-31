@@ -1,4 +1,9 @@
 {{/* Repository home composition adapted to Forgejo 15 partials. */}}
+{{/* The file tree's full list, fetched once per commit by repo-source-browser.js instead of sent with every page. */}}
+{{if and .TreeNames (eq (.Context.Req.FormValue "source-tree") "list")}}
+<template id="repo-source-tree-list">{{range .Context.Repo.Commit.ListEntriesRecursiveFast}}{{if not .IsDir}}{{.Name}}
+{{end}}{{end}}</template>
+{{else}}
 {{template "base/head" .}}
 {{$showSidebar := and (not .TreeNames) (not .HideRepoInfo) (not .IsBlame)}}
 {{/* Layout classes instead of CSS :has(): a :has() on .page-content restyles the whole page, every line of a large file included, on any DOM change. */}}
@@ -45,3 +50,4 @@
 	</div>
 </div>
 {{template "base/footer" .}}
+{{end}}
