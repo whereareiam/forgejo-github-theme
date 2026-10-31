@@ -1,0 +1,30 @@
+{{- /* GitHub's jump-to under the navbar search: focusing the field lists the signed-in user's most recently updated
+repositories and their organizations; typing filters both, and the last row searches all repositories with the text.
+Enter opens the highlighted row. jump.js loads the repositories from Forgejo's repository search and the organizations
+from the personal settings' organization list, as the owner switcher does. UID is the signed-in user's ID. */ -}}
+<div class="theme-jump" data-theme-jump data-repos="{{AppSubUrl}}/repo/search" data-orgs="{{AppSubUrl}}/user/settings/organization" data-uid="{{.UID}}" data-limit="5" hidden>
+	<p class="theme-jump-message" data-theme-jump-message role="status" hidden></p>
+	<div id="theme-jump" class="theme-jump-options" role="listbox" aria-label="{{ctx.Locale.Tr "search.repo_kind"}}">
+		<div class="theme-jump-group" data-theme-jump-group="repos" hidden>
+			<div class="theme-jump-title" id="theme-jump-repos" aria-hidden="true">{{ctx.Locale.Tr "home.my_repos"}}</div>
+			<ul class="theme-jump-list" role="group" aria-labelledby="theme-jump-repos" data-theme-jump-list="repos"></ul>
+		</div>
+		<div class="theme-jump-group" data-theme-jump-group="orgs" hidden>
+			<div class="theme-jump-title" id="theme-jump-orgs" aria-hidden="true">{{ctx.Locale.Tr "home.my_orgs"}}</div>
+			<ul class="theme-jump-list" role="group" aria-labelledby="theme-jump-orgs" data-theme-jump-list="orgs"></ul>
+		</div>
+		<div class="theme-jump-group" data-theme-jump-group="search" hidden>
+			<ul class="theme-jump-list" role="group">
+				<li role="presentation"><button type="submit" class="theme-jump-item" id="theme-jump-search" role="option" tabindex="-1">{{svg "octicon-search" 16}}<span class="theme-jump-name" data-theme-jump-query></span><span class="theme-jump-hint">{{ctx.Locale.Tr "explore"}}</span></button></li>
+			</ul>
+		</div>
+	</div>
+	<template data-theme-jump-icons>
+		<span data-icon="repo">{{svg "octicon-repo" 16}}</span>
+		<span data-icon="private">{{svg "octicon-lock" 16}}</span>
+		<span data-icon="fork">{{svg "octicon-repo-forked" 16}}</span>
+		<span data-icon="mirror">{{svg "octicon-mirror" 16}}</span>
+		<span data-icon="template">{{svg "octicon-repo-template" 16}}</span>
+	</template>
+	<template data-theme-jump-text data-empty="{{ctx.Locale.Tr "search.no_results"}}" data-error="{{ctx.Locale.Tr "error.network_error"}}"></template>
+</div>
