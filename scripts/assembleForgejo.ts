@@ -1,3 +1,4 @@
+import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { cpSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
@@ -102,3 +103,27 @@ const stampAssetLinks = (directory: string): void => {
   }
 };
 stampAssetLinks(templates);
+
+// The footer credits the theme with its version: the release tag in the release build, otherwise the nearest tag as
+// git describes it, such as 1.4.0-3-g54b4d73 for a build three commits after 1.4.0.
+const describeVersion = (): string => {
+  try {
+    return execFileSync("git", ["describe", "--tags", "--match", "[0-9]*", "--always", "--dirty"], {
+      cwd: root,
+      encoding: "utf-8",
+      stdio: ["ignore", "pipe", "ignore"],
+    }).trim();
+  } catch {
+    return "dev";
+  }
+};
+const releaseVersion = (process.env.THEME_VERSION?.trim() || describeVersion()).replace(/^v/, "");
+if (!/^[\w.+-]+$/.test(releaseVersion)) throw new Error(`Unexpected theme version: ${releaseVersion}`);
+const footer = join(templates, "base", "footer_content.tmpl");
+const versionVariable = /\{\{\$themeVersion := "[^"]*"\}\}/;
+const footerSource = readFileSync(footer, "utf-8");
+if (!versionVariable.test(footerSource)) throw new Error(`No theme version to stamp in ${footer}`);
+writeFileSync(
+  footer,
+  footerSource.replace(versionVariable, () => `{{$themeVersion := "${releaseVersion}"}}`)
+);
