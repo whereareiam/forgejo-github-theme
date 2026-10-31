@@ -85,9 +85,11 @@
 	<!-- the full dropdown menus -->
 	<div class="navbar-right">
 		{{if not (and .IsSigned .HideNavbarLinks)}}
-			{{/* GitHub's search sits first on the right; here it searches repositories and "/" focuses it. */}}
+			{{/* GitHub's search sits first on the right; here it searches repositories and "/" focuses it. Signed in, focusing
+			it lists your repositories and organizations, as GitHub's jump-to does. */}}
 			<form class="navbar-search not-mobile" action="{{AppSubUrl}}/explore/repos" method="get" role="search">
 				{{template "components/common/search/search" dict "Kind" "icon" "Placeholder" (ctx.Locale.Tr "search.repo_kind") "Shortcut" "/" "Class" "navbar-search-field"}}
+				{{if .IsSigned}}{{template "components/dashboard/jump/jump" dict "UID" .SignedUser.ID}}{{end}}
 			</form>
 		{{end}}
 		{{if and .IsSigned .HideNavbarLinks}}

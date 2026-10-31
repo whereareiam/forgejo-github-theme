@@ -1,0 +1,108 @@
+/* GitHub's jump-to under the navbar search, in the theme's menu surface. One spacing system: rows 32px tall with 16px
+   at the sides, group titles 8px above and 4px below, 8px around the line between groups, 8px at the panel's ends. */
+.navbar-search:has(> .theme-jump) {
+  position: relative;
+}
+
+.theme-jump {
+  position: absolute;
+  z-index: 60;
+  inset: calc(100% + 4px) 0 auto auto;
+  width: 360px;
+  max-width: calc(100vw - 32px);
+  max-height: min(480px, 70vh);
+  overflow-y: auto;
+  padding: 8px 0;
+  border: 1px solid var(--color-light-border);
+  border-radius: var(--border-radius);
+  background: var(--color-menu);
+  color: var(--color-text);
+}
+
+.theme-jump[hidden],
+.theme-jump-group[hidden],
+.theme-jump-message[hidden] {
+  display: none;
+}
+
+/* jump.js marks every shown block that follows another shown block. */
+.theme-jump-divided {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--color-secondary);
+}
+
+.theme-jump-title {
+  padding: 8px 16px 4px;
+  color: var(--color-text-light-2);
+  font: 600 12px/20px var(--fonts-proportional);
+}
+
+.theme-jump-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.theme-jump-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 32px;
+  margin: 0;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--color-text);
+  font: 400 14px/20px var(--fonts-proportional);
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.theme-jump-item:hover,
+.theme-jump-item.active {
+  background: var(--github-control-transparent-bgColor-hover);
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.theme-jump-item > .svg {
+  flex: none;
+  color: var(--color-text-light-2);
+}
+
+.theme-jump-item > .ui.avatar {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  border-radius: 4px;
+}
+
+.theme-jump-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.theme-jump-hint {
+  flex: none;
+  margin-left: auto;
+  color: var(--color-text-light-2);
+  font-size: 12px;
+}
+
+.theme-jump-message {
+  display: flex;
+  align-items: center;
+  min-height: 32px;
+  margin: 0;
+  padding: 0 16px;
+  color: var(--color-text-light-2);
+  font-size: 12px;
+  line-height: 18px;
+}
