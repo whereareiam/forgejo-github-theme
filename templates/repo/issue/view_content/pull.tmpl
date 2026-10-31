@@ -5,6 +5,8 @@
 {{$hasUnsignedMergeStyle := or $fastForwardStyleAllowed $manualMergeStyleAllowed}}
 {{$signingBlocksAllMergeStyles := and .AllowMerge .RequireSigned (not .WillSign) (not $hasUnsignedMergeStyle)}}
 {{$hasMergeForm := and .AllowMerge (or $prConfig.AllowMerge $prConfig.AllowRebase $prConfig.AllowRebaseMerge $prConfig.AllowSquash $prConfig.AllowFastForwardOnly $prConfig.AllowManualMerge)}}
+{{/* GitHub draws the merge box green only when every check passed, required or not. */}}
+{{$checksPassed := or (not .LatestCommitStatus) (eq .LatestCommitStatus.State "success") (eq .LatestCommitStatus.State "skipped")}}
 {{if or (not .Issue.PullRequest.HasMerged) .IsPullBranchDeletable .SomePullRequestRunsNeedApproval}}
 <div class="timeline-item comment merge box">
 	<div class="timeline-avatar text {{if .Issue.PullRequest.HasMerged}}purple
@@ -20,6 +22,7 @@
 	{{- else if and .EnableStatusCheck (or .RequiredStatusCheckState.IsFailure .RequiredStatusCheckState.IsError)}}red
 	{{- else if and .EnableStatusCheck (or (not $.LatestCommitStatus) .RequiredStatusCheckState.IsPending .RequiredStatusCheckState.IsWarning)}}yellow
 	{{- else if $signingBlocksAllMergeStyles}}red
+	{{- else if not $checksPassed}}grey
 	{{- else if .Issue.PullRequest.IsChecking}}yellow
 	{{- else if .Issue.PullRequest.IsEmpty}}grey
 	{{- else if .Issue.PullRequest.CanAutoMerge}}green
@@ -27,11 +30,10 @@
 	<div class="content">
 		{{if .LatestCommitStatus}}
 		<div class="ui attached segment fitted">
-		{{template "repo/pulls/status" (dict
+		{{template "repo/issue/view_content/pull_merge_checks" (dict
 			"CommitStatus" .LatestCommitStatus
 			"CommitStatuses" .LatestCommitStatuses
 			"MissingRequiredChecks" .MissingRequiredChecks
-			"ShowHideChecks" true
 			"is_context_required" .is_context_required
 		)}}
 		</div>
@@ -75,15 +77,18 @@
 				</div>
 				{{template "repo/pulls/trust" .}}
 			{{else if .IsPullFilesConflicted}}
-				<div class="item">
-					{{svg "octicon-x"}}
-					{{ctx.Locale.Tr "repo.pulls.files_conflicted"}}
+				<div class="item pull-merge-row">
+					{{svg "octicon-alert-fill"}}
+					<div>
+						<h3>{{ctx.Locale.Tr "repo.pulls.files_conflicted"}}</h3>
+						<p>{{ctx.Locale.Tr "repo.pulls.cannot_auto_merge_helper"}}</p>
+						<ul class="pull-merge-files">
+							{{range .ConflictedFiles}}
+							<li>{{svg "octicon-file"}}<code>{{.}}</code></li>
+							{{end}}
+						</ul>
+					</div>
 				</div>
-				<ul>
-					{{range .ConflictedFiles}}
-					<li>{{.}}</li>
-					{{end}}
-				</ul>
 				{{template "repo/pulls/trust" .}}
 			{{else if .IsPullRequestBroken}}
 				<div class="item">
@@ -91,15 +96,16 @@
 					{{ctx.Locale.Tr "repo.pulls.data_broken"}}
 				</div>
 			{{else if .IsPullWorkInProgress}}
-				<div class="item toggle-wip" data-title="{{.Issue.Title}}" data-wip-prefixes="{{JsonUtils.EncodeToString .PullRequestWorkInProgressPrefixes}}" data-update-url="{{.Issue.Link}}/title">
-					<div class="flex-text-inline tw-flex-1">
-						{{svg "octicon-x"}}
-						{{ctx.Locale.Tr "repo.pulls.cannot_merge_work_in_progress"}}
+				{{if .Issue.PullRequest.CanAutoMerge}}
+					{{template "repo/issue/view_content/pull_merge_clean" .}}
+				{{end}}
+				<div class="item pull-merge-row toggle-wip" data-title="{{.Issue.Title}}" data-wip-prefixes="{{JsonUtils.EncodeToString .PullRequestWorkInProgressPrefixes}}" data-update-url="{{.Issue.Link}}/title">
+					{{svg "octicon-git-pull-request-draft"}}
+					<div>
+						<h3>{{ctx.Locale.Tr "repo.pulls.cannot_merge_work_in_progress"}}</h3>
 					</div>
 					{{if or .HasIssuesOrPullsWritePermission .IsIssuePoster}}
-						<button class="ui compact button">
-							{{ctx.Locale.Tr "repo.pulls.remove_prefix" .WorkInProgressPrefix}}
-						</button>
+						<button class="ui compact button">{{ctx.Locale.Tr "repo.pulls.remove_prefix" .WorkInProgressPrefix}}</button>
 					{{end}}
 				</div>
 				{{template "repo/pulls/trust" .}}
@@ -179,24 +185,7 @@
 							{{ctx.Locale.Tr "repo.pulls.required_status_check_administrator"}}
 						</div>
 					{{else if $hasMergeForm}}
-						{{/* GitHub's ready-to-merge header: a title with the signing note beneath it. */}}
-						<div class="item pull-merge-status">
-							{{svg "octicon-check"}}
-							<div>
-								<h3>{{ctx.Locale.Tr "repo.pulls.can_auto_merge_desc"}}</h3>
-								{{if .WillSign}}
-									<div class="item pull-merge-note">
-										{{svg "octicon-lock" 16 "text green"}}
-										{{ctx.Locale.Tr "repo.signing.will_sign" .SigningKey}}
-									</div>
-								{{else if .IsSigned}}
-									<div class="item pull-merge-note">
-										{{svg "octicon-unlock"}}
-										{{ctx.Locale.Tr (printf "repo.signing.wont_sign.%s" .WontSignReason)}}
-									</div>
-								{{end}}
-							</div>
-						</div>
+						{{template "repo/issue/view_content/pull_merge_clean" .}}
 					{{else}}
 						<div class="item">
 							{{svg "octicon-check"}}
@@ -424,6 +413,15 @@
 					{{if $showMergeInstructions}}
 						{{template "repo/issue/view_content/pull_merge_instruction" dict "PullRequest" .Issue.PullRequest "ShowMergeInstructions" .ShowMergeInstructions "AutodetectManualMerge" .AutodetectManualMerge "DefaultMergeMessage" .DefaultMergeMessage "DefaultMergeBody" .DefaultMergeBody "IsPullFilesConflicted" .IsPullFilesConflicted "NoDivider" true}}
 					{{end}}
+				</div>
+			{{else if and $showMergeInstructions .AllowMerge (not .IsPullRequestBroken) (or .IsPullWorkInProgress .IsPullFilesConflicted)}}
+				{{/* GitHub keeps the merge button in place, disabled, until the draft or the conflict is resolved. */}}
+				<div class="pull-merge-actions">
+					<div class="ui buttons">
+						<button class="ui button" disabled>{{svg "octicon-git-merge"}}{{ctx.Locale.Tr "repo.pulls.merge_pull_request"}}</button>
+						<button class="ui icon button" disabled aria-label="{{ctx.Locale.Tr "repo.pulls.merge_pull_request"}}">{{svg "octicon-triangle-down" 14}}</button>
+					</div>
+					{{template "repo/issue/view_content/pull_merge_instruction" dict "PullRequest" .Issue.PullRequest "ShowMergeInstructions" .ShowMergeInstructions "AutodetectManualMerge" .AutodetectManualMerge "DefaultMergeMessage" .DefaultMergeMessage "DefaultMergeBody" .DefaultMergeBody "IsPullFilesConflicted" .IsPullFilesConflicted "NoDivider" true}}
 				</div>
 			{{else if $showMergeInstructions}}
 				{{template "repo/issue/view_content/pull_merge_instruction" dict "PullRequest" .Issue.PullRequest "ShowMergeInstructions" .ShowMergeInstructions "AutodetectManualMerge" .AutodetectManualMerge "DefaultMergeMessage" .DefaultMergeMessage "DefaultMergeBody" .DefaultMergeBody "IsPullFilesConflicted" .IsPullFilesConflicted}}

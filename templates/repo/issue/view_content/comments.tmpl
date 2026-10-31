@@ -95,7 +95,7 @@
 			</div>
 		{{else if eq .Type 2}}
 			<div class="timeline-item event" id="{{.HashTag}}">
-				<span class="badge tw-bg-red tw-text-white">{{svg "octicon-circle-slash"}}</span>
+				<span class="badge tw-bg-red tw-text-white">{{if .Issue.IsPull}}{{svg "octicon-git-pull-request-closed"}}{{else}}{{svg "octicon-circle-slash"}}{{end}}</span>
 				{{if not .OriginalAuthor}}
 					{{template "shared/user/avatarlink" dict "user" .Poster}}
 				{{end}}
@@ -729,7 +729,7 @@
 							{{end}}
 							</li>
 						{{else if and (not .Aggregator.PrevClosed) .Aggregator.IsClosed}}
-							<span class="badge tw-bg-red tw-text-white">{{svg "octicon-circle-slash"}}</span>
+							<span class="badge tw-bg-red tw-text-white">{{if .Issue.IsPull}}{{svg "octicon-git-pull-request-closed"}}{{else}}{{svg "octicon-circle-slash"}}{{end}}</span>
 							<li>
 							{{if .Issue.IsPull}}
 								{{ctx.Locale.Tr "repo.pulls.closed_at" ""}}

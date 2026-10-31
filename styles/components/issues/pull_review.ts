@@ -1,5 +1,9 @@
 import { css, otherThemeVars, themeVars } from "@lutinglt/gitea-github-theme/core";
-import { primaryButtonHoverStyle, primaryButtonStyle } from "@lutinglt/gitea-github-theme/styles/common";
+import {
+  basicButtonStyle,
+  primaryButtonHoverStyle,
+  primaryButtonStyle,
+} from "@lutinglt/gitea-github-theme/styles/common";
 
 /** The round status icon that starts a merge box section; the section sets its background. */
 const mergeSectionIcon = `
@@ -310,7 +314,7 @@ export default css`
         border: 1px solid ${themeVars.color.light.border};
         border-radius: ${otherThemeVars.border.radius};
       }
-      /* The status badge beside the box: neutral unless the pull request can be merged. */
+      /* The status badge beside the box: neutral unless the pull request can be merged and every check passed. */
       & > .timeline-avatar {
         display: grid !important;
         place-items: center;
@@ -324,11 +328,18 @@ export default css`
           height: 24px;
         }
       }
-      &:has(.pull-merge-status) > .timeline-avatar {
+      & > .timeline-avatar.green {
         background: ${themeVars.github.bgColor.success.emphasis};
       }
-      &:has(.pull-merge-status) > .content {
+      &:has(> .timeline-avatar.green) > .content {
         border-color: ${themeVars.github.bgColor.success.emphasis};
+      }
+      /* Until then GitHub's merge button is a default button, not the green one. */
+      &:not(:has(> .timeline-avatar.green)) .pull-merge-actions:not(.merge-scheduled) .ui.primary.buttons .ui.button {
+        ${basicButtonStyle}
+        & svg {
+          color: inherit;
+        }
       }
       /* GitHub keeps the badge and border neutral for blocked, conflicting, draft and closed pull requests. */
       & > .timeline-avatar:is(.red, .grey, .yellow) {
@@ -386,12 +397,17 @@ export default css`
         & > .item > svg.octicon-x:first-child {
           background: ${themeVars.github.bgColor.danger.emphasis};
         }
-        /* A row's control sits at its right edge. */
-        & > .item > .flex-text-inline {
-          flex: 1;
+        /* A row's control sits at its right edge, or below the title when the row is too narrow.
+           Rows of an icon and loose text keep one line, so their text wraps beside the icon. */
+        & > .item:has(> :is(div, .ui.button, .ui.buttons):last-child:not(:first-child)) {
+          flex-wrap: wrap;
+        }
+        & > .item > .flex-text-inline,
+        & > .item.item-section > div:first-child {
+          flex: 1 1 200px;
           min-width: 0;
         }
-        & > .item:not(.pull-merge-status) > :is(div, .ui.button, .ui.buttons):last-child:not(:first-child) {
+        & > .item:not(.pull-merge-row) > :is(div, .ui.button, .ui.buttons):last-child:not(:first-child) {
           flex: none;
           margin-left: auto;
         }
@@ -416,13 +432,20 @@ export default css`
         & > details > summary {
           ${mergeInstructionsLink}
         }
-        & > .item.pull-merge-status {
+        /* GitHub's row: a title with a muted sentence beneath it, and a control at the right edge. */
+        /* :has() matches the title rule above, which would otherwise win on specificity. */
+        & > .item.pull-merge-row:has(> svg:first-child) {
           align-items: flex-start;
           font-size: 14px;
           font-weight: 400;
           line-height: 21px;
-          & > svg {
-            background: ${themeVars.github.bgColor.success.emphasis};
+          & > div {
+            flex: 1 1 200px;
+            min-width: 0;
+          }
+          & > .ui.button {
+            flex: none;
+            align-self: center;
           }
           & h3 {
             margin: 0;
@@ -430,17 +453,159 @@ export default css`
             line-height: 24px;
             font-weight: 600;
           }
-          & .pull-merge-note {
-            min-height: 0;
-            padding: 0;
-            border: 0;
+          & p {
+            margin: 0;
             color: ${themeVars.color.text.light.num1};
             font-size: 14px;
             font-weight: 400;
             line-height: 21px;
-            & > svg {
-              display: none;
-            }
+          }
+        }
+        /* Merged and closed: the same title and muted sentence, with "Delete branch" beside them. */
+        & > .item.item-section > div > h3 {
+          margin: 0 !important;
+          font-size: 16px;
+          font-weight: 600;
+          line-height: 24px;
+        }
+        & > .item.item-section .merge-section-info {
+          color: ${themeVars.color.text.light.num1};
+          font-size: 14px;
+          line-height: 21px;
+        }
+        & > .item.pull-merge-status > svg {
+          background: ${themeVars.github.bgColor.success.emphasis};
+        }
+        & .pull-merge-files {
+          display: flex;
+          flex-direction: column;
+          gap: 4px;
+          margin: 8px 0 0;
+          padding: 0;
+          list-style: none;
+          & li {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: ${themeVars.color.text.light.num1};
+          }
+          & code {
+            color: ${themeVars.color.text.self};
+            font-size: 12px;
+          }
+        }
+      }
+      /* The checks section: a status ring, the overall result and its counts, and a chevron that folds the list. */
+      & .pull-merge-checks {
+        & > .commit-status-header {
+          position: relative;
+          display: flex;
+          align-items: flex-start;
+          gap: 8px;
+          margin: 0;
+          padding: var(--merge-section-padding);
+          border: 0;
+          background: transparent;
+          font-size: 14px;
+          font-weight: 400;
+          line-height: 21px;
+          & h3 {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 600;
+            line-height: 24px;
+          }
+          & p {
+            margin: 0;
+            color: ${themeVars.color.text.light.num1};
+          }
+        }
+        & .pull-merge-checks-text {
+          flex: 1;
+          min-width: 0;
+        }
+        /* The counts per state: an icon and a number each, labelled with Forgejo's name for the state. */
+        & .pull-merge-checks-counts {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 12px;
+          & > span {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+          }
+        }
+        & .pull-merge-checks-icon {
+          ${mergeSectionIcon}
+          background: ${themeVars.github.bgColor.success.emphasis};
+        }
+        & .pull-merge-checks-ring {
+          flex: none;
+          width: 28px;
+          height: 28px;
+          margin: 2px;
+          border-radius: 50%;
+          background: conic-gradient(
+            ${themeVars.github.fgColor.success} 0 var(--checks-passing),
+            ${themeVars.color.yellow.self} 0 var(--checks-pending),
+            ${themeVars.color.red.self} 0
+          );
+          mask: radial-gradient(farthest-side, transparent calc(100% - 4px), #000 calc(100% - 4px));
+        }
+        /* The whole header folds the list; Forgejo's button keeps its text for screen readers. */
+        & .commit-status-hide-checks {
+          position: absolute;
+          inset: 0;
+          width: 100%;
+          padding: 0;
+          border: 0;
+          background: transparent;
+          color: transparent;
+          font-size: 0;
+          cursor: pointer;
+          border-radius: ${otherThemeVars.border.radius} ${otherThemeVars.border.radius} 0 0;
+        }
+        & .pull-merge-checks-chevron {
+          flex: none;
+          margin: 4px 8px 0 0;
+          color: ${themeVars.color.text.light.num1};
+          transition: transform 0.15s ease;
+        }
+        &:has(> .commit-status-list[style*="max-height: 0"]) .pull-merge-checks-chevron {
+          transform: rotate(-90deg);
+        }
+        & > .commit-status-list {
+          overflow: hidden auto;
+          padding: 8px 0;
+          border-top: 1px solid var(--merge-section-divider);
+          background: ${themeVars.color.console.bg};
+          &[style*="max-height: 0"] {
+            padding: 0;
+            border-top: 0;
+          }
+        }
+        & .commit-status-item {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          min-height: 37px;
+          margin: 0 8px;
+          padding: 2px 8px;
+          border-radius: ${otherThemeVars.border.radius};
+          &:hover {
+            background: ${themeVars.github.control.transparent.bgColor.hover};
+          }
+          & .status-context {
+            flex: 1;
+            min-width: 0;
+          }
+          & .status-context > span {
+            margin-left: 4px;
+            font-size: 12px;
+          }
+          & .status-details a {
+            color: ${themeVars.color.text.light.num1};
+            font-size: 12px;
           }
         }
       }
