@@ -16,7 +16,7 @@ body:
     id: forgejo-version
     attributes:
       label: Forgejo version
-      placeholder: "17.0.0"
+      placeholder: "17.0.1"
     validations:
       required: true
 
