@@ -13,7 +13,14 @@
       "description": "Changes code without changing behaviour"
     }
   ],
-  "milestones": [],
+  "milestones": [
+    {
+      "title": "v3",
+      "description": "Design tokens for dark high contrast.",
+      "state": "open",
+      "dueInDays": 45
+    }
+  ],
   "issues": [],
   "pulls": [
     {

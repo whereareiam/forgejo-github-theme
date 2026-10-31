@@ -5,23 +5,15 @@
 		<div class="theme-sidebar-content">
 			{{template "components/dashboard/context/context" dict "Data" . "Page" "milestones"}}
 			<nav aria-label="{{ctx.Locale.Tr "home.issues.in_your_repos"}}">
-				<a class="{{if not .RepoIDs}}active{{end}}" href="?sort={{$.SortType}}&state={{$.State}}&q={{$.Keyword}}">{{svg "octicon-milestone" 16}}<span>{{ctx.Locale.Tr "home.issues.in_your_repos"}}</span><span class="theme-counter">{{.Total}}</span></a>
+				{{/* Forgejo fills RepoIDs with every listed repository when nothing is filtered. */}}
+				{{$unfiltered := eq (len .RepoIDs) (len .Repos)}}
+				<a class="{{if $unfiltered}}active{{end}}" href="?sort={{$.SortType}}&state={{$.State}}&q={{$.Keyword}}">{{svg "octicon-milestone" 16}}<span>{{ctx.Locale.Tr "home.issues.in_your_repos"}}</span><span class="theme-counter">{{.Total}}</span></a>
 					{{range .Repos}}
 						{{with $Repo := .}}
-							<a class="{{range $.RepoIDs}}{{if eq . $Repo.ID}}active{{end}}{{end}}" href="?repos=[
-								{{- with $include := true -}}
-										{{- range $.RepoIDs -}}
-											{{- if eq . $Repo.ID -}}
-												{{$include = false}}
-											{{- else -}}
-												{{.}}%2C
-											{{- end -}}
-										{{- end -}}
-										{{- if eq $include true -}}
-											{{$Repo.ID}}%2C
-										{{- end -}}
-									{{- end -}}
-								]&sort={{$.SortType}}&state={{$.State}}&q={{$.Keyword}}" title="{{.FullName}}">
+							{{/* Single-select, as on GitHub: a repository shows only itself, and the selected one goes back to all. */}}
+							{{$active := false}}
+							{{if not $unfiltered}}{{range $.RepoIDs}}{{if eq . $Repo.ID}}{{$active = true}}{{end}}{{end}}{{end}}
+							<a class="{{if $active}}active{{end}}" href="?{{if not $active}}repos=[{{$Repo.ID}}%2C]&{{end}}sort={{$.SortType}}&state={{$.State}}&q={{$.Keyword}}" title="{{.FullName}}">
 								{{svg "octicon-repo" 16}}<span class="gt-ellipsis">{{$Repo.FullName}}</span><span class="theme-counter">{{index $.Counts $Repo.ID}}</span>
 							</a>
 						{{end}}
