@@ -15,7 +15,7 @@ services:
       - forgejo-dev-data:/var/lib/gitea
 
   forgejo:
-    image: code.forgejo.org/forgejo/forgejo:17.0.0-rootless
+    image: code.forgejo.org/forgejo/forgejo:17.0.1-rootless
     container_name: forgejo-github-theme-dev
     environment:
       USER_GID: "1000"

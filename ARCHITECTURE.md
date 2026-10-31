@@ -7,7 +7,7 @@ Forgejo GitHub Theme makes Forgejo 17 look like GitHub. It ships two parts, whic
   without the templates.
 - **The template pack**, `dist/forgejo`: Forgejo template overrides and the stylesheets and scripts they load. It
   changes Forgejo's markup where styles alone cannot reach GitHub's layout, and it is bound to the Forgejo release it
-  was written against (17.0.0).
+  was written against (17.0.1).
 
 `bun bundle` builds both. Vite generates the theme stylesheets, then `scripts/assembleForgejo.ts` assembles the template
 pack. The local preview and the release archives use the same `dist/forgejo` tree.
@@ -133,7 +133,7 @@ declaration block, such as `primaryButtonStyle` in `styles/common/button.ts`. Ev
 ### Templates
 
 `templates/` mirrors Forgejo's `templates` directory. Forgejo renders a file from its custom templates directory in
-place of its own file at the same path, so each override is Forgejo 17.0.0's template with the theme's changes. An
+place of its own file at the same path, so each override is Forgejo 17.0.1's template with the theme's changes. An
 override keeps Forgejo's routes, form fields, permission checks and data, and changes the markup around them. A comment
 at the top of a template says why it departs from Forgejo where that is not obvious, as in
 `templates/base/head_style.tmpl`.
@@ -179,7 +179,7 @@ each auto theme's `@import` gets the hash of the imported file.
 
 ## Local preview
 
-`dev/docker-compose.yml` runs the Forgejo release pinned in `package.json` (`17.0.0-rootless`) and mounts
+`dev/docker-compose.yml` runs the Forgejo release pinned in `package.json` (`17.0.1-rootless`) and mounts
 `dev/.generated/public/assets/css`, `dev/.generated/public/assets/js` and `dev/.generated/templates` read-only into its
 custom directory. These are a copy of `dist/forgejo` with the preview's automatic sign-in and page reload added, so the
 hooks never reach a release and `dist` stays as `bun bundle` wrote it. The preview tool in `dev/preview` (started by
