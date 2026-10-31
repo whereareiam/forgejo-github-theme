@@ -6,10 +6,11 @@
 		<div class="divider"></div>
 		<div class="repo-home-sidebar-header repo-release-heading">
 			<a class="muted" href="{{.RepoLink}}/releases">{{ctx.Locale.Tr "repo.releases"}}</a>
-			{{if .NumReleases}}<span class="theme-counter theme-counter-tab">{{CountFmt .NumReleases}}</span>{{end}}
+			{{if .NumReleases}}<span class="theme-counter theme-counter-tab" data-release-count>{{CountFmt .NumReleases}}</span>{{end}}
 		</div>
 		{{if .NumReleases}}
-			<a class="repo-latest-release" data-repo-latest-release data-fallback="{{ctx.Locale.Tr "repo.release.releases"}}" data-api-url="{{AppSubUrl}}/api/v1/repos/{{.Repository.OwnerName}}/{{.Repository.Name}}/releases/latest" href="{{.RepoLink}}/releases">
+			{{/* The latest release excludes pre-releases and drafts; without one, GitHub shows the tag count instead of the card. */}}
+			<a class="repo-latest-release" data-repo-latest-release data-api-url="{{AppSubUrl}}/api/v1/repos/{{.Repository.OwnerName}}/{{.Repository.Name}}/releases/latest" href="{{.RepoLink}}/releases">
 				<div class="repo-latest-release-heading">
 					{{svg "octicon-tag" 16}}
 					<span class="repo-latest-release-title" data-release-title>{{ctx.Locale.Tr "loading"}}</span>
@@ -29,20 +30,23 @@
 							card.classList.add('theme-fade-in');
 						})
 						.catch(() => {
-							card.querySelector('[data-release-title]').textContent = card.dataset.fallback;
-							card.querySelector('[data-release-date]').remove();
-							card.querySelector('[data-release-badge]').remove();
+							document.querySelector('[data-release-count]')?.remove();
+							document.querySelector('[data-release-empty]').hidden = false;
+							card.remove();
 						});
 				})();
 			</script>
-		{{else}}
-			<div class="repo-home-sidebar-empty">
-				<span>{{ctx.Locale.TrPluralString 0 "counters.n_releases" "0"}}</span>
-				{{if and (.Permission.CanWrite $.UnitTypeReleases) (not .Repository.IsArchived)}}
-					<a href="{{.RepoLink}}/releases/new">{{ctx.Locale.Tr "repo.release.new_release"}}</a>
-				{{end}}
-			</div>
 		{{end}}
+		<div class="repo-home-sidebar-empty" data-release-empty {{if .NumReleases}}hidden{{end}}>
+			{{if .NumTags}}
+				<a class="repo-home-sidebar-tags" href="{{.RepoLink}}/tags">{{svg "octicon-tag" 16}}<span>{{ctx.Locale.TrPluralString .NumTags "counters.n_tags" (printf "<strong>%s</strong>" (ctx.Locale.PrettyNumber .NumTags) | TrustHTML)}}</span></a>
+			{{else}}
+				<span>{{ctx.Locale.TrPluralString 0 "counters.n_releases" "0"}}</span>
+			{{end}}
+			{{if and (.Permission.CanWrite $.UnitTypeReleases) (not .Repository.IsArchived)}}
+				<a href="{{.RepoLink}}/releases/new">{{ctx.Locale.Tr "repo.release.new_release"}}</a>
+			{{end}}
+		</div>
 	{{end}}
 
 	{{if .Permission.CanRead $.UnitTypePackages}}

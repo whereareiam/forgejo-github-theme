@@ -62,6 +62,33 @@
   text-decoration: underline;
 }
 
+/* Kept hidden until the latest release turns out not to exist. */
+.repo-home-sidebar-empty[hidden] {
+  display: none;
+}
+
+/* GitHub's tag count when there is no latest release: muted icon and label around the count in the text colour. */
+.repo-home-sidebar-empty > .repo-home-sidebar-tags {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 4px;
+  color: var(--color-text-light-1);
+  font-size: 14px;
+  line-height: 21px;
+  text-decoration: none;
+}
+
+.repo-home-sidebar-empty > .repo-home-sidebar-tags strong {
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+.repo-home-sidebar-empty > .repo-home-sidebar-tags:hover,
+.repo-home-sidebar-empty > .repo-home-sidebar-tags:hover strong {
+  color: var(--color-primary);
+}
+
 .repo-home-packages {
   display: flex;
   flex-direction: column;
