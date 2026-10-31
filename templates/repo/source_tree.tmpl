@@ -18,6 +18,8 @@
     <template id="repo-tree-chevron-right">{{svg "octicon-chevron-right" 12}}</template>
     <template id="repo-tree-chevron-down">{{svg "octicon-chevron-down" 12}}</template>
 </aside>
+{{/* Not deferred: the tree is built before the main content is parsed, so it never shows an empty panel. */}}
+<script src="{{AssetUrlPrefix}}/js/repo-source-browser.js"></script>
 <script src="{{AssetUrlPrefix}}/js/resizable-divider.js" defer></script>
 <script src="{{AssetUrlPrefix}}/js/tree-navigation.js" defer></script>
-<script src="{{AssetUrlPrefix}}/js/repo-source-browser.js" defer></script>
+<script src="{{AssetUrlPrefix}}/js/repo-source-navigation.js" defer></script>

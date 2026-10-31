@@ -1,6 +1,8 @@
 (() => {
   const picker = document.querySelector(".repo-file-picker");
-  if (!picker) return;
+  // A folder opened in place runs this again for the picker that stays in the file tree panel.
+  if (!picker || picker.dataset.themePickerReady) return;
+  picker.dataset.themePickerReady = "true";
   const input = picker.querySelector("input");
   const list = picker.querySelector('[role="listbox"]');
   const status = picker.querySelector('[role="status"]');
