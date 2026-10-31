@@ -29,6 +29,7 @@
 				<a class="repository-navbar-owner" href="{{.Owner.HomeLink}}">
 					<span>{{.Owner.Name}}</span>
 				</a>
+				{{if $.IsSigned}}{{template "base/navbar_owner_switcher" dict "Owner" .Owner "Data" $}}{{end}}
 				<span class="repository-navbar-separator">/</span>
 				{{$repoIcon := "octicon-repo"}}{{if .IsPrivate}}{{$repoIcon = "octicon-lock"}}{{else if .IsFork}}{{$repoIcon = "octicon-repo-forked"}}{{else if .IsMirror}}{{$repoIcon = "octicon-mirror"}}{{end}}
 				<a class="repository-navbar-name" href="{{$.RepoLink}}">{{svg $repoIcon 16}}<span>{{.Name}}</span></a>
@@ -40,8 +41,10 @@
 			{{end}}
 		{{else if $isOrganization}}
 			<a class="item navbar-context-title not-mobile" href="{{.Org.HomeLink}}">{{.Org.Name}}</a>
+			{{if .IsSigned}}{{template "base/navbar_owner_switcher" dict "Owner" .Org "Data" .}}{{end}}
 		{{else if $isUserProfile}}
 			<a class="item navbar-context-title not-mobile" href="{{.ContextUser.HomeLink}}">{{.ContextUser.Name}}</a>
+			{{if .IsSigned}}{{template "base/navbar_owner_switcher" dict "Owner" .ContextUser "Data" .}}{{end}}
 		{{else if and .IsSigned .HideNavbarLinks}}
 			{{/* No links */}}
 		{{else if .IsSigned}}

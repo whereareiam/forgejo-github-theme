@@ -1,0 +1,14 @@
+{{- /* GitHub's context switcher on the navbar's owner: the signed-in user's account and their organizations, each
+linking to its page, with a check on the owner shown, then Manage organizations and New organization as on the
+dashboard's switch menu. The navbar has no organization list, so owners.js loads it from the personal settings'
+organization list when the menu opens and adds a row per organization after the account. Current is the home link of
+the owner shown; SignedUser is the signed-in user. */ -}}
+<a class="theme-dropdown-action theme-dashboard-context-item" href="{{.SignedUser.HomeLink}}"{{if eq .Current .SignedUser.HomeLink}} aria-current="true"{{end}}>{{svg "octicon-check" 16 "theme-box-list-check"}}{{ctx.AvatarUtils.Avatar .SignedUser 20}}<span>{{.SignedUser.Name}}</span></a>
+<div class="theme-owner-switcher" data-theme-owner-switcher data-url="{{AppSubUrl}}/user/settings/organization" data-current="{{.Current}}" aria-busy="true">
+	<p class="theme-owner-switcher-message" data-theme-owner-switcher-message role="status" hidden>{{ctx.Locale.Tr "error.occurred"}}</p>
+	<template><a class="theme-dropdown-action theme-dashboard-context-item" href="#">{{svg "octicon-check" 16 "theme-box-list-check"}}<img class="ui avatar tw-align-middle" width="20" height="20" alt="" loading="lazy"><span></span></a></template>
+</div>
+<div class="theme-dashboard-context-actions">
+	<a class="ui button theme-control theme-control-small" href="{{AppSubUrl}}/user/settings/organization">{{svg "octicon-organization" 16}}{{ctx.Locale.Tr "admin.orgs.org_manage_panel"}}</a>
+	{{if .SignedUser.CanCreateOrganization}}<a class="ui button theme-control theme-control-small" href="{{AppSubUrl}}/org/create">{{svg "octicon-plus" 16}}{{ctx.Locale.Tr "new_org.link"}}</a>{{end}}
+</div>

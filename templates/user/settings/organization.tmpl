@@ -1,5 +1,6 @@
 {{/* Forgejo's organization list in personal settings, with GitHub's Settings button beside Leave for the organizations
-the signed-in user owns. */}}
+the signed-in user owns. Each entry names its organization in data-theme-organization for the navbar's owner switcher
+(components/dashboard/context/owners.js). */}}
 {{template "user/settings/layout_head" (dict "ctxData" . "pageClass" "user settings organization")}}
 	<div class="user-setting-content">
 		<h4 class="ui top attached header">
@@ -14,7 +15,7 @@ the signed-in user owns. */}}
 			{{if .Orgs}}
 				<div class="flex-list">
 					{{range .Orgs}}
-					<div class="flex-item">
+					<div class="flex-item" data-theme-organization="{{.Name}}" data-theme-organization-link="{{.HomeLink}}">
 						<div class="flex-item-leading">
 							{{ctx.AvatarUtils.Avatar . 28 "mini"}}
 						</div>

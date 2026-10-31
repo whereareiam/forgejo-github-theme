@@ -484,6 +484,36 @@ describe("Forgejo 15 native integration", () => {
     expect(header).toContain("width: 320px;");
   });
 
+  it("offers GitHub's context switcher beside the owner to signed-in users", () => {
+    const navbar = fs.readFileSync(path.join(ROOT_DIR, "templates", "base", "head_navbar.tmpl"), "utf-8");
+    const switcher = fs.readFileSync(path.join(ROOT_DIR, "templates", "base", "navbar_owner_switcher.tmpl"), "utf-8");
+    const items = fs.readFileSync(path.join(ROOT_DIR, "components", "dashboard", "context", "owners.tmpl"), "utf-8");
+    const settings = fs.readFileSync(
+      path.join(ROOT_DIR, "templates", "user", "settings", "organization.tmpl"),
+      "utf-8"
+    );
+
+    // A repository's owner, an organization and a profile each get the caret; signed out, the owner stays a link.
+    expect(navbar.indexOf('"base/navbar_owner_switcher"')).toBeGreaterThan(navbar.indexOf("repository-navbar-owner"));
+    expect(navbar.indexOf('"base/navbar_owner_switcher"')).toBeLessThan(navbar.indexOf("repository-navbar-separator"));
+    expect(navbar).toContain('{{if $.IsSigned}}{{template "base/navbar_owner_switcher" dict "Owner" .Owner');
+    expect(navbar).toContain('{{if .IsSigned}}{{template "base/navbar_owner_switcher" dict "Owner" .Org');
+    expect(navbar).toContain('{{if .IsSigned}}{{template "base/navbar_owner_switcher" dict "Owner" .ContextUser');
+    expect(switcher).toContain('"Items" "components/dashboard/context/owners"');
+    expect(switcher).toContain('"Current" .Owner.HomeLink');
+    // Every label is one of Forgejo's translations.
+    expect(switcher).toContain('(ctx.Locale.Tr "home.my_orgs")');
+    expect(items).toContain('{{ctx.Locale.Tr "admin.orgs.org_manage_panel"}}');
+    expect(items).toContain('{{ctx.Locale.Tr "new_org.link"}}');
+    expect(items).toContain('data-url="{{AppSubUrl}}/user/settings/organization"');
+    expect(settings).toContain('data-theme-organization="{{.Name}}" data-theme-organization-link="{{.HomeLink}}"');
+    // Admins can hide it with a custom variable; it shows by default.
+    const css = fs.readFileSync(path.join(DIST_DIR, `${PREFIX}light.css`), "utf-8");
+    expect(css).toContain(
+      ".repository-navbar-switcher.navbar-owner-switcher{display:var(--custom-owner-switcher,flex)}"
+    );
+  });
+
   it("ships the mobile drawer assets and keeps its toggle independent of Forgejo's inline menu", () => {
     const navbar = fs.readFileSync(path.join(ROOT_DIR, "templates", "base", "head_navbar.tmpl"), "utf-8");
     expect(navbar).toContain('id="navbar-drawer-toggle" aria-controls="navbar-drawer" aria-haspopup="dialog"');

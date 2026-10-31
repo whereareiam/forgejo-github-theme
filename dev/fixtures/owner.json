@@ -11,6 +11,14 @@
       "website": "https://acme.example",
       "location": "Remote",
       "teams": [{ "name": "maintainers", "permission": "write", "members": ["sam"] }]
+    },
+    {
+      "name": "globex",
+      "fullName": "Globex",
+      "description": "A second organization, for switching between owners.",
+      "website": "",
+      "location": "",
+      "teams": []
     }
   ]
 }
