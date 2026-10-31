@@ -22,6 +22,9 @@ function link(href: string, { kind = ".item-directory", directoryIcon = false, t
   };
 }
 
+// The entries of the folders on the fetched page's path, which the tree adds until it has the full list.
+const entries = { content: { children: [] } };
+
 // The page Forgejo answers with: a folder listing, unless it shows a README or a file.
 function page({ path = "src/components/avatar", listing = true, needsPageLoad = false, sourceUrl = source } = {}) {
   const content = {
@@ -35,7 +38,13 @@ function page({ path = "src/components/avatar", listing = true, needsPageLoad = 
   return {
     content,
     title: `${path} at main`,
-    getElementById: (id: string) => (id === "repo-source-tree" ? { dataset: { sourceUrl, currentPath: path } } : null),
+    getElementById: (id: string) =>
+      id === "repo-source-tree"
+        ? {
+            dataset: { sourceUrl, currentPath: path },
+            querySelector: (selector: string) => (selector === "#repo-source-tree-data" ? entries : null),
+          }
+        : null,
     querySelector: (selector: string) =>
       selector === '[role="main"]'
         ? { getAttribute: () => `${path} label` }
@@ -152,7 +161,7 @@ describe("repository file tree navigation", () => {
     expect(f.main.replaceWith).toHaveBeenCalled();
     expect(f.tree.dispatchEvent.mock.calls[0][0]).toMatchObject({
       type: "repo-source:navigate",
-      init: { detail: { path: "src/components/avatar" } },
+      init: { detail: { path: "src/components/avatar", entries } },
     });
     expect(f.scrollTo).toHaveBeenCalledWith(0, 0);
     expect(f.attributes.has("aria-busy")).toBe(false);

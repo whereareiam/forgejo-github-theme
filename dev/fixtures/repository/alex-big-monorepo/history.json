@@ -1,0 +1,20 @@
+{
+  "defaultBranch": "main",
+  "commits": [
+    {
+      "id": "01-packages",
+      "branch": "main",
+      "author": "alex",
+      "daysAgo": 30,
+      "time": "10:00",
+      "message": "Add 40 packages",
+      "generated": [
+        {
+          "files": "packages/pkg-{00..39}/src/module-{00..24}/file_{000..049}.ts",
+          "content": "export const value = 1;\n"
+        }
+      ]
+    }
+  ],
+  "tags": []
+}

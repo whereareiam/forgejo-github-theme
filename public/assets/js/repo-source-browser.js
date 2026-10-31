@@ -11,6 +11,9 @@
   const storageKey = `repo_source_expanded:${tree.dataset.sourceUrl}`;
   const scrollKey = `repo_source_scroll:${tree.dataset.sourceUrl}`;
   const rows = new Map();
+  // The entries known so far: the folders on the page's path at first, every entry once the full list arrives.
+  const nodes = new Map();
+  let complete = false;
   // Folders whose rows are made the first time they open: a large repository has tens of thousands of entries.
   const pending = new Map();
   let expanded = new Set();
@@ -106,7 +109,8 @@
         disclosure.setAttribute("data-tree-disclosure", "");
         row.append(disclosure, icon("folder"), icon("folder-open"), label);
         row.addEventListener("click", event => {
-          if (!event.target.closest("[data-tree-disclosure]")) return;
+          // A folder whose entries are not known yet, because the full list could not be read, opens as a page.
+          if (!event.target.closest("[data-tree-disclosure]") || !node.children.size) return;
           event.preventDefault();
           disclose(row, row.getAttribute("aria-expanded") !== "true");
         });
@@ -151,28 +155,136 @@
     reveal(row);
   }
   tree.addEventListener("repo-source:navigate", event => {
+    // Until the full list arrives, add the folders on the new page's path.
+    if (!complete && event.detail.entries) {
+      add(event.detail.entries);
+      build();
+    }
     select(event.detail.path);
     visible(shown());
   });
+  function insert(path, directory) {
+    let parent = nodes;
+    const segments = path.split("/");
+    segments.forEach((name, index) => {
+      if (!parent.has(name))
+        parent.set(name, {
+          name,
+          path: segments.slice(0, index + 1).join("/"),
+          directory: index < segments.length - 1 || directory,
+          children: new Map(),
+        });
+      parent = parent.get(name).children;
+    });
+  }
+  function add(data) {
+    for (const entry of data.content.children) insert(entry.dataset.path, entry.dataset.directory === "true");
+  }
+  // Git keeps no empty folders, so a folder without entries is one the page did not list.
+  function listed(map = nodes) {
+    for (const node of map.values())
+      if (node.directory && (!node.children.size || !listed(node.children))) return false;
+    return true;
+  }
+  function build() {
+    const focused = tree.contains(document.activeElement) ? document.activeElement.dataset.path : undefined;
+    const scroll = tree.scrollTop;
+    rows.clear();
+    pending.clear();
+    root.replaceChildren();
+    render(nodes, root);
+    const selected = rows.get(focused) || root.querySelector(".selected") || root.querySelector('[role="treeitem"]');
+    if (selected) selected.tabIndex = 0;
+    if (focused === undefined) restore();
+    else {
+      rows.get(focused)?.focus({ preventScroll: true });
+      tree.scrollTop = scroll;
+    }
+  }
+  // The full list of the page's commit, from this browser's copy or else fetched once; the page lists only its path.
+  const listKey = new URL(tree.dataset.commitUrl, location.href).pathname;
+  const kept = 10;
+  // One database per signed-in user; repo-source-tree-cache.js deletes the others on every page. Each connection closes
+  // once its transaction is done, so it never blocks that.
+  function database() {
+    return new Promise((resolve, reject) => {
+      const request = indexedDB.open(`repo-source-tree:${tree.dataset.viewer}`, 1);
+      request.onupgradeneeded = () =>
+        request.result.createObjectStore("lists", { keyPath: "key" }).createIndex("time", "time");
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = () => reject(request.error);
+    });
+  }
+  async function transaction(mode) {
+    const db = await database();
+    const store = db.transaction("lists", mode).objectStore("lists");
+    db.close();
+    return store;
+  }
+  async function cached() {
+    const store = await transaction("readonly");
+    return new Promise((resolve, reject) => {
+      const request = store.get(listKey);
+      request.onsuccess = () => resolve(request.result?.list);
+      request.onerror = () => reject(request.error);
+    });
+  }
+  // Keep the lists of the last few commits only.
+  async function keep(list) {
+    const store = await transaction("readwrite");
+    store.put({ key: listKey, list, time: Date.now() });
+    const count = store.count();
+    count.onsuccess = () => {
+      let extra = count.result - kept;
+      if (extra <= 0) return;
+      store.index("time").openKeyCursor().onsuccess = event => {
+        const cursor = event.target.result;
+        if (!cursor || extra-- <= 0) return;
+        store.delete(cursor.primaryKey);
+        cursor.continue();
+      };
+    };
+  }
+  // Any folder page of the commit answers with the list alone; the deepest folder on the path is already listed.
+  function listUrl() {
+    let folder = [...nodes.values()].find(node => node.directory);
+    let children = nodes;
+    for (const name of currentPath.split("/")) {
+      const node = children.get(name);
+      if (!node?.directory) break;
+      folder = node;
+      children = node.children;
+    }
+    return `${tree.dataset.commitUrl}/${folder.path.split("/").map(encodeURIComponent).join("/")}?source-tree=list`;
+  }
+  async function fetched() {
+    const response = await fetch(listUrl(), { headers: { Accept: "text/html" } });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const page = new DOMParser().parseFromString(await response.text(), "text/html");
+    const list = page.getElementById("repo-source-tree-list");
+    if (!list) throw new Error("No file list");
+    return list.content.textContent;
+  }
+  async function loadList() {
+    let list;
+    try {
+      list = await cached();
+    } catch {
+      /* No copy in this browser. */
+    }
+    if (list === undefined) {
+      list = await fetched();
+      keep(list).catch(() => {
+        /* Fetch it again next time. */
+      });
+    }
+    for (const path of list.split("\n")) if (path) insert(path, false);
+    complete = true;
+    build();
+  }
   function load() {
     try {
-      const nodes = new Map();
-      const entries = document.getElementById("repo-source-tree-data").content.children;
-      for (const entry of entries) {
-        let parent = nodes;
-        const segments = entry.dataset.path.split("/");
-        segments.forEach((name, index) => {
-          const path = segments.slice(0, index + 1).join("/");
-          if (!parent.has(name))
-            parent.set(name, {
-              name,
-              path,
-              directory: index < segments.length - 1 || entry.dataset.directory === "true",
-              children: new Map(),
-            });
-          parent = parent.get(name).children;
-        });
-      }
+      add(document.getElementById("repo-source-tree-data"));
       root.replaceChildren();
       render(nodes, root);
       const selected = root.querySelector(".selected") || root.querySelector('[role="treeitem"]');
@@ -181,7 +293,13 @@
       restore();
     } catch {
       status.textContent = status.dataset.error;
+      return;
     }
+    complete = listed();
+    if (!complete)
+      loadList().catch(() => {
+        /* The folders off the path open as pages. */
+      });
   }
   // Keep the tree where it was on the previous page of this branch, with the selected row in view.
   function restore() {

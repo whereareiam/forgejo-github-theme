@@ -72,7 +72,11 @@
       const adopted = document.adoptNode(content);
       main.replaceWith(adopted);
       activate(adopted);
-      tree.dispatchEvent(new CustomEvent("repo-source:navigate", { detail: { path: next.dataset.currentPath } }));
+      tree.dispatchEvent(
+        new CustomEvent("repo-source:navigate", {
+          detail: { path: next.dataset.currentPath, entries: next.querySelector("#repo-source-tree-data") },
+        })
+      );
       updateBranchSelector(next.dataset.currentPath);
       let anchor;
       try {

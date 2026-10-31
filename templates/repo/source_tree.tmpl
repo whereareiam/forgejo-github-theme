@@ -2,13 +2,24 @@
     <div class="repo-source-title"><button type="button" class="theme-icon-button" data-source-tree-toggle data-hide-label="{{ctx.Locale.Tr "repo.diff.hide_file_tree"}}" data-show-label="{{ctx.Locale.Tr "repo.diff.show_file_tree"}}" aria-expanded="true" aria-label="{{ctx.Locale.Tr "repo.diff.hide_file_tree"}}">{{svg "octicon-sidebar-expand" 16}}</button><h2>{{ctx.Locale.Tr "repo.code"}}</h2></div>
     <div class="repo-source-branch">{{template "repo/branch_dropdown" dict "root" .}}{{template "components/repository/compare/compare" .}}<a class="theme-icon-button theme-icon-button-outlined" href="{{.RepoLink}}/search/{{if .IsViewCommit}}branch/{{PathEscapeSegments .Repository.DefaultBranch}}{{else}}{{.BranchNameSubURL}}{{end}}" aria-label="{{ctx.Locale.Tr "search.code_kind"}}">{{svg "octicon-search" 16}}</a></div>
     {{template "repo/file_picker" .}}
-    <nav id="repo-source-tree" class="file-tree repo-source-tree" aria-label="{{ctx.Locale.Tr "repo.code"}}" data-source-url="{{.RepoLink}}/src/{{.BranchNameSubURL}}" data-current-path="{{.TreePath}}">
+    <nav id="repo-source-tree" class="file-tree repo-source-tree" aria-label="{{ctx.Locale.Tr "repo.code"}}" data-source-url="{{.RepoLink}}/src/{{.BranchNameSubURL}}" data-current-path="{{.TreePath}}" data-commit-url="{{.RepoLink}}/src/commit/{{.Context.Repo.CommitID}}" data-viewer="{{if .IsSigned}}{{.SignedUser.ID}}{{else}}0{{end}}">
         <div class="repo-source-tree-status" role="status" data-error="{{ctx.Locale.Tr "error.network_error"}}">{{ctx.Locale.Tr "loading"}}</div>
-        {{/* Read the same authorized commit as the page, without API authentication or file-picker filtering. */}}
+        {{/* Only the folders on the current path, so the tree shows on the first paint; the script fetches the rest once per
+            commit. Each folder is listed only when its parent lists it as one, so nothing here can fail on a file. */}}
         <template id="repo-source-tree-data">
-            {{range .Context.Repo.Commit.ListEntriesRecursiveFast}}
-                <span data-path="{{.Name}}" data-directory="{{.IsDir}}"></span>
-            {{end}}
+            {{- $entries := .Context.Repo.Commit.ListEntries -}}
+            {{- range $entries}}<span data-path="{{.Name}}" data-directory="{{.IsDir}}"></span>{{end -}}
+            {{- range $index, $path := .Paths -}}
+                {{- $name := index $.TreeNames $index -}}
+                {{- $folder := false -}}
+                {{- range $entries}}{{if and .IsDir (eq .Name $name)}}{{$folder = .Tree}}{{end}}{{end -}}
+                {{- if $folder -}}
+                    {{- $entries = $folder.ListEntries -}}
+                    {{- range $entries}}<span data-path="{{$path}}/{{.Name}}" data-directory="{{.IsDir}}"></span>{{end -}}
+                {{- else -}}
+                    {{- $entries = StringUtils.Make -}}
+                {{- end -}}
+            {{- end -}}
         </template>
         <div class="file-tree-items" role="tree" aria-label="{{ctx.Locale.Tr "repo.code"}}"></div>
     </nav>
