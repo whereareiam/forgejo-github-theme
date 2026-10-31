@@ -1,10 +1,11 @@
-{{/* GitHub's card menu. Forgejo has no strings for the move actions, so they stay in English. The board script moves
-	the card and saves the new order through Forgejo's column move endpoint. */}}
+{{/* GitHub's card menu. Forgejo has no strings for the move actions: moving to the top or bottom stays in English, and
+	the columns follow a separator instead of a "Move to column" heading. The board script moves the card and saves the
+	new order through Forgejo's column move endpoint. */}}
 <button type="button" class="theme-dropdown-action" data-clipboard-text="{{.Link}}" data-clipboard-text-type="url">{{svg "octicon-copy" 16}}{{ctx.Locale.Tr "copy_url"}}</button>
 {{if .CanWrite}}
 	<button type="button" class="theme-dropdown-action" data-project-card-move="top">{{svg "octicon-move-to-top" 16}}Move to top</button>
 	<button type="button" class="theme-dropdown-action" data-project-card-move="bottom">{{svg "octicon-move-to-bottom" 16}}Move to bottom</button>
-	<span class="theme-dropdown-group">Move to column</span>
+	<div class="theme-dropdown-separator" role="separator"></div>
 	{{range .Columns}}
 		<button type="button" class="theme-dropdown-action" data-project-card-move="{{.ID}}">{{svg "octicon-arrow-right" 16}}<span>{{.Title}}</span></button>
 	{{end}}

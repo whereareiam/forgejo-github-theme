@@ -26,7 +26,9 @@
     results.querySelector(".theme-repository-error")?.remove();
     results.setAttribute("aria-busy", "true");
     const status = results.querySelector("[data-theme-repository-status]");
-    if (status) status.textContent = "Updating repositories…";
+    // The status line carries Forgejo's words for loading and failing; the count announces the new results.
+    const text = status?.dataset ?? {};
+    if (status) status.textContent = text.loading ?? "";
     try {
       const response = await fetch(url, { signal: request.signal, headers: { Accept: "text/html" } });
       if (!response.ok) throw new Error("Repository search failed");
@@ -45,15 +47,16 @@
       }
       if (url.href !== location.href) history.pushState({ themeRepositorySearch: true }, "", url);
       const announcement = results.querySelector("[data-theme-repository-status]");
-      if (announcement) announcement.textContent = "Repositories updated.";
+      const count = form.querySelector("[data-theme-repository-count]");
+      if (announcement && count) announcement.textContent = count.textContent;
     } catch (error) {
       if (error.name === "AbortError" || current !== revision) return;
       const message = document.createElement("p");
       message.className = "theme-repository-error";
       message.setAttribute("role", "alert");
-      message.textContent = "Repository filters could not be updated. Try again.";
+      message.textContent = text.error ?? "";
       results.prepend(message);
-      if (status) status.textContent = "Repository update failed.";
+      if (status) status.textContent = text.error ?? "";
     } finally {
       if (current === revision) results.removeAttribute("aria-busy");
     }

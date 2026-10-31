@@ -1,1 +1,1 @@
-{{template "components/repository/picker/picker" dict "UID" .Repository.OwnerID "Exclusive" true "Current" .Repository.ID "Search" true "Lazy" true "Limit" 10 "Label" "Switch repository"}}
+{{template "components/repository/picker/picker" dict "UID" .Repository.OwnerID "Exclusive" true "Current" .Repository.ID "Search" true "Lazy" true "Limit" 10 "Label" (ctx.Locale.Tr "user.repositories")}}

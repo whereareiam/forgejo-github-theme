@@ -52,7 +52,7 @@
 				</div>
 			</div>
 		{{end}}
-		<div id="diff-container"{{if $showFileTree}} class="diff-has-file-tree"{{end}}>
+		<div id="diff-container"{{if $showFileTree}} class="diff-has-file-tree"{{end}} data-loading="{{ctx.Locale.Tr "loading"}}">
 			{{/* GitHub's toolbar spans the tree and the files, in the first row of the #diff-container grid. */}}
 			<div class="diff-detail-box diff-box diff-content-controls">
 				<div class="diff-content-controls-left">
@@ -76,8 +76,8 @@
 						</div>
 					{{end}}
 					<div class="diff-code-search">
-						{{template "components/common/search/search" dict "Kind" "icon" "Local" true "ID" "diff-code-search" "Placeholder" "Search within code"}}
-						<div class="diff-search-navigation" hidden><span id="diff-search-count" role="status"></span><button class="btn interact-bg" type="button" data-search-direction="-1" aria-label="Previous match">{{svg "octicon-chevron-up" 16}}</button><button class="btn interact-bg" type="button" data-search-direction="1" aria-label="Next match">{{svg "octicon-chevron-down" 16}}</button></div>
+						{{template "components/common/search/search" dict "Kind" "icon" "Local" true "ID" "diff-code-search" "Placeholder" (ctx.Locale.Tr "search.code_kind")}}
+						<div class="diff-search-navigation" hidden><span id="diff-search-count" role="status" data-empty="{{ctx.Locale.Tr "repo.wiki.no_search_results"}}"></span><button class="btn interact-bg" type="button" data-search-direction="-1" aria-label="{{ctx.Locale.Tr "editor.find_previous"}}">{{svg "octicon-chevron-up" 16}}</button><button class="btn interact-bg" type="button" data-search-direction="1" aria-label="{{ctx.Locale.Tr "editor.find_next"}}">{{svg "octicon-chevron-down" 16}}</button></div>
 					</div>
 				</div>
 				<div class="diff-content-controls-right diff-detail-actions button-row">
@@ -101,14 +101,14 @@
 				<div class="diff-file-tree-panel not-mobile">
 					<div class="diff-file-tree-scroll">
 						<div class="diff-file-tree-controls">
-                            {{template "components/common/search/search" dict "Kind" "icon" "Local" true "ID" "diff-tree-filter" "Placeholder" "Filter files…" "Label" "Filter files"}}
+                            {{template "components/common/search/search" dict "Kind" "icon" "Local" true "ID" "diff-tree-filter" "Placeholder" (ctx.Locale.Tr "filter")}}
                             <details class="theme-menu diff-tree-options">
-                                <summary class="theme-icon-button theme-icon-button-outlined" aria-label="Filter options">{{svg "octicon-filter" 16}}</summary>
+                                <summary class="theme-icon-button theme-icon-button-outlined" aria-label="{{ctx.Locale.Tr "filter"}}">{{svg "octicon-filter" 16}}</summary>
                                 <div class="theme-menu-popover"></div>
                             </details>
                         </div>
-						<div id="diff-file-tree" class="file-tree tw-hidden"></div>
-                        <p class="diff-tree-empty" role="status" hidden>No files found.</p>
+						<div id="diff-file-tree" class="file-tree tw-hidden" data-label="{{ctx.Locale.Tr "repo.pulls.tab_files"}}"></div>
+                        <p class="diff-tree-empty" role="status" hidden>{{ctx.Locale.Tr "repo.find_file.no_matching"}}</p>
 					</div>
 				</div>
 				<script>
@@ -151,8 +151,7 @@
                         {{if and $file.IsDeleted (not $file.IsBin)}}
                             <div class="diff-deleted-placeholder">
                                 <div class="diff-deleted-skeleton" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
-                                <button type="button" class="btn diff-load-deleted">Load diff</button>
-                                <span>This file was deleted.</span>
+                                <button type="button" class="btn diff-load-deleted">{{ctx.Locale.Tr "repo.diff.load"}}</button>
                             </div>
                         {{end}}
 						<div class="diff-file-body ui attached unstackable table segment" {{if and $file.IsViewed $.IsShowingAllCommits}}data-folded="true"{{end}}>
@@ -167,7 +166,7 @@
 												<span>{{ctx.Locale.Tr "repo.diff.file_suppressed_line_too_long"}}</span>
 											{{else}}
 												<a class="diff-load-button" role="button" href="#" data-href="?file-only=true&files={{$file.Name}}&files={{$file.OldName}}">{{ctx.Locale.Tr "repo.diff.load"}}</a>
-												<span>Large diffs are not rendered by default.</span>
+												<span>{{ctx.Locale.Tr "repo.diff.file_suppressed"}}</span>
 											{{end}}
 										{{else}}
 											{{ctx.Locale.Tr "repo.diff.bin_not_shown"}}
@@ -204,7 +203,7 @@
 				{{/* GitHub loads the next files while scrolling: diff-view.js presses the hidden "Show more" link. */}}
 				<div class="diff-loading-more" id="diff-incomplete" role="status">
 					<span class="diff-loading-spinner" aria-hidden="true"></span>
-					<span>Loading more files…</span>
+					<span>{{ctx.Locale.Tr "loading"}}</span>
 					<a class="tw-hidden" id="diff-show-more-files" data-href="?{{range $i, $f := .FileSelection}}{{if $i}}&{{end}}files={{$f}}{{end}}&diff-page={{len (printf "a%*s" .DiffMetadata.CurrentPage "")}}&file-only=true">{{ctx.Locale.Tr "repo.diff.show_more"}}</a>
 				</div>
 			{{end}}

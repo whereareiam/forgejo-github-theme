@@ -1,5 +1,5 @@
 {{/* GitHub's forks page: a heading over a box with a row per fork (its owner's avatar, owner and name), or GitHub's
-empty state. Forgejo has no string for that state, so it is GitHub's English one. */}}
+empty state. Forgejo has no sentence for that state, so it shows Forgejo's fork count, zero. */}}
 {{template "base/head" .}}
 <div role="main" aria-label="{{.Title}}" class="page-content repository forks">
 	<div class="ui container">
@@ -21,8 +21,7 @@ empty state. Forgejo has no string for that state, so it is GitHub's English one
 			{{else}}
 				<div class="theme-empty">
 					{{svg "octicon-repo-forked" 24}}
-					<h3>No one has forked this repository yet</h3>
-					<p>Forks are a great way to contribute to a repository. After forking a repository, you can send the original author a pull request.</p>
+					<h3>{{ctx.Locale.TrPluralString 0 "fork.n_forks" "0"}}</h3>
 				</div>
 			{{end}}
 		</section>

@@ -125,10 +125,10 @@ Forgejo's own, so every event type and language reads as on the profile. Data is
 	</ol>
 	{{with $data.Page.Paginater}}
 		{{if .HasNext}}
-			<a class="theme-feed-older" href="{{$link}}?page={{.Next}}{{if $params}}&{{$params}}{{end}}" data-theme-feed-older>Load older activity</a>
+			<a class="theme-feed-older" href="{{$link}}?page={{.Next}}{{if $params}}&{{$params}}{{end}}" data-theme-feed-older>{{ctx.Locale.Tr "repo.diff.show_more"}}</a>
 		{{end}}
 	{{end}}
-	<template data-theme-feed-text data-today="Today" data-yesterday="Yesterday" data-week="This week" data-last-week="Last week" data-earlier="Earlier" data-error="Older activity could not be loaded. Try again."></template>
+	<template data-theme-feed-text data-error="{{ctx.Locale.Tr "error.network_error"}}"></template>
 </div>
 {{/* Not deferred: the day headings are in place before the page's first paint instead of pushing the rows down. */}}
 <script src="{{AssetUrlPrefix}}/js/components/dashboard/feed/feed.js"></script>

@@ -1,18 +1,18 @@
-{{/* GitHub's organization settings nav: an icon per page, grouped under Access, Code, planning, and automation,
-	and Integrations. Forgejo has no strings for the group names. */}}
+{{/* GitHub's organization settings nav: an icon per page in groups. Forgejo has strings only for Integrations, so
+	the other groups are set apart by a separator instead of an English name. */}}
 <div class="flex-container-nav">
 	<div class="ui fluid vertical menu theme-nav-list">
 		<a class="{{if .PageIsSettingsOptions}}active {{end}}item" href="{{.OrgLink}}/settings">
 			{{svg "octicon-gear" 16}}{{ctx.Locale.Tr "org.settings.options"}}
 		</a>
-		<div class="theme-settings-group">Access</div>
+		<div class="theme-settings-separator" role="separator"></div>
 		<a class="{{if .PageIsOrgSettingsRepos}}active {{end}}item" href="{{.OrgLink}}/settings/repos">
 			{{svg "octicon-repo" 16}}{{ctx.Locale.Tr "settings.repos"}}
 		</a>
 		<a class="{{if .PageIsSettingsBlockedUsers}}active {{end}}item" href="{{.OrgLink}}/settings/blocked_users">
 			{{svg "octicon-blocked" 16}}{{ctx.Locale.Tr "settings.blocked_users"}}
 		</a>
-		<div class="theme-settings-group">Code, planning, and automation</div>
+		<div class="theme-settings-separator" role="separator"></div>
 		<a class="{{if .PageIsOrgSettingsLabels}}active {{end}}item" href="{{.OrgLink}}/settings/labels">
 			{{svg "octicon-tag" 16}}{{ctx.Locale.Tr "repo.labels"}}
 		</a>
@@ -48,7 +48,7 @@
 			</a>
 		{{end}}
 		{{if .EnableOAuth2}}
-		<div class="theme-settings-group">Integrations</div>
+		<div class="theme-settings-group">{{ctx.Locale.Tr "admin.integrations"}}</div>
 		<a class="{{if .PageIsSettingsApplications}}active {{end}}item" href="{{.OrgLink}}/settings/applications">
 			{{svg "octicon-apps" 16}}{{ctx.Locale.Tr "settings.applications"}}
 		</a>

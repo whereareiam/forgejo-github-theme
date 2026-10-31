@@ -1,9 +1,8 @@
 <details class="theme-menu diff-view-settings">
-	<summary class="theme-icon-button theme-icon-button-outlined" aria-label="Open diff view settings">{{svg "octicon-gear" 16}}</summary>
+	<summary class="theme-icon-button theme-icon-button-outlined" aria-label="{{ctx.Locale.Tr "repo.diff.options_button"}}">{{svg "octicon-gear" 16}}</summary>
 	<div class="theme-menu-popover">
-		<span class="theme-menu-title">Layout</span>
-		<a href="?style=unified&amp;whitespace={{.WhitespaceBehavior}}&amp;show-outdated={{.ShowOutdatedComments}}"><input type="radio" tabindex="-1" {{if not .IsSplitStyle}}checked{{end}}>Unified</a>
-		<a href="?style=split&amp;whitespace={{.WhitespaceBehavior}}&amp;show-outdated={{.ShowOutdatedComments}}"><input type="radio" tabindex="-1" {{if .IsSplitStyle}}checked{{end}}>Split</a>
+		<a href="?style=unified&amp;whitespace={{.WhitespaceBehavior}}&amp;show-outdated={{.ShowOutdatedComments}}"><input type="radio" tabindex="-1" {{if not .IsSplitStyle}}checked{{end}}>{{ctx.Locale.Tr "repo.diff.show_unified_view"}}</a>
+		<a href="?style=split&amp;whitespace={{.WhitespaceBehavior}}&amp;show-outdated={{.ShowOutdatedComments}}"><input type="radio" tabindex="-1" {{if .IsSplitStyle}}checked{{end}}>{{ctx.Locale.Tr "repo.diff.show_split_view"}}</a>
 		{{if .PageIsPullFiles}}<hr><label><input type="checkbox" id="diff-minimize-comments">Minimize comments</label>{{end}}
 		<hr>
 		{{/* GitHub has one "Hide whitespace" toggle; Forgejo's four whitespace modes stay a choice. */}}

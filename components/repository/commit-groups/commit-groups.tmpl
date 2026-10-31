@@ -8,7 +8,7 @@ commit rows. Called with the page context. */}}
     {{if ne $previousDate ""}}</ul></article>{{end}}
     {{$previousDate = $date}}
     <article class="theme-commit-group">
-      <h3>{{svg "octicon-git-commit" 16}}Commits on {{$time.Format "Jan 2, 2006"}}</h3>
+      <h3>{{svg "octicon-git-commit" 16}}{{DateUtils.AbsoluteLong $time}}</h3>
       <ul class="gitea-github-theme-templates-commits-list">
   {{end}}
     {{template "repo/commit_list_item" dict "Commit" . "Page" $}}

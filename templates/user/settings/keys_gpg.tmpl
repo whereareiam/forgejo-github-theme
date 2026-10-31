@@ -1,9 +1,9 @@
-{{/* GitHub's heading button (New GPG key) and its plain line when no GPG keys are added; Forgejo has no strings for
-them. */}}
+{{/* GitHub's heading button and its plain line when no GPG keys are added, in Forgejo's words for adding a key and
+for what the keys are. */}}
 <h4 class="ui top attached header">
 	{{ctx.Locale.Tr "settings.manage_gpg_keys"}}
 	<div class="ui right">
-		<button class="ui primary tiny show-panel toggle button" data-panel="#add-gpg-key-panel">New GPG key</button>
+		<button class="ui primary tiny show-panel toggle button" data-panel="#add-gpg-key-panel">{{ctx.Locale.Tr "settings.add_key"}}</button>
 	</div>
 </h4>
 <div class="ui attached segment">
@@ -115,7 +115,7 @@ them. */}}
 		{{end}}
 	</div>
 	{{if not .GPGKeys}}
-		{{template "components/common/settings/blankslate" dict "Title" "There are no GPG keys associated with your account." "Plain" true}}
+		{{template "components/common/settings/blankslate" dict "Title" (ctx.Locale.Tr "settings.gpg_desc") "Plain" true}}
 	{{end}}
 	<div class="ui g-modal-confirm delete modal" id="delete-gpg">
 		<div class="header">

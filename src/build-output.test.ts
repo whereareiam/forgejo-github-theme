@@ -787,7 +787,7 @@ describe("Forgejo 15 native integration", () => {
     expect(read("templates", "repo", "activity.tmpl")).toContain("flex-container github-insights");
   });
 
-  it("names and orders a person's profile tabs as GitHub does, with GitHub's search and empty-state copy", () => {
+  it("names and orders a person's profile tabs as GitHub does, with Forgejo's search and empty-state strings", () => {
     const read = (...parts: string[]) => fs.readFileSync(path.join(ROOT_DIR, ...parts), "utf-8");
     const tabs = read("templates", "user", "overview", "header.tmpl");
     // Overview, Repositories, Projects, Packages, Stars; Forgejo's own tabs after them.
@@ -801,27 +801,28 @@ describe("Forgejo 15 native integration", () => {
     expect(avatar).toContain('command="show-modal" commandfor="funding-modal"');
     expect(avatar).toContain('{{template "shared/funding" .}}');
     const search = read("templates", "user", "profile_repository_search.tmpl");
-    expect(search).toContain('"Find a repository…"');
-    expect(search).toContain('"Search starred repositories"');
-    expect(search).toContain(">Search</button>");
+    expect(search).toContain('"Placeholder" (ctx.Locale.Tr "search.repo_kind")');
+    expect(search).toContain('>{{ctx.Locale.Tr "search.verb"}}</button>');
     const packages = read("components", "package", "list", "list.tmpl");
     expect(packages).toContain('class="theme-package-list-header"');
     expect(packages.indexOf('name="type"')).toBeLessThan(packages.indexOf('"components/common/search/search"'));
-    expect(read("components", "project", "list", "list.tmpl")).toContain("There aren't any projects yet");
+    expect(read("components", "project", "list", "list.tmpl")).toContain(
+      'ctx.Locale.Tr "repo.issues.filter_project_none"'
+    );
   });
 
   it("matches GitHub's personal settings: the centred column, the header, key buttons, plain empty lines and org settings", () => {
     const read = (...parts: string[]) => fs.readFileSync(path.join(ROOT_DIR, ...parts), "utf-8");
     const head = read("templates", "user", "settings", "layout_head.tmpl");
-    expect(head).toContain('"Subtitle" "Your personal account"');
-    expect(head).toContain('"LinkLabel" "Go to your personal profile"');
+    expect(head).toContain('"Subtitle" (ctx.Locale.Tr "concept_user_individual")');
+    expect(head).toContain('"LinkLabel" (ctx.Locale.Tr "your_profile")');
     const css = read("components", "common", "settings", "settings.css");
     expect(css).toContain(
       ".page-content.user.settings > .ui.container:is(.theme-settings-context-container, .theme-settings) {"
     );
     expect(css).toContain("max-width: 980px !important;");
-    expect(read("templates", "user", "settings", "keys_ssh.tmpl")).toContain("New SSH key");
-    expect(read("templates", "user", "settings", "keys_gpg.tmpl")).toContain("New GPG key");
+    expect(read("templates", "user", "settings", "keys_ssh.tmpl")).toContain('ctx.Locale.Tr "settings.add_key"');
+    expect(read("templates", "user", "settings", "keys_gpg.tmpl")).toContain('ctx.Locale.Tr "settings.add_key"');
     for (const file of [
       ["templates", "user", "settings", "keys_ssh.tmpl"],
       ["templates", "shared", "blocked_users_list.tmpl"],
@@ -832,13 +833,17 @@ describe("Forgejo 15 native integration", () => {
     );
     // GitHub's Edit on the picture: Upload a photo opens the hidden file field, which sends itself as the custom picture.
     const profile = read("templates", "user", "settings", "profile.tmpl");
-    expect(profile).toContain('"Label" "Edit" "Small" true "NoCaret" true "Items" "user/settings/avatar_menu"');
+    expect(profile).toContain(
+      '"Label" (ctx.Locale.Tr "edit") "Small" true "NoCaret" true "Items" "user/settings/avatar_menu"'
+    );
     expect(profile).toContain('<input type="hidden" name="source" value="local">');
     expect(profile).toContain("event.target.form.requestSubmit()");
     const menu = read("templates", "user", "settings", "avatar_menu.tmpl");
-    expect(menu).toContain('<label class="theme-dropdown-action" for="new-avatar">Upload a photo…</label>');
+    expect(menu).toContain(
+      '<label class="theme-dropdown-action" for="new-avatar">{{ctx.Locale.Tr "settings.choose_new_avatar"}}</label>'
+    );
     expect(menu).toContain('form="avatar-gravatar-form"');
-    expect(menu).toContain("Remove photo");
+    expect(menu).toContain('ctx.Locale.Tr "settings.delete_current_avatar"');
     // The Gravatar choice sends the address typed under the picture, not only the stored one.
     expect(profile).toContain('<form id="avatar-gravatar-form" class="ui form theme-avatar-gravatar"');
     expect(profile).toContain('<input id="gravatar" name="gravatar" value="{{.SignedUser.AvatarEmail}}"');
@@ -1022,7 +1027,7 @@ describe("Forgejo 15 native integration", () => {
     const read = (...parts: string[]) =>
       fs.readFileSync(path.join(ROOT_DIR, "templates", "repo", "issue", ...parts), "utf-8");
     const field = read("view_content", "sidebar", "branch_selector_field.tmpl");
-    expect(field).toContain("<strong>Development</strong>");
+    expect(field).toContain('<strong>{{ctx.Locale.Tr "discussion.sidebar.reference"}}</strong>');
     expect(field).toContain('<span class="text branch-name gt-ellipsis">');
     expect(field).not.toContain('<div class="divider"></div>');
     const form = read("new_form.tmpl");
@@ -1185,7 +1190,7 @@ describe("Forgejo 15 native integration", () => {
   it("lists forks in a box and shows GitHub's empty state without them", () => {
     const forks = fs.readFileSync(path.join(ROOT_DIR, "templates", "repo", "forks.tmpl"), "utf-8");
     expect(forks).toContain('<li class="theme-box-list-row theme-fork-row">');
-    expect(forks).toContain("No one has forked this repository yet");
+    expect(forks).toContain('{{ctx.Locale.TrPluralString 0 "fork.n_forks" "0"}}');
   });
 
   it("shows blame as GitHub's in the code view while keeping Forgejo's line and reblame hooks", () => {
@@ -1365,8 +1370,7 @@ describe("Forgejo 15 native integration", () => {
     );
     const sidebarTemplate = fs.readFileSync(path.join(ROOT_DIR, "templates", "repo", "home_sidebar_top.tmpl"), "utf-8");
 
-    expect(sidebarTemplate).toContain("No description, website, or topics provided.");
-    expect(sidebarTemplate).not.toContain('ctx.Locale.Tr "repo.no_desc"');
+    expect(sidebarTemplate).toContain('ctx.Locale.Tr "repo.no_desc"');
     expect(headerTemplate).toContain("repository-visibility-label");
     expect(headerStyle).toContain("> .ui.label.repository-visibility-label");
     expect(repoContentStyle).toContain(".repo-home-sidebar-top > .repo-about-block");
@@ -1404,7 +1408,9 @@ describe("Forgejo 15 native integration", () => {
     );
 
     expect(latestCommitTemplate).toContain('class="repo-latest-commit-row"');
-    expect(latestCommitTemplate).toContain('<h2 class="sr-only">Latest commit</h2>');
+    expect(latestCommitTemplate).toContain(
+      '<h2 class="sr-only">{{ctx.Locale.Tr "repo.files.last_commit_message"}}</h2>'
+    );
     expect(latestCommitTemplate).toContain('class="repo-latest-commit-primary"');
     expect(latestCommitTemplate).toContain('class="repo-latest-commit-avatar" tabindex="0"');
     expect(latestCommitTemplate).toContain('class="repo-latest-commit-author-card"');
@@ -1458,7 +1464,9 @@ describe("Forgejo 15 native integration", () => {
     const commitPageTemplate = fs.readFileSync(path.join(ROOT_DIR, "templates", "repo", "commit_page.tmpl"), "utf-8");
 
     expect(commitPageTemplate).toContain('class="page-content repository diff commit-page"');
-    expect(commitPageTemplate).toContain('id="commit-title">Commit <code>{{printf "%.7s" .CommitID}}');
+    expect(commitPageTemplate).toContain(
+      'id="commit-title">{{ctx.Locale.Tr "repo.commit"}} <code>{{printf "%.7s" .CommitID}}'
+    );
     expect(commitPageTemplate).toContain('class="commit-attribution"');
     expect(commitPageTemplate).toContain('class="commit-card"');
     expect(commitPageTemplate).toContain('class="commit-meta-row"');
@@ -1653,13 +1661,12 @@ describe("Forgejo 15 native integration", () => {
     expect(signInTemplate).toContain("signin-field-label");
     expect(signInTemplate).toContain("signin-logo");
     expect(signInTemplate).toContain('role="heading" aria-level="1"');
-    expect(signInTemplate).toContain("Sign in to {{AppDisplayName}}");
+    expect(signInTemplate).toContain('aria-level="1">{{ctx.Locale.Tr "sign_in"}}</div>');
     expect(signInTemplate).not.toContain('class="required field');
     // Forgejo's Remember this device: the session outlives the browser only when it is checked.
     expect(signInTemplate).toContain('<input name="remember" type="checkbox"> {{ctx.Locale.Tr "auth.remember_me"}}');
     expect(signInTemplate).toContain('href="{{AppSubUrl}}/user/forgot_password"');
-    expect(oauthTemplate).toContain("Continue with {{$provider.DisplayName}}");
-    expect(oauthTemplate).not.toContain("sign_in_with_provider");
+    expect(oauthTemplate).toContain('{{ctx.Locale.Tr "sign_in_with_provider" $provider.DisplayName}}');
   });
 
   it("keeps registration form and account-linking contracts while sharing the auth presentation", () => {

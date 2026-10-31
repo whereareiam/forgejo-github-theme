@@ -1,4 +1,4 @@
-<button type="button" class="theme-sidebar-toggle" data-theme-sidebar-toggle aria-expanded="true">{{svg "octicon-sidebar-collapse" 16}}Collapse sidebar</button>
+<button type="button" class="theme-sidebar-toggle" data-theme-sidebar-toggle aria-expanded="true" aria-label="{{ctx.Locale.Tr "toggle_menu"}}" data-tooltip-content="{{ctx.Locale.Tr "toggle_menu"}}">{{svg "octicon-sidebar-collapse" 16}}</button>
 {{/* Fits the sidebar beneath the navbar before the first paint; sidebar.js keeps it fitted while the page scrolls. */}}
 <script>
 	((sidebar) => sidebar?.style.setProperty("--theme-sidebar-offset", `${Math.max(0, Math.round(sidebar.getBoundingClientRect().top))}px`))(document.currentScript.closest(".theme-sidebar"));

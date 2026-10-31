@@ -3,26 +3,26 @@
 {{/* Labels, milestones (the list, one milestone and its form) and projects are pages of their own, not a filter of the list. */}}
 {{$isMilestonePage := or .PageIsMilestones .Milestone}}
 {{$isListPage := not (or .IsProjectsPage $isMilestonePage .PageIsLabels)}}
-<aside class="theme-sidebar" aria-label="{{if .PageIsPullList}}Pull requests{{else}}Issues{{end}} sidebar navigation">
+<aside class="theme-sidebar" aria-label="{{if .PageIsPullList}}{{ctx.Locale.Tr "repo.pulls"}}{{else}}{{ctx.Locale.Tr "repo.issues"}}{{end}}">
     <div class="theme-sidebar-content">
-    <nav aria-label="{{if .PageIsPullList}}Pull request{{else}}Issue{{end}} filters">
-        <a class="{{if and $isListPage (or (eq .ViewType "all") (not .ViewType))}}active{{end}}" href="{{.RepoLink}}/{{$list}}?type=all&amp;state=open">{{if .PageIsPullList}}{{svg "octicon-git-pull-request" 16}}Pull requests{{else}}{{svg "octicon-issue-opened" 16}}Issues{{end}}</a>
+    <nav aria-label="{{ctx.Locale.Tr "filter"}}">
+        <a class="{{if and $isListPage (or (eq .ViewType "all") (not .ViewType))}}active{{end}}" href="{{.RepoLink}}/{{$list}}?type=all&amp;state=open">{{if .PageIsPullList}}{{svg "octicon-git-pull-request" 16}}{{ctx.Locale.Tr "repo.pulls"}}{{else}}{{svg "octicon-issue-opened" 16}}{{ctx.Locale.Tr "repo.issues"}}{{end}}</a>
         {{if .IsSigned}}
             {{/* GitHub's order: authored, assigned, involved, review requests. */}}
-            <a class="{{if and $isListPage (eq .ViewType "created_by")}}active{{end}}" href="{{.RepoLink}}/{{$list}}?type=created_by&amp;state=open">{{svg "octicon-person" 16}}Created by me</a>
-            <a class="{{if and $isListPage (eq .ViewType "assigned")}}active{{end}}" href="{{.RepoLink}}/{{$list}}?type=assigned&amp;state=open">{{svg "octicon-people" 16}}Assigned to me</a>
-            <a class="{{if and $isListPage (eq .ViewType "mentioned")}}active{{end}}" href="{{.RepoLink}}/{{$list}}?type=mentioned&amp;state=open">{{svg "octicon-mention" 16}}Mentioned</a>
-            {{if .PageIsPullList}}<a class="{{if and $isListPage (eq .ViewType "review_requested")}}active{{end}}" href="{{.RepoLink}}/pulls?type=review_requested&amp;state=open">{{svg "octicon-code-review" 16}}Review requested</a>{{end}}
+            <a class="{{if and $isListPage (eq .ViewType "created_by")}}active{{end}}" href="{{.RepoLink}}/{{$list}}?type=created_by&amp;state=open">{{svg "octicon-person" 16}}{{ctx.Locale.Tr "repo.issues.filter_type.created_by_you"}}</a>
+            <a class="{{if and $isListPage (eq .ViewType "assigned")}}active{{end}}" href="{{.RepoLink}}/{{$list}}?type=assigned&amp;state=open">{{svg "octicon-people" 16}}{{ctx.Locale.Tr "repo.issues.filter_type.assigned_to_you"}}</a>
+            <a class="{{if and $isListPage (eq .ViewType "mentioned")}}active{{end}}" href="{{.RepoLink}}/{{$list}}?type=mentioned&amp;state=open">{{svg "octicon-mention" 16}}{{ctx.Locale.Tr "repo.issues.filter_type.mentioning_you"}}</a>
+            {{if .PageIsPullList}}<a class="{{if and $isListPage (eq .ViewType "review_requested")}}active{{end}}" href="{{.RepoLink}}/pulls?type=review_requested&amp;state=open">{{svg "octicon-code-review" 16}}{{ctx.Locale.Tr "repo.issues.filter_type.review_requested"}}</a>{{end}}
         {{end}}
-        <a href="{{.RepoLink}}/{{$list}}?sort=recentupdate&amp;state=all">{{svg "octicon-history" 16}}Recent activity</a>
+        <a href="{{.RepoLink}}/{{$list}}?sort=recentupdate&amp;state=all">{{svg "octicon-history" 16}}{{ctx.Locale.Tr "issues.search.sort.recentupdate"}}</a>
     </nav>
     <hr>
-    <nav aria-label="Pages">
+    <nav>
         {{/* GitHub lists Projects, Milestones and Labels; Forgejo's extra pages follow them. */}}
         {{if and (not .UnitProjectsGlobalDisabled) (.Permission.CanRead $.UnitTypeProjects)}}<a class="{{if .IsProjectsPage}}active{{end}}" href="{{.RepoLink}}/projects">{{svg "octicon-table" 16}}{{ctx.Locale.Tr "repo.projects"}}</a>{{end}}
         <a class="{{if $isMilestonePage}}active{{end}}" href="{{.RepoLink}}/milestones">{{svg "octicon-milestone" 16}}{{ctx.Locale.Tr "repo.milestones"}}</a>
         <a class="{{if .PageIsLabels}}active{{end}}" href="{{.RepoLink}}/labels">{{svg "octicon-tag" 16}}{{ctx.Locale.Tr "repo.labels"}}</a>
-        <a href="{{.RepoLink}}/{{$list}}?state=all">{{svg "octicon-eye" 16}}All states</a>
+        <a href="{{.RepoLink}}/{{$list}}?state=all">{{svg "octicon-eye" 16}}{{ctx.Locale.Tr "repo.issues.all_title"}}</a>
         <a href="{{AppDocsURL "user/search/issue-search/"}}" target="_blank" rel="noopener noreferrer">{{svg "octicon-question" 16}}{{ctx.Locale.Tr "search.syntax"}}</a>
     </nav>
     </div>

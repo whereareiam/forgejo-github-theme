@@ -37,11 +37,12 @@
   });
   updateToggle();
   const excludedExtensions = new Set();
+  // Files without an extension share a dash: Forgejo has no word for them.
   const extension = name =>
     name
       .split("/")
       .pop()
-      .match(/\.[^.]+$/)?.[0] || "No extension";
+      .match(/\.[^.]+$/)?.[0] || "—";
   const files = () => window.config?.pageData?.diffFileInfo?.files || [];
   const matches = file =>
     file.Name.toLowerCase().includes(input.value.trim().toLowerCase()) && !excludedExtensions.has(extension(file.Name));
@@ -75,10 +76,6 @@
     if (key !== extensionKey) {
       extensionKey = key;
       options.replaceChildren();
-      const title = document.createElement("span");
-      title.className = "theme-menu-title";
-      title.textContent = "File extensions";
-      options.append(title);
       for (const [ext, count] of [...counts].sort(([a], [b]) => a.localeCompare(b))) {
         const label = document.createElement("label");
         const checkbox = document.createElement("input");
@@ -93,7 +90,7 @@
       }
     }
     setAttribute(tree, "role", "tree");
-    setAttribute(tree, "aria-label", "File tree");
+    setAttribute(tree, "aria-label", tree.dataset.label);
     function visit(container, prefix = "", level = 1) {
       for (const row of container.children) {
         if (row.matches(".item-directory")) {

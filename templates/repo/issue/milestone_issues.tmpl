@@ -6,7 +6,7 @@ date and progress, then the issue list with the issue page's filters. */}}
 	<div class="ui container issue-list-main theme-sidebar-main">
 		{{template "base/alert" .}}
 		<div class="theme-list-heading">
-			<div class="theme-list-title"><button type="button" class="theme-icon-button" data-theme-sidebar-toggle data-theme-sidebar-expand aria-expanded="false" aria-label="Expand sidebar">{{svg "octicon-sidebar-expand" 16}}</button><h1>{{.Milestone.Name}}</h1></div>
+			<div class="theme-list-title"><button type="button" class="theme-icon-button" data-theme-sidebar-toggle data-theme-sidebar-expand aria-expanded="false" aria-label="{{ctx.Locale.Tr "toggle_menu"}}">{{svg "octicon-sidebar-expand" 16}}</button><h1>{{.Milestone.Name}}</h1></div>
 			{{if not .Repository.IsArchived}}
 				<div class="button-row">
 					{{if or .CanWriteIssues .CanWritePulls}}

@@ -14,7 +14,7 @@ function events() {
 type ErrorMessage = { textContent: string; remove: () => void };
 type Results = {
   id: string;
-  status: { textContent: string };
+  status: { textContent: string; dataset: Record<string, string> };
   error?: ErrorMessage;
   querySelector: (selector: string) => { textContent: string } | ErrorMessage | undefined;
   setAttribute: ReturnType<typeof vi.fn>;
@@ -44,7 +44,7 @@ function fixture() {
   const location = { href: "http://localhost/org", reload: vi.fn() };
   const history = { pushState: vi.fn((_state, _title, url: URL) => (location.href = url.href)) };
   const makeResults = (id: string) => {
-    const status = { textContent: "" };
+    const status = { textContent: "", dataset: { loading: "Loading…", error: "Network error" } };
     const result: Results = {
       id,
       status,
@@ -188,7 +188,7 @@ describe("repository search enhancement", () => {
     const f = fixture();
     f.change(f.filters[0]);
     f.requests[0].reject(new Error("Offline"));
-    await vi.waitFor(() => expect(f.results().error?.textContent).toContain("could not be updated"));
+    await vi.waitFor(() => expect(f.results().error?.textContent).toBe("Network error"));
     expect(f.results().id).toBe("initial");
     expect(f.history.pushState).not.toHaveBeenCalled();
     expect(f.results().removeAttribute).toHaveBeenCalledWith("aria-busy");

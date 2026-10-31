@@ -4,6 +4,6 @@
 	<a class="theme-dropdown-action theme-dashboard-context-item" href="{{.OrganisationLink}}/{{or $page "dashboard"}}"{{if eq $data.ContextUser.ID .ID}} aria-current="true"{{end}}>{{svg "octicon-check" 16 "theme-box-list-check"}}{{ctx.AvatarUtils.Avatar . 20}}<span>{{.Name}}</span></a>
 {{end}}
 <div class="theme-dashboard-context-actions">
-	<a class="ui button theme-control theme-control-small" href="{{AppSubUrl}}/user/settings/organization">{{svg "octicon-organization" 16}}Manage organizations</a>
+	<a class="ui button theme-control theme-control-small" href="{{AppSubUrl}}/user/settings/organization">{{svg "octicon-organization" 16}}{{ctx.Locale.Tr "admin.orgs.org_manage_panel"}}</a>
 	{{if $data.SignedUser.CanCreateOrganization}}<a class="ui button theme-control theme-control-small" href="{{AppSubUrl}}/org/create">{{svg "octicon-plus" 16}}{{ctx.Locale.Tr "new_org.link"}}</a>{{end}}
 </div>

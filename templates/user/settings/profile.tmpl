@@ -111,13 +111,13 @@
 			</form>
 
 			<aside class="theme-settings-aside" aria-labelledby="avatar-settings">
-			<h3 id="avatar-settings">Profile picture</h3>
+			<h3 id="avatar-settings">{{ctx.Locale.Tr "settings.avatar"}}</h3>
 			{{/* GitHub's picture with Edit on its lower left. Upload a photo opens the file chooser and choosing a file
 			sends the form at once, as the custom picture; the form itself stays hidden. With Gravatar allowed, the menu
 			can switch back to it. */}}
 			<div class="theme-avatar-edit">
 				{{ctx.AvatarUtils.Avatar .SignedUser 200 "theme-settings-avatar"}}
-				{{template "components/common/dropdown/dropdown" dict "Kind" "actions" "Icon" "octicon-pencil" "Label" "Edit" "Small" true "NoCaret" true "Items" "user/settings/avatar_menu" "Data" (dict "Context" ctx "Link" .Link "Gravatar" (not .DisableGravatar) "Custom" .SignedUser.UseCustomAvatar)}}
+				{{template "components/common/dropdown/dropdown" dict "Kind" "actions" "Icon" "octicon-pencil" "Label" (ctx.Locale.Tr "edit") "Small" true "NoCaret" true "Items" "user/settings/avatar_menu" "Data" (dict "Context" ctx "Link" .Link "Gravatar" (not .DisableGravatar) "Custom" .SignedUser.UseCustomAvatar)}}
 			</div>
 			<form id="avatar-form" class="ui form tw-hidden" action="{{.Link}}/avatar" method="post" enctype="multipart/form-data">
 				<input type="hidden" name="source" value="local">

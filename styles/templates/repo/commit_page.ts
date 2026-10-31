@@ -222,17 +222,12 @@ const commitPage = css`
       box-shadow: none;
       color: ${themeVars.github.fgColor.accent};
       display: inline-flex;
-      font-size: 0;
-      height: 24px;
-      margin: 0 !important;
-      padding: 0 8px;
-    }
-
-    .commit-card .branch-and-tag-area > .ellipsis-button.ui.button::before {
-      content: "Branches and tags";
       font-size: 12px;
       font-weight: 500;
+      height: 24px;
       line-height: 20px;
+      margin: 0 !important;
+      padding: 0 8px;
     }
 
     .commit-card .branch-and-tag-detail {
@@ -389,6 +384,9 @@ const commitPage = css`
     }
 
     .commit-files-changed {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
       color: ${themeVars.color.text.self};
       font-size: 14px;
       font-weight: 600;

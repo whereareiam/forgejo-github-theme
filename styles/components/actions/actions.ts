@@ -22,13 +22,6 @@ import { css, cssCombine, otherThemeVars, themeVars } from "@lutinglt/gitea-gith
 // 仓库 Actions 页面
 const actions = css`
   .page-content.repository.actions:not(.settings) {
-    .actions-menu::before {
-      content: "Actions";
-      display: block;
-      font-size: 20px;
-      font-weight: 600;
-      margin: 6px 8px 8px;
-    }
     .run-list {
       border: 1px solid ${themeVars.color.light.border};
       border-radius: ${otherThemeVars.border.radius};

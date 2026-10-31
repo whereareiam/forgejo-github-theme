@@ -1,10 +1,10 @@
 {{/* GitHub's Actions sidebar: All workflows, then the repository's workflows, with Runners at the bottom for
-	administrators. Forgejo has no string for the "Workflows" group. */}}
-<aside class="theme-sidebar" aria-label="Actions sidebar navigation">
+	administrators. Forgejo has no string for the "Workflows" group, so a rule sets the workflows apart. */}}
+<aside class="theme-sidebar" aria-label="{{ctx.Locale.Tr "actions.actions"}}">
 	<div class="theme-sidebar-content">
-		<nav aria-label="Workflows">
+		<nav aria-label="{{ctx.Locale.Tr "actions.runs.workflow"}}">
 			<a class="{{if not $.CurWorkflow}}active{{end}}" href="?actor={{$.CurActor}}&status={{$.CurStatus}}">{{svg "octicon-home" 16}}<span>{{ctx.Locale.Tr "actions.runs.all_workflows"}}</span></a>
-			<span class="theme-sidebar-label">Workflows</span>
+			<hr>
 			{{range .workflows}}
 				<a class="{{if eq .Entry.Name $.CurWorkflow}}active{{end}}" href="?workflow={{.Entry.Name}}&actor={{$.CurActor}}&status={{$.CurStatus}}">
 					<span>{{.Entry.Name}}</span>

@@ -8,9 +8,9 @@
 		{{template "base/alert" .}}
 		<div class="theme-list-heading github-release-heading">
 			<div class="theme-list-title">
-				<button type="button" class="theme-icon-button" data-theme-sidebar-toggle data-theme-sidebar-expand aria-expanded="false" aria-label="Expand sidebar">{{svg "octicon-sidebar-expand" 16}}</button>
+				<button type="button" class="theme-icon-button" data-theme-sidebar-toggle data-theme-sidebar-expand aria-expanded="false" aria-label="{{ctx.Locale.Tr "toggle_menu"}}">{{svg "octicon-sidebar-expand" 16}}</button>
 				{{if and $single .Releases}}
-					<nav class="github-release-breadcrumb" aria-label="Breadcrumb">
+					<nav class="github-release-breadcrumb" aria-label="{{ctx.Locale.Tr "repo.release.releases"}}">
 						<a href="{{.RepoLink}}/{{if .PageIsSingleTag}}tags{{else}}releases{{end}}">{{if .PageIsSingleTag}}{{ctx.Locale.Tr "repo.tags"}}{{else}}{{ctx.Locale.Tr "repo.releases"}}{{end}}</a>
 						<span class="github-release-breadcrumb-separator">/</span>
 						<h1 aria-current="page">{{(index .Releases 0).Release.Title}}</h1>
@@ -21,9 +21,9 @@
 			</div>
 			{{if not $single}}
 				<div class="github-release-actions">
-					{{if .ShowReleaseSearch}}<form class="ignore-dirty github-release-search" method="get" role="search">{{template "components/common/search/search" dict "Kind" "icon" "Value" .Keyword "Placeholder" "Find a release"}}</form>{{end}}
+					{{if .ShowReleaseSearch}}<form class="ignore-dirty github-release-search" method="get" role="search">{{template "components/common/search/search" dict "Kind" "icon" "Value" .Keyword "Placeholder" (ctx.Locale.Tr "search.search")}}</form>{{end}}
 					{{if .EnableFeed}}<a class="theme-icon-button theme-icon-button-outlined" href="{{.RepoLink}}/releases.rss" aria-label="{{ctx.Locale.Tr "rss_feed"}}" data-tooltip-content="{{ctx.Locale.Tr "rss_feed"}}">{{svg "octicon-rss" 16}}</a>{{end}}
-					{{if .CanCreateRelease}}<a class="button theme-control" href="{{$.RepoLink}}/releases/new">Draft a new release</a>{{end}}
+					{{if .CanCreateRelease}}<a class="button theme-control" href="{{$.RepoLink}}/releases/new">{{ctx.Locale.Tr "repo.release.new_release"}}</a>{{end}}
 				</div>
 			{{end}}
 		</div>
@@ -41,7 +41,7 @@
 								{{else if $release.IsPrerelease}}
 									<span class="ui orange label theme-label theme-label-large">{{ctx.Locale.Tr "repo.release.prerelease"}}</span>
 								{{else if not $release.IsTag}}
-									<a class="github-release-latest" href="{{$.RepoLink}}/releases/latest" hidden><span class="ui green label theme-label theme-label-large">Latest</span></a>
+									<a class="github-release-latest" href="{{$.RepoLink}}/releases/latest" hidden><span class="ui green label theme-label theme-label-large">{{ctx.Locale.Tr "repo.release.stable"}}</span></a>
 								{{end}}
 							</h2>
 							<div class="github-release-controls">
@@ -65,7 +65,7 @@
 										{{template "shared/user/authorlink" (dict "ID" -1)}}
 									{{end}}
 								</span>
-								<span class="released">{{if $release.IsDraft}}drafted this{{else}}{{ctx.Locale.Tr "repo.released_this"}}{{end}}</span>
+								<span class="released">{{ctx.Locale.Tr "repo.released_this"}}</span>
 								{{if $release.CreatedUnix}}<span class="time">{{DateUtils.TimeSince $release.CreatedUnix}}</span>{{end}}
 							</p>
 							{{$showRefs := and $release.Sha1 $canReadCode}}
@@ -94,7 +94,7 @@
 						{{if or $hasArchiveLinks $hasReleaseAttachment}}
 							<details class="github-release-assets"{{if eq $idx 0}} open{{end}}>
 								<summary>
-									{{svg "octicon-triangle-right" 16 "github-release-assets-marker"}}<span>Assets</span>
+									{{svg "octicon-triangle-right" 16 "github-release-assets-marker"}}<span>{{ctx.Locale.Tr "repo.release.downloads"}}</span>
 									<span class="theme-counter github-release-asset-count">{{if $hasArchiveLinks}}{{Eval (len $release.Attachments) "+" 2}}{{else}}{{len $release.Attachments}}{{end}}</span>
 								</summary>
 								<ul class="github-release-asset-list">
@@ -133,9 +133,9 @@
 		{{else}}
 			<div class="theme-empty github-release-empty">
 				{{svg "octicon-tag" 32}}
-				<h2>{{if .Keyword}}No releases found{{else}}There aren’t any releases here{{end}}</h2>
-				<p>{{if .Keyword}}Try a different search.{{else}}Releases package software, release notes, and downloads for your project.{{end}}</p>
-				{{if .Keyword}}<a href="{{.RepoLink}}/releases">View all releases</a>{{end}}
+				<h2>{{if .Keyword}}{{ctx.Locale.Tr "search.no_results"}}{{else}}{{ctx.Locale.TrPluralString 0 "counters.n_releases" "0"}}{{end}}</h2>
+				<p>{{if .Keyword}}{{ctx.Locale.Tr "issues.search.no_results.hint"}}{{else}}{{ctx.Locale.Tr "repo.release.new_subheader"}}{{end}}</p>
+				{{if .Keyword}}<a href="{{.RepoLink}}/releases">{{ctx.Locale.Tr "repo.release.releases"}}</a>{{end}}
 			</div>
 		{{end}}
 

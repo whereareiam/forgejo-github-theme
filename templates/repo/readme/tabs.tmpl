@@ -8,9 +8,9 @@ not rendered on this page, so their tabs open the file itself. */ -}}
 				{{$name := .Entry.Name}}
 				{{if and (not .Entry.IsDir) (StringUtils.HasPrefix (StringUtils.ToUpper $name) $kind)}}
 					<a href="{{$.TreeLink}}/{{PathEscapeSegments $name}}">
-						{{if eq $kind "CODE_OF_CONDUCT"}}{{svg "octicon-code-of-conduct" 16}}<span>Code of conduct</span>
-						{{else if eq $kind "CONTRIBUTING"}}{{svg "octicon-people" 16}}<span>Contributing</span>
-						{{else if eq $kind "SECURITY"}}{{svg "octicon-law" 16}}<span>Security</span>
+						{{if eq $kind "CODE_OF_CONDUCT"}}{{svg "octicon-code-of-conduct" 16}}<span>{{$name}}</span>
+						{{else if eq $kind "CONTRIBUTING"}}{{svg "octicon-people" 16}}<span>{{$name}}</span>
+						{{else if eq $kind "SECURITY"}}{{svg "octicon-law" 16}}<span>{{ctx.Locale.Tr "settings.security"}}</span>
 						{{else}}{{svg "octicon-law" 16}}<span>{{ctx.Locale.Tr "repo.license"}}</span>{{end}}
 					</a>
 				{{end}}

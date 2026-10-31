@@ -1,5 +1,5 @@
-{{/* GitHub's personal settings nav: an icon per page, grouped under Access, Code, planning, and automation, and
-	Integrations. Forgejo has no strings for the group names. */}}
+{{/* GitHub's personal settings nav: an icon per page in groups. Forgejo has strings only for Integrations, so the
+	other groups are set apart by a separator instead of an English name. */}}
 {{if not .HideNavbarLinks}}
 <div class="flex-container-nav">
 	<div class="ui fluid vertical menu theme-nav-list">
@@ -12,7 +12,7 @@
 		<a class="{{if .PageIsSettingsAppearance}}active {{end}}item" href="{{AppSubUrl}}/user/settings/appearance">
 			{{svg "octicon-paintbrush" 16}}{{ctx.Locale.Tr "settings.appearance"}}
 		</a>
-		<div class="theme-settings-group">Access</div>
+		<div class="theme-settings-separator" role="separator"></div>
 		<a class="{{if .PageIsSettingsSecurity}}active {{end}}item" href="{{AppSubUrl}}/user/settings/security">
 			{{svg "octicon-shield-lock" 16}}{{ctx.Locale.Tr "settings.security"}}
 		</a>
@@ -25,7 +25,7 @@
 		<a class="{{if .PageIsBlockedUsers}}active {{end}}item" href="{{AppSubUrl}}/user/settings/blocked_users">
 			{{svg "octicon-blocked" 16}}{{ctx.Locale.Tr "settings.blocked_users"}}
 		</a>
-		<div class="theme-settings-group">Code, planning, and automation</div>
+		<div class="theme-settings-separator" role="separator"></div>
 		<a class="{{if .PageIsSettingsRepos}}active {{end}}item" href="{{AppSubUrl}}/user/settings/repos">
 			{{svg "octicon-repo" 16}}{{ctx.Locale.Tr "settings.repos"}}
 		</a>
@@ -60,7 +60,7 @@
 				{{svg "octicon-database" 16}}{{ctx.Locale.Tr "settings.storage_overview"}}
 			</a>
 		{{end}}
-		<div class="theme-settings-group">Integrations</div>
+		<div class="theme-settings-group">{{ctx.Locale.Tr "admin.integrations"}}</div>
 		<a class="{{if .PageIsSettingsApplications}}active {{end}}item" href="{{AppSubUrl}}/user/settings/applications">
 			{{svg "octicon-apps" 16}}{{ctx.Locale.Tr "settings.applications"}}
 		</a>

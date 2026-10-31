@@ -104,7 +104,7 @@ describe("mirror badge disclosure", () => {
       '{{if .Repository.IsPrivate}}{{ctx.Locale.Tr "repo.desc.private"}}{{else if .Repository.Owner.Visibility.IsPrivate}}'
     );
     expect(template).toContain('{{ctx.Locale.Tr "repo.desc.internal"}}');
-    expect(template).toContain('{{ctx.Locale.Tr "user.visibility.public.title"}}{{end}} mirror');
+    expect(template).toContain('{{ctx.Locale.Tr "user.visibility.public.title"}}{{end}} {{svg "octicon-mirror" 12}}');
     expect(template).toContain("{{if .PullMirror.UpdatedUnix}}");
     expect(template).toContain("{{DateUtils.TimeSince .PullMirror.UpdatedUnix}}");
     expect(template).toContain("{{AssetUrlPrefix}}/css/repo-mirror.css");

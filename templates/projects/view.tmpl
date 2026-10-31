@@ -23,11 +23,11 @@
 					{{svg "octicon-triangle-down" 16}}
 				</summary>
 				<div class="theme-menu-popover" role="menu">
-					<span class="theme-menu-title">Create issue in repository</span>
+					<span class="theme-menu-title">{{ctx.Locale.Tr "repository"}}</span>
 					<div class="github-project-repo-filter">
-						{{template "components/common/search/search" dict "Kind" "icon" "Local" true "ID" "project-repo-filter" "Placeholder" "Find a repository" "Label" "Find a repository"}}
+						{{template "components/common/search/search" dict "Kind" "icon" "Local" true "ID" "project-repo-filter" "Placeholder" (ctx.Locale.Tr "search.repo_kind")}}
 					</div>
-					<p class="github-project-repo-status" role="status">Loading…</p>
+					<p class="github-project-repo-status" role="status" data-empty="{{ctx.Locale.Tr "search.no_results"}}" data-error="{{ctx.Locale.Tr "error.network_error"}}">{{ctx.Locale.Tr "loading"}}</p>
 				</div>
 				<template class="github-project-repo-icon">{{svg "octicon-repo" 16}}</template>
 			</details>
@@ -63,7 +63,7 @@
 {{end}}
 
 <div class="github-project-filter">
-	{{template "components/common/search/search" dict "Kind" "icon" "Local" true "ID" "project-board-filter" "Placeholder" "Filter by keyword" "Label" "Filter cards by keyword"}}
+	{{template "components/common/search/search" dict "Kind" "icon" "Local" true "ID" "project-board-filter" "Placeholder" (ctx.Locale.Tr "filter")}}
 </div>
 
 {{if $canWriteProject}}
@@ -203,13 +203,13 @@
 	without the site chrome when it is loaded in this frame (see base/head_style). */}}
 <div class="github-project-panel" data-project-id="{{.Project.ID}}" hidden>
 	<div class="github-project-panel-backdrop" data-project-panel-close></div>
-	<section class="github-project-panel-sheet" role="dialog" aria-modal="true" aria-label="Issue">
+	<section class="github-project-panel-sheet" role="dialog" aria-modal="true" aria-label="{{ctx.Locale.Tr "repo.issues"}}">
 		<div class="github-project-panel-toolbar">
-			<a class="theme-icon-button github-project-panel-open" target="_blank" rel="noopener" aria-label="Open in new tab" data-tooltip-content="Open in new tab">{{svg "octicon-link-external"}}</a>
-			<button type="button" class="theme-icon-button" data-project-panel-close aria-label="Close panel">{{svg "octicon-x"}}</button>
+			<a class="theme-icon-button github-project-panel-open" target="_blank" rel="noopener" aria-label="{{ctx.Locale.Tr "view"}}" data-tooltip-content="{{ctx.Locale.Tr "view"}}">{{svg "octicon-link-external"}}</a>
+			<button type="button" class="theme-icon-button" data-project-panel-close aria-label="{{ctx.Locale.Tr "modal.close"}}">{{svg "octicon-x"}}</button>
 		</div>
 		{{/* Organization and user projects hold issues from several repositories, so their panel names the repository. */}}
-		<iframe name="github-project-panel{{if not .Repository}}-owner{{end}}" title="Issue"></iframe>
+		<iframe name="github-project-panel{{if not .Repository}}-owner{{end}}" title="{{ctx.Locale.Tr "repo.issues"}}"></iframe>
 	</section>
 </div>
 <script src="{{AssetUrlPrefix}}/js/details-menu.js" defer></script>

@@ -6,11 +6,11 @@ Title the heading, and either Default the default branch or Branches the other r
 		<table class="theme-branch-table">
 			<thead>
 				<tr>
-					<th scope="col">Branch</th>
-					<th scope="col" class="theme-branch-updated">Updated</th>
-					<th scope="col" class="theme-branch-status">Check status</th>
-					<th scope="col" class="theme-branch-divergence"><span>Behind</span><span>Ahead</span></th>
-					<th scope="col" class="theme-branch-pull">Pull request</th>
+					<th scope="col">{{ctx.Locale.Tr "repo.branch"}}</th>
+					<th scope="col" class="theme-branch-updated">{{ctx.Locale.Tr "admin.auths.updated"}}</th>
+					<th scope="col" class="theme-branch-status">{{ctx.Locale.Tr "actions.runs.status"}}</th>
+					<th scope="col" class="theme-branch-divergence" aria-label="{{ctx.Locale.Tr "repo.commits.commits"}}"><span>{{svg "octicon-arrow-down" 16}}</span><span>{{svg "octicon-arrow-up" 16}}</span></th>
+					<th scope="col" class="theme-branch-pull">{{ctx.Locale.Tr "pull_requests"}}</th>
 					<th scope="col" class="theme-branch-actions"><span class="tw-sr-only">{{ctx.Locale.Tr "profile.actions.tooltip"}}</span></th>
 				</tr>
 			</thead>

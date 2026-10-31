@@ -7,11 +7,11 @@
 		{{$canReadReleases := $.Permission.CanRead $.UnitTypeReleases}}
 		{{$canReadCode := $.Permission.CanRead $.UnitTypeCode}}
 		<div class="theme-list-heading github-release-heading">
-			<div class="theme-list-title"><button type="button" class="theme-icon-button" data-theme-sidebar-toggle data-theme-sidebar-expand aria-expanded="false" aria-label="Expand sidebar">{{svg "octicon-sidebar-expand" 16}}</button><h1>{{ctx.Locale.Tr "repo.tags"}}</h1></div>
+			<div class="theme-list-title"><button type="button" class="theme-icon-button" data-theme-sidebar-toggle data-theme-sidebar-expand aria-expanded="false" aria-label="{{ctx.Locale.Tr "toggle_menu"}}">{{svg "octicon-sidebar-expand" 16}}</button><h1>{{ctx.Locale.Tr "repo.tags"}}</h1></div>
 			<div class="github-release-actions">
 				{{if .ShowReleaseSearch}}
 					<form class="ignore-dirty github-release-search" method="get" role="search">
-						{{template "components/common/search/search" dict "Kind" "icon" "Value" .Keyword "Placeholder" "Find a tag"}}
+						{{template "components/common/search/search" dict "Kind" "icon" "Value" .Keyword "Placeholder" (ctx.Locale.Tr "repo.find_tag")}}
 					</form>
 				{{end}}
 				{{if .EnableFeed}}<a class="theme-icon-button theme-icon-button-outlined" href="{{.RepoLink}}/tags.rss" aria-label="{{ctx.Locale.Tr "rss_feed"}}" data-tooltip-content="{{ctx.Locale.Tr "rss_feed"}}">{{svg "octicon-rss" 16}}</a>{{end}}
@@ -44,7 +44,7 @@
 						</div>
 					</div>
 				{{else}}
-					<div class="github-tags-empty">{{if .Keyword}}No tags found{{else}}There aren’t any tags here{{end}}</div>
+					<div class="github-tags-empty">{{if .Keyword}}{{ctx.Locale.Tr "search.no_results"}}{{else}}{{ctx.Locale.TrPluralString 0 "counters.n_tags" "0"}}{{end}}</div>
 				{{end}}
 			</div>
 		</div>

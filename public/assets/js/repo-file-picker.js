@@ -91,11 +91,12 @@
     list.hidden = false;
     position();
     input.setAttribute("aria-expanded", "true");
-    status.textContent = results.length ? `${results.length} matching files` : "No files found";
+    // The listbox announces its matches; the status line speaks only when there are none, in Forgejo's words.
+    status.textContent = results.length ? "" : picker.dataset.empty;
     if (!results.length) {
       const empty = document.createElement("div");
       empty.className = "repo-file-picker-empty";
-      empty.textContent = "No files found";
+      empty.textContent = picker.dataset.empty;
       list.append(empty);
     }
     select(results.length ? 0 : -1);
@@ -107,7 +108,7 @@
       render();
       return;
     }
-    status.textContent = "Loading files…";
+    status.textContent = picker.dataset.loading;
     loading ??= fetch(picker.dataset.treeUrl)
       .then(response => {
         if (!response.ok) throw new Error("Unable to load files");
@@ -135,7 +136,7 @@
         }
       })
       .catch(() => {
-        status.textContent = "Could not load files. Try again.";
+        status.textContent = picker.dataset.error;
         if (!dismissed) {
           const error = document.createElement("div");
           error.className = "repo-file-picker-empty";

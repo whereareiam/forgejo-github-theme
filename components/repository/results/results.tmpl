@@ -1,5 +1,5 @@
 <div data-theme-repository-results>
-	<span class="tw-sr-only" role="status" data-theme-repository-status></span>
+	<span class="tw-sr-only" role="status" data-theme-repository-status data-loading="{{ctx.Locale.Tr "loading"}}" data-error="{{ctx.Locale.Tr "error.network_error"}}"></span>
 	{{template "components/repository/results/list" dict "Data" .Data "View" .View}}
 	<div data-theme-repository-pagination>
 		{{ExecuteTemplate .Data.Context .Pagination .Data}}

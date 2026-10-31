@@ -6,7 +6,7 @@
 	<input type="search"{{if .ID}} id="{{.ID}}"{{end}}{{if .Local}} autocomplete="off"{{else}} name="{{or .Name "q"}}" value="{{.Value}}" maxlength="255"{{end}}{{if .Syntax}} autocomplete="off" data-search-syntax role="combobox" aria-autocomplete="list" aria-expanded="false"{{end}} placeholder="{{.Placeholder}}" aria-label="{{or .Label .Placeholder}}"{{if .Shortcut}} data-search-shortcut="{{.Shortcut}}" aria-keyshortcuts="{{.Shortcut}}"{{end}}{{if .Live}} hx-get="{{.Live}}" hx-target="{{.LiveTarget}}" hx-swap="innerHTML" hx-trigger="keyup changed delay:.5s"{{end}} spellcheck="false" dir="auto">
 	{{if .Syntax}}</span>{{end}}
 	{{if .Shortcut}}<kbd class="theme-search-shortcut" aria-hidden="true">{{.Shortcut}}</kbd>{{end}}
-	<button type="button" class="theme-search-clear" aria-label="Clear search" tabindex="-1">{{svg "octicon-x-circle-fill" 16}}</button>
+	<button type="button" class="theme-search-clear" aria-label="{{ctx.Locale.Tr "repo.milestones.clear"}}" tabindex="-1">{{svg "octicon-x-circle-fill" 16}}</button>
 	{{if not (or $icon (eq .Kind "plain"))}}<button type="submit" class="theme-search-submit" aria-label="{{ctx.Locale.Tr "search.search"}}">{{svg "octicon-search" 16}}</button>{{end}}
 {{if $icon}}</label>{{else}}</div>{{end}}
 {{if .Syntax}}{{template "components/common/search/syntax"}}</div>{{end}}

@@ -26,9 +26,9 @@
 			{{if .ReadmeInList}}
 				{{template "repo/readme/tabs" .}}
 			{{else}}
-                {{if or .HasSourceRenderedToggle .IsRepresentableAsText}}<nav class="repo-file-view-tabs" aria-label="File view">
-                    {{if .HasSourceRenderedToggle}}<a class="{{if .IsDisplayingRendered}}active{{end}}" href="{{$.Link}}">Preview</a>{{end}}
-                    {{if .IsRepresentableAsText}}<a class="{{if or .IsDisplayingSource (not .HasSourceRenderedToggle)}}active{{end}}" href="?display=source">Code</a><a href="{{.RepoLink}}/blame/{{.BranchNameSubURL}}/{{PathEscapeSegments .TreePath}}">{{ctx.Locale.Tr "repo.blame"}}</a>{{end}}
+                {{if or .HasSourceRenderedToggle .IsRepresentableAsText}}<nav class="repo-file-view-tabs">
+                    {{if .HasSourceRenderedToggle}}<a class="{{if .IsDisplayingRendered}}active{{end}}" href="{{$.Link}}">{{ctx.Locale.Tr "preview"}}</a>{{end}}
+                    {{if .IsRepresentableAsText}}<a class="{{if or .IsDisplayingSource (not .HasSourceRenderedToggle)}}active{{end}}" href="?display=source">{{ctx.Locale.Tr "repo.code"}}</a><a href="{{.RepoLink}}/blame/{{.BranchNameSubURL}}/{{PathEscapeSegments .TreePath}}">{{ctx.Locale.Tr "repo.blame"}}</a>{{end}}
                 </nav>{{end}}
 				{{template "repo/file_info" .}}
 			{{end}}
@@ -93,7 +93,7 @@
 				<a class="btn-octicon" data-tooltip-content="{{ctx.Locale.Tr "repo.editor.edit_this_file"}}" href="{{.RepoLink}}/_edit/{{PathEscapeSegments .BranchName}}/{{if .TreePath}}{{PathEscapeSegments .TreePath}}/{{end}}{{PathEscapeSegments .FileName}}">{{svg "octicon-pencil"}}</a>
 			{{end}}
 			{{if and .ReadmeInList .IsMarkup}}
-				{{template "components/common/dropdown/dropdown" dict "Kind" "actions" "Icon" "octicon-list-unordered" "IconOnly" true "Quiet" true "Small" true "Label" "Outline" "Items" "repo/readme/outline" "Data" .}}
+				{{template "components/common/dropdown/dropdown" dict "Kind" "actions" "Icon" "octicon-list-unordered" "IconOnly" true "Quiet" true "Small" true "Label" (ctx.Locale.Tr "toc") "Items" "repo/readme/outline" "Data" .}}
 			{{end}}
 		</div>
 	</h4>

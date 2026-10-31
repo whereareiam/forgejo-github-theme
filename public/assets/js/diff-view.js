@@ -24,7 +24,7 @@
       CSS.highlights.set("diff-search-current", new Highlight(...(results[current] ? [results[current].range] : [])));
     }
     navigation.hidden = !search.value;
-    count.textContent = results.length ? `${current + 1} of ${results.length}` : "No results";
+    count.textContent = results.length ? `${current + 1}/${results.length}` : count.dataset.empty;
     if (!results[current]) return;
     const result = results[current];
     if (scroll) {
@@ -108,11 +108,8 @@
     const button = box.querySelector(".diff-expand-file");
     box.toggleAttribute("data-context-expanded", expanded);
     if (!button) return;
-    const label = button.dataset[expanded ? "collapseLabel" : "expandLabel"];
-    // Forgejo moves title into its own tooltip attribute, so keep both in sync.
-    button.title = label;
-    if (button.hasAttribute("data-tooltip-content")) button.setAttribute("data-tooltip-content", label);
-    button.setAttribute("aria-label", `${label}: ${box.dataset.newFilename}`);
+    // Named by the file it acts on, with its state in aria-pressed, as Forgejo has no strings for the two actions.
+    button.setAttribute("aria-pressed", expanded);
     if (expanded) button.hidden = false;
   }
   // GitHub's "Collapse non-diff lines": reload the file's original diff through Forgejo's own "Load diff"
@@ -128,7 +125,7 @@
       params.append("files", box.dataset.oldFilename);
     const holder = document.createElement("div");
     holder.className = "diff-file-body binary";
-    holder.textContent = "Loading…";
+    holder.textContent = container.dataset.loading;
     const link = document.createElement("a");
     link.className = "diff-load-button tw-hidden";
     link.dataset.href = `?${params}`;
@@ -193,7 +190,6 @@
       if (!button) continue;
       const expanded = box.dataset.folded !== "true";
       button.setAttribute("aria-expanded", expanded);
-      button.setAttribute("aria-label", expanded ? "Collapse file" : "Expand file");
     }
   }
   // Forgejo hides a folded file body at once. Keep it shown while its height slides to or from zero; past the

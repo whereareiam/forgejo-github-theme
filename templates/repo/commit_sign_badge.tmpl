@@ -63,14 +63,14 @@ so this template should be kept as small as possible, DO NOT put large component
 	<span class="ui label commit-sign-badge gitea-github-theme-commit-sign-badge {{$extraClass}}">
 		{{- if $verified -}}
 			{{- if and $signingUser $signingUser.ID -}}
-				<span data-tooltip-content="{{$msgReason}}">Verified</span>
+				<span data-tooltip-content="{{$msgReason}}">{{svg "octicon-verified" 16}}</span>
 				<span data-tooltip-content="{{$msgSigningKey}}">{{ctx.AvatarUtils.Avatar $signingUser 20}}</span>
 			{{- else -}}
-				<span data-tooltip-content="{{$msgReason}}">Partially verified</span>
+				<span data-tooltip-content="{{$msgReason}}">{{svg "octicon-verified" 16}}</span>
 				<span data-tooltip-content="{{$msgSigningKey}}">{{ctx.AvatarUtils.AvatarByEmail $signingEmail "" 20}}</span>
 			{{- end -}}
 		{{- else -}}
-			<span data-tooltip-content="{{$msgReason}}">Unverified</span>
+			<span data-tooltip-content="{{$msgReason}}">{{svg "octicon-unverified" 16}}</span>
 		{{- end -}}
 	</span>
 {{- end -}}

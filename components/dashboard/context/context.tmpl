@@ -9,7 +9,7 @@ helper the page's Context lacks. */ -}}
 	{{ctx.AvatarUtils.Avatar $user 32}}
 	<div class="theme-dashboard-context-title">
 		<a href="{{$user.HomeLink}}">{{$user.Name}}</a>
-		<span>{{if $user.IsOrganization}}{{ctx.Locale.Tr "org.settings.options"}}{{else}}Your personal account{{end}}</span>
+		<span>{{if $user.IsOrganization}}{{ctx.Locale.Tr "org.settings.options"}}{{else}}{{ctx.Locale.Tr "concept_user_individual"}}{{end}}</span>
 	</div>
 	{{template "components/common/dropdown/dropdown" dict "Kind" "actions" "Icon" "octicon-arrow-switch" "IconOnly" true "Quiet" true "Small" true "Label" (ctx.Locale.Tr "home.switch_dashboard_context") "Title" (ctx.Locale.Tr "home.switch_dashboard_context") "Items" "components/dashboard/context/items" "Data" (dict "Context" ctx "Page" .Page "Data" $data)}}
 </div>
