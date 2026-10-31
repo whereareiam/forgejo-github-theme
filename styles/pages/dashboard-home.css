@@ -26,6 +26,45 @@
   color: var(--color-text-light-1);
 }
 
+/* With organizations, the heading is a quiet menu that reads like the plain heading: its text, then a caret. */
+/* Fomantic's .ui.form sets 14px; the heading's 12px/600 passes through to the trigger instead. */
+.ui.form.github-home-list-form {
+  display: inline-block;
+  margin: 0;
+  font: inherit;
+}
+
+.github-home-list-menu > summary.theme-control {
+  gap: 2px;
+  height: auto;
+  min-height: 0;
+  margin-left: -4px;
+  padding: 2px 4px;
+  color: inherit;
+  font: inherit;
+}
+
+.github-home-list-menu > summary.theme-control > .svg {
+  color: inherit;
+}
+
+.github-home-list-menu > .theme-dropdown-panel {
+  inset: calc(100% + 4px) auto auto 0;
+  width: 200px;
+}
+
+/* One list at a time; the organizations show once chosen. */
+.github-home-repositories[data-github-home-list="repositories"] > .github-home-organizations,
+.github-home-repositories[data-github-home-list="organizations"] > .theme-repo-picker,
+.github-home-repositories[data-github-home-list="organizations"] .theme-icon-button[data-theme-repo-picker-toggle] {
+  display: none;
+}
+
+.github-home-organizations .ui.avatar {
+  flex: none;
+  border-radius: 4px;
+}
+
 .page-content.theme-sidebar-layout[data-theme-sidebar] > .ui.container.theme-sidebar-main.github-home-main {
   max-width: 1280px !important;
 }

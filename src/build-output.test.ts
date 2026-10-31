@@ -1357,6 +1357,13 @@ describe("Forgejo 15 native integration", () => {
     expect(home).toContain('{{template "components/dashboard/context/context" dict "Data" . "Page" ""}}');
     expect(home).toContain('{{template "components/dashboard/context/pages" dict "Data" . "Current" "home"}}');
     expect(home).toContain('template "components/repository/picker/picker"');
+    // With organizations, the repositories heading opens a menu that swaps in the organizations, chosen before paint.
+    expect(home).toContain('"Items" "user/dashboard/home_lists"');
+    expect(home).toContain("{{range .Orgs}}");
+    expect(home).toContain('localStorage.getItem(key) === "organizations"');
+    // Switching lists is not an unsaved change: Forgejo's leave-page warning skips the form.
+    expect(home).toContain('<form class="ui form ignore-dirty github-home-list-form">');
+    expect(read("templates", "user", "dashboard", "home_lists.tmpl")).toContain('"Value" "organizations"');
     expect(home).not.toContain('template "user/heatmap"');
     expect(home).not.toContain('template "user/dashboard/repolist"');
     // The feed in day groups beside the work rail; the profile keeps Forgejo's own feed.

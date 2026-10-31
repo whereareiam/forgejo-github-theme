@@ -11,14 +11,54 @@ organization's pages in the sidebar. */}}
 			{{template "components/dashboard/context/context" dict "Data" . "Page" ""}}
 			{{template "components/dashboard/context/pages" dict "Data" . "Current" "home"}}
 			<hr>
-			<section class="github-home-repositories" aria-labelledby="github-home-repositories-title">
+			{{/* GitHub's heading over the top repositories. With organizations, the heading opens a menu that swaps the list
+			for them; the choice is kept in the browser and restored before the first paint. */}}
+			<section class="github-home-repositories" aria-labelledby="github-home-repositories-title" data-github-home-list="repositories">
 				<div class="github-home-repositories-heading">
-					<h2 id="github-home-repositories-title">{{ctx.Locale.Tr "home.my_repos"}}</h2>
+					<h2 id="github-home-repositories-title">
+						{{- /* The form only gives the options the dropdown's form styles; choosing one never submits it, and ignore-dirty keeps Forgejo from warning about unsaved changes. */}}
+						{{- if .Orgs}}<form class="ui form ignore-dirty github-home-list-form">{{template "components/common/dropdown/dropdown" dict "Kind" "single" "Quiet" true "Label" (ctx.Locale.Tr "home.my_repos") "UpdateLabel" true "Class" "github-home-list-menu" "Items" "user/dashboard/home_lists" "Data" (dict "Context" ctx)}}</form>
+						{{- else}}{{ctx.Locale.Tr "home.my_repos"}}{{end -}}
+					</h2>
 					<button type="button" class="theme-icon-button" data-theme-repo-picker-toggle aria-controls="github-home-repositories" aria-label="{{ctx.Locale.Tr "search.repo_kind"}}" data-tooltip-content="{{ctx.Locale.Tr "search.repo_kind"}}">{{svg "octicon-search" 16}}</button>
 				</div>
 				{{$teamID := 0}}{{if .Team}}{{$teamID = .Team.ID}}{{end}}
 				{{template "components/repository/picker/picker" dict "ID" "github-home-repositories" "UID" $user.ID "Team" $teamID "FullName" true "Limit" 10 "More" true "Label" (ctx.Locale.Tr "home.my_repos")}}
+				{{if .Orgs}}
+					<ul class="theme-repo-picker-list github-home-organizations" aria-label="{{ctx.Locale.Tr "home.my_orgs"}}">
+						{{range .Orgs}}
+							<li><a class="theme-repo-picker-item" href="{{.HomeLink}}">{{ctx.AvatarUtils.Avatar . 16}}<span class="theme-repo-picker-name">{{.Name}}</span></a></li>
+						{{end}}
+					</ul>
+				{{end}}
 			</section>
+			{{if .Orgs}}
+				<script>
+					(() => {
+						const section = document.currentScript.previousElementSibling;
+						const key = "github-home-list";
+						const show = list => {
+							section.dataset.githubHomeList = list;
+							const input = section.querySelector(`input[name="${key}"][value="${list}"]`);
+							if (!input) return;
+							input.checked = true;
+							const label = section.querySelector("[data-theme-dropdown-label]");
+							const text = input.closest(".theme-dropdown-option")?.querySelector("span")?.textContent;
+							if (label && text) label.textContent = text;
+						};
+						try {
+							if (localStorage.getItem(key) === "organizations") show("organizations");
+						} catch {}
+						section.addEventListener("change", event => {
+							if (event.target.name !== key) return;
+							show(event.target.value);
+							try {
+								localStorage.setItem(key, event.target.value);
+							} catch {}
+						});
+					})();
+				</script>
+			{{end}}
 		</div>
 		{{template "components/common/sidebar/toggle" .}}
 	</aside>
