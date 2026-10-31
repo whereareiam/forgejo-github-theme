@@ -1,0 +1,78 @@
+{{/*
+The checks section of the merge box, as GitHub draws it: a status ring, a title naming the
+overall result, the counts beneath it and a chevron that folds the list. Passing checks start
+folded. Forgejo's own script toggles the list through .commit-status-hide-checks.
+All words come from Forgejo's translations; the counts are icons with numbers, labelled with
+Forgejo's names for each state.
+
+Template Attributes:
+* CommitStatus: summary of all commit status state
+* CommitStatuses: all commit status elements
+* MissingRequiredChecks: commit check contexts that are required by branch protection but not present
+* is_context_required: whether a context is required by branch protection
+*/}}
+{{$failing := 0}}{{$pending := 0}}{{$passing := 0}}{{$skipped := 0}}
+{{range .CommitStatuses}}
+	{{if or (eq .State "failure") (eq .State "error") (eq .State "warning")}}{{$failing = Eval $failing "+" 1}}
+	{{- else if eq .State "pending"}}{{$pending = Eval $pending "+" 1}}
+	{{- else if eq .State "skipped"}}{{$skipped = Eval $skipped "+" 1}}
+	{{- else}}{{$passing = Eval $passing "+" 1}}{{end}}
+{{end}}
+{{range .MissingRequiredChecks}}{{$pending = Eval $pending "+" 1}}{{end}}
+{{$total := Eval $failing "+" $pending "+" $passing "+" $skipped}}
+{{$state := .CommitStatus.State}}
+{{if .MissingRequiredChecks}}{{$state = "pending"}}{{end}}
+{{$folded := or (eq $state "success") (eq $state "skipped")}}
+{{/* The ring's arcs: successful and skipped checks, then those in progress, then the failing rest. */}}
+<div class="commit-status-panel pull-merge-checks" style="--checks-passing: {{Eval "(" $passing "+" $skipped ")" "*" 100 "/" $total}}%; --checks-pending: {{Eval "(" $passing "+" $skipped "+" $pending ")" "*" 100 "/" $total}}%">
+	<div class="commit-status-header">
+		{{if eq $state "success"}}
+			{{svg "octicon-check" 16 "pull-merge-checks-icon"}}
+		{{else}}
+			<span class="pull-merge-checks-ring" aria-hidden="true"></span>
+		{{end}}
+		<div class="pull-merge-checks-text">
+			<h3>
+				{{- if eq $state "success"}}{{ctx.Locale.Tr "repo.pulls.status_checks_success"}}
+				{{- else if eq $state "pending"}}{{ctx.Locale.Tr "repo.pulls.status_checking"}}
+				{{- else if eq $state "skipped"}}{{ctx.Locale.Tr "pulls.status_checks.skipped"}}
+				{{- else if eq $state "warning"}}{{ctx.Locale.Tr "repo.pulls.status_checks_warning"}}
+				{{- else if eq $state "error"}}{{ctx.Locale.Tr "repo.pulls.status_checks_error"}}
+				{{- else}}{{ctx.Locale.Tr "repo.pulls.status_checks_failure"}}{{end -}}
+			</h3>
+			<p class="pull-merge-checks-counts">
+				{{- if ne (print $failing) "0"}}<span data-tooltip-content="{{ctx.Locale.Tr "actions.status.failure"}}" aria-label="{{ctx.Locale.Tr "actions.status.failure"}}: {{$failing}}">{{svg "octicon-x" 16 "text red"}}{{$failing}}</span>{{end}}
+				{{- if ne (print $pending) "0"}}<span data-tooltip-content="{{ctx.Locale.Tr "actions.status.waiting"}}" aria-label="{{ctx.Locale.Tr "actions.status.waiting"}}: {{$pending}}">{{svg "octicon-dot-fill" 16 "text yellow"}}{{$pending}}</span>{{end}}
+				{{- if ne (print $skipped) "0"}}<span data-tooltip-content="{{ctx.Locale.Tr "actions.status.skipped"}}" aria-label="{{ctx.Locale.Tr "actions.status.skipped"}}: {{$skipped}}">{{svg "octicon-skip" 16 "text grey"}}{{$skipped}}</span>{{end}}
+				{{- if ne (print $passing) "0"}}<span data-tooltip-content="{{ctx.Locale.Tr "actions.status.success"}}" aria-label="{{ctx.Locale.Tr "actions.status.success"}}: {{$passing}}">{{svg "octicon-check" 16 "text green"}}{{$passing}}</span>{{end -}}
+			</p>
+		</div>
+		<button class="commit-status-hide-checks"
+			data-show-all="{{ctx.Locale.Tr "repo.pulls.status_checks_show_all"}}"
+			data-hide-all="{{ctx.Locale.Tr "repo.pulls.status_checks_hide_all"}}">
+			{{- if $folded}}{{ctx.Locale.Tr "repo.pulls.status_checks_show_all"}}{{else}}{{ctx.Locale.Tr "repo.pulls.status_checks_hide_all"}}{{end -}}
+		</button>
+		{{svg "octicon-chevron-down" 16 "pull-merge-checks-chevron"}}
+	</div>
+	<div class="commit-status-list"{{if $folded}} style="max-height: 0px"{{end}}>
+		{{range .CommitStatuses}}
+			<div class="commit-status-item">
+				{{template "repo/commit_status" .}}
+				<div class="status-context gt-ellipsis">{{.Context}} <span class="text light-2">{{.Description}}</span></div>
+				<div class="ui status-details">
+					{{if $.is_context_required}}
+						{{if (call $.is_context_required .Context)}}<div class="ui label">{{ctx.Locale.Tr "repo.pulls.status_checks_requested"}}</div>{{end}}
+					{{end}}
+					<span>{{if .TargetURL}}<a href="{{.TargetURL}}">{{ctx.Locale.Tr "repo.pulls.status_checks_details"}}</a>{{end}}</span>
+				</div>
+			</div>
+		{{end}}
+		{{range .MissingRequiredChecks}}
+			<div class="commit-status-item">
+				{{svg "octicon-dot-fill" 18 "commit-status icon text yellow"}}
+				<div class="status-context gt-ellipsis">{{.}}</div>
+				<div class="ui label">{{ctx.Locale.Tr "repo.pulls.status_checks_requested"}}</div>
+			</div>
+		{{end}}
+	</div>
+</div>

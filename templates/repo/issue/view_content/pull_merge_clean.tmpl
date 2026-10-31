@@ -1,0 +1,12 @@
+{{/* The merge box row for a branch that merges cleanly, followed by Forgejo's note on whether the merge will be signed. */}}
+<div class="item pull-merge-row pull-merge-status">
+	{{svg "octicon-check"}}
+	<div>
+		<h3>{{ctx.Locale.Tr "repo.pulls.can_auto_merge_desc"}}</h3>
+		{{if .WillSign}}
+			<p>{{ctx.Locale.Tr "repo.signing.will_sign" .SigningKey}}</p>
+		{{else if .IsSigned}}
+			<p>{{ctx.Locale.Tr (printf "repo.signing.wont_sign.%s" .WontSignReason)}}</p>
+		{{end}}
+	</div>
+</div>
