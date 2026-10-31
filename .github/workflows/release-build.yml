@@ -28,6 +28,9 @@ jobs:
           ref: ${{ github.event_name == 'release' && github.event.release.tag_name || inputs.release-tag }}
       - name: Build release assets
         uses: ./.github/actions/build-release-assets
+        env:
+          # The footer shows the theme's version.
+          THEME_VERSION: ${{ github.event_name == 'release' && github.event.release.tag_name || inputs.release-tag }}
       - name: Upload assets to release
         env:
           GH_TOKEN: ${{ github.token }}

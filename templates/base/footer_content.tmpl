@@ -1,4 +1,6 @@
 {{/* Keep Forgejo's native footer settings, language menu, and custom links. */}}
+{{/* scripts/assembleForgejo.ts stamps the theme's version here. */}}
+{{$themeVersion := "dev"}}
 <link rel="stylesheet" href="{{AssetUrlPrefix}}/css/site-footer.css">
 <footer class="page-footer github-footer" aria-label="{{ctx.Locale.Tr "aria.footer"}}">
 	<div class="footer-main">
@@ -20,6 +22,7 @@
 			</div>
 			<a href="{{AssetUrlPrefix}}/licenses.txt">{{ctx.Locale.Tr "licenses"}}</a>
 			{{if .EnableSwagger}}<a href="{{AppSubUrl}}/api/swagger">API</a>{{end}}
+			<a class="footer-theme" target="_blank" rel="noopener noreferrer" href="https://github.com/whereareiam/forgejo-github-theme">GitHub Theme {{$themeVersion}}</a>
 			{{template "custom/extra_links_footer" .}}
 		</nav>
 		{{if or .ShowFooterVersion .PageIsAdmin (and .TemplateLoadTimes ShowFooterTemplateLoadTime)}}

@@ -236,6 +236,7 @@ Add the following code at the beginning or end of the theme's CSS file
 | --custom-clone-menu-width         | Clone button menu width                                  | Gitea   | 332px  | 200px     | 150px | 400px |
 | --custom-user-menu-width          | User menu width                                          | 192px   | 200px  |           | Gitea | 320px |
 | --custom-owner-switcher           | Owner switcher in the navbar; `none` hides it            | flex    | flex   |           |       |       |
+| --custom-footer-credit            | Theme name and version in the footer; `none` hides it    | inline  | inline |           |       |       |
 | --custom-explore-repolist-columns | Number of repository list columns on explore page        | 2       | 2      | 2         |       |       |
 | --custom-explore-userlist-columns | Number of user/organization list columns on explore page | 3       | 1      | 2/3       |       |       |
 | --custom-user-repolist-columns    | Number of repository list columns on user page           | 2       | 2      | 1/2       |       |       |

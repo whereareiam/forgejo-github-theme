@@ -177,6 +177,13 @@ only. Templates therefore link assets without a version, and the assembly adds o
 the content hash of the file it loads, the theme link in `base/head_style.tmpl` gets the hash of all theme files, and
 each auto theme's `@import` gets the hash of the imported file.
 
+### Theme version
+
+The footer in `base/footer_content.tmpl` links the theme's repository with its version. The template declares
+`{{$themeVersion := "dev"}}` and the assembly replaces the value: with `THEME_VERSION`, which the release build sets to
+the release tag, or else with `git describe --tags`, such as `1.4.0-3-g54b4d73` for a build three commits after 1.4.0.
+Admins hide the credit with `--custom-footer-credit: none`.
+
 ## Local preview
 
 `dev/docker-compose.yml` runs the Forgejo release pinned in `package.json` (`17.0.1-rootless`) and mounts

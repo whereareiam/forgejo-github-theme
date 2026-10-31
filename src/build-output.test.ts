@@ -514,6 +514,24 @@ describe("Forgejo 15 native integration", () => {
     );
   });
 
+  it("credits the theme with its version in the footer", () => {
+    const source = fs.readFileSync(path.join(ROOT_DIR, "templates", "base", "footer_content.tmpl"), "utf-8");
+    const footer = fs.readFileSync(path.join(DIST_DIR, "forgejo", "templates", "base", "footer_content.tmpl"), "utf-8");
+
+    // The link sits with Forgejo's own footer links and shows only the theme's name and version.
+    expect(source).toContain('{{$themeVersion := "dev"}}');
+    expect(source.indexOf('class="footer-theme"')).toBeGreaterThan(source.indexOf("/api/swagger"));
+    expect(source.indexOf('class="footer-theme"')).toBeLessThan(source.indexOf('"custom/extra_links_footer"'));
+    expect(source).toContain(
+      '<a class="footer-theme" target="_blank" rel="noopener noreferrer" href="https://github.com/whereareiam/forgejo-github-theme">GitHub Theme {{$themeVersion}}</a>'
+    );
+    // The assembly stamps the release tag or git's description of the build.
+    expect(footer).toMatch(/\{\{\$themeVersion := "(?!dev")[\w.+-]+"\}\}/);
+    // Admins can hide it with a custom variable; it shows by default.
+    const css = fs.readFileSync(path.join(DIST_DIR, `${PREFIX}light.css`), "utf-8");
+    expect(css).toContain(".github-footer .footer-theme{display:var(--custom-footer-credit,inline)}");
+  });
+
   it("ships the mobile drawer assets and keeps its toggle independent of Forgejo's inline menu", () => {
     const navbar = fs.readFileSync(path.join(ROOT_DIR, "templates", "base", "head_navbar.tmpl"), "utf-8");
     expect(navbar).toContain('id="navbar-drawer-toggle" aria-controls="navbar-drawer" aria-haspopup="dialog"');

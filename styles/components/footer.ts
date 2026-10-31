@@ -17,7 +17,8 @@
  * limitations under the License.
  */
 
-import { css, cssCombine, themeVars } from "@lutinglt/gitea-github-theme/core";
+import { css, cssCombine, customThemeVars, themeVars } from "@lutinglt/gitea-github-theme/core";
+import { fallbackVar } from "@vanilla-extract/css";
 
 const footer = css`
   .page-footer {
@@ -67,4 +68,12 @@ const footer = css`
   }
 `;
 
-export default cssCombine(footer);
+const themeCredit = css`
+  .github-footer .footer-theme {
+    /* Admins can hide the theme's credit with
+       --custom-footer-credit: none. */
+    display: ${fallbackVar(customThemeVars.footerCredit, "inline")};
+  }
+`;
+
+export default cssCombine(footer, themeCredit);
