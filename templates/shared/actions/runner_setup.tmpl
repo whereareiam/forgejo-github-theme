@@ -1,0 +1,52 @@
+{{/* Forgejo's runner setup, shown once after a runner is created, in the shape GitHub gives a credential it shows only
+once: the warning as a flash, the UUID and token in a box with a copy button each, and each snippet in a code block
+with its own copy button. The copy buttons copy the commands without their "$ " prompts. */}}
+<div class="runner-container theme-runner-setup">
+	<h4 class="ui top attached header">
+		{{ctx.Locale.Tr "actions.runners.runner_setup.title" .Runner.Name}}
+		<div class="ui right">
+			<a class="ui basic tiny button" href="{{.RunnersListLink}}">
+				{{ctx.Locale.Tr "actions.runners.runner_setup.list_of_runners_link"}}
+			</a>
+		</div>
+	</h4>
+	<div class="ui attached segment">
+		<div class="ui warning message flash-message flash-warning">
+			{{svg "octicon-alert"}}
+			<p>{{ctx.Locale.Tr "actions.runners.runner_setup.last_chance_copying_token"}}</p>
+		</div>
+		<dl class="theme-runner-credentials">
+			<div class="theme-runner-credential">
+				<dt>{{ctx.Locale.Tr "actions.runners.uuid"}}</dt>
+				<dd>
+					<code>{{.Runner.UUID}}</code>
+					<button type="button" class="theme-icon-button" data-clipboard-text="{{.Runner.UUID}}" aria-label="{{ctx.Locale.Tr "actions.runners.runner_setup.button_copy_uuid_aria"}}" data-tooltip-content="{{ctx.Locale.Tr "copy"}}">{{svg "octicon-copy" 16}}</button>
+				</dd>
+			</div>
+			<div class="theme-runner-credential">
+				<dt>{{ctx.Locale.Tr "actions.runners.token"}}</dt>
+				<dd>
+					<code>{{.Runner.Token}}</code>
+					<button type="button" class="theme-icon-button" data-clipboard-text="{{.Runner.Token}}" aria-label="{{ctx.Locale.Tr "actions.runners.runner_setup.button_copy_token_aria"}}" data-tooltip-content="{{ctx.Locale.Tr "copy"}}">{{svg "octicon-copy" 16}}</button>
+				</dd>
+			</div>
+		</dl>
+		<h3 class="theme-runner-setup-heading">{{ctx.Locale.Tr "actions.runners.runner_setup.heading_using_configuration"}}</h3>
+		{{- $configuration := printf "server:\n  connections:\n    forgejo:\n      url: %s\n      uuid: %s\n      token: %s\n" .AppURL .Runner.UUID .Runner.Token}}
+		<div class="theme-runner-snippet">
+			<pre><code aria-label="{{ctx.Locale.Tr "actions.runners.runner_setup.configuration_snippet_aria"}}">{{$configuration}}</code></pre>
+			<button type="button" class="theme-icon-button theme-icon-button-outlined" data-clipboard-text="{{$configuration}}" aria-label="{{ctx.Locale.Tr "copy"}}: {{ctx.Locale.Tr "actions.runners.runner_setup.configuration_snippet_aria"}}" data-tooltip-content="{{ctx.Locale.Tr "copy"}}">{{svg "octicon-copy" 16}}</button>
+		</div>
+		<p>{{ctx.Locale.Tr "actions.runners.runner_setup.instruction_replace_connection_name"}}</p>
+		<h3 class="theme-runner-setup-heading">{{ctx.Locale.Tr "actions.runners.runner_setup.heading_using_options"}}</h3>
+		{{- $token := printf "echo -n \"%s\" > /path/to/runner-token" .Runner.Token}}
+		{{- $daemon := printf "forgejo-runner daemon \\\n    --url %s \\\n    --uuid %s \\\n    --token-url file:///path/to/runner-token \\\n    --label docker:docker://node:lts" .AppURL .Runner.UUID}}
+		<div class="theme-runner-snippet">
+			<pre><code aria-label="{{ctx.Locale.Tr "actions.runners.runner_setup.program_options_snippet_aria"}}"><span class="theme-runner-prompt" aria-hidden="true">$ </span>{{$token}}
+<span class="theme-runner-prompt" aria-hidden="true">$ </span>{{$daemon}}
+</code></pre>
+			<button type="button" class="theme-icon-button theme-icon-button-outlined" data-clipboard-text="{{$token}}&#10;{{$daemon}}&#10;" aria-label="{{ctx.Locale.Tr "copy"}}: {{ctx.Locale.Tr "actions.runners.runner_setup.program_options_snippet_aria"}}" data-tooltip-content="{{ctx.Locale.Tr "copy"}}">{{svg "octicon-copy" 16}}</button>
+		</div>
+		<p>{{ctx.Locale.Tr "actions.runners.runner_setup.instruction_advanced_configurations" (AppDocsURL "admin/actions/")}}</p>
+	</div>
+</div>

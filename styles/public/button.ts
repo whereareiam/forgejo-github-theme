@@ -153,7 +153,8 @@ const fixButtonHeight = css`
     height: 32px;
   }
   /* 修复仓库页仓库操作按钮高度对齐和修正 */
-  .repo-button-row .ui.button {
+  .repo-button-row .ui.button,
+  .repo-button-row .clone-panel > input {
     min-height: 32px;
     height: 32px;
   }

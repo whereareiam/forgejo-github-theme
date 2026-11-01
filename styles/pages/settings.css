@@ -1,5 +1,5 @@
 /* Settings sub-pages that need more than the shared settings layout (components/common/settings): two-factor
-   enrolment, access tokens, webhook deliveries and events, branch protection rules and repository units. */
+   enrolment, access tokens, runner setup, webhook deliveries and events, branch protection rules and repository units. */
 
 /* Two-factor enrolment: the QR code in a bordered box, the secret as inline code. */
 .page-content > .ui.container.flex-container.theme-settings > .flex-container-main .theme-settings-qr {
@@ -91,6 +91,120 @@
   & select {
     width: auto;
     min-width: 140px;
+  }
+}
+
+/* Runner setup, shown once after a runner is created: the warning as a flash, the UUID and token as rows of a box with
+   a copy button each, and each snippet in a code block with its copy button in the corner. */
+.page-content > .ui.container.flex-container.theme-settings > .flex-container-main .theme-runner-setup {
+  & .ui.warning.message {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin: 0 0 16px;
+    text-align: start;
+    & > .svg {
+      flex: none;
+      margin-top: 2px;
+    }
+    & > p {
+      margin: 0;
+    }
+  }
+  & .theme-runner-credentials {
+    margin: 0 0 24px;
+    border: 1px solid var(--color-light-border);
+    border-radius: var(--border-radius);
+    background: var(--color-box-body);
+  }
+  & .theme-runner-credential {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    min-height: 48px;
+    padding: 8px 8px 8px 16px;
+    & + .theme-runner-credential {
+      border-top: 1px solid var(--color-light-border);
+    }
+    & > dt {
+      flex: none;
+      width: 64px;
+      font-weight: 600;
+    }
+    & > dd {
+      display: flex;
+      flex: 1;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+      margin: 0;
+    }
+    & > dd > code {
+      flex: 1;
+      min-width: 0;
+      padding: 0;
+      background: transparent;
+      font-size: 12px;
+      line-height: 20px;
+      overflow-wrap: anywhere;
+    }
+  }
+  & .theme-runner-setup-heading {
+    margin: 24px 0 8px;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 24px;
+  }
+  /* The block is drawn by the wrapper, and only the pre scrolls inside it, so a long line passes under the copy button's
+     column, never under the button. */
+  & .theme-runner-snippet {
+    position: relative;
+    margin: 0 0 8px;
+    padding-right: 48px;
+    border-radius: var(--border-radius);
+    background: var(--color-markup-code-block);
+    & > pre {
+      margin: 0;
+      padding: 16px 0 16px 16px;
+      overflow: auto;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      font-family: var(--fonts-monospace);
+      font-size: 12px;
+      line-height: 20px;
+    }
+    /* Commands and tokens never break: Forgejo wraps code and pre on admin pages with an id selector
+       (:is(.admin, #detail-modal)), which only !important outranks. */
+    & > pre,
+    & > pre > code {
+      white-space: pre !important;
+      overflow-wrap: normal !important;
+    }
+    & > pre > code {
+      padding: 0;
+      background: transparent;
+      font: inherit;
+    }
+    & > .theme-icon-button {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+    }
+  }
+  & .theme-runner-prompt {
+    color: var(--color-text-light-2);
+    user-select: none;
+  }
+  & .ui.attached.segment > p {
+    margin: 0 0 16px;
+    color: var(--color-text-light-1);
+  }
+  & .ui.attached.segment > p > code {
+    padding: 2px 6px;
+    border-radius: var(--border-radius);
+    background: var(--color-markup-code-inline);
+    font-size: 12px;
   }
 }
 

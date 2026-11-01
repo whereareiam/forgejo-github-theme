@@ -76,6 +76,15 @@
       box-shadow: inset 0 0 0 1px var(--github-bgColor-accent-emphasis);
     }
   }
+  /* A field joined to its button (Forgejo's search, .ui.action.input) keeps the join the border above would undo: its
+     right side is the button's, square and without a line of its own until it has focus. */
+  & .ui.action.input:not([class*="left action"]) > input {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    &:not(:focus) {
+      border-right-color: transparent;
+    }
+  }
   /* A field the server rejected keeps GitHub's red border, which the border above would otherwise replace. */
   & .field.error > :is(input, textarea) {
     border-color: var(--color-error-border);
