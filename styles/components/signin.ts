@@ -98,11 +98,23 @@ const signIn = css`
         /* A site-wide username prefix sits in a box joined to the start of the field, with its note below. */
         .ui.labeled.input {
           width: 100%;
+          /* The site's 32px input height would leave the 40px field hanging below the prefix. */
+          height: auto;
           > .ui.label {
             display: flex;
             align-items: center;
+            margin: 0;
+            padding: 0 12px;
+            border: 1px solid ${themeVars.color.input.border};
+            border-right: 0;
+            border-radius: ${otherThemeVars.border.radius} 0 0 ${otherThemeVars.border.radius};
+            background: ${themeVars.color.box.header};
             font-size: 14px;
             font-weight: 400;
+          }
+          > input {
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
           }
         }
         .help {

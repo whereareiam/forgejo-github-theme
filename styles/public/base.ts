@@ -69,8 +69,8 @@ const body = css`
       text-underline-position: unset;
     }
   }
-  /* 默认代码块 */
-  code:not(.code-inner) {
+  /* 默认代码块; the code of a block (pre > code) takes its padding from the pre, as on GitHub, so its first line is not indented. */
+  code:not(.code-inner, pre > code) {
     padding: 0.2em 0.4em;
   }
   /* 快捷键提示(输入框内) */

@@ -90,6 +90,17 @@ const selectionDropdown = css`
   .ui.action.input > .dropdown.small:not(:first-child) {
     border-radius: 0;
   }
+  /* The radius rule above counts :has(> #uid) as an id, so a dropdown joined after a field (the admin package type)
+     repeats it to stay square on its joined sides; before a button, the button's border is the line between them. */
+  .ui.action.input > .ui.selection.dropdown:not(:first-child):not(:has(> #uid)) {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    &:not(:last-child) {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+      border-right-color: transparent;
+    }
+  }
   /* 排除一些小按钮, 例如软件包类型, 通常相邻有元素 */
   .ui.selection.dropdown.active:not(.small) {
     border-bottom-left-radius: ${otherThemeVars.border.radius} !important;

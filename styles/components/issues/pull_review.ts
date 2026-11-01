@@ -340,6 +340,10 @@ export default css`
         & svg {
           color: inherit;
         }
+        /* The style's full border would double the seam with the arrow; its border is the line. */
+        &:not(:last-child) {
+          border-inline-end-width: 0;
+        }
       }
       /* GitHub keeps the badge and border neutral for blocked, conflicting, draft and closed pull requests. */
       & > .timeline-avatar:is(.red, .grey, .yellow) {

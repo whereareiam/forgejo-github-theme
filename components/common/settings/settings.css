@@ -130,7 +130,11 @@
       font-weight: 500;
       line-height: 18px;
     }
+    /* Forgejo places the right side absolutely, over a long title on a phone; in the row it wraps under it. */
+    flex-wrap: wrap;
     & > :is(.ui.right, .right) {
+      position: static;
+      flex: none;
       display: flex;
       gap: 8px;
       margin-left: auto;
@@ -234,6 +238,18 @@
       &::before {
         display: none;
       }
+    }
+  }
+  /* A search over a list (runners, the site administration's lists) sits 16px above the list's box, as GitHub's
+     filter bar does; the repositories' filter menu brings its own margin and divider instead. Unadopted repositories'
+     field has no search type, and a form that only holds a search field (the token form) has no list under it. */
+  & .ui.attached.segment:has(input[type="search"], > form > .ui.action.input):has(+ .ui.attached.segment) {
+    margin-bottom: 16px;
+    & > .filter.menu {
+      margin-bottom: 0;
+    }
+    & > .divider {
+      display: none;
     }
   }
   /* An add form below its list (Forgejo's bottom attached segment) sits 16px under the box. */
