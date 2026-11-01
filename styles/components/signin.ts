@@ -127,6 +127,7 @@ const signIn = css`
       .signin-remember {
         margin: 0 0 16px;
         label {
+          width: 100%;
           display: inline-flex;
           align-items: center;
           gap: 8px;
