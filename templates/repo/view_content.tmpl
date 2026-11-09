@@ -68,14 +68,29 @@
 			</button>
 		{{end}}
 
-        <details class="theme-menu repo-mobile-actions only-mobile">
-            <summary class="theme-icon-button theme-icon-button-outlined" aria-label="{{ctx.Locale.Tr "profile.actions.tooltip"}}">{{svg "octicon-kebab-horizontal" 16}}</summary>
+        {{/*
+            On phones this menu holds Go to file and Add file. In a folder it is GitHub's "More options" button at every
+            width and also holds the folder's path, permalink and Forgejo's folder archives.
+        */}}
+        {{$isFolder := and (not $isTreePathRoot) (not .IsViewFile)}}
+        <details class="theme-menu repo-mobile-actions{{if $isFolder}} repo-folder-actions{{else}} only-mobile{{end}}">
+            <summary class="theme-icon-button theme-icon-button-outlined" aria-label="{{ctx.Locale.Tr "repo.more_operations"}}">{{svg "octicon-kebab-horizontal" 16}}</summary>
             <div class="theme-menu-popover">
-                <a href="{{.Repository.Link}}/find/{{.BranchNameSubURL}}">{{svg "octicon-search" 16}}{{ctx.Locale.Tr "repo.find_file.go_to_file"}}</a>
+                <a class="repo-mobile-action" href="{{.Repository.Link}}/find/{{.BranchNameSubURL}}">{{svg "octicon-search" 16}}{{ctx.Locale.Tr "repo.find_file.go_to_file"}}</a>
                 {{if and .CanWriteCode .IsViewBranch (not .Repository.IsMirror) (not .Repository.IsArchived) (not .IsViewFile)}}
-                    <a href="{{.RepoLink}}/_new/{{.BranchName | PathEscapeSegments}}/{{.TreePath | PathEscapeSegments}}">{{svg "octicon-plus" 16}}{{ctx.Locale.Tr "file_editor.new_file"}}</a>
-                    {{if .RepositoryUploadEnabled}}<a href="{{.RepoLink}}/_upload/{{.BranchName | PathEscapeSegments}}/{{.TreePath | PathEscapeSegments}}">{{svg "octicon-upload" 16}}{{ctx.Locale.Tr "file_editor.upload_file"}}</a>{{end}}
-                    <a href="{{.RepoLink}}/_diffpatch/{{.BranchName | PathEscapeSegments}}/{{.TreePath | PathEscapeSegments}}">{{svg "octicon-diff" 16}}{{ctx.Locale.Tr "repo.editor.patch"}}</a>
+                    <a class="repo-mobile-action" href="{{.RepoLink}}/_new/{{.BranchName | PathEscapeSegments}}/{{.TreePath | PathEscapeSegments}}">{{svg "octicon-plus" 16}}{{ctx.Locale.Tr "file_editor.new_file"}}</a>
+                    {{if .RepositoryUploadEnabled}}<a class="repo-mobile-action" href="{{.RepoLink}}/_upload/{{.BranchName | PathEscapeSegments}}/{{.TreePath | PathEscapeSegments}}">{{svg "octicon-upload" 16}}{{ctx.Locale.Tr "file_editor.upload_file"}}</a>{{end}}
+                    <a class="repo-mobile-action" href="{{.RepoLink}}/_diffpatch/{{.BranchName | PathEscapeSegments}}/{{.TreePath | PathEscapeSegments}}">{{svg "octicon-diff" 16}}{{ctx.Locale.Tr "repo.editor.patch"}}</a>
+                {{end}}
+                {{if $isFolder}}
+                    <hr class="repo-mobile-action">
+                    <button type="button" data-clipboard-text="{{.TreePath}}">{{svg "octicon-copy" 16}}{{ctx.Locale.Tr "copy_path"}}</button>
+                    <button type="button" data-clipboard-text-type="url" data-clipboard-text="{{.RepoLink}}/src/commit/{{PathEscape .CommitID}}/{{PathEscapeSegments .TreePath}}">{{svg "octicon-link" 16}}{{ctx.Locale.Tr "repo.file_copy_permalink"}}</button>
+                    {{if not $.DisableDownloadSourceArchives}}
+                        <hr>
+                        <a class="archive-link" href="{{$.RepoLink}}/archive/{{PathEscapeSegments (printf "%s:%s" $.RefName .TreePath)}}.zip" rel="nofollow" type="application/zip">{{svg "octicon-file-zip" 16}}{{ctx.Locale.Tr "repo.download_zip"}}</a>
+                        <a class="archive-link" href="{{$.RepoLink}}/archive/{{PathEscapeSegments (printf "%s:%s" $.RefName .TreePath)}}.tar.gz" rel="nofollow" type="application/gzip">{{svg "octicon-file-zip" 16}}{{ctx.Locale.Tr "repo.download_tar"}}</a>
+                    {{end}}
                 {{end}}
             </div>
         </details>
