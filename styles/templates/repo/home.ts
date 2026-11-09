@@ -305,7 +305,8 @@ const repositoryHome = css`
     }
   }
   @media (min-width: 544px) {
-    .page-content.repository.file.list .repo-mobile-actions {
+    .page-content.repository.file.list .repo-mobile-actions:not(.repo-folder-actions),
+    .page-content.repository.file.list .repo-folder-actions .repo-mobile-action {
       display: none !important;
     }
   }
