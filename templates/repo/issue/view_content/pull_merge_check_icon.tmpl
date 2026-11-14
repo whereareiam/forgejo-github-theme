@@ -1,0 +1,12 @@
+{{/* A check's state in the merge box, as GitHub draws it there: failing checks get a filled circle. */}}
+{{if or (eq .State "failure") (eq .State "error")}}
+	{{svg "octicon-x-circle-fill" 16 "commit-status icon text red"}}
+{{else if eq .State "warning"}}
+	{{svg "octicon-alert-fill" 16 "commit-status icon text yellow"}}
+{{else if eq .State "pending"}}
+	{{svg "octicon-dot-fill" 16 "commit-status icon text yellow"}}
+{{else if eq .State "skipped"}}
+	{{svg "octicon-skip" 16 "commit-status icon text grey"}}
+{{else}}
+	{{svg "octicon-check" 16 "commit-status icon text green"}}
+{{end}}

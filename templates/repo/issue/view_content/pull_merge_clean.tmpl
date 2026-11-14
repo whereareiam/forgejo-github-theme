@@ -2,11 +2,11 @@
 <div class="item pull-merge-row pull-merge-status">
 	{{svg "octicon-check"}}
 	<div>
-		<h3>{{ctx.Locale.Tr "repo.pulls.can_auto_merge_desc"}}</h3>
-		{{if .WillSign}}
-			<p>{{ctx.Locale.Tr "repo.signing.will_sign" .SigningKey}}</p>
-		{{else if .IsSigned}}
-			<p>{{ctx.Locale.Tr (printf "repo.signing.wont_sign.%s" .WontSignReason)}}</p>
-		{{end}}
+		<h3>{{template "theme/phrase" dict "Key" "pulls.merge.clean_title" "Fallback" (ctx.Locale.Tr "repo.pulls.can_auto_merge_desc")}}</h3>
+		{{/* GitHub's sentence where the theme has it, else Forgejo's note on why the merge won't be signed; a merge that will be signed says so either way. */}}
+		{{$wontSign := ""}}
+		{{if and .IsSigned (not .WillSign)}}{{$wontSign = ctx.Locale.Tr (printf "repo.signing.wont_sign.%s" .WontSignReason)}}{{end}}
+		<p>{{template "theme/phrase" dict "Key" "pulls.merge.clean_description" "Fallback" $wontSign}}</p>
+		{{if .WillSign}}<p>{{ctx.Locale.Tr "repo.signing.will_sign" .SigningKey}}</p>{{end}}
 	</div>
 </div>
