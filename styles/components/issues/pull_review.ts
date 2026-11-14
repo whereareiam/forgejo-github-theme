@@ -40,6 +40,9 @@ const mergeButton = `
 `;
 
 export default css`
+  .full.height:has(> .page-content.github-pull-review.files) {
+    padding-bottom: 0;
+  }
   .page-content.repository.view.issue.github-pull-review {
     & > .ui.container {
       width: calc(100% - 64px) !important;
@@ -50,6 +53,8 @@ export default css`
     &.files > .ui.container {
       width: 100% !important;
       max-width: none !important;
+      /* GitHub's divider between the file tree and the files runs down to the footer. */
+      margin-bottom: 0 !important;
     }
     /* GitHub's files tab is full width: title, tabs and diff share a 24px side margin. */
     &.files > .ui.container > .issue-title-header,
