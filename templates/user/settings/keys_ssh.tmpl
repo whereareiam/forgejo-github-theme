@@ -4,7 +4,7 @@ for what the keys are. */}}
 	{{ctx.Locale.Tr "settings.manage_ssh_keys"}}
 	<div class="ui right">
 		<button id="add-ssh-button" class="ui primary tiny show-panel toggle button" data-panel="#add-ssh-key-panel">
-			{{ctx.Locale.Tr "settings.add_key"}}
+			{{template "theme/phrase" dict "Key" "settings.keys.new_ssh" "Fallback" (ctx.Locale.Tr "settings.add_key")}}
 		</button>
 	</div>
 </h4>

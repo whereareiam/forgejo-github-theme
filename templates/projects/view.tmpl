@@ -23,7 +23,7 @@
 					{{svg "octicon-triangle-down" 16}}
 				</summary>
 				<div class="theme-menu-popover" role="menu">
-					<span class="theme-menu-title">{{ctx.Locale.Tr "repository"}}</span>
+					<span class="theme-menu-title">{{template "theme/phrase" dict "Key" "projects.create_issue_in" "Fallback" (ctx.Locale.Tr "repository")}}</span>
 					<div class="github-project-repo-filter">
 						{{template "components/common/search/search" dict "Kind" "icon" "Local" true "ID" "project-repo-filter" "Placeholder" (ctx.Locale.Tr "search.repo_kind")}}
 					</div>
@@ -205,7 +205,7 @@
 	<div class="github-project-panel-backdrop" data-project-panel-close></div>
 	<section class="github-project-panel-sheet" role="dialog" aria-modal="true" aria-label="{{ctx.Locale.Tr "repo.issues"}}">
 		<div class="github-project-panel-toolbar">
-			<a class="theme-icon-button github-project-panel-open" target="_blank" rel="noopener" aria-label="{{ctx.Locale.Tr "view"}}" data-tooltip-content="{{ctx.Locale.Tr "view"}}">{{svg "octicon-link-external"}}</a>
+			<a class="theme-icon-button github-project-panel-open" target="_blank" rel="noopener" aria-label="{{template "theme/phrase" dict "Key" "projects.open_in_new_tab" "Fallback" (ctx.Locale.Tr "view")}}" data-tooltip-content="{{template "theme/phrase" dict "Key" "projects.open_in_new_tab" "Fallback" (ctx.Locale.Tr "view")}}">{{svg "octicon-link-external"}}</a>
 			<button type="button" class="theme-icon-button" data-project-panel-close aria-label="{{ctx.Locale.Tr "modal.close"}}">{{svg "octicon-x"}}</button>
 		</div>
 		{{/* Organization and user projects hold issues from several repositories, so their panel names the repository. */}}

@@ -42,8 +42,9 @@
 										{{template "shared/user/authorlink" .Issue.Poster}}
 										{{ctx.Locale.Tr "repo.issues.commented_at" .Issue.HashTag $createdStr}}
 									{{else}}
-										{{/* GitHub says an issue was opened; Forgejo's translation places the author itself. */}}
-										{{ctx.Locale.Tr "repo.issues.opened_by" (HTMLFormat `<a href="#%s">%s</a>` .Issue.HashTag $createdStr) .Issue.Poster.HomeLink .Issue.Poster.GetDisplayName}}
+										{{/* GitHub's "alex opened 3 days ago" from the theme's phrases; Forgejo's translation, the fallback, places the author itself. */}}
+										{{$openedAt := HTMLFormat `<a href="#%s">%s</a>` .Issue.HashTag $createdStr}}
+										{{template "theme/phrase" dict "Key" "issues.header.opened" "Author" (HTMLFormat `<a class="author" href="%s">%s</a>` .Issue.Poster.HomeLink .Issue.Poster.GetDisplayName) "Time" $openedAt "Fallback" (ctx.Locale.Tr "repo.issues.opened_by" $openedAt .Issue.Poster.HomeLink .Issue.Poster.GetDisplayName)}}
 									{{end}}
 								</span>
 							{{end}}
@@ -98,7 +99,7 @@
 				</div>
 			{{else if .IsSigned}}
 				<div class="timeline-item comment form">
-					<h2 class="comment-editor-heading">{{ctx.Locale.Tr "repo.diff.comment.add_review_comment"}}</h2>
+					<h2 class="comment-editor-heading">{{template "theme/phrase" dict "Key" "issues.comment.heading" "Fallback" (ctx.Locale.Tr "repo.diff.comment.add_review_comment")}}</h2>
 					<a class="timeline-avatar" href="{{.SignedUser.HomeLink}}">
 						{{ctx.AvatarUtils.Avatar .SignedUser 40}}
 					</a>

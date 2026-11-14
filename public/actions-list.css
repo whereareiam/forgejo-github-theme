@@ -11,6 +11,15 @@
   .actions-heading h1 {
     overflow-wrap: anywhere;
   }
+  /* GitHub's line under the heading, which only the wording add-on words. */
+  .actions-subtitle {
+    margin: 0 0 8px;
+    font-size: 14px;
+    line-height: 21px;
+    &:empty {
+      display: none;
+    }
+  }
   .actions-search {
     width: 100%;
     margin-bottom: 16px;

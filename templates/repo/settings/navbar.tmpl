@@ -1,5 +1,4 @@
-{{/* GitHub's repository settings nav: an icon per page in groups. Forgejo has strings only for Security, so the
-	other groups are set apart by a separator instead of an English name. */}}
+{{/* GitHub's repository settings nav: an icon per page in groups. Forgejo has strings only for Security; the theme's phrases name the others, and without the wording add-on they are set apart by a rule. */}}
 <div class="flex-container-nav">
 	<div class="ui fluid vertical menu theme-nav-list">
 		<a class="{{if .PageIsSettingsOptions}}active {{end}}item" href="{{.RepoLink}}/settings">
@@ -22,11 +21,11 @@
 				</a>
 			</div>
 		</details>
-		<div class="theme-settings-separator" role="separator"></div>
+		<div class="theme-settings-group">{{template "theme/phrase" dict "Key" "settings.group.access" "Fallback" ""}}</div>
 		<a class="{{if .PageIsSettingsCollaboration}}active {{end}}item" href="{{.RepoLink}}/settings/collaboration">
 			{{svg "octicon-people" 16}}{{ctx.Locale.Tr "repo.settings.collaboration"}}
 		</a>
-		<div class="theme-settings-separator" role="separator"></div>
+		<div class="theme-settings-group">{{template "theme/phrase" dict "Key" "settings.group.code_automation" "Fallback" ""}}</div>
 		{{if .Repository.UnitEnabled $.Context $.UnitTypeCode}}
 			{{if not .Repository.IsEmpty}}
 				<a class="{{if .PageIsSettingsBranches}}active {{end}}item" href="{{.RepoLink}}/settings/branches">

@@ -135,6 +135,10 @@ export default css`
     line-height: 18px;
     font-weight: 600;
   }
+  /* A heading only the wording add-on words, such as GitHub's "Layout". */
+  .theme-menu-title:empty {
+    display: none;
+  }
   .resizable-divider {
     align-self: stretch;
     position: relative;

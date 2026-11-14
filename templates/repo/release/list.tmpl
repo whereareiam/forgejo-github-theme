@@ -23,7 +23,7 @@
 				<div class="github-release-actions">
 					{{if .ShowReleaseSearch}}<form class="ignore-dirty github-release-search" method="get" role="search">{{template "components/common/search/search" dict "Kind" "icon" "Value" .Keyword "Placeholder" (ctx.Locale.Tr "search.search")}}</form>{{end}}
 					{{if .EnableFeed}}<a class="theme-icon-button theme-icon-button-outlined" href="{{.RepoLink}}/releases.rss" aria-label="{{ctx.Locale.Tr "rss_feed"}}" data-tooltip-content="{{ctx.Locale.Tr "rss_feed"}}">{{svg "octicon-rss" 16}}</a>{{end}}
-					{{if .CanCreateRelease}}<a class="button theme-control" href="{{$.RepoLink}}/releases/new">{{ctx.Locale.Tr "repo.release.new_release"}}</a>{{end}}
+					{{if .CanCreateRelease}}<a class="button theme-control" href="{{$.RepoLink}}/releases/new">{{template "theme/phrase" dict "Key" "releases.draft_new" "Fallback" (ctx.Locale.Tr "repo.release.new_release")}}</a>{{end}}
 				</div>
 			{{end}}
 		</div>
@@ -41,7 +41,7 @@
 								{{else if $release.IsPrerelease}}
 									<span class="ui orange label theme-label theme-label-large">{{ctx.Locale.Tr "repo.release.prerelease"}}</span>
 								{{else if not $release.IsTag}}
-									<a class="github-release-latest" href="{{$.RepoLink}}/releases/latest" hidden><span class="ui green label theme-label theme-label-large">{{ctx.Locale.Tr "repo.release.stable"}}</span></a>
+									<a class="github-release-latest" href="{{$.RepoLink}}/releases/latest" hidden><span class="ui green label theme-label theme-label-large">{{template "theme/phrase" dict "Key" "releases.latest" "Fallback" (ctx.Locale.Tr "repo.release.stable")}}</span></a>
 								{{end}}
 							</h2>
 							<div class="github-release-controls">
@@ -65,7 +65,7 @@
 										{{template "shared/user/authorlink" (dict "ID" -1)}}
 									{{end}}
 								</span>
-								<span class="released">{{ctx.Locale.Tr "repo.released_this"}}</span>
+								<span class="released">{{if $release.IsDraft}}{{template "theme/phrase" dict "Key" "releases.drafted_this" "Fallback" (ctx.Locale.Tr "repo.released_this")}}{{else}}{{ctx.Locale.Tr "repo.released_this"}}{{end}}</span>
 								{{if $release.CreatedUnix}}<span class="time">{{DateUtils.TimeSince $release.CreatedUnix}}</span>{{end}}
 							</p>
 							{{$showRefs := and $release.Sha1 $canReadCode}}
@@ -94,7 +94,7 @@
 						{{if or $hasArchiveLinks $hasReleaseAttachment}}
 							<details class="github-release-assets"{{if eq $idx 0}} open{{end}}>
 								<summary>
-									{{svg "octicon-triangle-right" 16 "github-release-assets-marker"}}<span>{{ctx.Locale.Tr "repo.release.downloads"}}</span>
+									{{svg "octicon-triangle-right" 16 "github-release-assets-marker"}}<span>{{template "theme/phrase" dict "Key" "releases.assets" "Fallback" (ctx.Locale.Tr "repo.release.downloads")}}</span>
 									<span class="theme-counter github-release-asset-count">{{if $hasArchiveLinks}}{{Eval (len $release.Attachments) "+" 2}}{{else}}{{len $release.Attachments}}{{end}}</span>
 								</summary>
 								<ul class="github-release-asset-list">
@@ -133,9 +133,9 @@
 		{{else}}
 			<div class="theme-empty github-release-empty">
 				{{svg "octicon-tag" 32}}
-				<h2>{{if .Keyword}}{{ctx.Locale.Tr "search.no_results"}}{{else}}{{ctx.Locale.TrPluralString 0 "counters.n_releases" "0"}}{{end}}</h2>
-				<p>{{if .Keyword}}{{ctx.Locale.Tr "issues.search.no_results.hint"}}{{else}}{{ctx.Locale.Tr "repo.release.new_subheader"}}{{end}}</p>
-				{{if .Keyword}}<a href="{{.RepoLink}}/releases">{{ctx.Locale.Tr "repo.release.releases"}}</a>{{end}}
+				<h2>{{if .Keyword}}{{template "theme/phrase" dict "Key" "releases.empty_search_title" "Fallback" (ctx.Locale.Tr "search.no_results")}}{{else}}{{template "theme/phrase" dict "Key" "releases.empty_title" "Fallback" (ctx.Locale.TrPluralString 0 "counters.n_releases" "0")}}{{end}}</h2>
+				<p>{{if .Keyword}}{{template "theme/phrase" dict "Key" "releases.empty_search_hint" "Fallback" (ctx.Locale.Tr "issues.search.no_results.hint")}}{{else}}{{template "theme/phrase" dict "Key" "releases.empty_description" "Fallback" (ctx.Locale.Tr "repo.release.new_subheader")}}{{end}}</p>
+				{{if .Keyword}}<a href="{{.RepoLink}}/releases">{{template "theme/phrase" dict "Key" "releases.view_all" "Fallback" (ctx.Locale.Tr "repo.release.releases")}}</a>{{end}}
 			</div>
 		{{end}}
 

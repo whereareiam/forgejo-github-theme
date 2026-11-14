@@ -283,6 +283,10 @@ export default css`
   .diff-deleted-placeholder > :not(.diff-deleted-skeleton) {
     position: relative;
   }
+  /* GitHub's "This file was deleted." under the button, worded only by the wording add-on. */
+  .diff-deleted-note:empty {
+    display: none;
+  }
   /* Large diffs Forgejo does not render: GitHub's "Load diff" over a skeleton, inside the file body. */
   .repository #diff-file-boxes .diff-suppressed-placeholder {
     position: relative;

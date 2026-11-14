@@ -16,7 +16,7 @@ headed by the package count with a row per package, or the empty state. Called w
 </form>
 {{end}}
 <div class="theme-package-list">
-	{{if .PackageDescriptors}}<div class="theme-package-list-header" title="{{ctx.Locale.Tr "packages.title"}}">{{svg "octicon-package" 16}}{{.Total}}</div>{{end}}
+	{{if .PackageDescriptors}}<div class="theme-package-list-header" title="{{ctx.Locale.Tr "packages.title"}}">{{svg "octicon-package" 16}}{{template "theme/phrase" dict "Key" "packages.count" "Count" .Total "Fallback" .Total}}</div>{{end}}
 	{{range .PackageDescriptors}}
 	<div class="theme-package-row">
 		<div class="flex-item">
