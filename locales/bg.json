@@ -1,0 +1,41 @@
+{
+  "pulls.checks.title_success": "Всички проверки са успешни",
+  "pulls.checks.title_pending": "Някои проверки още не са завършили",
+  "pulls.checks.title_failure": "Някои проверки не бяха успешни",
+  "pulls.checks.title_conflict": "Проверките чакат разрешаване на конфликтите",
+  "pulls.checks.count_failing": "{count} неуспешни",
+  "pulls.checks.count_pending": "{count} в очакване",
+  "pulls.checks.count_skipped": "{count} пропуснати",
+  "pulls.checks.count_successful": "{count} успешни",
+  "pulls.checks.list_separator": ", ",
+  "pulls.checks.summary": {
+    "one": "{list}",
+    "other": "{list}"
+  },
+  "pulls.checks.group_failing": {
+    "one": "{count} неуспешна проверка",
+    "other": "{count} неуспешни проверки"
+  },
+  "pulls.checks.group_pending": {
+    "one": "{count} проверка в очакване",
+    "other": "{count} проверки в очакване"
+  },
+  "pulls.checks.group_skipped": {
+    "one": "{count} пропусната проверка",
+    "other": "{count} пропуснати проверки"
+  },
+  "pulls.checks.group_successful": {
+    "one": "{count} успешна проверка",
+    "other": "{count} успешни проверки"
+  },
+  "pulls.merge.clean_title": "Няма конфликти с основния клон",
+  "pulls.merge.clean_description": "Сливането може да се извърши автоматично.",
+  "pulls.merge.conflict_title": "Този клон има конфликти, които трябва да бъдат разрешени",
+  "pulls.merge.conflict_description": "Разрешете конфликтите от командния ред, преди да продължите.",
+  "pulls.merge.draft_title": "Тази заявка за сливане все още е в процес на работа",
+  "pulls.merge.draft_description": "Заявки за сливане в процес на работа не могат да бъдат слети.",
+  "pulls.merge.command_line_hint": "Можете също да слеете това от командния ред.",
+  "pulls.merged.description": "Всичко е готово — клонът {branch} може безопасно да бъде изтрит.",
+  "pulls.closed.title": "Затворена с неслети подавания",
+  "pulls.closed.description": "Тази заявка за сливане е затворена, но клонът {branch} има неслети подавания."
+}

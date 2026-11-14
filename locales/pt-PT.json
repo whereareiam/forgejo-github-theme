@@ -1,0 +1,41 @@
+{
+  "pulls.checks.title_success": "Todas as verificações foram aprovadas",
+  "pulls.checks.title_pending": "Algumas verificações ainda não terminaram",
+  "pulls.checks.title_failure": "Algumas verificações não foram bem-sucedidas",
+  "pulls.checks.title_conflict": "Verificações a aguardar a resolução dos conflitos",
+  "pulls.checks.count_failing": "{count} falhadas",
+  "pulls.checks.count_pending": "{count} pendentes",
+  "pulls.checks.count_skipped": "{count} ignoradas",
+  "pulls.checks.count_successful": "{count} bem-sucedidas",
+  "pulls.checks.list_separator": ", ",
+  "pulls.checks.summary": {
+    "one": "{list}",
+    "other": "{list}"
+  },
+  "pulls.checks.group_failing": {
+    "one": "{count} verificação falhada",
+    "other": "{count} verificações falhadas"
+  },
+  "pulls.checks.group_pending": {
+    "one": "{count} verificação pendente",
+    "other": "{count} verificações pendentes"
+  },
+  "pulls.checks.group_skipped": {
+    "one": "{count} verificação ignorada",
+    "other": "{count} verificações ignoradas"
+  },
+  "pulls.checks.group_successful": {
+    "one": "{count} verificação bem-sucedida",
+    "other": "{count} verificações bem-sucedidas"
+  },
+  "pulls.merge.clean_title": "Sem conflitos com o ramo base",
+  "pulls.merge.clean_description": "A integração pode ser feita automaticamente.",
+  "pulls.merge.conflict_title": "Este ramo tem conflitos que têm de ser resolvidos",
+  "pulls.merge.conflict_description": "Resolva os conflitos pela linha de comandos antes de continuar.",
+  "pulls.merge.draft_title": "Este pedido de integração ainda é um trabalho em andamento",
+  "pulls.merge.draft_description": "Pedidos de integração em andamento não podem ser integrados.",
+  "pulls.merge.command_line_hint": "Também pode integrar isto pela linha de comandos.",
+  "pulls.merged.description": "Está tudo pronto — o ramo {branch} pode ser eliminado em segurança.",
+  "pulls.closed.title": "Fechado com cometimentos não integrados",
+  "pulls.closed.description": "Este pedido de integração está fechado, mas o ramo {branch} tem cometimentos não integrados."
+}

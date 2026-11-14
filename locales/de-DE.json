@@ -1,0 +1,41 @@
+{
+  "pulls.checks.title_success": "Alle Prüfungen waren erfolgreich",
+  "pulls.checks.title_pending": "Einige Prüfungen sind noch nicht abgeschlossen",
+  "pulls.checks.title_failure": "Einige Prüfungen waren nicht erfolgreich",
+  "pulls.checks.title_conflict": "Prüfungen warten auf die Lösung der Konflikte",
+  "pulls.checks.count_failing": "{count} fehlgeschlagen",
+  "pulls.checks.count_pending": "{count} ausstehend",
+  "pulls.checks.count_skipped": "{count} übersprungen",
+  "pulls.checks.count_successful": "{count} erfolgreich",
+  "pulls.checks.list_separator": ", ",
+  "pulls.checks.summary": {
+    "one": "{list}",
+    "other": "{list}"
+  },
+  "pulls.checks.group_failing": {
+    "one": "{count} fehlgeschlagene Prüfung",
+    "other": "{count} fehlgeschlagene Prüfungen"
+  },
+  "pulls.checks.group_pending": {
+    "one": "{count} ausstehende Prüfung",
+    "other": "{count} ausstehende Prüfungen"
+  },
+  "pulls.checks.group_skipped": {
+    "one": "{count} übersprungene Prüfung",
+    "other": "{count} übersprungene Prüfungen"
+  },
+  "pulls.checks.group_successful": {
+    "one": "{count} erfolgreiche Prüfung",
+    "other": "{count} erfolgreiche Prüfungen"
+  },
+  "pulls.merge.clean_title": "Keine Konflikte mit dem Basis-Branch",
+  "pulls.merge.clean_description": "Das Zusammenführen kann automatisch erfolgen.",
+  "pulls.merge.conflict_title": "Dieser Branch hat Konflikte, die gelöst werden müssen",
+  "pulls.merge.conflict_description": "Die Konflikte vor dem Fortfahren über die Kommandozeile lösen.",
+  "pulls.merge.draft_title": "Dieser Pull-Request ist noch in Bearbeitung",
+  "pulls.merge.draft_description": "Pull-Requests in Bearbeitung können nicht zusammengeführt werden.",
+  "pulls.merge.command_line_hint": "Dies kann auch über die Kommandozeile zusammengeführt werden.",
+  "pulls.merged.description": "Alles erledigt – der Branch {branch} kann jetzt bedenkenlos gelöscht werden.",
+  "pulls.closed.title": "Geschlossen mit nicht zusammengeführten Commits",
+  "pulls.closed.description": "Dieser Pull-Request ist geschlossen, aber der Branch {branch} hat nicht zusammengeführte Commits."
+}

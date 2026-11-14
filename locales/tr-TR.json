@@ -1,0 +1,41 @@
+{
+  "pulls.checks.title_success": "Tüm kontroller başarılı oldu",
+  "pulls.checks.title_pending": "Bazı kontroller henüz tamamlanmadı",
+  "pulls.checks.title_failure": "Bazı kontroller başarılı olmadı",
+  "pulls.checks.title_conflict": "Kontroller çakışmaların çözülmesini bekliyor",
+  "pulls.checks.count_failing": "{count} başarısız",
+  "pulls.checks.count_pending": "{count} beklemede",
+  "pulls.checks.count_skipped": "{count} atlandı",
+  "pulls.checks.count_successful": "{count} başarılı",
+  "pulls.checks.list_separator": ", ",
+  "pulls.checks.summary": {
+    "one": "{list}",
+    "other": "{list}"
+  },
+  "pulls.checks.group_failing": {
+    "one": "{count} başarısız kontrol",
+    "other": "{count} başarısız kontrol"
+  },
+  "pulls.checks.group_pending": {
+    "one": "{count} bekleyen kontrol",
+    "other": "{count} bekleyen kontrol"
+  },
+  "pulls.checks.group_skipped": {
+    "one": "{count} atlanan kontrol",
+    "other": "{count} atlanan kontrol"
+  },
+  "pulls.checks.group_successful": {
+    "one": "{count} başarılı kontrol",
+    "other": "{count} başarılı kontrol"
+  },
+  "pulls.merge.clean_title": "Temel dalla çakışma yok",
+  "pulls.merge.clean_description": "Birleştirme otomatik olarak yapılabilir.",
+  "pulls.merge.conflict_title": "Bu dalda çözülmesi gereken çakışmalar var",
+  "pulls.merge.conflict_description": "Devam etmeden önce çakışmaları komut satırından çözün.",
+  "pulls.merge.draft_title": "Bu değişiklik isteği hâlâ üzerinde çalışılıyor",
+  "pulls.merge.draft_description": "Üzerinde çalışılan değişiklik istekleri birleştirilemez.",
+  "pulls.merge.command_line_hint": "Bunu komut satırından da birleştirebilirsiniz.",
+  "pulls.merged.description": "Her şey hazır — {branch} dalı güvenle silinebilir.",
+  "pulls.closed.title": "Birleştirilmemiş işlemelerle kapatıldı",
+  "pulls.closed.description": "Bu değişiklik isteği kapatıldı, ancak {branch} dalında birleştirilmemiş işlemeler var."
+}

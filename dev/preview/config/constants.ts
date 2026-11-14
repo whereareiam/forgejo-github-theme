@@ -37,6 +37,12 @@ export const AUTO_LOGIN = {
   loginPath: "/user/login",
 } as const;
 
+/** The preview applies the GitHub wording add-on unless this is "false". */
+export const GITHUB_WORDING = {
+  environment: "FORGEJO_PREVIEW_GITHUB_WORDING",
+  disabledValue: "false",
+} as const;
+
 export const CONTAINER_PATHS = {
   css: "/var/lib/gitea/custom/public/assets/css",
   templates: "/var/lib/gitea/custom/templates",
@@ -54,6 +60,7 @@ export const SOURCE_PATHS = [
   "templates",
   "themes",
   "primer",
+  "locales",
 ] as const;
 
 export const ENVIRONMENT = {

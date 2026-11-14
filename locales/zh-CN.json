@@ -1,0 +1,36 @@
+{
+  "pulls.checks.title_success": "所有检测均已通过",
+  "pulls.checks.title_pending": "部分检测尚未完成",
+  "pulls.checks.title_failure": "部分检测未通过",
+  "pulls.checks.title_conflict": "检测正在等待冲突解决",
+  "pulls.checks.count_failing": "{count} 个失败",
+  "pulls.checks.count_pending": "{count} 个等待中",
+  "pulls.checks.count_skipped": "{count} 个已跳过",
+  "pulls.checks.count_successful": "{count} 个成功",
+  "pulls.checks.list_separator": "，",
+  "pulls.checks.summary": {
+    "other": "{list}"
+  },
+  "pulls.checks.group_failing": {
+    "other": "{count} 个失败的检测"
+  },
+  "pulls.checks.group_pending": {
+    "other": "{count} 个等待中的检测"
+  },
+  "pulls.checks.group_skipped": {
+    "other": "{count} 个已跳过的检测"
+  },
+  "pulls.checks.group_successful": {
+    "other": "{count} 个成功的检测"
+  },
+  "pulls.merge.clean_title": "与基础分支没有冲突",
+  "pulls.merge.clean_description": "可以自动合并。",
+  "pulls.merge.conflict_title": "此分支存在必须解决的冲突",
+  "pulls.merge.conflict_description": "请先使用命令行解决冲突再继续。",
+  "pulls.merge.draft_title": "此合并请求仍在进行中",
+  "pulls.merge.draft_description": "进行中的合并请求无法合并。",
+  "pulls.merge.command_line_hint": "你也可以使用命令行合并。",
+  "pulls.merged.description": "一切就绪 — 可以放心删除 {branch} 分支。",
+  "pulls.closed.title": "已关闭，含未合并的提交",
+  "pulls.closed.description": "此合并请求已关闭，但 {branch} 分支含有未合并的提交。"
+}

@@ -1,0 +1,46 @@
+{
+  "pulls.checks.title_success": "Všechny kontroly prošly",
+  "pulls.checks.title_pending": "Některé kontroly ještě neskončily",
+  "pulls.checks.title_failure": "Některé kontroly nebyly úspěšné",
+  "pulls.checks.title_conflict": "Kontroly čekají na vyřešení konfliktů",
+  "pulls.checks.count_failing": "neúspěšné: {count}",
+  "pulls.checks.count_pending": "čekající: {count}",
+  "pulls.checks.count_skipped": "přeskočené: {count}",
+  "pulls.checks.count_successful": "úspěšné: {count}",
+  "pulls.checks.list_separator": ", ",
+  "pulls.checks.summary": {
+    "one": "{list}",
+    "few": "{list}",
+    "other": "{list}"
+  },
+  "pulls.checks.group_failing": {
+    "one": "{count} neúspěšná kontrola",
+    "few": "{count} neúspěšné kontroly",
+    "other": "{count} neúspěšných kontrol"
+  },
+  "pulls.checks.group_pending": {
+    "one": "{count} čekající kontrola",
+    "few": "{count} čekající kontroly",
+    "other": "{count} čekajících kontrol"
+  },
+  "pulls.checks.group_skipped": {
+    "one": "{count} přeskočená kontrola",
+    "few": "{count} přeskočené kontroly",
+    "other": "{count} přeskočených kontrol"
+  },
+  "pulls.checks.group_successful": {
+    "one": "{count} úspěšná kontrola",
+    "few": "{count} úspěšné kontroly",
+    "other": "{count} úspěšných kontrol"
+  },
+  "pulls.merge.clean_title": "Žádné konflikty se základní větví",
+  "pulls.merge.clean_description": "Sloučení lze provést automaticky.",
+  "pulls.merge.conflict_title": "Tato větev má konflikty, které je třeba vyřešit",
+  "pulls.merge.conflict_description": "Než budete pokračovat, vyřešte konflikty v příkazové řádce.",
+  "pulls.merge.draft_title": "Tato žádost o sloučení je stále rozpracovaná",
+  "pulls.merge.draft_description": "Rozpracované žádosti o sloučení nelze sloučit.",
+  "pulls.merge.command_line_hint": "Můžete ji také sloučit z příkazové řádky.",
+  "pulls.merged.description": "Vše je hotovo — větev {branch} lze bezpečně smazat.",
+  "pulls.closed.title": "Uzavřeno s nesloučenými revizemi",
+  "pulls.closed.description": "Tato žádost o sloučení je uzavřena, ale větev {branch} obsahuje nesloučené revize."
+}

@@ -1,6 +1,6 @@
 import { join, resolve } from "node:path";
 
-import { AUTO_LOGIN, COMPOSE, ENVIRONMENT, FIXTURES, PREVIEW, SOURCE_PATHS } from "./constants.ts";
+import { AUTO_LOGIN, COMPOSE, ENVIRONMENT, FIXTURES, GITHUB_WORDING, PREVIEW, SOURCE_PATHS } from "./constants.ts";
 
 export class PreviewConfig {
   public readonly projectDirectory: string;
@@ -14,6 +14,8 @@ export class PreviewConfig {
   public readonly previewEmail: string;
   public readonly autoLoginEnabled: boolean;
   public readonly themeTemplatesDirectory: string;
+  public readonly githubWordingTemplatesDirectory: string;
+  public readonly githubWordingEnabled: boolean;
   public readonly generatedTemplatesDirectory: string;
   public readonly autoLoginTemplateFile: string;
   public readonly themeAssetsDirectory: string;
@@ -36,6 +38,8 @@ export class PreviewConfig {
     this.previewEmail = environment[ENVIRONMENT.email] ?? PREVIEW.defaultEmail;
     this.autoLoginEnabled = environment[AUTO_LOGIN.environment] !== AUTO_LOGIN.disabledValue;
     this.themeTemplatesDirectory = join(this.projectDirectory, "dist/forgejo/templates");
+    this.githubWordingTemplatesDirectory = join(this.projectDirectory, "dist/github-wording/templates");
+    this.githubWordingEnabled = environment[GITHUB_WORDING.environment] !== GITHUB_WORDING.disabledValue;
     this.generatedTemplatesDirectory = join(this.projectDirectory, "dev/.generated/templates");
     this.autoLoginTemplateFile = join(this.projectDirectory, AUTO_LOGIN.templateDirectory, AUTO_LOGIN.templateFile);
     this.themeAssetsDirectory = join(this.projectDirectory, "dist/forgejo/public/assets");

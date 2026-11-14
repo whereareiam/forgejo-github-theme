@@ -54,7 +54,10 @@ Install the resulting files using your Forgejo data directory (commonly `data/gi
    `theme-github-extras.tar.gz` for Pink, Gitea-compatible, and Catppuccin themes. Place their CSS files in the same
    `<forgejo-data>/public/assets/css` directory.
 3. Extract the optional `theme-github-templates.tar.gz` archive into `<forgejo-data>`. It includes the templates and
-   their required JavaScript and page-specific CSS assets under `public/assets`.
+   their required JavaScript and page-specific CSS assets under `public/assets`. Its text is Forgejo's translations. For
+   GitHub's wording where Forgejo has none, such as "1 failing check" in a pull request's merge box, also extract the
+   optional `theme-github-wording.tar.gz` into `<forgejo-data>` afterwards, in every language Forgejo enables by
+   default. It replaces one file of the templates, so extract it again after every templates update.
 4. Modify `<forgejo-data>/conf/app.ini` and append the CSS filename without the `theme-` prefix to `THEMES` under the
    `[ui]` section.
 5. Restart Forgejo.

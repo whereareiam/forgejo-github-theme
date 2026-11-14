@@ -1,0 +1,41 @@
+{
+  "pulls.checks.title_success": "همه بررسی‌ها موفق بودند",
+  "pulls.checks.title_pending": "برخی بررسی‌ها هنوز تمام نشده‌اند",
+  "pulls.checks.title_failure": "برخی بررسی‌ها موفق نبودند",
+  "pulls.checks.title_conflict": "بررسی‌ها در انتظار حل تداخل‌ها هستند",
+  "pulls.checks.count_failing": "{count} ناموفق",
+  "pulls.checks.count_pending": "{count} در انتظار",
+  "pulls.checks.count_skipped": "{count} نادیده گرفته‌شده",
+  "pulls.checks.count_successful": "{count} موفق",
+  "pulls.checks.list_separator": "، ",
+  "pulls.checks.summary": {
+    "one": "{list}",
+    "other": "{list}"
+  },
+  "pulls.checks.group_failing": {
+    "one": "{count} بررسی ناموفق",
+    "other": "{count} بررسی ناموفق"
+  },
+  "pulls.checks.group_pending": {
+    "one": "{count} بررسی در انتظار",
+    "other": "{count} بررسی در انتظار"
+  },
+  "pulls.checks.group_skipped": {
+    "one": "{count} بررسی نادیده گرفته‌شده",
+    "other": "{count} بررسی نادیده گرفته‌شده"
+  },
+  "pulls.checks.group_successful": {
+    "one": "{count} بررسی موفق",
+    "other": "{count} بررسی موفق"
+  },
+  "pulls.merge.clean_title": "تداخلی با شاخه پایه وجود ندارد",
+  "pulls.merge.clean_description": "ادغام را می‌توان به صورت خودکار انجام داد.",
+  "pulls.merge.conflict_title": "این شاخه تداخل‌هایی دارد که باید حل شوند",
+  "pulls.merge.conflict_description": "پیش از ادامه، تداخل‌ها را با خط فرمان حل کنید.",
+  "pulls.merge.draft_title": "این تقاضای واکشی هنوز در حال انجام است",
+  "pulls.merge.draft_description": "تقاضاهای واکشی در حال انجام قابل ادغام نیستند.",
+  "pulls.merge.command_line_hint": "می‌توانید این را با خط فرمان نیز ادغام کنید.",
+  "pulls.merged.description": "همه چیز آماده است — شاخه {branch} را می‌توان با خیال راحت حذف کرد.",
+  "pulls.closed.title": "بسته‌شده با کامیت‌های ادغام‌نشده",
+  "pulls.closed.description": "این تقاضای واکشی بسته شده است، اما شاخه {branch} کامیت‌های ادغام‌نشده دارد."
+}

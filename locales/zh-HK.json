@@ -1,0 +1,36 @@
+{
+  "pulls.checks.title_success": "所有檢查均已通過",
+  "pulls.checks.title_pending": "部分檢查尚未完成",
+  "pulls.checks.title_failure": "部分檢查未通過",
+  "pulls.checks.title_conflict": "檢查正在等待衝突解決",
+  "pulls.checks.count_failing": "{count} 個失敗",
+  "pulls.checks.count_pending": "{count} 個等待中",
+  "pulls.checks.count_skipped": "{count} 個已略過",
+  "pulls.checks.count_successful": "{count} 個成功",
+  "pulls.checks.list_separator": "，",
+  "pulls.checks.summary": {
+    "other": "{list}"
+  },
+  "pulls.checks.group_failing": {
+    "other": "{count} 個失敗的檢查"
+  },
+  "pulls.checks.group_pending": {
+    "other": "{count} 個等待中的檢查"
+  },
+  "pulls.checks.group_skipped": {
+    "other": "{count} 個已略過的檢查"
+  },
+  "pulls.checks.group_successful": {
+    "other": "{count} 個成功的檢查"
+  },
+  "pulls.merge.clean_title": "與基礎分支沒有衝突",
+  "pulls.merge.clean_description": "可以自動合併。",
+  "pulls.merge.conflict_title": "此分支有必須解決的衝突",
+  "pulls.merge.conflict_description": "請先使用命令列解決衝突再繼續。",
+  "pulls.merge.draft_title": "此合併請求仍在進行中",
+  "pulls.merge.draft_description": "進行中的合併請求無法合併。",
+  "pulls.merge.command_line_hint": "你亦可以使用命令列合併。",
+  "pulls.merged.description": "一切就緒 — 可以放心刪除 {branch} 分支。",
+  "pulls.closed.title": "已關閉，含未合併的提交",
+  "pulls.closed.description": "此合併請求已關閉，但 {branch} 分支含有未合併的提交。"
+}

@@ -1,0 +1,41 @@
+{
+  "pulls.checks.title_success": "Alle kontroller er bestået",
+  "pulls.checks.title_pending": "Nogle kontroller er ikke færdige endnu",
+  "pulls.checks.title_failure": "Nogle kontroller lykkedes ikke",
+  "pulls.checks.title_conflict": "Kontroller afventer løsning af konflikter",
+  "pulls.checks.count_failing": "{count} mislykket",
+  "pulls.checks.count_pending": "{count} afventer",
+  "pulls.checks.count_skipped": "{count} sprunget over",
+  "pulls.checks.count_successful": "{count} lykkedes",
+  "pulls.checks.list_separator": ", ",
+  "pulls.checks.summary": {
+    "one": "{list}",
+    "other": "{list}"
+  },
+  "pulls.checks.group_failing": {
+    "one": "{count} mislykket kontrol",
+    "other": "{count} mislykkede kontroller"
+  },
+  "pulls.checks.group_pending": {
+    "one": "{count} afventende kontrol",
+    "other": "{count} afventende kontroller"
+  },
+  "pulls.checks.group_skipped": {
+    "one": "{count} oversprunget kontrol",
+    "other": "{count} oversprungne kontroller"
+  },
+  "pulls.checks.group_successful": {
+    "one": "{count} vellykket kontrol",
+    "other": "{count} vellykkede kontroller"
+  },
+  "pulls.merge.clean_title": "Ingen konflikter med basisgrenen",
+  "pulls.merge.clean_description": "Fletning kan udføres automatisk.",
+  "pulls.merge.conflict_title": "Denne gren har konflikter, der skal løses",
+  "pulls.merge.conflict_description": "Løs konflikterne via kommandolinjen, før du fortsætter.",
+  "pulls.merge.draft_title": "Denne pull-anmodning er stadig et igangværende arbejde",
+  "pulls.merge.draft_description": "Igangværende pull-anmodninger kan ikke flettes.",
+  "pulls.merge.command_line_hint": "Du kan også flette dette via kommandolinjen.",
+  "pulls.merged.description": "Alt er klar – grenen {branch} kan trygt slettes.",
+  "pulls.closed.title": "Lukket med ikke-flettede commits",
+  "pulls.closed.description": "Denne pull-anmodning er lukket, men grenen {branch} har commits, der ikke er flettet."
+}

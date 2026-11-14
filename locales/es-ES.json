@@ -1,0 +1,41 @@
+{
+  "pulls.checks.title_success": "Todas las comprobaciones se han superado",
+  "pulls.checks.title_pending": "Algunas comprobaciones aún no han terminado",
+  "pulls.checks.title_failure": "Algunas comprobaciones no han tenido éxito",
+  "pulls.checks.title_conflict": "Comprobaciones a la espera de resolver los conflictos",
+  "pulls.checks.count_failing": "{count} fallidas",
+  "pulls.checks.count_pending": "{count} pendientes",
+  "pulls.checks.count_skipped": "{count} omitidas",
+  "pulls.checks.count_successful": "{count} correctas",
+  "pulls.checks.list_separator": ", ",
+  "pulls.checks.summary": {
+    "one": "{list}",
+    "other": "{list}"
+  },
+  "pulls.checks.group_failing": {
+    "one": "{count} comprobación fallida",
+    "other": "{count} comprobaciones fallidas"
+  },
+  "pulls.checks.group_pending": {
+    "one": "{count} comprobación pendiente",
+    "other": "{count} comprobaciones pendientes"
+  },
+  "pulls.checks.group_skipped": {
+    "one": "{count} comprobación omitida",
+    "other": "{count} comprobaciones omitidas"
+  },
+  "pulls.checks.group_successful": {
+    "one": "{count} comprobación correcta",
+    "other": "{count} comprobaciones correctas"
+  },
+  "pulls.merge.clean_title": "No hay conflictos con la rama base",
+  "pulls.merge.clean_description": "La fusión puede realizarse automáticamente.",
+  "pulls.merge.conflict_title": "Esta rama tiene conflictos que deben resolverse",
+  "pulls.merge.conflict_description": "Resuelve los conflictos desde la línea de comandos antes de continuar.",
+  "pulls.merge.draft_title": "Este pull request sigue siendo un trabajo en curso",
+  "pulls.merge.draft_description": "Los pull requests en curso no se pueden fusionar.",
+  "pulls.merge.command_line_hint": "También puedes fusionarlo desde la línea de comandos.",
+  "pulls.merged.description": "Todo listo: la rama {branch} se puede eliminar sin problema.",
+  "pulls.closed.title": "Cerrado con commits sin fusionar",
+  "pulls.closed.description": "Este pull request está cerrado, pero la rama {branch} tiene commits sin fusionar."
+}

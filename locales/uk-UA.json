@@ -1,0 +1,46 @@
+{
+  "pulls.checks.title_success": "Усі перевірки пройдено",
+  "pulls.checks.title_pending": "Деякі перевірки ще не завершено",
+  "pulls.checks.title_failure": "Деякі перевірки не пройшли",
+  "pulls.checks.title_conflict": "Перевірки очікують розв’язання конфліктів",
+  "pulls.checks.count_failing": "не пройдено: {count}",
+  "pulls.checks.count_pending": "очікує: {count}",
+  "pulls.checks.count_skipped": "пропущено: {count}",
+  "pulls.checks.count_successful": "пройдено: {count}",
+  "pulls.checks.list_separator": ", ",
+  "pulls.checks.summary": {
+    "one": "{list}",
+    "few": "{list}",
+    "many": "{list}"
+  },
+  "pulls.checks.group_failing": {
+    "one": "{count} непройдена перевірка",
+    "few": "{count} непройдені перевірки",
+    "many": "{count} непройдених перевірок"
+  },
+  "pulls.checks.group_pending": {
+    "one": "{count} очікувана перевірка",
+    "few": "{count} очікувані перевірки",
+    "many": "{count} очікуваних перевірок"
+  },
+  "pulls.checks.group_skipped": {
+    "one": "{count} пропущена перевірка",
+    "few": "{count} пропущені перевірки",
+    "many": "{count} пропущених перевірок"
+  },
+  "pulls.checks.group_successful": {
+    "one": "{count} пройдена перевірка",
+    "few": "{count} пройдені перевірки",
+    "many": "{count} пройдених перевірок"
+  },
+  "pulls.merge.clean_title": "Немає конфліктів з базовою гілкою",
+  "pulls.merge.clean_description": "Злиття можна виконати автоматично.",
+  "pulls.merge.conflict_title": "У цій гілці є конфлікти, які потрібно розв’язати",
+  "pulls.merge.conflict_description": "Розв’яжіть конфлікти в командному рядку, перш ніж продовжити.",
+  "pulls.merge.draft_title": "Цей запит на злиття ще в роботі",
+  "pulls.merge.draft_description": "Запити на злиття, які ще в роботі, не можна злити.",
+  "pulls.merge.command_line_hint": "Це також можна злити з командного рядка.",
+  "pulls.merged.description": "Усе готово — гілку {branch} можна безпечно видалити.",
+  "pulls.closed.title": "Закрито з незлитими комітами",
+  "pulls.closed.description": "Цей запит на злиття закрито, але гілка {branch} має незлиті коміти."
+}
