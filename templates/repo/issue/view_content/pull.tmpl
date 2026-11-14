@@ -35,6 +35,7 @@
 			"CommitStatuses" .LatestCommitStatuses
 			"MissingRequiredChecks" .MissingRequiredChecks
 			"is_context_required" .is_context_required
+			"Conflicted" .IsPullFilesConflicted
 		)}}
 		</div>
 		{{end}}
@@ -48,7 +49,7 @@
 								{{ctx.Locale.Tr "repo.pulls.merged_success"}}
 							</h3>
 							<div class="merge-section-info">
-								{{ctx.Locale.Tr "repo.pulls.merged_info_text" (HTMLFormat "<code>%s</code>" .HeadTarget)}}
+								{{template "theme/phrase" dict "Key" "pulls.merged.description" "Branch" (HTMLFormat "<code>%s</code>" .HeadTarget) "Fallback" (ctx.Locale.Tr "repo.pulls.merged_info_text" (HTMLFormat "<code>%s</code>" .HeadTarget))}}
 							</div>
 						</div>
 						<div>
@@ -60,10 +61,14 @@
 			{{else if .Issue.IsClosed}}
 				<div class="item item-section text tw-flex-1">
 					<div>
-						<h3 class="tw-mb-2">{{ctx.Locale.Tr "repo.pulls.closed"}}</h3>
+						{{/* GitHub names a closed pull request's branch while it can still be deleted. */}}
+						{{$branchLeft := and .IsPullBranchDeletable (not .IsPullRequestBroken)}}
+						<h3 class="tw-mb-2">{{if $branchLeft}}{{template "theme/phrase" dict "Key" "pulls.closed.title" "Fallback" (ctx.Locale.Tr "repo.pulls.closed")}}{{else}}{{ctx.Locale.Tr "repo.pulls.closed"}}{{end}}</h3>
 						<div class="merge-section-info">
 							{{if .IsPullRequestBroken}}
 								{{ctx.Locale.Tr "repo.pulls.cant_reopen_deleted_branch"}}
+							{{else if $branchLeft}}
+								{{template "theme/phrase" dict "Key" "pulls.closed.description" "Branch" (HTMLFormat "<code>%s</code>" .HeadTarget) "Fallback" (ctx.Locale.Tr "repo.pulls.reopen_to_merge")}}
 							{{else}}
 								{{ctx.Locale.Tr "repo.pulls.reopen_to_merge"}}
 							{{end}}
@@ -80,8 +85,8 @@
 				<div class="item pull-merge-row">
 					{{svg "octicon-alert-fill"}}
 					<div>
-						<h3>{{ctx.Locale.Tr "repo.pulls.files_conflicted"}}</h3>
-						<p>{{ctx.Locale.Tr "repo.pulls.cannot_auto_merge_helper"}}</p>
+						<h3>{{template "theme/phrase" dict "Key" "pulls.merge.conflict_title" "Fallback" (ctx.Locale.Tr "repo.pulls.files_conflicted")}}</h3>
+						<p>{{template "theme/phrase" dict "Key" "pulls.merge.conflict_description" "Fallback" (ctx.Locale.Tr "repo.pulls.cannot_auto_merge_helper")}}</p>
 						<ul class="pull-merge-files">
 							{{range .ConflictedFiles}}
 							<li>{{svg "octicon-file"}}<code>{{.}}</code></li>
@@ -102,7 +107,8 @@
 				<div class="item pull-merge-row toggle-wip" data-title="{{.Issue.Title}}" data-wip-prefixes="{{JsonUtils.EncodeToString .PullRequestWorkInProgressPrefixes}}" data-update-url="{{.Issue.Link}}/title">
 					{{svg "octicon-git-pull-request-draft"}}
 					<div>
-						<h3>{{ctx.Locale.Tr "repo.pulls.cannot_merge_work_in_progress"}}</h3>
+						<h3>{{template "theme/phrase" dict "Key" "pulls.merge.draft_title" "Fallback" (ctx.Locale.Tr "repo.pulls.cannot_merge_work_in_progress")}}</h3>
+						<p>{{template "theme/phrase" dict "Key" "pulls.merge.draft_description" "Fallback" (ctx.Locale.Tr "repo.pulls.no_merge_wip")}}</p>
 					</div>
 					{{if or .HasIssuesOrPullsWritePermission .IsIssuePoster}}
 						<button class="ui compact button">{{ctx.Locale.Tr "repo.pulls.remove_prefix" .WorkInProgressPrefix}}</button>
@@ -417,8 +423,8 @@
 			{{else if and $showMergeInstructions .AllowMerge (not .IsPullRequestBroken) (or .IsPullWorkInProgress .IsPullFilesConflicted)}}
 				{{/* GitHub keeps the merge button in place, disabled, until the draft or the conflict is resolved. */}}
 				<div class="pull-merge-actions">
-					<div class="ui buttons">
-						<button class="ui button" disabled>{{svg "octicon-git-merge"}}{{ctx.Locale.Tr "repo.pulls.merge_pull_request"}}</button>
+					<div class="ui buttons merge-button">
+						<button class="ui button" disabled>{{ctx.Locale.Tr "repo.pulls.merge_pull_request"}}</button>
 						<button class="ui icon button" disabled aria-label="{{ctx.Locale.Tr "repo.pulls.merge_pull_request"}}">{{svg "octicon-triangle-down" 14}}</button>
 					</div>
 					{{template "repo/issue/view_content/pull_merge_instruction" dict "PullRequest" .Issue.PullRequest "ShowMergeInstructions" .ShowMergeInstructions "AutodetectManualMerge" .AutodetectManualMerge "DefaultMergeMessage" .DefaultMergeMessage "DefaultMergeBody" .DefaultMergeBody "IsPullFilesConflicted" .IsPullFilesConflicted "NoDivider" true}}

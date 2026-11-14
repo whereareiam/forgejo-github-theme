@@ -1,0 +1,11 @@
+{{/* One check in the merge box: its state, name and description, and whether branch protection requires it. Takes Status and is_context_required. */}}
+<div class="commit-status-item">
+	{{template "repo/issue/view_content/pull_merge_check_icon" .Status}}
+	<div class="status-context gt-ellipsis">{{.Status.Context}} <span class="text light-2">{{.Status.Description}}</span></div>
+	<div class="ui status-details">
+		{{if .is_context_required}}
+			{{if (call .is_context_required .Status.Context)}}<div class="ui label">{{ctx.Locale.Tr "repo.pulls.status_checks_requested"}}</div>{{end}}
+		{{end}}
+		<span>{{if .Status.TargetURL}}<a href="{{.Status.TargetURL}}">{{ctx.Locale.Tr "repo.pulls.status_checks_details"}}</a>{{end}}</span>
+	</div>
+</div>

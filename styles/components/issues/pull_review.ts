@@ -452,9 +452,13 @@ export default css`
             flex: 1 1 200px;
             min-width: 0;
           }
+          /* GitHub centres a row's button on a one-line title and tops it with a two-line one. */
           & > .ui.button {
             flex: none;
             align-self: center;
+          }
+          &:has(> div > p) > .ui.button {
+            align-self: flex-start;
           }
           & h3 {
             margin: 0;
@@ -470,17 +474,33 @@ export default css`
             line-height: 21px;
           }
         }
-        /* Merged and closed: the same title and muted sentence, with "Delete branch" beside them. */
+        /* Merged and closed: the same title and muted sentence, with "Delete branch" beside them, level with the title. */
+        & > .item.item-section:has(.merge-section-info) {
+          align-items: flex-start;
+        }
         & > .item.item-section > div > h3 {
           margin: 0 !important;
           font-size: 16px;
           font-weight: 600;
           line-height: 24px;
         }
+        & > .item p:empty {
+          display: none;
+        }
         & > .item.item-section .merge-section-info {
           color: ${themeVars.color.text.light.num1};
           font-size: 14px;
           line-height: 21px;
+          /* The branch name: GitHub's blue branch chip. */
+          & code {
+            padding: 2px 6px;
+            border: 0;
+            border-radius: 6px;
+            background: ${themeVars.github.bgColor.accent.muted};
+            color: ${themeVars.github.fgColor.accent};
+            font-size: 12px;
+            line-height: 18px;
+          }
         }
         & > .item.pull-merge-status > svg {
           background: ${themeVars.github.bgColor.success.emphasis};
@@ -534,6 +554,11 @@ export default css`
           min-width: 0;
         }
         /* The counts per state: an icon and a number each, labelled with Forgejo's name for the state. */
+        /* GitHub's sentence of counts where the theme has it in the reader's language, else the icons with numbers. */
+        & .pull-merge-checks-counts:empty,
+        & .pull-merge-checks-counts:not(:empty) + .pull-merge-checks-icons {
+          display: none;
+        }
         & .pull-merge-checks-counts {
           display: flex;
           flex-wrap: wrap;
@@ -550,9 +575,9 @@ export default css`
         }
         & .pull-merge-checks-ring {
           flex: none;
-          width: 28px;
-          height: 28px;
-          margin: 2px;
+          width: 32px;
+          height: 32px;
+          margin: 0;
           border-radius: 50%;
           background: conic-gradient(
             ${themeVars.github.fgColor.success} 0 var(--checks-passing),
@@ -584,6 +609,8 @@ export default css`
           transform: rotate(-90deg);
         }
         & > .commit-status-list {
+          /* GitHub scrolls the checks past 300px. */
+          max-height: 300px;
           overflow: hidden auto;
           padding: 8px 0;
           border-top: 1px solid var(--merge-section-divider);
@@ -593,13 +620,55 @@ export default css`
             border-top: 0;
           }
         }
+        /* GitHub's rows have no rules between them and 16px icons. */
+        /* A group of checks in one state, folded by its heading, as GitHub's "1 failing check". */
+        & .pull-merge-check-group > summary {
+          display: inline-flex;
+          align-items: center;
+          gap: 4px;
+          height: 28px;
+          padding: 0 8px;
+          border-radius: ${otherThemeVars.border.radius};
+          color: ${themeVars.color.text.light.num1};
+          font-size: 12px;
+          font-weight: 500;
+          line-height: 18px;
+          list-style: none;
+          cursor: pointer;
+          &::-webkit-details-marker {
+            display: none;
+          }
+          &:hover {
+            background: ${themeVars.github.control.transparent.bgColor.hover};
+          }
+          & > svg {
+            transition: transform 0.15s ease;
+          }
+        }
+        & .pull-merge-check-group:not([open]) > summary > svg {
+          transform: rotate(-90deg);
+        }
         & .commit-status-item {
           display: flex;
           align-items: center;
           gap: 8px;
+          height: auto;
           min-height: 37px;
           margin: 0 8px;
-          padding: 2px 8px;
+          padding: 2px 6px;
+          border: 0;
+          /* GitHub rules off the checks within one group. */
+          & + .commit-status-item {
+            border-top: 1px solid ${themeVars.color.light.border};
+            border-radius: 0;
+          }
+          & > .commit-status.icon {
+            flex: none;
+            width: 16px;
+            min-width: 16px;
+            height: 16px;
+            margin: 0;
+          }
           border-radius: ${otherThemeVars.border.radius};
           &:hover {
             background: ${themeVars.github.control.transparent.bgColor.hover};
@@ -611,6 +680,10 @@ export default css`
           & .status-context > span {
             margin-left: 4px;
             font-size: 12px;
+          }
+          /* GitHub sets a status's description off with a dash. */
+          & .status-context > span:not(:empty)::before {
+            content: "— ";
           }
           & .status-details a {
             color: ${themeVars.color.text.light.num1};
@@ -635,6 +708,16 @@ export default css`
         }
         & summary {
           ${mergeInstructionsLink}
+        }
+        /* GitHub's "You can also merge this with the command line." before the link, muted and not underlined. */
+        & summary > .pull-merge-cli-hint {
+          display: inline-block;
+          margin-right: 4px;
+          color: ${themeVars.color.text.light.num1};
+          text-decoration: none;
+          &:empty {
+            display: none;
+          }
         }
         & .ui.button {
           ${mergeButton}
@@ -666,6 +749,13 @@ export default css`
           width: 32px;
           padding: 0;
           justify-content: center;
+        }
+        /* GitHub's merge button is only its label. */
+        & .merge-button > .ui.button:not(.dropdown, .icon) {
+          padding-inline: 12px;
+          & > svg {
+            display: none;
+          }
         }
         /* The expanded form takes the whole row: title, message, then the buttons. */
         & > #pull-request-merge-form:has(form .field) {

@@ -604,6 +604,75 @@ export default css`
     & .comment .markup p {
       line-height: inherit;
     }
+    /* A commit with a body: GitHub's small "…" pill right after the message, not a full button by the hash. */
+    & .comment-list .timeline-item.commits-list .singular-commit {
+      min-height: 36px;
+      & > .badge.badge-commit {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        & > svg {
+          width: 16px;
+          height: 16px;
+          padding: 0;
+        }
+      }
+      /* GitHub sets the first commit of a push apart: a taller row and its icon in a filled circle. */
+      &:first-child {
+        min-height: 64px;
+        /* An unfolded body stays right under the title, inside the row's padding. */
+        &:has(+ .commit-body:not(.tw-hidden)) {
+          min-height: 48px;
+          padding-top: 16px;
+        }
+        & > .badge.badge-commit {
+          box-sizing: border-box;
+          width: 32px;
+          height: 32px !important;
+          /* Forgejo's -33px offset for its 34px badge, kept centred on the timeline line. */
+          margin: 0 9px 0 -32px;
+          border: 2px solid ${themeVars.color.body};
+          border-radius: 50%;
+          background: ${themeVars.github.control.bgColor.rest};
+        }
+      }
+      /* Forgejo's utilities are !important. */
+      & > .gt-ellipsis.tw-flex-1 {
+        flex: 0 1 auto !important;
+      }
+      & > .shabox {
+        margin-left: auto;
+      }
+      & > .ellipsis-button.ui.button {
+        flex: none;
+        min-width: 0;
+        min-height: 0;
+        height: 12px;
+        margin: 0 0 0 5px;
+        padding: 0 5px;
+        border: 0;
+        border-radius: 1px;
+        background: color-mix(in srgb, ${themeVars.github.bgColor.neutral.emphasis} 20%, transparent);
+        box-shadow: none;
+        color: ${themeVars.color.text.self};
+        font-size: 12px;
+        font-weight: 600;
+        line-height: 6px;
+        &:hover {
+          background: ${themeVars.github.control.transparent.bgColor.active};
+        }
+      }
+    }
+    /* The unfolded body: muted 12px monospace under the avatar. */
+    & .comment-list .timeline-item.commits-list > .commit-body {
+      margin: 0 0 8px 9px !important;
+      color: ${themeVars.color.text.light.num1};
+      font-size: 12px;
+      line-height: 18px;
+    }
+    & .comment-list .timeline-item.commits-list > .singular-commit:first-child + .commit-body {
+      margin-bottom: 16px !important;
+    }
     /* Commits listed in the timeline: a plain, muted seven-character hash. */
     & .comment-list .timeline-item.commits-list .shabox .sha.label {
       min-height: 0;

@@ -1,6 +1,6 @@
 {{if not .NoDivider}}<div class="divider"></div>{{end}}
 <details class="collapsible">
-	<summary class="tw-py-2"> {{ctx.Locale.Tr "repo.pulls.cmd_instruction_hint"}} </summary>
+	<summary class="tw-py-2"><span class="pull-merge-cli-hint">{{template "theme/phrase" dict "Key" "pulls.merge.command_line_hint" "Fallback" ""}}</span>{{ctx.Locale.Tr "repo.pulls.cmd_instruction_hint"}}</summary>
 	{{if .IsPullFilesConflicted}}
 		{{$titleID := printf "manual-merge-title-%d" .PullRequest.ID}}
 		{{$bodyID := printf "manual-merge-body-%d" .PullRequest.ID}}
