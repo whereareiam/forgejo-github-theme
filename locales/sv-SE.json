@@ -1,0 +1,41 @@
+{
+  "pulls.checks.title_success": "Alla kontroller har godkänts",
+  "pulls.checks.title_pending": "Vissa kontroller är inte klara än",
+  "pulls.checks.title_failure": "Vissa kontroller lyckades inte",
+  "pulls.checks.title_conflict": "Kontroller väntar på att konflikterna löses",
+  "pulls.checks.count_failing": "{count} misslyckade",
+  "pulls.checks.count_pending": "{count} väntande",
+  "pulls.checks.count_skipped": "{count} överhoppade",
+  "pulls.checks.count_successful": "{count} lyckade",
+  "pulls.checks.list_separator": ", ",
+  "pulls.checks.summary": {
+    "one": "{list}",
+    "other": "{list}"
+  },
+  "pulls.checks.group_failing": {
+    "one": "{count} misslyckad kontroll",
+    "other": "{count} misslyckade kontroller"
+  },
+  "pulls.checks.group_pending": {
+    "one": "{count} väntande kontroll",
+    "other": "{count} väntande kontroller"
+  },
+  "pulls.checks.group_skipped": {
+    "one": "{count} överhoppad kontroll",
+    "other": "{count} överhoppade kontroller"
+  },
+  "pulls.checks.group_successful": {
+    "one": "{count} lyckad kontroll",
+    "other": "{count} lyckade kontroller"
+  },
+  "pulls.merge.clean_title": "Inga konflikter med basgrenen",
+  "pulls.merge.clean_description": "Sammanslagningen kan utföras automatiskt.",
+  "pulls.merge.conflict_title": "Den här grenen har konflikter som måste lösas",
+  "pulls.merge.conflict_description": "Lös konflikterna via kommandoraden innan du fortsätter.",
+  "pulls.merge.draft_title": "Denna ändringsförfrågan är fortfarande ett pågående arbete",
+  "pulls.merge.draft_description": "Pågående ändringsförfrågningar kan inte slås samman.",
+  "pulls.merge.command_line_hint": "Du kan också slå samman detta via kommandoraden.",
+  "pulls.merged.description": "Allt klart – grenen {branch} kan tas bort utan risk.",
+  "pulls.closed.title": "Stängd med commits som inte slagits samman",
+  "pulls.closed.description": "Denna ändringsförfrågan är stängd, men grenen {branch} har commits som inte slagits samman."
+}

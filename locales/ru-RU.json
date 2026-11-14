@@ -1,0 +1,46 @@
+{
+  "pulls.checks.title_success": "Все проверки пройдены",
+  "pulls.checks.title_pending": "Некоторые проверки ещё не завершены",
+  "pulls.checks.title_failure": "Некоторые проверки не прошли",
+  "pulls.checks.title_conflict": "Проверки ожидают разрешения конфликтов",
+  "pulls.checks.count_failing": "не пройдено: {count}",
+  "pulls.checks.count_pending": "ожидает: {count}",
+  "pulls.checks.count_skipped": "пропущено: {count}",
+  "pulls.checks.count_successful": "пройдено: {count}",
+  "pulls.checks.list_separator": ", ",
+  "pulls.checks.summary": {
+    "one": "{list}",
+    "few": "{list}",
+    "many": "{list}"
+  },
+  "pulls.checks.group_failing": {
+    "one": "{count} непройденная проверка",
+    "few": "{count} непройденные проверки",
+    "many": "{count} непройденных проверок"
+  },
+  "pulls.checks.group_pending": {
+    "one": "{count} ожидающая проверка",
+    "few": "{count} ожидающие проверки",
+    "many": "{count} ожидающих проверок"
+  },
+  "pulls.checks.group_skipped": {
+    "one": "{count} пропущенная проверка",
+    "few": "{count} пропущенные проверки",
+    "many": "{count} пропущенных проверок"
+  },
+  "pulls.checks.group_successful": {
+    "one": "{count} пройденная проверка",
+    "few": "{count} пройденные проверки",
+    "many": "{count} пройденных проверок"
+  },
+  "pulls.merge.clean_title": "Нет конфликтов с базовой веткой",
+  "pulls.merge.clean_description": "Слияние может быть выполнено автоматически.",
+  "pulls.merge.conflict_title": "В этой ветке есть конфликты, которые нужно разрешить",
+  "pulls.merge.conflict_description": "Разрешите конфликты в командной строке, прежде чем продолжить.",
+  "pulls.merge.draft_title": "Этот запрос на слияние ещё в работе",
+  "pulls.merge.draft_description": "Запросы на слияние, которые ещё в работе, нельзя слить.",
+  "pulls.merge.command_line_hint": "Это также можно слить из командной строки.",
+  "pulls.merged.description": "Всё готово — ветку {branch} можно безопасно удалить.",
+  "pulls.closed.title": "Закрыт с неслитыми коммитами",
+  "pulls.closed.description": "Этот запрос на слияние закрыт, но в ветке {branch} есть неслитые коммиты."
+}

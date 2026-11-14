@@ -1,0 +1,41 @@
+{
+  "pulls.checks.title_success": "Pumasa ang lahat ng pagsusuri",
+  "pulls.checks.title_pending": "Hindi pa tapos ang ilang pagsusuri",
+  "pulls.checks.title_failure": "Hindi nagtagumpay ang ilang pagsusuri",
+  "pulls.checks.title_conflict": "Naghihintay ang mga pagsusuri na malutas ang mga salungatan",
+  "pulls.checks.count_failing": "{count} nabigo",
+  "pulls.checks.count_pending": "{count} nakabinbin",
+  "pulls.checks.count_skipped": "{count} nilaktawan",
+  "pulls.checks.count_successful": "{count} nagtagumpay",
+  "pulls.checks.list_separator": ", ",
+  "pulls.checks.summary": {
+    "one": "{list}",
+    "other": "{list}"
+  },
+  "pulls.checks.group_failing": {
+    "one": "{count} nabigong pagsusuri",
+    "other": "{count} nabigong pagsusuri"
+  },
+  "pulls.checks.group_pending": {
+    "one": "{count} nakabinbing pagsusuri",
+    "other": "{count} nakabinbing pagsusuri"
+  },
+  "pulls.checks.group_skipped": {
+    "one": "{count} nilaktawang pagsusuri",
+    "other": "{count} nilaktawang pagsusuri"
+  },
+  "pulls.checks.group_successful": {
+    "one": "{count} matagumpay na pagsusuri",
+    "other": "{count} matagumpay na pagsusuri"
+  },
+  "pulls.merge.clean_title": "Walang salungatan sa base na branch",
+  "pulls.merge.clean_description": "Maaaring gawin nang awtomatiko ang pagsali.",
+  "pulls.merge.conflict_title": "May mga salungatan ang branch na ito na kailangang lutasin",
+  "pulls.merge.conflict_description": "Lutasin ang mga salungatan gamit ang command line bago magpatuloy.",
+  "pulls.merge.draft_title": "Ginagawa pa ang hiling sa paghila na ito",
+  "pulls.merge.draft_description": "Hindi maisasali ang mga hiling sa paghila na ginagawa pa.",
+  "pulls.merge.command_line_hint": "Maaari mo rin itong isali gamit ang command line.",
+  "pulls.merged.description": "Handa na ang lahat — ligtas nang mabubura ang branch na {branch}.",
+  "pulls.closed.title": "Isinara nang may mga commit na hindi naisali",
+  "pulls.closed.description": "Sarado na ang hiling sa paghila na ito, pero may mga commit na hindi naisali ang branch na {branch}."
+}

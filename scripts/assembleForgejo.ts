@@ -3,6 +3,8 @@ import { createHash } from "node:crypto";
 import { cpSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
+import { buildPhraseTemplate, forgejoWordingTemplate, readPhrases } from "./phrases.ts";
+
 const root = process.cwd();
 const output = join(root, "dist", "forgejo");
 const templates = join(output, "templates");
@@ -28,6 +30,15 @@ const copyTemplates = (source: string, target: string): void => {
   }
 };
 copyTemplates(join(root, "components"), join(templates, "components"));
+
+// The template theme/phrase: Forgejo's wording in the templates pack, and GitHub's from the theme's phrases in the
+// optional add-on, which admins extract over the pack; see scripts/phrases.ts.
+mkdirSync(join(templates, "theme"), { recursive: true });
+writeFileSync(join(templates, "theme", "phrase.tmpl"), forgejoWordingTemplate);
+const githubWording = join(root, "dist", "github-wording", "templates", "theme");
+rmSync(join(root, "dist", "github-wording"), { recursive: true, force: true });
+mkdirSync(githubWording, { recursive: true });
+writeFileSync(join(githubWording, "phrase.tmpl"), buildPhraseTemplate(readPhrases(join(root, "locales"))));
 
 for (const directory of readdirSync(join(root, "components"))) {
   const source = join(root, "components", directory);

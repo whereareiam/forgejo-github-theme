@@ -1,0 +1,41 @@
+{
+  "pulls.checks.title_success": "Todas as verificações foram aprovadas",
+  "pulls.checks.title_pending": "Algumas verificações ainda não foram concluídas",
+  "pulls.checks.title_failure": "Algumas verificações não foram bem-sucedidas",
+  "pulls.checks.title_conflict": "Verificações aguardando a resolução dos conflitos",
+  "pulls.checks.count_failing": "{count} com falha",
+  "pulls.checks.count_pending": "{count} pendente(s)",
+  "pulls.checks.count_skipped": "{count} ignorada(s)",
+  "pulls.checks.count_successful": "{count} bem-sucedida(s)",
+  "pulls.checks.list_separator": ", ",
+  "pulls.checks.summary": {
+    "one": "{list}",
+    "other": "{list}"
+  },
+  "pulls.checks.group_failing": {
+    "one": "{count} verificação com falha",
+    "other": "{count} verificações com falha"
+  },
+  "pulls.checks.group_pending": {
+    "one": "{count} verificação pendente",
+    "other": "{count} verificações pendentes"
+  },
+  "pulls.checks.group_skipped": {
+    "one": "{count} verificação ignorada",
+    "other": "{count} verificações ignoradas"
+  },
+  "pulls.checks.group_successful": {
+    "one": "{count} verificação bem-sucedida",
+    "other": "{count} verificações bem-sucedidas"
+  },
+  "pulls.merge.clean_title": "Nenhum conflito com o branch base",
+  "pulls.merge.clean_description": "O merge pode ser aplicado automaticamente.",
+  "pulls.merge.conflict_title": "Este branch tem conflitos que precisam ser resolvidos",
+  "pulls.merge.conflict_description": "Resolva os conflitos pela linha de comando antes de continuar.",
+  "pulls.merge.draft_title": "Este pull request ainda é um trabalho em andamento",
+  "pulls.merge.draft_description": "Pull requests em andamento não podem receber merge.",
+  "pulls.merge.command_line_hint": "Você também pode aplicar o merge pela linha de comando.",
+  "pulls.merged.description": "Tudo pronto — o branch {branch} pode ser excluído com segurança.",
+  "pulls.closed.title": "Fechado com commits sem merge",
+  "pulls.closed.description": "Este pull request está fechado, mas o branch {branch} tem commits sem merge."
+}

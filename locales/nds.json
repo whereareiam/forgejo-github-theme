@@ -1,0 +1,41 @@
+{
+  "pulls.checks.title_success": "All Överprüfens sünd dörgahn",
+  "pulls.checks.title_pending": "Eenige Överprüfens sünd noch nich klaar",
+  "pulls.checks.title_failure": "Eenige Överprüfens weren nich mit Spood",
+  "pulls.checks.title_conflict": "Överprüfens töven up dat Lösen vun de Konflikten",
+  "pulls.checks.count_failing": "{count} fehlslagen",
+  "pulls.checks.count_pending": "{count} utstahnd",
+  "pulls.checks.count_skipped": "{count} översprungen",
+  "pulls.checks.count_successful": "{count} mit Spood",
+  "pulls.checks.list_separator": ", ",
+  "pulls.checks.summary": {
+    "one": "{list}",
+    "other": "{list}"
+  },
+  "pulls.checks.group_failing": {
+    "one": "{count} fehlslagen Överprüfen",
+    "other": "{count} fehlslagen Överprüfens"
+  },
+  "pulls.checks.group_pending": {
+    "one": "{count} utstahnd Överprüfen",
+    "other": "{count} utstahnd Överprüfens"
+  },
+  "pulls.checks.group_skipped": {
+    "one": "{count} översprungen Överprüfen",
+    "other": "{count} översprungen Överprüfens"
+  },
+  "pulls.checks.group_successful": {
+    "one": "{count} Överprüfen mit Spood",
+    "other": "{count} Överprüfens mit Spood"
+  },
+  "pulls.merge.clean_title": "Keen Konflikten mit de Grund-Twieg",
+  "pulls.merge.clean_description": "Dat Tosamenföhren kann automatisk passeren.",
+  "pulls.merge.conflict_title": "Deese Twieg hett Konflikten, wat lööst worden mutten",
+  "pulls.merge.conflict_description": "Löös de Konflikten över de Befehlsreeg, ehr du wiedermaakst.",
+  "pulls.merge.draft_title": "Deeser Haalvörslag is noch in de Maak",
+  "pulls.merge.draft_description": "Haalvörslagen in de Maak könen nich tosamenföhrt worden.",
+  "pulls.merge.command_line_hint": "Du kannst dat ok över de Befehlsreeg tosamenföhren.",
+  "pulls.merged.description": "All klaar – de Twieg {branch} kann nu ohn Sorg lösket worden.",
+  "pulls.closed.title": "Dichtmaakt mit nich tosamenföhrten Commits",
+  "pulls.closed.description": "Deeser Haalvörslag is dicht, man de Twieg {branch} hett nich tosamenföhrte Commits."
+}

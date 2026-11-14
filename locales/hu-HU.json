@@ -1,0 +1,41 @@
+{
+  "pulls.checks.title_success": "Minden ellenőrzés sikeres",
+  "pulls.checks.title_pending": "Néhány ellenőrzés még nem fejeződött be",
+  "pulls.checks.title_failure": "Néhány ellenőrzés nem volt sikeres",
+  "pulls.checks.title_conflict": "Az ellenőrzések az ütközések feloldására várnak",
+  "pulls.checks.count_failing": "{count} sikertelen",
+  "pulls.checks.count_pending": "{count} függőben",
+  "pulls.checks.count_skipped": "{count} kihagyva",
+  "pulls.checks.count_successful": "{count} sikeres",
+  "pulls.checks.list_separator": ", ",
+  "pulls.checks.summary": {
+    "one": "{list}",
+    "other": "{list}"
+  },
+  "pulls.checks.group_failing": {
+    "one": "{count} sikertelen ellenőrzés",
+    "other": "{count} sikertelen ellenőrzés"
+  },
+  "pulls.checks.group_pending": {
+    "one": "{count} függőben lévő ellenőrzés",
+    "other": "{count} függőben lévő ellenőrzés"
+  },
+  "pulls.checks.group_skipped": {
+    "one": "{count} kihagyott ellenőrzés",
+    "other": "{count} kihagyott ellenőrzés"
+  },
+  "pulls.checks.group_successful": {
+    "one": "{count} sikeres ellenőrzés",
+    "other": "{count} sikeres ellenőrzés"
+  },
+  "pulls.merge.clean_title": "Nincs ütközés az alapággal",
+  "pulls.merge.clean_description": "Az egyesítés automatikusan elvégezhető.",
+  "pulls.merge.conflict_title": "Ebben az ágban feloldandó ütközések vannak",
+  "pulls.merge.conflict_description": "Folytatás előtt oldja fel az ütközéseket a parancssorban.",
+  "pulls.merge.draft_title": "Ez az egyesítési kérés még folyamatban lévő munka",
+  "pulls.merge.draft_description": "A folyamatban lévő egyesítési kérések nem egyesíthetők.",
+  "pulls.merge.command_line_hint": "Ezt parancssorból is egyesítheti.",
+  "pulls.merged.description": "Minden kész – a(z) {branch} ág biztonságosan törölhető.",
+  "pulls.closed.title": "Lezárva egyesítetlen commitokkal",
+  "pulls.closed.description": "Ez az egyesítési kérés lezárult, de a(z) {branch} ágban egyesítetlen commitok vannak."
+}

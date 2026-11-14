@@ -1,0 +1,41 @@
+{
+  "pulls.checks.title_success": "Tous les contrôles ont réussi",
+  "pulls.checks.title_pending": "Certains contrôles ne sont pas encore terminés",
+  "pulls.checks.title_failure": "Certains contrôles n'ont pas réussi",
+  "pulls.checks.title_conflict": "Contrôles en attente de la résolution des conflits",
+  "pulls.checks.count_failing": "{count} en échec",
+  "pulls.checks.count_pending": "{count} en attente",
+  "pulls.checks.count_skipped": "{count} ignoré(s)",
+  "pulls.checks.count_successful": "{count} réussi(s)",
+  "pulls.checks.list_separator": ", ",
+  "pulls.checks.summary": {
+    "one": "{list}",
+    "other": "{list}"
+  },
+  "pulls.checks.group_failing": {
+    "one": "{count} contrôle en échec",
+    "other": "{count} contrôles en échec"
+  },
+  "pulls.checks.group_pending": {
+    "one": "{count} contrôle en attente",
+    "other": "{count} contrôles en attente"
+  },
+  "pulls.checks.group_skipped": {
+    "one": "{count} contrôle ignoré",
+    "other": "{count} contrôles ignorés"
+  },
+  "pulls.checks.group_successful": {
+    "one": "{count} contrôle réussi",
+    "other": "{count} contrôles réussis"
+  },
+  "pulls.merge.clean_title": "Aucun conflit avec la branche de base",
+  "pulls.merge.clean_description": "La fusion peut être effectuée automatiquement.",
+  "pulls.merge.conflict_title": "Cette branche contient des conflits à résoudre",
+  "pulls.merge.conflict_description": "Résolvez les conflits en ligne de commande avant de continuer.",
+  "pulls.merge.draft_title": "Cette demande d’ajout est encore en chantier",
+  "pulls.merge.draft_description": "Les demandes d’ajout en chantier ne peuvent pas être fusionnées.",
+  "pulls.merge.command_line_hint": "Vous pouvez aussi fusionner en ligne de commande.",
+  "pulls.merged.description": "Tout est prêt — la branche {branch} peut être supprimée sans risque.",
+  "pulls.closed.title": "Fermée avec des commits non fusionnés",
+  "pulls.closed.description": "Cette demande d’ajout est fermée, mais la branche {branch} contient des commits non fusionnés."
+}

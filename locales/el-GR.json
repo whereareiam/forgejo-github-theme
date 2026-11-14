@@ -1,0 +1,41 @@
+{
+  "pulls.checks.title_success": "Όλοι οι έλεγχοι πέρασαν",
+  "pulls.checks.title_pending": "Κάποιοι έλεγχοι δεν έχουν ολοκληρωθεί ακόμη",
+  "pulls.checks.title_failure": "Κάποιοι έλεγχοι δεν ήταν επιτυχείς",
+  "pulls.checks.title_conflict": "Οι έλεγχοι περιμένουν την επίλυση των συγκρούσεων",
+  "pulls.checks.count_failing": "{count} απέτυχαν",
+  "pulls.checks.count_pending": "{count} σε εκκρεμότητα",
+  "pulls.checks.count_skipped": "{count} παραλείφθηκαν",
+  "pulls.checks.count_successful": "{count} επιτυχείς",
+  "pulls.checks.list_separator": ", ",
+  "pulls.checks.summary": {
+    "one": "{list}",
+    "other": "{list}"
+  },
+  "pulls.checks.group_failing": {
+    "one": "{count} αποτυχημένος έλεγχος",
+    "other": "{count} αποτυχημένοι έλεγχοι"
+  },
+  "pulls.checks.group_pending": {
+    "one": "{count} έλεγχος σε εκκρεμότητα",
+    "other": "{count} έλεγχοι σε εκκρεμότητα"
+  },
+  "pulls.checks.group_skipped": {
+    "one": "{count} έλεγχος που παραλείφθηκε",
+    "other": "{count} έλεγχοι που παραλείφθηκαν"
+  },
+  "pulls.checks.group_successful": {
+    "one": "{count} επιτυχής έλεγχος",
+    "other": "{count} επιτυχείς έλεγχοι"
+  },
+  "pulls.merge.clean_title": "Καμία σύγκρουση με τον βασικό κλάδο",
+  "pulls.merge.clean_description": "Η συγχώνευση μπορεί να γίνει αυτόματα.",
+  "pulls.merge.conflict_title": "Αυτός ο κλάδος έχει συγκρούσεις που πρέπει να επιλυθούν",
+  "pulls.merge.conflict_description": "Επιλύστε τις συγκρούσεις από τη γραμμή εντολών πριν συνεχίσετε.",
+  "pulls.merge.draft_title": "Αυτό το pull request είναι ακόμη εργασία σε εξέλιξη",
+  "pulls.merge.draft_description": "Τα pull request σε εξέλιξη δεν μπορούν να συγχωνευθούν.",
+  "pulls.merge.command_line_hint": "Μπορείτε επίσης να το συγχωνεύσετε από τη γραμμή εντολών.",
+  "pulls.merged.description": "Όλα έτοιμα — ο κλάδος {branch} μπορεί να διαγραφεί με ασφάλεια.",
+  "pulls.closed.title": "Κλειστό με μη συγχωνευμένες υποβολές",
+  "pulls.closed.description": "Αυτό το pull request έχει κλείσει, αλλά ο κλάδος {branch} έχει μη συγχωνευμένες υποβολές."
+}

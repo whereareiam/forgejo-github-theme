@@ -1,0 +1,41 @@
+{
+  "pulls.checks.title_success": "Tutti i controlli sono stati superati",
+  "pulls.checks.title_pending": "Alcuni controlli non sono ancora terminati",
+  "pulls.checks.title_failure": "Alcuni controlli non sono andati a buon fine",
+  "pulls.checks.title_conflict": "Controlli in attesa della risoluzione dei conflitti",
+  "pulls.checks.count_failing": "{count} falliti",
+  "pulls.checks.count_pending": "{count} in sospeso",
+  "pulls.checks.count_skipped": "{count} saltati",
+  "pulls.checks.count_successful": "{count} riusciti",
+  "pulls.checks.list_separator": ", ",
+  "pulls.checks.summary": {
+    "one": "{list}",
+    "other": "{list}"
+  },
+  "pulls.checks.group_failing": {
+    "one": "{count} controllo fallito",
+    "other": "{count} controlli falliti"
+  },
+  "pulls.checks.group_pending": {
+    "one": "{count} controllo in sospeso",
+    "other": "{count} controlli in sospeso"
+  },
+  "pulls.checks.group_skipped": {
+    "one": "{count} controllo saltato",
+    "other": "{count} controlli saltati"
+  },
+  "pulls.checks.group_successful": {
+    "one": "{count} controllo riuscito",
+    "other": "{count} controlli riusciti"
+  },
+  "pulls.merge.clean_title": "Nessun conflitto con il ramo di base",
+  "pulls.merge.clean_description": "La fusione può essere eseguita automaticamente.",
+  "pulls.merge.conflict_title": "Questo ramo ha conflitti che devono essere risolti",
+  "pulls.merge.conflict_description": "Risolvi i conflitti dalla riga di comando prima di continuare.",
+  "pulls.merge.draft_title": "Questa richiesta di modifica è ancora un lavoro in corso",
+  "pulls.merge.draft_description": "Le richieste di modifica in corso non possono essere fuse.",
+  "pulls.merge.command_line_hint": "Puoi anche fonderla dalla riga di comando.",
+  "pulls.merged.description": "Tutto pronto: il ramo {branch} può essere eliminato in sicurezza.",
+  "pulls.closed.title": "Chiusa con commit non fusi",
+  "pulls.closed.description": "Questa richiesta di modifica è chiusa, ma il ramo {branch} ha commit non fusi."
+}

@@ -36,3 +36,6 @@ while IFS= read -r stylesheet; do
   cp "$stylesheet" "$target/"
 done < <(find dist/forgejo/public/assets/css -type f -name "*.css" ! -name "theme-*")
 tar -zcf dist/theme-github-templates.tar.gz -C "$template_stage" templates public
+
+# The optional GitHub wording replaces one template of the pack, so it extracts over it.
+tar -zcf dist/theme-github-wording.tar.gz -C dist/github-wording templates

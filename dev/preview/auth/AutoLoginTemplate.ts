@@ -1,4 +1,4 @@
-import { cpSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
+import { cpSync, existsSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
 import { dirname } from "node:path";
 
 import { AUTO_LOGIN } from "../config/constants.ts";
@@ -14,6 +14,9 @@ export class AutoLoginTemplate {
   public prepare(): void {
     rmSync(this.config.generatedTemplatesDirectory, { force: true, recursive: true });
     cpSync(this.config.themeTemplatesDirectory, this.config.generatedTemplatesDirectory, { recursive: true });
+    // Like an admin who installs the optional add-on, extracted over the templates pack.
+    if (this.config.githubWordingEnabled && existsSync(this.config.githubWordingTemplatesDirectory))
+      cpSync(this.config.githubWordingTemplatesDirectory, this.config.generatedTemplatesDirectory, { recursive: true });
     if (!this.config.autoLoginEnabled) return;
 
     mkdirSync(dirname(this.config.autoLoginTemplateFile), { recursive: true });

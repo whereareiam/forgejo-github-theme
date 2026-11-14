@@ -34,6 +34,7 @@ theme.config.ts, themes/, primer/, styles/*.ts      templates/, components/, sty
 | `src/`                               | The generator: palettes, CSS variables, Vite plugin    | nothing; it runs at build time                               | `vite.config.ts`                       |
 | `styles/` (`*.ts`)                   | Theme-wide overrides of Forgejo's markup               | every theme stylesheet                                       | the theme stylesheet                   |
 | `templates/`                         | Overrides of Forgejo templates, at Forgejo's paths     | `dist/forgejo/templates`                                     | Forgejo, in place of its own template  |
+| `locales/<lang>.json`                | The theme's own phrases, one file per language         | `dist/github-wording/templates/theme/phrase.tmpl`            | `{{template "theme/phrase" ...}}`      |
 | `components/<group>/<name>/`         | Reusable UI: template, stylesheet, script and tests    | `templates/components/`, `css/components/`, `js/components/` | `templates/base/component_assets.tmpl` |
 | `styles/pages/*.css`                 | Layout of one page or a family of pages                | `css/components/pages/`                                      | `templates/base/component_assets.tmpl` |
 | `public/*.css`, `public/assets/js/*` | Stylesheets and scripts that a template links itself   | `css/`, `js/`                                                | the template that needs it             |
@@ -169,6 +170,26 @@ markup it enhances, often by a `data-theme-*` attribute, and returns when the pa
 server-rendered markup that works without them: `components/repository/results/results.js` replaces the result list with
 the same GET route's response, and the form still submits without it. Script tests load the script into a `node:vm`
 context with a stubbed document.
+
+### Theme phrases
+
+Some of GitHub's wording has no Forgejo translation, such as "1 failing check" in the merge box. Forgejo reads a custom
+locale file instead of its own one, never on top of it, so adding keys to Forgejo's translations would replace them and
+any an admin customised. The theme keeps its phrases apart instead: `locales/<lang>.json` holds them for each language
+Forgejo enables by default, and the assembly compiles them, with Forgejo's plural rule for each language, into the
+template `theme/phrase` (`scripts/phrases.ts`). GitHub's wording is optional: the templates pack's `theme/phrase` prints
+only Forgejo's text, and the compiled one ships alone in `theme-github-wording.tar.gz` (`dist/github-wording`), which
+admins extract over the pack. The local preview applies it unless `FORGEJO_PREVIEW_GITHUB_WORDING=false`. A template
+asks for a phrase with Forgejo's own text as the fallback:
+
+```gotemplate
+{{template "theme/phrase" dict "Key" "pulls.checks.group_failing" "Count" 2 "Fallback" (ctx.Locale.Tr "repo.pulls.status_checks_failure")}}
+```
+
+Without the add-on, and with it for a reader whose language has no theme phrases, the fallback shows, so no English
+shows up in another language. A phrase is a string or one string per plural form; `{count}` and `{branch}` take the
+dict's `Count` and `Branch`. A test checks that every language has every English key, the plural forms its rule needs
+and the same placeholders.
 
 ### Asset versions
 

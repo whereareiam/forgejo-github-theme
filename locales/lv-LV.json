@@ -1,0 +1,46 @@
+{
+  "pulls.checks.title_success": "Visas pārbaudes ir izpildītas",
+  "pulls.checks.title_pending": "Dažas pārbaudes vēl nav pabeigtas",
+  "pulls.checks.title_failure": "Dažas pārbaudes neizdevās",
+  "pulls.checks.title_conflict": "Pārbaudes gaida konfliktu atrisināšanu",
+  "pulls.checks.count_failing": "neizdevās: {count}",
+  "pulls.checks.count_pending": "gaida: {count}",
+  "pulls.checks.count_skipped": "izlaistas: {count}",
+  "pulls.checks.count_successful": "izdevās: {count}",
+  "pulls.checks.list_separator": ", ",
+  "pulls.checks.summary": {
+    "zero": "{list}",
+    "one": "{list}",
+    "other": "{list}"
+  },
+  "pulls.checks.group_failing": {
+    "zero": "{count} neizdevušās pārbaudes",
+    "one": "{count} neizdevusies pārbaude",
+    "other": "{count} neizdevušās pārbaudes"
+  },
+  "pulls.checks.group_pending": {
+    "zero": "{count} gaidošas pārbaudes",
+    "one": "{count} gaidoša pārbaude",
+    "other": "{count} gaidošas pārbaudes"
+  },
+  "pulls.checks.group_skipped": {
+    "zero": "{count} izlaistas pārbaudes",
+    "one": "{count} izlaista pārbaude",
+    "other": "{count} izlaistas pārbaudes"
+  },
+  "pulls.checks.group_successful": {
+    "zero": "{count} izdevušās pārbaudes",
+    "one": "{count} izdevusies pārbaude",
+    "other": "{count} izdevušās pārbaudes"
+  },
+  "pulls.merge.clean_title": "Nav konfliktu ar bāzes zaru",
+  "pulls.merge.clean_description": "Apvienošanu var veikt automātiski.",
+  "pulls.merge.conflict_title": "Šajā zarā ir konflikti, kas jāatrisina",
+  "pulls.merge.conflict_description": "Pirms turpināt, atrisiniet konfliktus komandrindā.",
+  "pulls.merge.draft_title": "Šis izmaiņu pieprasījums vēl ir nepabeigts darbs",
+  "pulls.merge.draft_description": "Nepabeigtus izmaiņu pieprasījumus nevar apvienot.",
+  "pulls.merge.command_line_hint": "To var apvienot arī no komandrindas.",
+  "pulls.merged.description": "Viss gatavs — zaru {branch} var droši izdzēst.",
+  "pulls.closed.title": "Aizvērts ar neapvienotiem iesūtījumiem",
+  "pulls.closed.description": "Šis izmaiņu pieprasījums ir aizvērts, bet zarā {branch} ir neapvienoti iesūtījumi."
+}

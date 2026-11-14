@@ -1,0 +1,36 @@
+{
+  "pulls.checks.title_success": "すべてのチェックに合格しました",
+  "pulls.checks.title_pending": "一部のチェックがまだ完了していません",
+  "pulls.checks.title_failure": "一部のチェックが成功しませんでした",
+  "pulls.checks.title_conflict": "チェックはコンフリクトの解決を待っています",
+  "pulls.checks.count_failing": "{count} 件失敗",
+  "pulls.checks.count_pending": "{count} 件待機中",
+  "pulls.checks.count_skipped": "{count} 件スキップ",
+  "pulls.checks.count_successful": "{count} 件成功",
+  "pulls.checks.list_separator": "、",
+  "pulls.checks.summary": {
+    "other": "{list}"
+  },
+  "pulls.checks.group_failing": {
+    "other": "{count} 件の失敗したチェック"
+  },
+  "pulls.checks.group_pending": {
+    "other": "{count} 件の待機中のチェック"
+  },
+  "pulls.checks.group_skipped": {
+    "other": "{count} 件のスキップされたチェック"
+  },
+  "pulls.checks.group_successful": {
+    "other": "{count} 件の成功したチェック"
+  },
+  "pulls.merge.clean_title": "ベースブランチとのコンフリクトはありません",
+  "pulls.merge.clean_description": "自動的にマージできます。",
+  "pulls.merge.conflict_title": "このブランチには解決が必要なコンフリクトがあります",
+  "pulls.merge.conflict_description": "続行する前に、コマンドラインでコンフリクトを解決してください。",
+  "pulls.merge.draft_title": "このプルリクエストはまだ作業中です",
+  "pulls.merge.draft_description": "作業中のプルリクエストはマージできません。",
+  "pulls.merge.command_line_hint": "コマンドラインでマージすることもできます。",
+  "pulls.merged.description": "準備完了 — {branch} ブランチは安全に削除できます。",
+  "pulls.closed.title": "マージされていないコミットを残してクローズ",
+  "pulls.closed.description": "このプルリクエストはクローズされていますが、{branch} ブランチにはマージされていないコミットがあります。"
+}

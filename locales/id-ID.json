@@ -1,0 +1,36 @@
+{
+  "pulls.checks.title_success": "Semua pemeriksaan telah lulus",
+  "pulls.checks.title_pending": "Beberapa pemeriksaan belum selesai",
+  "pulls.checks.title_failure": "Beberapa pemeriksaan tidak berhasil",
+  "pulls.checks.title_conflict": "Pemeriksaan menunggu penyelesaian konflik",
+  "pulls.checks.count_failing": "{count} gagal",
+  "pulls.checks.count_pending": "{count} tertunda",
+  "pulls.checks.count_skipped": "{count} dilewati",
+  "pulls.checks.count_successful": "{count} berhasil",
+  "pulls.checks.list_separator": ", ",
+  "pulls.checks.summary": {
+    "other": "{list}"
+  },
+  "pulls.checks.group_failing": {
+    "other": "{count} pemeriksaan gagal"
+  },
+  "pulls.checks.group_pending": {
+    "other": "{count} pemeriksaan tertunda"
+  },
+  "pulls.checks.group_skipped": {
+    "other": "{count} pemeriksaan dilewati"
+  },
+  "pulls.checks.group_successful": {
+    "other": "{count} pemeriksaan berhasil"
+  },
+  "pulls.merge.clean_title": "Tidak ada konflik dengan cabang dasar",
+  "pulls.merge.clean_description": "Penggabungan dapat dilakukan secara otomatis.",
+  "pulls.merge.conflict_title": "Cabang ini memiliki konflik yang harus diselesaikan",
+  "pulls.merge.conflict_description": "Selesaikan konflik melalui baris perintah sebelum melanjutkan.",
+  "pulls.merge.draft_title": "Permintaan tarik ini masih dalam pengerjaan",
+  "pulls.merge.draft_description": "Permintaan tarik yang masih dalam pengerjaan tidak dapat digabung.",
+  "pulls.merge.command_line_hint": "Anda juga dapat menggabungkan ini melalui baris perintah.",
+  "pulls.merged.description": "Semua siap — cabang {branch} dapat dihapus dengan aman.",
+  "pulls.closed.title": "Ditutup dengan komit yang belum digabung",
+  "pulls.closed.description": "Permintaan tarik ini ditutup, tetapi cabang {branch} memiliki komit yang belum digabung."
+}

@@ -1,0 +1,41 @@
+{
+  "pulls.checks.title_success": "Kaikki tarkistukset läpäistiin",
+  "pulls.checks.title_pending": "Jotkin tarkistukset ovat vielä kesken",
+  "pulls.checks.title_failure": "Jotkin tarkistukset eivät onnistuneet",
+  "pulls.checks.title_conflict": "Tarkistukset odottavat ristiriitojen ratkaisemista",
+  "pulls.checks.count_failing": "{count} epäonnistunut",
+  "pulls.checks.count_pending": "{count} odottaa",
+  "pulls.checks.count_skipped": "{count} ohitettu",
+  "pulls.checks.count_successful": "{count} onnistunut",
+  "pulls.checks.list_separator": ", ",
+  "pulls.checks.summary": {
+    "one": "{list}",
+    "other": "{list}"
+  },
+  "pulls.checks.group_failing": {
+    "one": "{count} epäonnistunut tarkistus",
+    "other": "{count} epäonnistunutta tarkistusta"
+  },
+  "pulls.checks.group_pending": {
+    "one": "{count} odottava tarkistus",
+    "other": "{count} odottavaa tarkistusta"
+  },
+  "pulls.checks.group_skipped": {
+    "one": "{count} ohitettu tarkistus",
+    "other": "{count} ohitettua tarkistusta"
+  },
+  "pulls.checks.group_successful": {
+    "one": "{count} onnistunut tarkistus",
+    "other": "{count} onnistunutta tarkistusta"
+  },
+  "pulls.merge.clean_title": "Ei ristiriitoja perushaaran kanssa",
+  "pulls.merge.clean_description": "Yhdistäminen voidaan tehdä automaattisesti.",
+  "pulls.merge.conflict_title": "Tässä haarassa on ristiriitoja, jotka on ratkaistava",
+  "pulls.merge.conflict_description": "Ratkaise ristiriidat komentorivillä ennen jatkamista.",
+  "pulls.merge.draft_title": "Tämä vetopyyntö on vielä keskeneräinen",
+  "pulls.merge.draft_description": "Keskeneräisiä vetopyyntöjä ei voi yhdistää.",
+  "pulls.merge.command_line_hint": "Voit myös yhdistää tämän komentorivillä.",
+  "pulls.merged.description": "Kaikki valmista – haaran {branch} voi poistaa turvallisesti.",
+  "pulls.closed.title": "Suljettu yhdistämättömin kommitein",
+  "pulls.closed.description": "Tämä vetopyyntö on suljettu, mutta haarassa {branch} on yhdistämättömiä kommitteja."
+}
