@@ -3,7 +3,7 @@ for what the keys are. */}}
 <h4 class="ui top attached header">
 	{{ctx.Locale.Tr "settings.manage_gpg_keys"}}
 	<div class="ui right">
-		<button class="ui primary tiny show-panel toggle button" data-panel="#add-gpg-key-panel">{{ctx.Locale.Tr "settings.add_key"}}</button>
+		<button class="ui primary tiny show-panel toggle button" data-panel="#add-gpg-key-panel">{{template "theme/phrase" dict "Key" "settings.keys.new_gpg" "Fallback" (ctx.Locale.Tr "settings.add_key")}}</button>
 	</div>
 </h4>
 <div class="ui attached segment">

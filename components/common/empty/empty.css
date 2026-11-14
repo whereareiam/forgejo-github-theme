@@ -32,6 +32,11 @@
   line-height: 21px;
 }
 
+/* A sentence that only the wording add-on fills. */
+.theme-empty p:empty {
+  display: none;
+}
+
 @media (max-width: 767px) {
   .theme-empty {
     min-height: 180px;

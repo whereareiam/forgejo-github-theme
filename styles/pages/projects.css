@@ -293,9 +293,19 @@
   position: fixed;
   width: 240px;
 }
-.github-project-card-meta .theme-dropdown-separator {
+.github-project-card-meta .theme-dropdown-group {
+  color: var(--color-text-light-2);
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 18px;
+  padding: 8px 16px 4px;
+}
+/* Without the wording add-on the "Move to column" heading is empty and sets the columns apart as a rule. */
+.github-project-card-meta .theme-dropdown-group:empty {
   border-top: 1px solid var(--color-secondary);
   margin: 6px 0;
+  padding: 0;
 }
 .github-project-card-meta .theme-dropdown-action > span {
   min-width: 0;

@@ -24,7 +24,14 @@
       CSS.highlights.set("diff-search-current", new Highlight(...(results[current] ? [results[current].range] : [])));
     }
     navigation.hidden = !search.value;
-    count.textContent = results.length ? `${current + 1}/${results.length}` : count.dataset.empty;
+    // GitHub's "3 of 12" where the wording add-on words it, else the plain 3/12.
+    const position = String(current + 1);
+    const total = String(results.length);
+    count.textContent = results.length
+      ? count.dataset.format
+        ? count.dataset.format.replace("{current}", position).replace("{total}", total)
+        : `${position}/${total}`
+      : count.dataset.empty;
     if (!results[current]) return;
     const result = results[current];
     if (scroll) {

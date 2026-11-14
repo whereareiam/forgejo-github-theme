@@ -858,7 +858,7 @@ describe("Forgejo 15 native integration", () => {
     expect(profile).toContain("event.target.form.requestSubmit()");
     const menu = read("templates", "user", "settings", "avatar_menu.tmpl");
     expect(menu).toContain(
-      '<label class="theme-dropdown-action" for="new-avatar">{{ctx.Locale.Tr "settings.choose_new_avatar"}}</label>'
+      '<label class="theme-dropdown-action" for="new-avatar">{{template "theme/phrase" dict "Key" "settings.avatar.upload" "Fallback" (ctx.Locale.Tr "settings.choose_new_avatar")}}</label>'
     );
     expect(menu).toContain('form="avatar-gravatar-form"');
     expect(menu).toContain('ctx.Locale.Tr "settings.delete_current_avatar"');
@@ -1045,7 +1045,9 @@ describe("Forgejo 15 native integration", () => {
     const read = (...parts: string[]) =>
       fs.readFileSync(path.join(ROOT_DIR, "templates", "repo", "issue", ...parts), "utf-8");
     const field = read("view_content", "sidebar", "branch_selector_field.tmpl");
-    expect(field).toContain('<strong>{{ctx.Locale.Tr "discussion.sidebar.reference"}}</strong>');
+    expect(field).toContain(
+      '<strong>{{template "theme/phrase" dict "Key" "issues.sidebar.development" "Fallback" (ctx.Locale.Tr "discussion.sidebar.reference")}}</strong>'
+    );
     expect(field).toContain('<span class="text branch-name gt-ellipsis">');
     expect(field).not.toContain('<div class="divider"></div>');
     const form = read("new_form.tmpl");
@@ -1208,7 +1210,9 @@ describe("Forgejo 15 native integration", () => {
   it("lists forks in a box and shows GitHub's empty state without them", () => {
     const forks = fs.readFileSync(path.join(ROOT_DIR, "templates", "repo", "forks.tmpl"), "utf-8");
     expect(forks).toContain('<li class="theme-box-list-row theme-fork-row">');
-    expect(forks).toContain('{{ctx.Locale.TrPluralString 0 "fork.n_forks" "0"}}');
+    expect(forks).toContain(
+      '"Key" "repo.forks.empty_title" "Fallback" (ctx.Locale.TrPluralString 0 "fork.n_forks" "0")'
+    );
   });
 
   it("shows blame as GitHub's in the code view while keeping Forgejo's line and reblame hooks", () => {

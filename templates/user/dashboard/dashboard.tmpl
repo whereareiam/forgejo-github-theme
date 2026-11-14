@@ -18,7 +18,7 @@ organization's pages in the sidebar. */}}
 					<h2 id="github-home-repositories-title">
 						{{- /* The form only gives the options the dropdown's form styles; choosing one never submits it, and ignore-dirty keeps Forgejo from warning about unsaved changes. */}}
 						{{- if .Orgs}}<form class="ui form ignore-dirty github-home-list-form">{{template "components/common/dropdown/dropdown" dict "Kind" "single" "Quiet" true "Label" (ctx.Locale.Tr "home.my_repos") "UpdateLabel" true "Class" "github-home-list-menu" "Items" "user/dashboard/home_lists" "Data" (dict "Context" ctx)}}</form>
-						{{- else}}{{ctx.Locale.Tr "home.my_repos"}}{{end -}}
+						{{- else}}{{template "theme/phrase" dict "Key" "home.top_repositories" "Fallback" (ctx.Locale.Tr "home.my_repos")}}{{end -}}
 					</h2>
 					<button type="button" class="theme-icon-button" data-theme-repo-picker-toggle aria-controls="github-home-repositories" aria-label="{{ctx.Locale.Tr "search.repo_kind"}}" data-tooltip-content="{{ctx.Locale.Tr "search.repo_kind"}}">{{svg "octicon-search" 16}}</button>
 				</div>
@@ -67,9 +67,14 @@ organization's pages in the sidebar. */}}
 		<div class="theme-list-heading">
 			<div class="theme-list-title">
 				<button type="button" class="theme-icon-button" data-theme-sidebar-toggle data-theme-sidebar-expand aria-expanded="false" aria-label="{{ctx.Locale.Tr "toggle_menu"}}">{{svg "octicon-sidebar-expand" 16}}</button>
-				{{/* GitHub greets the visitor by time of day; Forgejo has no strings for a greeting, so Home is headed by the
-				account name. */}}
-				<h1>{{$user.DisplayName}}</h1>
+				{{/* GitHub greets the visitor by time of day. The greetings come from the theme's phrases; the script picks one by
+				the visitor's clock as the heading is parsed, before the first paint. Without the wording add-on Home is headed
+				by the account name. */}}
+				<h1 data-theme-greeting
+					data-morning="{{template "theme/phrase" dict "Key" "home.greeting.morning" "Name" $user.Name "Fallback" ""}}"
+					data-afternoon="{{template "theme/phrase" dict "Key" "home.greeting.afternoon" "Name" $user.Name "Fallback" ""}}"
+					data-evening="{{template "theme/phrase" dict "Key" "home.greeting.evening" "Name" $user.Name "Fallback" ""}}">{{$user.DisplayName}}</h1>
+				<script src="{{AssetUrlPrefix}}/js/dashboard-greeting.js"></script>
 			</div>
 		</div>
 		<div class="github-home-columns">

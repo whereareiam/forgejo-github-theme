@@ -1,10 +1,10 @@
 {{/* GitHub-style repository overview sidebar adapted to Forgejo 15 data and endpoints. */}}
-<aside class="repo-home-sidebar-top" aria-label="{{ctx.Locale.Tr "packages.common.repository"}}">
+<aside class="repo-home-sidebar-top" aria-label="{{template "theme/phrase" dict "Key" "repo.about.title" "Fallback" (ctx.Locale.Tr "packages.common.repository")}}">
 	<div id="repo-topics" class="repo-about-block flex-relaxed-list">
 		<div class="repo-home-sidebar-header repo-about-heading">
-			<span>{{ctx.Locale.Tr "packages.common.repository"}}</span>
+			<span>{{template "theme/phrase" dict "Key" "repo.about.title" "Fallback" (ctx.Locale.Tr "packages.common.repository")}}</span>
 			{{if and .Permission.IsAdmin (not .Repository.IsArchived)}}
-				<button id="github_theme_repo_about_manage" type="button" class="btn repo-about-settings" aria-label="{{ctx.Locale.Tr "edit"}}" data-tooltip-content="{{ctx.Locale.Tr "edit"}}">
+				<button id="github_theme_repo_about_manage" type="button" class="btn repo-about-settings" aria-label="{{template "theme/phrase" dict "Key" "repo.about.edit" "Fallback" (ctx.Locale.Tr "edit")}}" data-tooltip-content="{{template "theme/phrase" dict "Key" "repo.about.edit" "Fallback" (ctx.Locale.Tr "edit")}}">
 					{{svg "octicon-gear" 16}}
 				</button>
 			{{end}}
@@ -14,7 +14,7 @@
 		{{if $description}}
 			<div class="repo-description tw-break-anywhere"><span class="description">{{$description | RenderCodeBlock}}</span></div>
 		{{else}}
-			<div class="repo-description no-description tw-break-anywhere">{{ctx.Locale.Tr "repo.no_desc"}}</div>
+			<div class="repo-description no-description tw-break-anywhere">{{template "theme/phrase" dict "Key" "repo.about.no_description" "Fallback" (ctx.Locale.Tr "repo.no_desc")}}</div>
 		{{end}}
 
 		{{if .Repository.Website}}
@@ -71,7 +71,7 @@
 				{{if .Repository.IsTemplate}}<input type="hidden" name="template" value="true">{{end}}
 
 				<div class="repo-about-modal-header">
-					<strong id="repo-about-modal-title">{{ctx.Locale.Tr "packages.common.repository"}}</strong>
+					<strong id="repo-about-modal-title">{{template "theme/phrase" dict "Key" "repo.about.edit_title" "Fallback" (ctx.Locale.Tr "packages.common.repository")}}</strong>
 					<button type="button" class="btn interact-fg repo-about-modal-close" aria-label="{{ctx.Locale.Tr "modal.close"}}">
 						{{svg "octicon-x" 16}}
 					</button>
@@ -99,7 +99,7 @@
 
 				<div class="repo-about-modal-footer">
 					<button type="button" class="ui basic button" id="github_theme_repo_about_cancel">{{ctx.Locale.Tr "cancel"}}</button>
-					<button type="button" class="ui primary button" id="github_theme_repo_about_save" data-link="{{.RepoLink}}/topics">{{ctx.Locale.Tr "repo.settings.update_settings"}}</button>
+					<button type="button" class="ui primary button" id="github_theme_repo_about_save" data-link="{{.RepoLink}}/topics">{{template "theme/phrase" dict "Key" "repo.about.save" "Fallback" (ctx.Locale.Tr "repo.settings.update_settings")}}</button>
 				</div>
 			</form>
 		</div>

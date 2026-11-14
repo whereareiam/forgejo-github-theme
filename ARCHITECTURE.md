@@ -187,9 +187,11 @@ asks for a phrase with Forgejo's own text as the fallback:
 ```
 
 Without the add-on, and with it for a reader whose language has no theme phrases, the fallback shows, so no English
-shows up in another language. A phrase is a string or one string per plural form; `{count}` and `{branch}` take the
-dict's `Count` and `Branch`. A test checks that every language has every English key, the plural forms its rule needs
-and the same placeholders.
+shows up in another language. A phrase is a string or one string per plural form; a placeholder takes the dict's value
+of the same name, so `{count}` is `Count` and `{branch}` is `Branch`; a value passed as HTML stays HTML. A text that has
+no Forgejo translation at all keeps the theme's English as the fallback, as before; everywhere else the fallback is
+Forgejo's own text or the word-free design it replaced. A test checks that every language has every English key, the
+plural forms its rule needs and the same placeholders.
 
 ### Asset versions
 

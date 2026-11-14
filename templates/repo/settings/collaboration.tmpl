@@ -14,7 +14,7 @@
 					<strong>{{if .Repository.IsPrivate}}{{ctx.Locale.Tr "repo.desc.private"}}{{else}}{{ctx.Locale.Tr "org.settings.visibility.public"}}{{end}}</strong>
 					<span>{{if .Repository.IsPrivate}}{{ctx.Locale.Tr "repo.visibility_description"}}{{else}}{{ctx.Locale.Tr "user.visibility.public.tooltip"}}{{end}}</span>
 				</div>
-				<a class="ui button" href="{{.RepoLink}}/settings#repo-private">{{ctx.Locale.Tr "repo.visibility"}}</a>
+				<a class="ui button" href="{{.RepoLink}}/settings#repo-private">{{template "theme/phrase" dict "Key" "repo.collaboration.manage_visibility" "Fallback" (ctx.Locale.Tr "repo.visibility")}}</a>
 			</div>
 
 			<div class="theme-settings-panel">
@@ -23,7 +23,7 @@
 			</div>
 
 			<div class="theme-settings-subsection">
-				<h3>{{ctx.Locale.Tr "repo.settings.collaboration"}}</h3>
+				<h3>{{template "theme/phrase" dict "Key" "repo.collaboration.manage_access" "Fallback" (ctx.Locale.Tr "repo.settings.collaboration")}}</h3>
 				{{if .Collaborators}}<button type="button" class="ui primary button show-modal" data-modal="#add-collaborator-modal">{{ctx.Locale.Tr "repo.settings.add_collaborator"}}</button>{{end}}
 			</div>
 			{{if .Collaborators}}
@@ -112,7 +112,7 @@
 			{{else}}
 				<div class="theme-settings-blankslate theme-settings-blankslate-spacious">
 					{{svg "octicon-people" 32}}
-					<h3>{{ctx.Locale.Tr "org.teams.none_access"}}</h3>
+					<h3>{{template "theme/phrase" dict "Key" "repo.collaboration.no_teams" "Fallback" (ctx.Locale.Tr "org.teams.none_access")}}</h3>
 					{{if $allowedToChangeTeams}}<button type="button" class="ui button show-modal" data-modal="#add-team-modal">{{ctx.Locale.Tr "repo.settings.add_team"}}</button>{{end}}
 				</div>
 			{{end}}

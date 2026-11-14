@@ -1,9 +1,10 @@
 <details class="theme-menu diff-view-settings">
 	<summary class="theme-icon-button theme-icon-button-outlined" aria-label="{{ctx.Locale.Tr "repo.diff.options_button"}}">{{svg "octicon-gear" 16}}</summary>
 	<div class="theme-menu-popover">
-		<a href="?style=unified&amp;whitespace={{.WhitespaceBehavior}}&amp;show-outdated={{.ShowOutdatedComments}}"><input type="radio" tabindex="-1" {{if not .IsSplitStyle}}checked{{end}}>{{ctx.Locale.Tr "repo.diff.show_unified_view"}}</a>
-		<a href="?style=split&amp;whitespace={{.WhitespaceBehavior}}&amp;show-outdated={{.ShowOutdatedComments}}"><input type="radio" tabindex="-1" {{if .IsSplitStyle}}checked{{end}}>{{ctx.Locale.Tr "repo.diff.show_split_view"}}</a>
-		{{if .PageIsPullFiles}}<hr><label><input type="checkbox" id="diff-minimize-comments">Minimize comments</label>{{end}}
+		<span class="theme-menu-title">{{template "theme/phrase" dict "Key" "diff.settings.layout" "Fallback" ""}}</span>
+		<a href="?style=unified&amp;whitespace={{.WhitespaceBehavior}}&amp;show-outdated={{.ShowOutdatedComments}}"><input type="radio" tabindex="-1" {{if not .IsSplitStyle}}checked{{end}}>{{template "theme/phrase" dict "Key" "diff.settings.unified" "Fallback" (ctx.Locale.Tr "repo.diff.show_unified_view")}}</a>
+		<a href="?style=split&amp;whitespace={{.WhitespaceBehavior}}&amp;show-outdated={{.ShowOutdatedComments}}"><input type="radio" tabindex="-1" {{if .IsSplitStyle}}checked{{end}}>{{template "theme/phrase" dict "Key" "diff.settings.split" "Fallback" (ctx.Locale.Tr "repo.diff.show_split_view")}}</a>
+		{{if .PageIsPullFiles}}<hr><label><input type="checkbox" id="diff-minimize-comments">{{template "theme/phrase" dict "Key" "diff.settings.minimize_comments" "Fallback" "Minimize comments"}}</label>{{end}}
 		<hr>
 		{{/* GitHub has one "Hide whitespace" toggle; Forgejo's four whitespace modes stay a choice. */}}
 		{{$style := "unified"}}{{if .IsSplitStyle}}{{$style = "split"}}{{end}}
@@ -13,7 +14,7 @@
 		<a href="?style={{$style}}&amp;whitespace=ignore-change&amp;show-outdated={{.ShowOutdatedComments}}"><input type="radio" tabindex="-1" {{if eq .WhitespaceBehavior "ignore-change"}}checked{{end}}>{{ctx.Locale.Tr "repo.diff.whitespace_ignore_amount_changes"}}</a>
 		<a href="?style={{$style}}&amp;whitespace=ignore-eol&amp;show-outdated={{.ShowOutdatedComments}}"><input type="radio" tabindex="-1" {{if eq .WhitespaceBehavior "ignore-eol"}}checked{{end}}>{{ctx.Locale.Tr "repo.diff.whitespace_ignore_at_eol"}}</a>
 		<hr>
-		<label><input type="checkbox" id="diff-compact-lines" checked>Compact line height</label>
+		<label><input type="checkbox" id="diff-compact-lines" checked>{{template "theme/phrase" dict "Key" "diff.settings.compact_lines" "Fallback" "Compact line height"}}</label>
 		<hr>
 		<button type="button" id="expand-files-btn">{{ctx.Locale.Tr "repo.pulls.expand_files"}}</button>
 		<button type="button" id="collapse-files-btn">{{ctx.Locale.Tr "repo.pulls.collapse_files"}}</button>

@@ -125,11 +125,12 @@ export const pluralForms = (language: string): PluralForm[] => pluralRules[langu
 export const selectPluralForm = (language: string, n: number): PluralForm =>
   pluralRules[languageRules[language]].select(n);
 
-/** What the template puts in place of a phrase's placeholders: the dict's Count and Branch. */
-const placeholders: Record<string, string> = {
-  count: "{{.Count}}",
-  branch: "{{.Branch}}",
-};
+/**
+ * What the template puts in place of a placeholder: {name} reads the dict's Name, so {count} is .Count and {branch} is
+ * .Branch. Values passed as HTML, such as a branch link, stay HTML.
+ */
+const placeholders: Record<string, string> = {};
+const fieldOf = (name: string): string => `{{.${name[0].toUpperCase()}${name.slice(1)}}}`;
 
 /**
  * {list}: the non-zero counts of a pull request's checks, each worded by its phrase with its own number, joined by the
@@ -177,9 +178,7 @@ const renderText = (text: string, values: Record<string, string> = placeholders)
     .map(part => {
       const name = /^\{(\w+)\}$/.exec(part)?.[1];
       if (name === undefined) return `{{${JSON.stringify(part)}}}`;
-      const value = values[name];
-      if (!value) throw new Error(`Unknown placeholder {${name}} in "${text}"`);
-      return value;
+      return values[name] ?? fieldOf(name);
     })
     .join("");
 
@@ -203,8 +202,8 @@ export const forgejoWordingTemplate =
   "{{/* Forgejo's wording. Extract theme-github-wording.tar.gz over the templates for GitHub's. */}}{{.Fallback -}}\n";
 
 /**
- * Builds the template `theme/phrase`. It takes a dict with Key, Fallback and, as the phrase needs them, Count (which
- * also picks the plural form), Branch, and for {list} Failing, Pending, Skipped and Successful. It prints the reader's
+ * Builds the template `theme/phrase`. It takes a dict with Key, Fallback and what the phrase's placeholders name, such
+ * as Count (which also picks the plural form) or Branch, and for {list} Failing, Pending, Skipped and Successful. It prints the reader's
  * phrase or, for a language without theme phrases, the fallback.
  */
 export const buildPhraseTemplate = (phrases: Record<string, Phrases>): string => {

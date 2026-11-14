@@ -99,6 +99,12 @@
   margin-bottom: 8px;
 }
 
+/* A group the wording add-on does not name is a rule, as the separator. */
+.theme-settings-group:empty {
+  margin-bottom: 8px;
+  padding: 0;
+}
+
 /* The page side is anchored on the page structure, which outranks the theme's older boxed style for settings
    content. */
 .page-content > .ui.container.flex-container.theme-settings > .flex-container-main {

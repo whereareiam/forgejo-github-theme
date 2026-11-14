@@ -116,7 +116,7 @@ most recent versions. */}}
 				</section>
 				{{end}}
 				<section>
-					<h2>{{ctx.Locale.Tr "packages.versions"}} <span class="theme-counter">{{.TotalVersionCount}}</span></h2>
+					<h2>{{template "theme/phrase" dict "Key" "packages.recent_versions" "Fallback" (ctx.Locale.Tr "packages.versions")}} <span class="theme-counter">{{.TotalVersionCount}}</span></h2>
 					<ul class="theme-package-versions">
 						{{range .LatestVersions}}
 						<li{{if eq .ID $.PackageDescriptor.Version.ID}} aria-current="true"{{end}}>

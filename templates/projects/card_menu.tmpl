@@ -1,11 +1,12 @@
-{{/* GitHub's card menu. Forgejo has no strings for the move actions: moving to the top or bottom stays in English, and
-	the columns follow a separator instead of a "Move to column" heading. The board script moves the card and saves the
-	new order through Forgejo's column move endpoint. */}}
+{{/* GitHub's card menu. Forgejo has no strings for the move actions: they come from the theme's phrases, and without
+	the wording add-on moving to the top or bottom stays in English and the columns follow a separator instead of a
+	"Move to column" heading. The board script moves the card and saves the new order through Forgejo's column move
+	endpoint. */}}
 <button type="button" class="theme-dropdown-action" data-clipboard-text="{{.Link}}" data-clipboard-text-type="url">{{svg "octicon-copy" 16}}{{ctx.Locale.Tr "copy_url"}}</button>
 {{if .CanWrite}}
-	<button type="button" class="theme-dropdown-action" data-project-card-move="top">{{svg "octicon-move-to-top" 16}}Move to top</button>
-	<button type="button" class="theme-dropdown-action" data-project-card-move="bottom">{{svg "octicon-move-to-bottom" 16}}Move to bottom</button>
-	<div class="theme-dropdown-separator" role="separator"></div>
+	<button type="button" class="theme-dropdown-action" data-project-card-move="top">{{svg "octicon-move-to-top" 16}}{{template "theme/phrase" dict "Key" "projects.card.move_top" "Fallback" "Move to top"}}</button>
+	<button type="button" class="theme-dropdown-action" data-project-card-move="bottom">{{svg "octicon-move-to-bottom" 16}}{{template "theme/phrase" dict "Key" "projects.card.move_bottom" "Fallback" "Move to bottom"}}</button>
+	<span class="theme-dropdown-group">{{template "theme/phrase" dict "Key" "projects.card.move_to_column" "Fallback" ""}}</span>
 	{{range .Columns}}
 		<button type="button" class="theme-dropdown-action" data-project-card-move="{{.ID}}">{{svg "octicon-arrow-right" 16}}<span>{{.Title}}</span></button>
 	{{end}}

@@ -11,8 +11,8 @@
 		</nav>
 		{{if and .PageIsReleaseList (not $single) .Releases}}
 			<hr>
-			<nav aria-label="{{ctx.Locale.Tr "repo.release.releases"}}" data-theme-sidebar-outline>
-				<h2 class="theme-sidebar-label">{{svg "octicon-list-unordered" 16}}{{ctx.Locale.Tr "repo.release.releases"}}</h2>
+			<nav aria-label="{{template "theme/phrase" dict "Key" "releases.on_this_page" "Fallback" (ctx.Locale.Tr "repo.release.releases")}}" data-theme-sidebar-outline>
+				<h2 class="theme-sidebar-label">{{svg "octicon-list-unordered" 16}}{{template "theme/phrase" dict "Key" "releases.on_this_page" "Fallback" (ctx.Locale.Tr "repo.release.releases")}}</h2>
 				{{range .Releases}}<a href="#release-{{.Release.ID}}"><span>{{.Release.Title}}</span></a>{{end}}
 			</nav>
 		{{end}}

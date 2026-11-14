@@ -111,7 +111,7 @@
 			</form>
 
 			<aside class="theme-settings-aside" aria-labelledby="avatar-settings">
-			<h3 id="avatar-settings">{{ctx.Locale.Tr "settings.avatar"}}</h3>
+			<h3 id="avatar-settings">{{template "theme/phrase" dict "Key" "settings.profile_picture" "Fallback" (ctx.Locale.Tr "settings.avatar")}}</h3>
 			{{/* GitHub's picture with Edit on its lower left. Upload a photo opens the file chooser and choosing a file
 			sends the form at once, as the custom picture; the form itself stays hidden. With Gravatar allowed, the menu
 			can switch back to it. */}}

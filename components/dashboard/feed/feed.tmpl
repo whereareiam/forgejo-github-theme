@@ -125,7 +125,7 @@ Forgejo's own, so every event type and language reads as on the profile. Data is
 	</ol>
 	{{with $data.Page.Paginater}}
 		{{if .HasNext}}
-			<a class="theme-feed-older" href="{{$link}}?page={{.Next}}{{if $params}}&{{$params}}{{end}}" data-theme-feed-older>{{ctx.Locale.Tr "repo.diff.show_more"}}</a>
+			<a class="theme-feed-older" href="{{$link}}?page={{.Next}}{{if $params}}&{{$params}}{{end}}" data-theme-feed-older>{{template "theme/phrase" dict "Key" "home.feed.load_older" "Fallback" (ctx.Locale.Tr "repo.diff.show_more")}}</a>
 		{{end}}
 	{{end}}
 	<template data-theme-feed-text data-error="{{ctx.Locale.Tr "error.network_error"}}"></template>

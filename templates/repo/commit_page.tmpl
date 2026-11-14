@@ -6,9 +6,9 @@
 			<div class="commit-title-row">
 				<h1 class="commit-title" id="commit-title">{{ctx.Locale.Tr "repo.commit"}} <code>{{printf "%.7s" .CommitID}}</code></h1>
 				<div class="commit-page-actions">
-					<a class="ui button" href="{{.SourcePath}}" aria-label="{{ctx.Locale.Tr "repo.diff.browse_source"}}">
+					<a class="ui button" href="{{.SourcePath}}" aria-label="{{template "theme/phrase" dict "Key" "commits.browse_files" "Fallback" (ctx.Locale.Tr "repo.diff.browse_source")}}">
 						{{svg "octicon-file-code" 16}}
-						<span>{{ctx.Locale.Tr "repo.diff.browse_source"}}</span>
+						<span>{{template "theme/phrase" dict "Key" "commits.browse_files" "Fallback" (ctx.Locale.Tr "repo.diff.browse_source")}}</span>
 					</a>
 					{{if and ($.Permission.CanWrite $.UnitTypeCode) (not $.Repository.IsArchived) (not .IsDeleted)}}{{- /* */ -}}
 						<div class="ui dropdown button commit-operations" data-tooltip-content="{{ctx.Locale.Tr "repo.commit.operations"}}">
@@ -238,7 +238,7 @@
 				{{end}}
 				{{if not .DiffNotAvailable}}
 					<div class="commit-stats-row">
-						<div class="commit-files-changed" data-tooltip-content="{{ctx.Locale.Tr "repo.pulls.tab_files"}}">{{svg "octicon-file-diff" 16}}{{.DiffMetadata.TotalNumberOfFiles}}</div>
+						<div class="commit-files-changed" data-tooltip-content="{{ctx.Locale.Tr "repo.pulls.tab_files"}}">{{template "theme/phrase" dict "Key" "commits.files_changed" "Count" .DiffMetadata.TotalNumberOfFiles "Fallback" (HTMLFormat "%s%d" (svg "octicon-file-diff" 16) .DiffMetadata.TotalNumberOfFiles)}}</div>
 						{{template "repo/diff/change_summary" dict "Addition" .Diff.TotalAddition "Deletion" .Diff.TotalDeletion}}
 					</div>
 				{{end}}
