@@ -237,9 +237,10 @@
       attributeFilter: ["data-folded", "data-tree-filtered"],
     });
   updateFoldLabels();
-  // GitHub loads the next files while scrolling. Press Forgejo's hidden "Show more" link before the end comes into
-  // view; its handler swaps in a new #diff-incomplete for each page. A loader still there after a while failed or is
-  // slow, so it is watched again and retried once in view.
+  // GitHub loads the next files while scrolling. Press Forgejo's hidden "Show more" link while the end is still four
+  // screens away, so a page is usually loaded before it is reached; its handler swaps in a new #diff-incomplete for
+  // each page. A link that is busy with another load is tried again shortly; a loader still there after a while failed
+  // or is slow, so it is watched again and retried once in view.
   const content = document.getElementById("diff-content-container");
   if (content && "IntersectionObserver" in window) {
     const loader = new IntersectionObserver(
@@ -247,11 +248,13 @@
         for (const entry of entries) {
           if (!entry.isIntersecting) continue;
           loader.unobserve(entry.target);
-          entry.target.querySelector("#diff-show-more-files:not(.disabled)")?.click();
-          setTimeout(() => entry.target.isConnected && loader.observe(entry.target), 5000);
+          const link = entry.target.querySelector("#diff-show-more-files");
+          const busy = link?.classList.contains("disabled");
+          if (link && !busy) link.click();
+          setTimeout(() => entry.target.isConnected && loader.observe(entry.target), busy ? 300 : 5000);
         }
       },
-      { rootMargin: "0px 0px 2000px 0px" }
+      { rootMargin: "0px 0px 400% 0px" }
     );
     const watchIncomplete = () => {
       const incomplete = document.getElementById("diff-incomplete");

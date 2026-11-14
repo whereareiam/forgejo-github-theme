@@ -33,7 +33,10 @@
 				selectedItem: '',
 			};
 			diffFileInfo = Object.assign(diffFileInfo, diffData);
-			diffFileInfo.files.push(...diffDataFiles);
+			// Every page lists all files of the diff, so a loaded page adds only the files not listed yet. Pushing the
+			// whole list again grew the tree's data with each page and slowed every later page down.
+			const knownFiles = new Set(diffFileInfo.files.map(file => file.NameHash));
+			diffFileInfo.files.push(...diffDataFiles.filter(file => !knownFiles.has(file.NameHash)));
 			window.config.pageData.diffFileInfo = diffFileInfo;
 		</script>
 		{{end}}
@@ -199,16 +202,20 @@
 				{{end}}
 
 			</div>
-			{{if .DiffMetadata.HasNext}}
-				{{/* GitHub loads the next files while scrolling: diff-view.js presses the hidden "Show more" link. */}}
-				<div class="diff-loading-more" id="diff-incomplete" role="status">
-					<span class="diff-loading-spinner" aria-hidden="true"></span>
-					<span>{{ctx.Locale.Tr "loading"}}</span>
-					<a class="tw-hidden" id="diff-show-more-files" data-href="?{{range $i, $f := .FileSelection}}{{if $i}}&{{end}}files={{$f}}{{end}}&diff-page={{len (printf "a%*s" .DiffMetadata.CurrentPage "")}}&file-only=true">{{ctx.Locale.Tr "repo.diff.show_more"}}</a>
-				</div>
-			{{end}}
 		{{end}}
 		</div>
+		{{/* Forgejo removes #diff-incomplete and appends the next one to #diff-content-container after every page. The
+		element before a removed or added last child is restyled with everything inside it, so without this empty
+		element every page restyled all files loaded so far, and each page loaded slower than the one before. */}}
+		<div class="diff-content-end" hidden></div>
+		{{if and (not .DiffNotAvailable) .DiffMetadata.HasNext}}
+			{{/* GitHub loads the next files while scrolling: diff-view.js presses the hidden "Show more" link. */}}
+			<div class="diff-loading-more" id="diff-incomplete" role="status">
+				<span class="diff-loading-spinner" aria-hidden="true"></span>
+				<span>{{ctx.Locale.Tr "loading"}}</span>
+				<a class="tw-hidden" id="diff-show-more-files" data-href="?{{range $i, $f := .FileSelection}}{{if $i}}&{{end}}files={{$f}}{{end}}&diff-page={{len (printf "a%*s" .DiffMetadata.CurrentPage "")}}&file-only=true">{{ctx.Locale.Tr "repo.diff.show_more"}}</a>
+			</div>
+		{{end}}
 			</div>
 		</div>
         <script src="{{AssetUrlPrefix}}/js/diff-view.js" defer></script>
