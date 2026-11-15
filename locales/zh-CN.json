@@ -135,5 +135,19 @@
   "issues.list.merged": "由 {author} 创建，于 {time} 合并",
   "commits.committed": "于 {time} 提交",
   "commits.authored": "于 {time} 编写",
-  "commits.on_date": "{date} 的提交"
+  "commits.on_date": "{date} 的提交",
+  "milestones.due_by": "截止于 {date}",
+  "milestones.issues_closed": {
+    "other": "已关闭 {closed}/{count} 个工单"
+  },
+  "milestones.complete": "{percent} 已完成",
+  "milestones.open": "开启",
+  "milestones.closed": "已关闭",
+  "repo.home.branches": {
+    "other": "{number} 个分支"
+  },
+  "repo.home.tags": {
+    "other": "{number} 个标签"
+  },
+  "tags.notes": "说明"
 }

@@ -145,5 +145,22 @@
   "issues.list.merged": "de {author} estis kunfandita {time}",
   "commits.committed": "enmetis {time}",
   "commits.authored": "aŭtoris {time}",
-  "commits.on_date": "Enmetoj je {date}"
+  "commits.on_date": "Enmetoj je {date}",
+  "milestones.due_by": "Limdato {date}",
+  "milestones.issues_closed": {
+    "one": "{closed}/{count} problemo fermita",
+    "other": "{closed}/{count} problemoj fermitaj"
+  },
+  "milestones.complete": "{percent} kompleta",
+  "milestones.open": "malfermitaj",
+  "milestones.closed": "fermitaj",
+  "repo.home.branches": {
+    "one": "{number} branĉo",
+    "other": "{number} branĉoj"
+  },
+  "repo.home.tags": {
+    "one": "{number} etikedo",
+    "other": "{number} etikedoj"
+  },
+  "tags.notes": "Notoj"
 }

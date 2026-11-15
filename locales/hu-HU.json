@@ -145,5 +145,22 @@
   "issues.list.merged": "{author} által, egyesítve {time}",
   "commits.committed": "commitolta {time}",
   "commits.authored": "írta {time}",
-  "commits.on_date": "Commitok: {date}"
+  "commits.on_date": "Commitok: {date}",
+  "milestones.due_by": "Határidő: {date}",
+  "milestones.issues_closed": {
+    "one": "{closed}/{count} hibajegy lezárva",
+    "other": "{closed}/{count} hibajegy lezárva"
+  },
+  "milestones.complete": "{percent} kész",
+  "milestones.open": "nyitott",
+  "milestones.closed": "lezárt",
+  "repo.home.branches": {
+    "one": "{number} ág",
+    "other": "{number} ág"
+  },
+  "repo.home.tags": {
+    "one": "{number} címke",
+    "other": "{number} címke"
+  },
+  "tags.notes": "Jegyzetek"
 }

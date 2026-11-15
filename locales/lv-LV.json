@@ -155,5 +155,25 @@
   "issues.list.merged": "no {author} tika apvienots {time}",
   "commits.committed": "iesūtīja {time}",
   "commits.authored": "izveidoja {time}",
-  "commits.on_date": "Iesūtījumi {date}"
+  "commits.on_date": "Iesūtījumi {date}",
+  "milestones.due_by": "Termiņš {date}",
+  "milestones.issues_closed": {
+    "zero": "{closed}/{count} problēmas aizvērtas",
+    "one": "{closed}/{count} problēma aizvērta",
+    "other": "{closed}/{count} problēmas aizvērtas"
+  },
+  "milestones.complete": "{percent} pabeigts",
+  "milestones.open": "atvērtas",
+  "milestones.closed": "aizvērtas",
+  "repo.home.branches": {
+    "zero": "{number} zari",
+    "one": "{number} zars",
+    "other": "{number} zari"
+  },
+  "repo.home.tags": {
+    "zero": "{number} tagi",
+    "one": "{number} tags",
+    "other": "{number} tagi"
+  },
+  "tags.notes": "Piezīmes"
 }

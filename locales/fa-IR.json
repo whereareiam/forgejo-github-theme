@@ -145,5 +145,22 @@
   "issues.list.merged": "توسط {author} {time} ادغام شد",
   "commits.committed": "{time} کامیت کرد",
   "commits.authored": "{time} نوشت",
-  "commits.on_date": "کامیت‌های {date}"
+  "commits.on_date": "کامیت‌های {date}",
+  "milestones.due_by": "سررسید {date}",
+  "milestones.issues_closed": {
+    "one": "{closed}/{count} مسئله بسته شده",
+    "other": "{closed}/{count} مسئله بسته شده"
+  },
+  "milestones.complete": "{percent} تکمیل",
+  "milestones.open": "باز",
+  "milestones.closed": "بسته",
+  "repo.home.branches": {
+    "one": "{number} شاخه",
+    "other": "{number} شاخه"
+  },
+  "repo.home.tags": {
+    "one": "{number} برچسب",
+    "other": "{number} برچسب"
+  },
+  "tags.notes": "یادداشت‌ها"
 }

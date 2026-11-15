@@ -145,5 +145,22 @@
   "issues.list.merged": "door {author} werd {time} samengevoegd",
   "commits.committed": "committe {time}",
   "commits.authored": "schreef {time}",
-  "commits.on_date": "Commits op {date}"
+  "commits.on_date": "Commits op {date}",
+  "milestones.due_by": "Vervalt op {date}",
+  "milestones.issues_closed": {
+    "one": "{closed}/{count} issue gesloten",
+    "other": "{closed}/{count} issues gesloten"
+  },
+  "milestones.complete": "{percent} voltooid",
+  "milestones.open": "open",
+  "milestones.closed": "gesloten",
+  "repo.home.branches": {
+    "one": "{number} branch",
+    "other": "{number} branches"
+  },
+  "repo.home.tags": {
+    "one": "{number} tag",
+    "other": "{number} tags"
+  },
+  "tags.notes": "Notities"
 }

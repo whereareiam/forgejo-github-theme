@@ -135,5 +135,19 @@
   "issues.list.merged": "{author} 님이 작성, {time} 병합됨",
   "commits.committed": "{time} 커밋했습니다",
   "commits.authored": "{time} 작성했습니다",
-  "commits.on_date": "{date}의 커밋"
+  "commits.on_date": "{date}의 커밋",
+  "milestones.due_by": "기한 {date}",
+  "milestones.issues_closed": {
+    "other": "이슈 {closed}/{count}개 닫힘"
+  },
+  "milestones.complete": "{percent} 완료",
+  "milestones.open": "열림",
+  "milestones.closed": "닫힘",
+  "repo.home.branches": {
+    "other": "브랜치 {number}개"
+  },
+  "repo.home.tags": {
+    "other": "태그 {number}개"
+  },
+  "tags.notes": "노트"
 }

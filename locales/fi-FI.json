@@ -145,5 +145,22 @@
   "issues.list.merged": "käyttäjältä {author} yhdistettiin {time}",
   "commits.committed": "kommitoi {time}",
   "commits.authored": "kirjoitti {time}",
-  "commits.on_date": "Kommitit {date}"
+  "commits.on_date": "Kommitit {date}",
+  "milestones.due_by": "Erääntyy {date}",
+  "milestones.issues_closed": {
+    "one": "{closed}/{count} ongelma suljettu",
+    "other": "{closed}/{count} ongelmaa suljettu"
+  },
+  "milestones.complete": "{percent} valmis",
+  "milestones.open": "avoinna",
+  "milestones.closed": "suljettu",
+  "repo.home.branches": {
+    "one": "{number} haara",
+    "other": "{number} haaraa"
+  },
+  "repo.home.tags": {
+    "one": "{number} tagi",
+    "other": "{number} tagia"
+  },
+  "tags.notes": "Muistiinpanot"
 }

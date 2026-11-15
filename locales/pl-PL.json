@@ -155,5 +155,25 @@
   "issues.list.merged": "przez {author}, scalony {time}",
   "commits.committed": "zatwierdził(a) {time}",
   "commits.authored": "utworzył(a) {time}",
-  "commits.on_date": "Commity z {date}"
+  "commits.on_date": "Commity z {date}",
+  "milestones.due_by": "Termin {date}",
+  "milestones.issues_closed": {
+    "one": "{closed}/{count} zgłoszenie zamknięte",
+    "few": "{closed}/{count} zgłoszenia zamknięte",
+    "many": "{closed}/{count} zgłoszeń zamkniętych"
+  },
+  "milestones.complete": "{percent} ukończono",
+  "milestones.open": "otwarte",
+  "milestones.closed": "zamknięte",
+  "repo.home.branches": {
+    "one": "{number} gałąź",
+    "few": "{number} gałęzie",
+    "many": "{number} gałęzi"
+  },
+  "repo.home.tags": {
+    "one": "{number} tag",
+    "few": "{number} tagi",
+    "many": "{number} tagów"
+  },
+  "tags.notes": "Notatki"
 }

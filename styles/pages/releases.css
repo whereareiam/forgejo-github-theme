@@ -715,6 +715,18 @@
 .github-tags-list {
   background: var(--color-box-body);
 }
+/* GitHub heads the box with the tag icon and "Tags". */
+.github-tags-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  padding: 16px;
+  border-bottom: 1px solid var(--color-light-border);
+  background: var(--color-box-header);
+  font-size: 14px;
+  font-weight: 600;
+}
 .github-tag-row {
   border-bottom: 1px solid var(--color-light-border);
   min-height: 90px;

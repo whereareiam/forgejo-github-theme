@@ -145,5 +145,22 @@
   "issues.list.merged": "vun {author} wurr {time} tosamenföhrt",
   "commits.committed": "hett {time} committet",
   "commits.authored": "hett {time} schreven",
-  "commits.on_date": "Commits an'n {date}"
+  "commits.on_date": "Commits an'n {date}",
+  "milestones.due_by": "Fällig an'n {date}",
+  "milestones.issues_closed": {
+    "one": "{closed}/{count} Gefall dicht",
+    "other": "{closed}/{count} Gefallen dicht"
+  },
+  "milestones.complete": "{percent} fertig",
+  "milestones.open": "open",
+  "milestones.closed": "dicht",
+  "repo.home.branches": {
+    "one": "{number} Twieg",
+    "other": "{number} Twiegen"
+  },
+  "repo.home.tags": {
+    "one": "{number} Mark",
+    "other": "{number} Marken"
+  },
+  "tags.notes": "Notizen"
 }

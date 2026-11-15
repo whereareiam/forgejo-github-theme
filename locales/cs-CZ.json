@@ -155,5 +155,25 @@
   "issues.list.merged": "od {author}, sloučeno {time}",
   "commits.committed": "odeslal(a) {time}",
   "commits.authored": "vytvořil(a) {time}",
-  "commits.on_date": "Revize z {date}"
+  "commits.on_date": "Revize z {date}",
+  "milestones.due_by": "Termín {date}",
+  "milestones.issues_closed": {
+    "one": "{closed}/{count} uzavřený úkol",
+    "few": "{closed}/{count} uzavřené úkoly",
+    "other": "{closed}/{count} uzavřených úkolů"
+  },
+  "milestones.complete": "{percent} dokončeno",
+  "milestones.open": "otevřených",
+  "milestones.closed": "uzavřených",
+  "repo.home.branches": {
+    "one": "{number} větev",
+    "few": "{number} větve",
+    "other": "{number} větví"
+  },
+  "repo.home.tags": {
+    "one": "{number} značka",
+    "few": "{number} značky",
+    "other": "{number} značek"
+  },
+  "tags.notes": "Poznámky"
 }

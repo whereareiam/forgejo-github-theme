@@ -145,5 +145,22 @@
   "issues.list.merged": "af {author} blev flettet {time}",
   "commits.committed": "committede {time}",
   "commits.authored": "forfattede {time}",
-  "commits.on_date": "Commits den {date}"
+  "commits.on_date": "Commits den {date}",
+  "milestones.due_by": "Forfalder {date}",
+  "milestones.issues_closed": {
+    "one": "{closed}/{count} problem lukket",
+    "other": "{closed}/{count} problemer lukket"
+  },
+  "milestones.complete": "{percent} færdig",
+  "milestones.open": "åbne",
+  "milestones.closed": "lukkede",
+  "repo.home.branches": {
+    "one": "{number} gren",
+    "other": "{number} grene"
+  },
+  "repo.home.tags": {
+    "one": "{number} tag",
+    "other": "{number} tags"
+  },
+  "tags.notes": "Noter"
 }

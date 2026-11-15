@@ -155,5 +155,25 @@
   "issues.list.merged": "від {author}, злито {time}",
   "commits.committed": "закомітив(ла) {time}",
   "commits.authored": "створив(ла) {time}",
-  "commits.on_date": "Коміти за {date}"
+  "commits.on_date": "Коміти за {date}",
+  "milestones.due_by": "Термін {date}",
+  "milestones.issues_closed": {
+    "one": "{closed}/{count} задачу закрито",
+    "few": "{closed}/{count} задачі закрито",
+    "many": "{closed}/{count} задач закрито"
+  },
+  "milestones.complete": "{percent} виконано",
+  "milestones.open": "відкрито",
+  "milestones.closed": "закрито",
+  "repo.home.branches": {
+    "one": "{number} гілка",
+    "few": "{number} гілки",
+    "many": "{number} гілок"
+  },
+  "repo.home.tags": {
+    "one": "{number} тег",
+    "few": "{number} теги",
+    "many": "{number} тегів"
+  },
+  "tags.notes": "Нотатки"
 }

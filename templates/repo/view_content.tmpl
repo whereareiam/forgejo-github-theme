@@ -17,11 +17,11 @@
 		<div class="repository-summary">
 			<a class="item muted" href="{{.RepoLink}}/branches">
 				{{svg "octicon-git-branch"}}
-				{{ctx.Locale.TrPluralString .BranchesCount "counters.n_branches" (printf "<b>%s</b>" (ctx.Locale.PrettyNumber .BranchesCount) | TrustHTML)}}
+				{{$branchCount := printf "<b>%s</b>" (ctx.Locale.PrettyNumber .BranchesCount) | TrustHTML}}{{template "theme/phrase" dict "Key" "repo.home.branches" "Count" .BranchesCount "Number" $branchCount "Fallback" (ctx.Locale.TrPluralString .BranchesCount "counters.n_branches" $branchCount)}}
 			</a>
 			<a class="item muted" href="{{.RepoLink}}/tags">
 				{{svg "octicon-tag"}}
-				{{ctx.Locale.TrPluralString .NumTags "counters.n_tags" (printf "<b>%s</b>" (ctx.Locale.PrettyNumber .NumTags) | TrustHTML)}}
+				{{$tagCount := printf "<b>%s</b>" (ctx.Locale.PrettyNumber .NumTags) | TrustHTML}}{{template "theme/phrase" dict "Key" "repo.home.tags" "Count" .NumTags "Number" $tagCount "Fallback" (ctx.Locale.TrPluralString .NumTags "counters.n_tags" $tagCount)}}
 			</a>
 		</div>
 		{{end}}

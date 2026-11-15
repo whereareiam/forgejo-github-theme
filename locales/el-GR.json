@@ -145,5 +145,22 @@
   "issues.list.merged": "από {author} συγχωνεύτηκε {time}",
   "commits.committed": "υπέβαλε {time}",
   "commits.authored": "συνέταξε {time}",
-  "commits.on_date": "Υποβολές στις {date}"
+  "commits.on_date": "Υποβολές στις {date}",
+  "milestones.due_by": "Προθεσμία {date}",
+  "milestones.issues_closed": {
+    "one": "{closed}/{count} ζήτημα κλειστό",
+    "other": "{closed}/{count} ζητήματα κλειστά"
+  },
+  "milestones.complete": "{percent} ολοκληρώθηκε",
+  "milestones.open": "ανοιχτά",
+  "milestones.closed": "κλειστά",
+  "repo.home.branches": {
+    "one": "{number} κλάδος",
+    "other": "{number} κλάδοι"
+  },
+  "repo.home.tags": {
+    "one": "{number} ετικέτα",
+    "other": "{number} ετικέτες"
+  },
+  "tags.notes": "Σημειώσεις"
 }
