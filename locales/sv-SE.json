@@ -139,5 +139,11 @@
   "home.feed.load_older": "Läs in äldre aktivitet",
   "issues.filter.all_states": "Alla tillstånd",
   "projects.create_issue_in": "Skapa ärende i kodförråd",
-  "projects.open_in_new_tab": "Öppna i ny flik"
+  "projects.open_in_new_tab": "Öppna i ny flik",
+  "issues.list.opened": "{author} öppnade {time}",
+  "issues.list.closed": "av {author} stängdes {time}",
+  "issues.list.merged": "av {author} slogs samman {time}",
+  "commits.committed": "committade {time}",
+  "commits.authored": "skrev {time}",
+  "commits.on_date": "Commits den {date}"
 }

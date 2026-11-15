@@ -129,5 +129,11 @@
   "home.feed.load_older": "載入較早的動態",
   "issues.filter.all_states": "所有狀態",
   "projects.create_issue_in": "在儲存庫建立問題",
-  "projects.open_in_new_tab": "在新分頁開啟"
+  "projects.open_in_new_tab": "在新分頁開啟",
+  "issues.list.opened": "{author} 於 {time} 建立",
+  "issues.list.closed": "由 {author} 建立，於 {time} 關閉",
+  "issues.list.merged": "由 {author} 建立，於 {time} 合併",
+  "commits.committed": "於 {time} 提交",
+  "commits.authored": "於 {time} 撰寫",
+  "commits.on_date": "{date} 的提交"
 }

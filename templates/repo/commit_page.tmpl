@@ -128,7 +128,10 @@
 				{{else}}
 					<strong>{{.Commit.Author.Name}}</strong>
 				{{end}}
-				<span>{{DateUtils.TimeSince .Commit.Author.When}}</span>
+				{{/* GitHub: "user committed 2 weeks ago", or "authored" when someone else committed it. */}}
+				{{$authoredAt := DateUtils.TimeSince .Commit.Author.When}}
+				{{$timeKey := "commits.committed"}}{{if or (ne .Commit.Committer.Name .Commit.Author.Name) (ne .Commit.Committer.Email .Commit.Author.Email)}}{{$timeKey = "commits.authored"}}{{end}}
+				<span>{{template "theme/phrase" dict "Key" $timeKey "Time" $authoredAt "Fallback" $authoredAt}}</span>
 				{{if or (ne .Commit.Committer.Name .Commit.Author.Name) (ne .Commit.Committer.Email .Commit.Author.Email)}}
 					<span class="commit-attribution-separator">·</span>
 					<span>{{ctx.Locale.Tr "repo.diff.committed_by"}}</span>
@@ -138,7 +141,8 @@
 						<strong>{{.Commit.Committer.Name}}</strong>
 					{{end}}
 				{{end}}
-				{{template "repo/commit_statuses" dict "Status" .CommitStatus "Statuses" .CommitStatuses}}
+				{{if .CommitStatuses}}<span class="commit-attribution-separator">·</span>{{end}}
+				{{template "repo/commit_statuses" dict "Status" .CommitStatus "Statuses" .CommitStatuses "Count" true}}
 				{{if and .Commit.Signature .Verification.Verified}}
 					<span class="commit-attribution-separator">·</span>
 					<span class="commit-verification" data-tooltip-content="{{.Verification.Reason}}">

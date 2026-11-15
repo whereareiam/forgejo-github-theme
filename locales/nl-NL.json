@@ -139,5 +139,11 @@
   "home.feed.load_older": "Oudere activiteit laden",
   "issues.filter.all_states": "Alle statussen",
   "projects.create_issue_in": "Issue aanmaken in repository",
-  "projects.open_in_new_tab": "Openen in nieuw tabblad"
+  "projects.open_in_new_tab": "Openen in nieuw tabblad",
+  "issues.list.opened": "{author} opende {time}",
+  "issues.list.closed": "door {author} werd {time} gesloten",
+  "issues.list.merged": "door {author} werd {time} samengevoegd",
+  "commits.committed": "committe {time}",
+  "commits.authored": "schreef {time}",
+  "commits.on_date": "Commits op {date}"
 }

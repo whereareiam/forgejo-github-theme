@@ -139,5 +139,11 @@
   "home.feed.load_older": "Φόρτωση παλαιότερης δραστηριότητας",
   "issues.filter.all_states": "Όλες οι καταστάσεις",
   "projects.create_issue_in": "Δημιουργία ζητήματος σε αποθετήριο",
-  "projects.open_in_new_tab": "Άνοιγμα σε νέα καρτέλα"
+  "projects.open_in_new_tab": "Άνοιγμα σε νέα καρτέλα",
+  "issues.list.opened": "{author} άνοιξε {time}",
+  "issues.list.closed": "από {author} έκλεισε {time}",
+  "issues.list.merged": "από {author} συγχωνεύτηκε {time}",
+  "commits.committed": "υπέβαλε {time}",
+  "commits.authored": "συνέταξε {time}",
+  "commits.on_date": "Υποβολές στις {date}"
 }

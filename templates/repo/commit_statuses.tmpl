@@ -1,4 +1,11 @@
+{{/* With Count, GitHub's tally of passed checks follows the icon, as in "2/2". */}}
 {{if .Statuses}}
+	{{$count := ""}}
+	{{if .Count}}
+		{{$passed := 0}}
+		{{range .Statuses}}{{if or (eq .State "success") (eq .State "skipped")}}{{$passed = Eval $passed "+" 1}}{{end}}{{end}}
+		{{$count = HTMLFormat `<span class="commit-status-count">%d<span class="commit-status-count-slash">/</span>%d</span>` $passed (len .Statuses)}}
+	{{end}}
 	{{if and (eq (len .Statuses) 1) .Status.TargetURL}}
 		{{$label := ""}}
 		{{if .StatusLabel}}
@@ -6,11 +13,11 @@
 			{{if eq .Status.State "pending"}}{{$label = ctx.Locale.Tr "repo.pulls.status_checking"}}{{else if eq .Status.State "success"}}{{$label = ctx.Locale.Tr "repo.pulls.status_checks_success"}}{{else if eq .Status.State "warning"}}{{$label = ctx.Locale.Tr "repo.pulls.status_checks_warning"}}{{else if eq .Status.State "failure"}}{{$label = ctx.Locale.Tr "repo.pulls.status_checks_failure"}}{{else if eq .Status.State "error"}}{{$label = ctx.Locale.Tr "repo.pulls.status_checks_error"}}{{end}}
 		{{end}}
 		<a class="tw-align-middle {{.AdditionalClasses}} tw-no-underline" data-tippy="commit-statuses" href="{{.Status.TargetURL}}"{{if $label}} aria-label="{{$label}}"{{end}}>
-			{{template "repo/commit_status" .Status}}
+			{{template "repo/commit_status" .Status}}{{$count}}
 		</a>
 	{{else}}
 		<span class="tw-align-middle {{.AdditionalClasses}}" data-tippy="commit-statuses" tabindex="0">
-			{{template "repo/commit_status" .Status}}
+			{{template "repo/commit_status" .Status}}{{$count}}
 		</span>
 	{{end}}
 	<div class="tippy-target">

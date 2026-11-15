@@ -139,5 +139,11 @@
   "home.feed.load_older": "I-load ang mas lumang aktibidad",
   "issues.filter.all_states": "Lahat ng estado",
   "projects.create_issue_in": "Gumawa ng isyu sa repository",
-  "projects.open_in_new_tab": "Buksan sa bagong tab"
+  "projects.open_in_new_tab": "Buksan sa bagong tab",
+  "issues.list.opened": "Binuksan ni {author} {time}",
+  "issues.list.closed": "ni {author} ay isinara {time}",
+  "issues.list.merged": "ni {author} ay isinali {time}",
+  "commits.committed": "nag-commit {time}",
+  "commits.authored": "isinulat {time}",
+  "commits.on_date": "Mga commit noong {date}"
 }

@@ -14,11 +14,6 @@
 				<div class="flex-item-header">
 					<div class="flex-item-title">
 						<a class="tw-no-underline issue-title" href="{{if .Link}}{{.Link}}{{else}}{{$.Link}}/{{.Index}}{{end}}">{{RenderRefIssueTitle $.Context .Title}}</a>
-						{{if .IsPull}}
-							{{if (index $.CommitStatuses .PullRequest.ID)}}
-								{{template "repo/commit_statuses" dict "Status" (index $.CommitLastStatus .PullRequest.ID) "Statuses" (index $.CommitStatuses .PullRequest.ID)}}
-							{{end}}
-						{{end}}
 						<span class="labels-list tw-ml-1">
 							{{range .Labels}}
 								<a href="?q={{$.Keyword}}&type={{$.ViewType}}&state={{$.State}}&labels={{.ID}}{{if ne $.listType "milestone"}}&milestone={{$.MilestoneID}}{{end}}&assignee={{$.AssigneeID}}&poster={{$.PosterID}}{{if $.ShowArchivedLabels}}&archived=true{{end}}" rel="nofollow">{{template "components/repository/label/label" .}}</a>
@@ -62,14 +57,27 @@
 							{{- end -}}
 						</a>
 						{{$timeStr := DateUtils.TimeSince .GetLastEventTimestamp}}
+						{{$forgejoEvent := ""}}{{$author := ""}}
 						{{if .OriginalAuthor}}
-							{{ctx.Locale.Tr .GetLastEventLabelFake $timeStr .OriginalAuthor}}
+							{{$forgejoEvent = ctx.Locale.Tr .GetLastEventLabelFake $timeStr .OriginalAuthor}}
+							{{$author = HTMLFormat `<span class="author">%s</span>` .OriginalAuthor}}
 						{{else if gt .Poster.ID 0}}
-							{{ctx.Locale.Tr .GetLastEventLabel $timeStr .Poster.HomeLink .Poster.GetDisplayName}}
+							{{$forgejoEvent = ctx.Locale.Tr .GetLastEventLabel $timeStr .Poster.HomeLink .Poster.GetDisplayName}}
+							{{$author = HTMLFormat `<a class="author" href="%s">%s%s</a>` .Poster.HomeLink (ctx.AvatarUtils.Avatar .Poster 16) .Poster.GetDisplayName}}
 						{{else}}
-							{{ctx.Locale.Tr .GetLastEventLabelFake $timeStr .Poster.GetDisplayName}}
+							{{$forgejoEvent = ctx.Locale.Tr .GetLastEventLabelFake $timeStr .Poster.GetDisplayName}}
+							{{$author = HTMLFormat `<span class="author">%s</span>` .Poster.GetDisplayName}}
 						{{end}}
+						{{/* GitHub: "#8 · [avatar] user opened yesterday", "#5 · by user was closed 2 weeks ago". */}}
+						{{$eventKey := "issues.list.opened"}}
+						{{if and .IsPull .PullRequest.HasMerged}}{{$eventKey = "issues.list.merged"}}{{else if .IsClosed}}{{$eventKey = "issues.list.closed"}}{{end}}
+						<span class="issue-meta-event">{{template "theme/phrase" dict "Key" $eventKey "Author" $author "Time" $timeStr "Fallback" $forgejoEvent}}</span>
 					</span>
+					{{if .IsPull}}
+						{{if (index $.CommitStatuses .PullRequest.ID)}}
+							<span class="issue-meta-checks">{{template "repo/commit_statuses" dict "Status" (index $.CommitLastStatus .PullRequest.ID) "Statuses" (index $.CommitStatuses .PullRequest.ID) "Count" true}}</span>
+						{{end}}
+					{{end}}
 					{{if .IsPull}}
 						{{svg "gitea-double-chevron-right" 12}}
 						<div class="flex-text-inline issue-meta-branch">

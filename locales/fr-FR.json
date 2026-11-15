@@ -139,5 +139,11 @@
   "home.feed.load_older": "Charger l’activité plus ancienne",
   "issues.filter.all_states": "Tous les états",
   "projects.create_issue_in": "Créer un ticket dans le dépôt",
-  "projects.open_in_new_tab": "Ouvrir dans un nouvel onglet"
+  "projects.open_in_new_tab": "Ouvrir dans un nouvel onglet",
+  "issues.list.opened": "{author} a ouvert {time}",
+  "issues.list.closed": "par {author} a été fermée {time}",
+  "issues.list.merged": "par {author} a été fusionnée {time}",
+  "commits.committed": "a validé {time}",
+  "commits.authored": "a rédigé {time}",
+  "commits.on_date": "Révisions du {date}"
 }

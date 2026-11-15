@@ -139,5 +139,11 @@
   "home.feed.load_older": "Régebbi tevékenység betöltése",
   "issues.filter.all_states": "Minden állapot",
   "projects.create_issue_in": "Hibajegy létrehozása a tárolóban",
-  "projects.open_in_new_tab": "Megnyitás új lapon"
+  "projects.open_in_new_tab": "Megnyitás új lapon",
+  "issues.list.opened": "{author} megnyitotta {time}",
+  "issues.list.closed": "{author} által, lezárva {time}",
+  "issues.list.merged": "{author} által, egyesítve {time}",
+  "commits.committed": "commitolta {time}",
+  "commits.authored": "írta {time}",
+  "commits.on_date": "Commitok: {date}"
 }

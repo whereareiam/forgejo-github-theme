@@ -139,5 +139,11 @@
   "home.feed.load_older": "بارگذاری فعالیت‌های قدیمی‌تر",
   "issues.filter.all_states": "همه وضعیت‌ها",
   "projects.create_issue_in": "ایجاد مسئله در مخزن",
-  "projects.open_in_new_tab": "باز کردن در زبانه جدید"
+  "projects.open_in_new_tab": "باز کردن در زبانه جدید",
+  "issues.list.opened": "{author} {time} باز کرد",
+  "issues.list.closed": "توسط {author} {time} بسته شد",
+  "issues.list.merged": "توسط {author} {time} ادغام شد",
+  "commits.committed": "{time} کامیت کرد",
+  "commits.authored": "{time} نوشت",
+  "commits.on_date": "کامیت‌های {date}"
 }

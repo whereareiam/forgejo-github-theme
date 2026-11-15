@@ -139,5 +139,11 @@
   "home.feed.load_older": "Daha eski etkinlikleri yükle",
   "issues.filter.all_states": "Tüm durumlar",
   "projects.create_issue_in": "Depoda konu oluştur",
-  "projects.open_in_new_tab": "Yeni sekmede aç"
+  "projects.open_in_new_tab": "Yeni sekmede aç",
+  "issues.list.opened": "{author} {time} açtı",
+  "issues.list.closed": "{author} tarafından, {time} kapatıldı",
+  "issues.list.merged": "{author} tarafından, {time} birleştirildi",
+  "commits.committed": "{time} işledi",
+  "commits.authored": "{time} yazdı",
+  "commits.on_date": "{date} tarihli işlemeler"
 }

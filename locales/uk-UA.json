@@ -149,5 +149,11 @@
   "home.feed.load_older": "Завантажити давнішу активність",
   "issues.filter.all_states": "Усі стани",
   "projects.create_issue_in": "Створити задачу в репозиторії",
-  "projects.open_in_new_tab": "Відкрити в новій вкладці"
+  "projects.open_in_new_tab": "Відкрити в новій вкладці",
+  "issues.list.opened": "{author} відкрив(ла) {time}",
+  "issues.list.closed": "від {author}, закрито {time}",
+  "issues.list.merged": "від {author}, злито {time}",
+  "commits.committed": "закомітив(ла) {time}",
+  "commits.authored": "створив(ла) {time}",
+  "commits.on_date": "Коміти за {date}"
 }

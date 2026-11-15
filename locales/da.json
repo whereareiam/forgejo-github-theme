@@ -139,5 +139,11 @@
   "home.feed.load_older": "Indlæs ældre aktivitet",
   "issues.filter.all_states": "Alle tilstande",
   "projects.create_issue_in": "Opret problem i depot",
-  "projects.open_in_new_tab": "Åbn i ny fane"
+  "projects.open_in_new_tab": "Åbn i ny fane",
+  "issues.list.opened": "{author} oprettede {time}",
+  "issues.list.closed": "af {author} blev lukket {time}",
+  "issues.list.merged": "af {author} blev flettet {time}",
+  "commits.committed": "committede {time}",
+  "commits.authored": "forfattede {time}",
+  "commits.on_date": "Commits den {date}"
 }

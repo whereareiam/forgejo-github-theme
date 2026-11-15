@@ -149,5 +149,11 @@
   "home.feed.load_older": "Wczytaj starszą aktywność",
   "issues.filter.all_states": "Wszystkie stany",
   "projects.create_issue_in": "Utwórz zgłoszenie w repozytorium",
-  "projects.open_in_new_tab": "Otwórz w nowej karcie"
+  "projects.open_in_new_tab": "Otwórz w nowej karcie",
+  "issues.list.opened": "{author} otworzył(a) {time}",
+  "issues.list.closed": "przez {author}, zamknięty {time}",
+  "issues.list.merged": "przez {author}, scalony {time}",
+  "commits.committed": "zatwierdził(a) {time}",
+  "commits.authored": "utworzył(a) {time}",
+  "commits.on_date": "Commity z {date}"
 }

@@ -139,5 +139,11 @@
   "home.feed.load_older": "Ollere Aktivität laden",
   "issues.filter.all_states": "All Standen",
   "projects.create_issue_in": "Gefall in Repositorium maken",
-  "projects.open_in_new_tab": "In nejem Tab opmaken"
+  "projects.open_in_new_tab": "In nejem Tab opmaken",
+  "issues.list.opened": "{author} hett {time} opmaakt",
+  "issues.list.closed": "vun {author} wurr {time} tomaakt",
+  "issues.list.merged": "vun {author} wurr {time} tosamenföhrt",
+  "commits.committed": "hett {time} committet",
+  "commits.authored": "hett {time} schreven",
+  "commits.on_date": "Commits an'n {date}"
 }
