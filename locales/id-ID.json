@@ -135,5 +135,19 @@
   "issues.list.merged": "oleh {author} digabungkan {time}",
   "commits.committed": "melakukan komit {time}",
   "commits.authored": "menulis {time}",
-  "commits.on_date": "Komit pada {date}"
+  "commits.on_date": "Komit pada {date}",
+  "milestones.due_by": "Jatuh tempo {date}",
+  "milestones.issues_closed": {
+    "other": "{closed}/{count} isu ditutup"
+  },
+  "milestones.complete": "{percent} selesai",
+  "milestones.open": "terbuka",
+  "milestones.closed": "ditutup",
+  "repo.home.branches": {
+    "other": "{number} cabang"
+  },
+  "repo.home.tags": {
+    "other": "{number} tag"
+  },
+  "tags.notes": "Catatan"
 }

@@ -145,5 +145,22 @@
   "issues.list.merged": "{author} tarafından, {time} birleştirildi",
   "commits.committed": "{time} işledi",
   "commits.authored": "{time} yazdı",
-  "commits.on_date": "{date} tarihli işlemeler"
+  "commits.on_date": "{date} tarihli işlemeler",
+  "milestones.due_by": "Son tarih {date}",
+  "milestones.issues_closed": {
+    "one": "{closed}/{count} konu kapatıldı",
+    "other": "{closed}/{count} konu kapatıldı"
+  },
+  "milestones.complete": "{percent} tamamlandı",
+  "milestones.open": "açık",
+  "milestones.closed": "kapalı",
+  "repo.home.branches": {
+    "one": "{number} dal",
+    "other": "{number} dal"
+  },
+  "repo.home.tags": {
+    "one": "{number} etiket",
+    "other": "{number} etiket"
+  },
+  "tags.notes": "Notlar"
 }

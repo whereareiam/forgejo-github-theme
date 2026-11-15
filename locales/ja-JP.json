@@ -135,5 +135,19 @@
   "issues.list.merged": "{author} が作成、{time} にマージ",
   "commits.committed": "{time} にコミット",
   "commits.authored": "{time} に作成",
-  "commits.on_date": "{date} のコミット"
+  "commits.on_date": "{date} のコミット",
+  "milestones.due_by": "期限 {date}",
+  "milestones.issues_closed": {
+    "other": "{closed}/{count} 件のイシューをクローズ"
+  },
+  "milestones.complete": "{percent} 完了",
+  "milestones.open": "オープン",
+  "milestones.closed": "クローズ",
+  "repo.home.branches": {
+    "other": "{number} ブランチ"
+  },
+  "repo.home.tags": {
+    "other": "{number} タグ"
+  },
+  "tags.notes": "ノート"
 }

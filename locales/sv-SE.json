@@ -145,5 +145,22 @@
   "issues.list.merged": "av {author} slogs samman {time}",
   "commits.committed": "committade {time}",
   "commits.authored": "skrev {time}",
-  "commits.on_date": "Commits den {date}"
+  "commits.on_date": "Commits den {date}",
+  "milestones.due_by": "Förfaller {date}",
+  "milestones.issues_closed": {
+    "one": "{closed}/{count} ärende stängt",
+    "other": "{closed}/{count} ärenden stängda"
+  },
+  "milestones.complete": "{percent} klart",
+  "milestones.open": "öppna",
+  "milestones.closed": "stängda",
+  "repo.home.branches": {
+    "one": "{number} gren",
+    "other": "{number} grenar"
+  },
+  "repo.home.tags": {
+    "one": "{number} tagg",
+    "other": "{number} taggar"
+  },
+  "tags.notes": "Anteckningar"
 }

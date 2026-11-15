@@ -155,5 +155,25 @@
   "issues.list.merged": "от {author}, слит {time}",
   "commits.committed": "закоммитил(а) {time}",
   "commits.authored": "создал(а) {time}",
-  "commits.on_date": "Коммиты за {date}"
+  "commits.on_date": "Коммиты за {date}",
+  "milestones.due_by": "Срок {date}",
+  "milestones.issues_closed": {
+    "one": "{closed}/{count} задача закрыта",
+    "few": "{closed}/{count} задачи закрыты",
+    "many": "{closed}/{count} задач закрыто"
+  },
+  "milestones.complete": "{percent} выполнено",
+  "milestones.open": "открыто",
+  "milestones.closed": "закрыто",
+  "repo.home.branches": {
+    "one": "{number} ветка",
+    "few": "{number} ветки",
+    "many": "{number} веток"
+  },
+  "repo.home.tags": {
+    "one": "{number} тег",
+    "few": "{number} тега",
+    "many": "{number} тегов"
+  },
+  "tags.notes": "Заметки"
 }

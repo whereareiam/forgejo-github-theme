@@ -145,5 +145,22 @@
   "issues.list.merged": "ni {author} ay isinali {time}",
   "commits.committed": "nag-commit {time}",
   "commits.authored": "isinulat {time}",
-  "commits.on_date": "Mga commit noong {date}"
+  "commits.on_date": "Mga commit noong {date}",
+  "milestones.due_by": "Takdang petsa {date}",
+  "milestones.issues_closed": {
+    "one": "{closed}/{count} isyu ang sarado",
+    "other": "{closed}/{count} isyu ang sarado"
+  },
+  "milestones.complete": "{percent} kumpleto",
+  "milestones.open": "bukas",
+  "milestones.closed": "sarado",
+  "repo.home.branches": {
+    "one": "{number} branch",
+    "other": "{number} branch"
+  },
+  "repo.home.tags": {
+    "one": "{number} tag",
+    "other": "{number} tag"
+  },
+  "tags.notes": "Mga tala"
 }

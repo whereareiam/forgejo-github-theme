@@ -7,7 +7,13 @@ CanWrite adds the Edit and Delete menu, DeleteLink being where Delete posts. */ 
 		{{template "repo/issue/labels/label_archived" $label}}
 	</div>
 	<div class="theme-label-description">{{if $label.Description}}{{$label.Description | RenderEmoji ctx}}{{end}}</div>
-	<a class="theme-label-issues" href="{{.IssuesLink}}?labels={{$label.ID}}">{{svg "octicon-issue-opened" 16}}{{ctx.Locale.Tr "repo.issues.label_open_issues" .OpenIssues}}</a>
+	{{/* GitHub counts a label's open issues by icon and number, and shows nothing for none. */}}
+	{{if .OpenIssues}}
+		{{$openIssues := ctx.Locale.Tr "repo.issues.label_open_issues" .OpenIssues}}
+		<a class="theme-label-issues" href="{{.IssuesLink}}?labels={{$label.ID}}" data-tooltip-content="{{$openIssues}}" aria-label="{{$openIssues}}">{{svg "octicon-issue-opened" 16}}{{.OpenIssues}}</a>
+	{{else}}
+		<span class="theme-label-issues"></span>
+	{{end}}
 	{{if .CanWrite}}
 		{{template "components/common/dropdown/dropdown" dict "Kind" "actions" "Icon" "octicon-kebab-horizontal" "IconOnly" true "Quiet" true "Label" (ctx.Locale.Tr "profile.actions.tooltip") "Items" "components/repository/label/actions" "Data" (dict "Context" .Context "Label" $label "DeleteLink" .DeleteLink)}}
 	{{else}}

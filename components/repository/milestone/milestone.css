@@ -99,3 +99,9 @@
 .theme-milestone-summary > .markup {
   margin-bottom: 16px;
 }
+
+/* GitHub parts the due date and the closed issues with a bullet. */
+.theme-milestone-issues:not(:empty)::before {
+  content: "•";
+  margin: 0 6px;
+}

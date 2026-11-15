@@ -165,5 +165,28 @@
   "issues.list.merged": "od {author}, združeno {time}",
   "commits.committed": "je uveljavil(a) {time}",
   "commits.authored": "je ustvaril(a) {time}",
-  "commits.on_date": "Uveljavitve dne {date}"
+  "commits.on_date": "Uveljavitve dne {date}",
+  "milestones.due_by": "Rok {date}",
+  "milestones.issues_closed": {
+    "one": "{closed}/{count} zadeva zaprta",
+    "two": "{closed}/{count} zadevi zaprti",
+    "few": "{closed}/{count} zadeve zaprte",
+    "other": "{closed}/{count} zadev zaprtih"
+  },
+  "milestones.complete": "{percent} dokončano",
+  "milestones.open": "odprtih",
+  "milestones.closed": "zaprtih",
+  "repo.home.branches": {
+    "one": "{number} veja",
+    "two": "{number} veji",
+    "few": "{number} veje",
+    "other": "{number} vej"
+  },
+  "repo.home.tags": {
+    "one": "{number} oznaka",
+    "two": "{number} oznaki",
+    "few": "{number} oznake",
+    "other": "{number} oznak"
+  },
+  "tags.notes": "Opombe"
 }

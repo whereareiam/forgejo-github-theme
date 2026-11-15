@@ -145,5 +145,22 @@
   "issues.list.merged": "by {author} was merged {time}",
   "commits.committed": "committed {time}",
   "commits.authored": "authored {time}",
-  "commits.on_date": "Commits on {date}"
+  "commits.on_date": "Commits on {date}",
+  "milestones.due_by": "Due by {date}",
+  "milestones.issues_closed": {
+    "one": "{closed}/{count} issue closed",
+    "other": "{closed}/{count} issues closed"
+  },
+  "milestones.complete": "{percent} complete",
+  "milestones.open": "open",
+  "milestones.closed": "closed",
+  "repo.home.branches": {
+    "one": "{number} Branch",
+    "other": "{number} Branches"
+  },
+  "repo.home.tags": {
+    "one": "{number} Tag",
+    "other": "{number} Tags"
+  },
+  "tags.notes": "Notes"
 }

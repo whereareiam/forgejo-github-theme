@@ -145,5 +145,22 @@
   "issues.list.merged": "от {author}, слято {time}",
   "commits.committed": "подаде {time}",
   "commits.authored": "създаде {time}",
-  "commits.on_date": "Подавания от {date}"
+  "commits.on_date": "Подавания от {date}",
+  "milestones.due_by": "Краен срок {date}",
+  "milestones.issues_closed": {
+    "one": "{closed}/{count} затворен проблем",
+    "other": "{closed}/{count} затворени проблема"
+  },
+  "milestones.complete": "{percent} завършено",
+  "milestones.open": "отворени",
+  "milestones.closed": "затворени",
+  "repo.home.branches": {
+    "one": "{number} клон",
+    "other": "{number} клона"
+  },
+  "repo.home.tags": {
+    "one": "{number} етикет",
+    "other": "{number} етикета"
+  },
+  "tags.notes": "Бележки"
 }

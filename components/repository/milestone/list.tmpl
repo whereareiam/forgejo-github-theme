@@ -17,25 +17,29 @@ repository's writers. Rows carry their progress and an open milestone's due date
 			<li class="theme-box-list-row theme-milestone-row" data-theme-milestone data-progress="{{.Completeness}}"{{if and (not .IsClosed) .DeadlineString}} data-due="{{.DeadlineString}}"{{end}}>
 				<div class="theme-box-list-main">
 					<h3>{{if $.ShowRepo}}<span class="theme-milestone-repo">{{.Repo.FullName}}</span>{{end}}<a href="{{$link}}">{{.Name}}</a></h3>
+					{{/* GitHub: the description, then "Due by November 30, 2026 • 3/7 issues closed". */}}
+					{{if .Content}}<div class="theme-box-list-description markup">{{.RenderedContent}}</div>{{end}}
 					<p class="theme-box-list-meta">
 						{{if .IsClosed}}
 							{{ctx.Locale.Tr "repo.milestones.closed" (DateUtils.TimeSince .ClosedDateUnix)}}
 						{{else if .DeadlineString}}
-							<span{{if .IsOverdue}} class="theme-milestone-overdue"{{end}}>{{svg "octicon-calendar" 14}} {{DateUtils.AbsoluteShort (.DeadlineString|DateUtils.ParseLegacy)}}</span>
+							{{$due := .DeadlineString|DateUtils.ParseLegacy}}
+							<span{{if .IsOverdue}} class="theme-milestone-overdue"{{end}}>{{template "theme/phrase" dict "Key" "milestones.due_by" "Date" (DateUtils.AbsoluteLong $due) "Fallback" (HTMLFormat "%s %s" (svg "octicon-calendar" 14) (DateUtils.AbsoluteShort $due))}}</span>
 						{{else}}
 							{{ctx.Locale.Tr "repo.milestones.no_due_date"}}
 						{{end}}
-						{{if .UpdatedUnix}}<span aria-hidden="true">·</span> {{ctx.Locale.Tr "repo.milestones.update_ago" (DateUtils.TimeSince .UpdatedUnix)}}{{end}}
+						{{$updated := ""}}{{if .UpdatedUnix}}{{$updated = ctx.Locale.Tr "repo.milestones.update_ago" (DateUtils.TimeSince .UpdatedUnix)}}{{end}}
+						{{$issues := Eval .NumOpenIssues "+" .NumClosedIssues}}
+						<span class="theme-milestone-issues">{{template "theme/phrase" dict "Key" "milestones.issues_closed" "Count" $issues "Closed" .NumClosedIssues "Fallback" $updated}}</span>
 						{{if .TotalTrackedTime}}<span aria-hidden="true">·</span> <span data-tooltip-content="{{ctx.Locale.Tr "tracked_time_summary"}}">{{svg "octicon-clock" 14}} {{.TotalTrackedTime|Sec2Time}}</span>{{end}}
 					</p>
-					{{if .Content}}<div class="theme-box-list-description markup">{{.RenderedContent}}</div>{{end}}
 				</div>
 				<div class="theme-milestone-progress">
 					<progress class="theme-progress" value="{{.Completeness}}" max="100"></progress>
 					<p class="theme-milestone-stats">
-						<span>{{ctx.Locale.Tr "repo.milestones.completeness" .Completeness}}</span>
-						<span><strong>{{ctx.Locale.PrettyNumber .NumOpenIssues}}</strong> {{ctx.Locale.Tr "repo.issues.open_title"}}</span>
-						<span><strong>{{ctx.Locale.PrettyNumber .NumClosedIssues}}</strong> {{ctx.Locale.Tr "repo.issues.closed_title"}}</span>
+						<span>{{template "theme/phrase" dict "Key" "milestones.complete" "Percent" (HTMLFormat "<strong>%d%%</strong>" .Completeness) "Fallback" (ctx.Locale.Tr "repo.milestones.completeness" .Completeness)}}</span>
+						<span><strong>{{ctx.Locale.PrettyNumber .NumOpenIssues}}</strong> {{template "theme/phrase" dict "Key" "milestones.open" "Fallback" (ctx.Locale.Tr "repo.issues.open_title")}}</span>
+						<span><strong>{{ctx.Locale.PrettyNumber .NumClosedIssues}}</strong> {{template "theme/phrase" dict "Key" "milestones.closed" "Fallback" (ctx.Locale.Tr "repo.issues.closed_title")}}</span>
 					</p>
 					{{if $.CanWrite}}
 						<p class="theme-milestone-actions">
