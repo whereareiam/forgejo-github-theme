@@ -129,5 +129,11 @@
   "home.feed.load_older": "Muat aktivitas lama",
   "issues.filter.all_states": "Semua status",
   "projects.create_issue_in": "Buat isu di repositori",
-  "projects.open_in_new_tab": "Buka di tab baru"
+  "projects.open_in_new_tab": "Buka di tab baru",
+  "issues.list.opened": "{author} membuka {time}",
+  "issues.list.closed": "oleh {author} ditutup {time}",
+  "issues.list.merged": "oleh {author} digabungkan {time}",
+  "commits.committed": "melakukan komit {time}",
+  "commits.authored": "menulis {time}",
+  "commits.on_date": "Komit pada {date}"
 }

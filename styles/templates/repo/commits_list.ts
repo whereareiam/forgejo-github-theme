@@ -135,4 +135,33 @@ const commitsList = css`
   }
 `;
 
-export default cssCombine(commitsList);
+// The tally of passed checks that follows a check icon wherever GitHub counts them: lists, history and a commit.
+const commitStatusCount = css`
+  [data-tippy="commit-statuses"]:has(> .commit-status-count) {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    color: ${themeVars.color.text.light.num1};
+  }
+  .commit-status-count {
+    font-size: 12px;
+    white-space: nowrap;
+  }
+`;
+
+// GitHub's checks after the time: "· ✓ 2 / 2".
+const commitChecks = css`
+  .gitea-github-theme-commit .commit-checks {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    &::before {
+      content: "·";
+    }
+    & .commit-status-count-slash {
+      margin: 0 4px;
+    }
+  }
+`;
+
+export default cssCombine(commitsList, commitStatusCount, commitChecks);

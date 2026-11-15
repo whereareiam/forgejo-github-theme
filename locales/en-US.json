@@ -139,5 +139,11 @@
   "home.feed.load_older": "Load older activity",
   "issues.filter.all_states": "All states",
   "projects.create_issue_in": "Create issue in repository",
-  "projects.open_in_new_tab": "Open in new tab"
+  "projects.open_in_new_tab": "Open in new tab",
+  "issues.list.opened": "{author} opened {time}",
+  "issues.list.closed": "by {author} was closed {time}",
+  "issues.list.merged": "by {author} was merged {time}",
+  "commits.committed": "committed {time}",
+  "commits.authored": "authored {time}",
+  "commits.on_date": "Commits on {date}"
 }

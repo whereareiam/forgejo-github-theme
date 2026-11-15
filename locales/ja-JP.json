@@ -129,5 +129,11 @@
   "home.feed.load_older": "以前のアクティビティを読み込む",
   "issues.filter.all_states": "すべての状態",
   "projects.create_issue_in": "リポジトリにイシューを作成",
-  "projects.open_in_new_tab": "新しいタブで開く"
+  "projects.open_in_new_tab": "新しいタブで開く",
+  "issues.list.opened": "{author} が {time} にオープン",
+  "issues.list.closed": "{author} が作成、{time} にクローズ",
+  "issues.list.merged": "{author} が作成、{time} にマージ",
+  "commits.committed": "{time} にコミット",
+  "commits.authored": "{time} に作成",
+  "commits.on_date": "{date} のコミット"
 }

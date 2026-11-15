@@ -139,5 +139,11 @@
   "home.feed.load_older": "Lataa vanhempaa toimintaa",
   "issues.filter.all_states": "Kaikki tilat",
   "projects.create_issue_in": "Luo tiketti repoon",
-  "projects.open_in_new_tab": "Avaa uudessa välilehdessä"
+  "projects.open_in_new_tab": "Avaa uudessa välilehdessä",
+  "issues.list.opened": "{author} avasi {time}",
+  "issues.list.closed": "käyttäjältä {author} suljettiin {time}",
+  "issues.list.merged": "käyttäjältä {author} yhdistettiin {time}",
+  "commits.committed": "kommitoi {time}",
+  "commits.authored": "kirjoitti {time}",
+  "commits.on_date": "Kommitit {date}"
 }

@@ -139,5 +139,11 @@
   "home.feed.load_older": "Зареждане на по-стара активност",
   "issues.filter.all_states": "Всички състояния",
   "projects.create_issue_in": "Създаване на задача в хранилище",
-  "projects.open_in_new_tab": "Отваряне в нов раздел"
+  "projects.open_in_new_tab": "Отваряне в нов раздел",
+  "issues.list.opened": "{author} отвори {time}",
+  "issues.list.closed": "от {author}, затворено {time}",
+  "issues.list.merged": "от {author}, слято {time}",
+  "commits.committed": "подаде {time}",
+  "commits.authored": "създаде {time}",
+  "commits.on_date": "Подавания от {date}"
 }

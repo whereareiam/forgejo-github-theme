@@ -278,4 +278,30 @@ const titleLabels = css`
   }
 `;
 
-export default cssCombine(issueList, issueListMobile, issuePins, issueRows, repositoryRows, titleLabels);
+// GitHub's meta line: "#8 · [avatar] user opened yesterday · ✓ 2/2", the checks counted after the event.
+const metaLine = css`
+  #issue-list .issue-meta {
+    & .index::after {
+      content: " ·";
+    }
+    & .issue-meta-event .author {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      color: inherit;
+      vertical-align: top;
+    }
+    & .issue-meta-event .author img.ui.avatar {
+      width: 16px;
+      height: 16px;
+      margin: 0;
+      border-radius: 9999px;
+    }
+    & .issue-meta-checks::before {
+      content: "·";
+      margin-right: 4px;
+    }
+  }
+`;
+
+export default cssCombine(issueList, issueListMobile, issuePins, issueRows, repositoryRows, titleLabels, metaLine);

@@ -129,5 +129,11 @@
   "home.feed.load_older": "이전 활동 불러오기",
   "issues.filter.all_states": "모든 상태",
   "projects.create_issue_in": "저장소에 이슈 만들기",
-  "projects.open_in_new_tab": "새 탭에서 열기"
+  "projects.open_in_new_tab": "새 탭에서 열기",
+  "issues.list.opened": "{author} 님이 {time} 열었습니다",
+  "issues.list.closed": "{author} 님이 작성, {time} 닫힘",
+  "issues.list.merged": "{author} 님이 작성, {time} 병합됨",
+  "commits.committed": "{time} 커밋했습니다",
+  "commits.authored": "{time} 작성했습니다",
+  "commits.on_date": "{date}의 커밋"
 }

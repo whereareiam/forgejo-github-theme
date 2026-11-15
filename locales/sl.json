@@ -159,5 +159,11 @@
   "home.feed.load_older": "Naloži starejšo dejavnost",
   "issues.filter.all_states": "Vsa stanja",
   "projects.create_issue_in": "Ustvari zadevo v repozitoriju",
-  "projects.open_in_new_tab": "Odpri v novem zavihku"
+  "projects.open_in_new_tab": "Odpri v novem zavihku",
+  "issues.list.opened": "{author} je odprl(a) {time}",
+  "issues.list.closed": "od {author}, zaprto {time}",
+  "issues.list.merged": "od {author}, združeno {time}",
+  "commits.committed": "je uveljavil(a) {time}",
+  "commits.authored": "je ustvaril(a) {time}",
+  "commits.on_date": "Uveljavitve dne {date}"
 }

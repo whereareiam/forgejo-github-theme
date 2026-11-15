@@ -149,5 +149,11 @@
   "home.feed.load_older": "Načíst starší aktivitu",
   "issues.filter.all_states": "Všechny stavy",
   "projects.create_issue_in": "Vytvořit úkol v repozitáři",
-  "projects.open_in_new_tab": "Otevřít na nové kartě"
+  "projects.open_in_new_tab": "Otevřít na nové kartě",
+  "issues.list.opened": "{author} otevřel(a) {time}",
+  "issues.list.closed": "od {author}, uzavřeno {time}",
+  "issues.list.merged": "od {author}, sloučeno {time}",
+  "commits.committed": "odeslal(a) {time}",
+  "commits.authored": "vytvořil(a) {time}",
+  "commits.on_date": "Revize z {date}"
 }

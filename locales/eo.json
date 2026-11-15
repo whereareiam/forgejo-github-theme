@@ -139,5 +139,11 @@
   "home.feed.load_older": "Ŝargi pli malnovan aktivecon",
   "issues.filter.all_states": "Ĉiuj statoj",
   "projects.create_issue_in": "Krei eraron en deponejo",
-  "projects.open_in_new_tab": "Malfermi en nova langeto"
+  "projects.open_in_new_tab": "Malfermi en nova langeto",
+  "issues.list.opened": "{author} malfermis {time}",
+  "issues.list.closed": "de {author} estis fermita {time}",
+  "issues.list.merged": "de {author} estis kunfandita {time}",
+  "commits.committed": "enmetis {time}",
+  "commits.authored": "aŭtoris {time}",
+  "commits.on_date": "Enmetoj je {date}"
 }

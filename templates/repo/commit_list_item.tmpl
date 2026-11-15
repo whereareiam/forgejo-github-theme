@@ -1,7 +1,8 @@
 {{/* Shared commit row for repository history and pull-request date groups. */}}
 {{$page := .Page}}{{$commit := .Commit}}{{$commitID := $commit.ID.String}}
 {{$commitRepoLink := $page.RepoLink}}{{if $page.CommitRepoLink}}{{$commitRepoLink = $page.CommitRepoLink}}{{end}}
-{{$shortHash := ""}}{{if $page.PageIsPullCommits}}{{$shortHash = printf "%.7s" $commitID}}{{end}}
+{{/* GitHub shortens a commit to seven characters everywhere. */}}
+{{$shortHash := printf "%.7s" $commitID}}
 			<li class="gitea-github-theme-commit">
 				<div class="message">
 					{{if $page.PageIsWiki}}
@@ -38,12 +39,13 @@
 						{{ctx.AvatarUtils.AvatarByEmail $commit.Author.Email $commit.Author.Name 20}}
 						<span class="author-wrapper">{{$userName}}</span>
 					{{end}}
-					{{if $commit.Committer}}
-						{{DateUtils.TimeSince $commit.Committer.When}}
-					{{else}}
-						{{DateUtils.TimeSince $commit.Author.When}}
-					{{end}}
-					{{template "repo/commit_statuses" dict "Status" $commit.Status "Statuses" $commit.Statuses}}
+					{{/* GitHub: "user committed 2 weeks ago", or "authored" when someone else committed it. */}}
+					{{$when := $commit.Author.When}}{{if $commit.Committer}}{{$when = $commit.Committer.When}}{{end}}
+					{{$timeKey := "commits.committed"}}
+					{{if and $commit.Committer (or (ne $commit.Committer.Name $commit.Author.Name) (ne $commit.Committer.Email $commit.Author.Email))}}{{$timeKey = "commits.authored"}}{{end}}
+					{{$timeSince := DateUtils.TimeSince $when}}
+					<span class="commit-time">{{template "theme/phrase" dict "Key" $timeKey "Time" $timeSince "Fallback" $timeSince}}</span>
+					{{if $commit.Statuses}}<span class="commit-checks">{{template "repo/commit_statuses" dict "Status" $commit.Status "Statuses" $commit.Statuses "Count" true}}</span>{{end}}
 				</div>
 				<div class="extra">
 					{{if $page.CommitTagsMap}}
@@ -71,7 +73,7 @@
 						{{end}}
 						<a class="btn interact-bg view-commit-path gitea-github-theme-action" data-tooltip-content="{{ctx.Locale.Tr "repo.commits.view_path"}}"
 							href="{{if $page.FileName}}{{printf "%s/src/commit/%s/%s" $commitRepoLink (PathEscape $commitID) (PathEscapeSegments $page.FileName)}}{{else}}{{printf "%s/src/commit/%s" $commitRepoLink (PathEscape $commitID)}}{{end}}"
-						>{{if $page.PageIsPullCommits}}{{svg "octicon-code"}}{{else}}{{svg "octicon-file-code"}}{{end}}</a>
+						>{{svg "octicon-code"}}</a>
 					{{end}}
 				</div>
 			</li>

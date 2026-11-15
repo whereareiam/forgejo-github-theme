@@ -149,5 +149,11 @@
   "home.feed.load_older": "Ielādēt senākas darbības",
   "issues.filter.all_states": "Visi stāvokļi",
   "projects.create_issue_in": "Izveidot pieteikumu glabātavā",
-  "projects.open_in_new_tab": "Atvērt jaunā cilnē"
+  "projects.open_in_new_tab": "Atvērt jaunā cilnē",
+  "issues.list.opened": "{author} atvēra {time}",
+  "issues.list.closed": "no {author} tika aizvērts {time}",
+  "issues.list.merged": "no {author} tika apvienots {time}",
+  "commits.committed": "iesūtīja {time}",
+  "commits.authored": "izveidoja {time}",
+  "commits.on_date": "Iesūtījumi {date}"
 }
