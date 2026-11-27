@@ -39,7 +39,7 @@ jobs:
       - uses: actions/cache@v6
         with:
           path: ~/.bun/install/cache
-          key: bun-cache-v3-${{ runner.os }}-${{ hashFiles('package.json') }}
+          key: bun-cache-v3-${{ runner.os }}-${{ hashFiles('bun.lock') }}
 
       - run: bun install --frozen-lockfile
 
