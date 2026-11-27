@@ -1,15 +1,12 @@
 ---
-version: 1.5.0
+version: 1.6.0
 ---
 
-# Forgejo GitHub Theme 1.5.0 - Jump-to, organizations and folder downloads
+# Forgejo GitHub Theme 1.6.0 - GitHub's wording and merge box
 
-The navbar search now opens GitHub's jump-to with your repositories and organizations, and the home sidebar can list
-your organizations. Folders can be downloaded again from GitHub's "More options" menu, and the footer names the theme
-and its version.
+An optional add-on brings GitHub's wording to the places where Forgejo has no text of its own, in every language Forgejo
+enables by default. Pull requests get GitHub's classic merge box and timeline commit rows.
 
 # Compatibility
 
-This release targets Forgejo `17`. It was tested against Forgejo `17.0.1`, including the bundled template overrides.
-
-Install the stylesheets and templates together, as with 1.4.0.
+This release targets Forgejo `17`. It was tested against Forgejo `17.0.2`, including the bundled template overrides.
