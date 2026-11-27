@@ -604,13 +604,21 @@ export default css`
     & .comment .markup p {
       line-height: inherit;
     }
-    /* A commit with a body: GitHub's small "…" pill right after the message, not a full button by the hash. */
     & .comment-list .timeline-item.commits-list .singular-commit {
       min-height: 36px;
+      /* A commit's muted 16px icon sits on a page-coloured disc that cuts the timeline line around it. Forgejo's badge
+         rule already centres the icon in a round, border-box badge. As on GitHub, the badge stacks above the commit
+         list's line, which is a positioned ::before and would otherwise paint over it. */
       & > .badge.badge-commit {
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        position: relative;
+        z-index: 1;
+        flex: none;
+        width: 32px;
+        height: 16px !important;
+        /* Forgejo's -33px offset for its 34px badge, kept centred on the timeline line. */
+        margin: 0 9px 0 -32px;
+        background: ${themeVars.color.body};
+        color: ${themeVars.color.text.light.num1};
         & > svg {
           width: 16px;
           height: 16px;
@@ -626,13 +634,8 @@ export default css`
           padding-top: 16px;
         }
         & > .badge.badge-commit {
-          box-sizing: border-box;
-          width: 32px;
           height: 32px !important;
-          /* Forgejo's -33px offset for its 34px badge, kept centred on the timeline line. */
-          margin: 0 9px 0 -32px;
           border: 2px solid ${themeVars.color.body};
-          border-radius: 50%;
           background: ${themeVars.github.control.bgColor.rest};
         }
       }
@@ -643,6 +646,7 @@ export default css`
       & > .shabox {
         margin-left: auto;
       }
+      /* A commit with a body: GitHub's small "…" pill right after the message, not a full button by the hash. */
       & > .ellipsis-button.ui.button {
         flex: none;
         min-width: 0;
