@@ -10,7 +10,7 @@
   "engines": {
     "bun": ">=1.3.14"
   },
-  "forgejo": "17.0.1",
+  "forgejo": "17.0.2",
   "exports": {
     "./core": "./src/index.ts",
     "./vite-plugin": "./src/vite-plugin/index.ts",
